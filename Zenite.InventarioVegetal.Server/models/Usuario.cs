@@ -1,4 +1,4 @@
-﻿namespace Zenite.InventarioVegetal.Server.Models
+﻿namespace Estoque.models
 {
     public class Usuario
     {

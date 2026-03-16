@@ -1,7 +1,7 @@
 <Solution>
-  <Project Path="zenite.inventariovegetal.client/zenite.inventariovegetal.client.esproj">
+  <Project Path="zenite.inventariovegetal.client/estoque.client.esproj">
     <Build />
     <Deploy />
   </Project>
-  <Project Path="Zenite.InventarioVegetal.Server/Zenite.InventarioVegetal.Server.csproj" />
+  <Project Path="Zenite.InventarioVegetal.Server/Estoque.Server.csproj" />
 </Solution>

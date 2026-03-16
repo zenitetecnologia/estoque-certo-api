@@ -1,4 +1,4 @@
-﻿namespace Zenite.InventarioVegetal.Server.models
+﻿namespace Estoque.models
 {
     public class UnidadeOrganizacional
     {

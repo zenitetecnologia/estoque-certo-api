@@ -1,6 +1,4 @@
-﻿using Zenite.InventarioVegetal.Server.Models;
-
-namespace Zenite.InventarioVegetal.Server.models
+﻿namespace Estoque.models
 {
     public class ItemEstoque
     {
