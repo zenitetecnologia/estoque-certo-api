@@ -1,0 +1,6 @@
+@Zenite.InventarioVegetal.Server_HostAddress = http://localhost:5120
+
+GET {{Zenite.InventarioVegetal.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
