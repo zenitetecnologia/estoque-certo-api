@@ -24,7 +24,7 @@ public class ItemEstoqueRepository
                 tipo_unidade_medida,
                 quantidade
             FROM
-                inventario_vegetal.itens_estoque
+                estoque.itens_estoque
             ORDER BY
                 descricao;
         ";
@@ -71,7 +71,7 @@ public class ItemEstoqueRepository
                 tipo_unidade_medida,
                 quantidade
             FROM
-                inventario_vegetal.itens_estoque
+                estoque.itens_estoque
             WHERE
                 id = @id
             LIMIT 1;
@@ -108,7 +108,7 @@ public class ItemEstoqueRepository
     public async Task<int> CadastrarItemEstoque(ItemEstoque item)
     {
         const string sql = @"
-            INSERT INTO inventario_vegetal.itens_estoque
+            INSERT INTO estoque.itens_estoque
             (
                 id_unidade_organizacional,
                 espaco,
@@ -154,7 +154,7 @@ public class ItemEstoqueRepository
     {
         const string sql = @"
             UPDATE
-                inventario_vegetal.itens_estoque
+                estoque.itens_estoque
             SET
                 id_unidade_organizacional = @id_unidade_organizacional,
                 espaco = @espaco,
@@ -192,7 +192,7 @@ public class ItemEstoqueRepository
     {
         const string sql = @"
             DELETE FROM
-                inventario_vegetal.itens_estoque
+                estoque.itens_estoque
             WHERE
                 id = @id;
         ";

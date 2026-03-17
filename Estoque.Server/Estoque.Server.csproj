@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <SpaRoot>..\zenite.inventariovegetal.client</SpaRoot>
+    <SpaRoot>..\estoque.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:62997</SpaProxyServerUrl>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -17,17 +17,13 @@
       <Version>10.*-*</Version>
     </PackageReference>
     <PackageReference Include="Npgsql" Version="10.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\zenite.inventariovegetal.client\estoque.client.esproj">
+    <ProjectReference Include="..\estoque.client\estoque.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="controllers\" />
-    <Folder Include="services\" />
   </ItemGroup>
 
 </Project>

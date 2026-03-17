@@ -25,7 +25,7 @@ public class HistoricoRepository
                 quantidade_anterior,
                 quantidade_resultante
             FROM
-                inventario_vegetal.historico
+                estoque.historico
             WHERE
                 id_item_estoque = @id_item_estoque
             ORDER BY
@@ -69,7 +69,7 @@ public class HistoricoRepository
     public async Task<int> RegistarHistorico(Historico historico)
     {
         const string sql = @"
-            INSERT INTO inventario_vegetal.historico
+            INSERT INTO estoque.historico
             (
                 id_item_estoque,
                 tipo_movimentacao,

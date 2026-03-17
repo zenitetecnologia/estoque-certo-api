@@ -32,7 +32,7 @@ public class UnidadeOrganizacionalRepository
                 telefone,
                 email
             FROM
-                inventario_vegetal.unidades_organizacionais
+                estoque.unidades_organizacionais
             ORDER BY
                 razao_social;
         ";
@@ -95,7 +95,7 @@ public class UnidadeOrganizacionalRepository
                 telefone,
                 email
             FROM
-                inventario_vegetal.unidades_organizacionais
+                estoque.unidades_organizacionais
             WHERE
                 id = @id
             LIMIT 1;
@@ -140,7 +140,7 @@ public class UnidadeOrganizacionalRepository
     public async Task<int> CadastrarUnidade(UnidadeOrganizacional unidade)
     {
         const string sql = @"
-            INSERT INTO inventario_vegetal.unidades_organizacionais 
+            INSERT INTO estoque.unidades_organizacionais 
             (
                 id_ou_matriz,
                 cpnj,
@@ -210,7 +210,7 @@ public class UnidadeOrganizacionalRepository
     {
         const string sql = @"
             UPDATE
-                inventario_vegetal.unidades_organizacionais
+                estoque.unidades_organizacionais
             SET
                 id_ou_matriz = @id_ou_matriz,
                 cpnj = @cpnj,
@@ -263,7 +263,7 @@ public class UnidadeOrganizacionalRepository
     {
         const string sql = @"
             DELETE FROM
-                inventario_vegetal.unidades_organizacionais
+                estoque.unidades_organizacionais
             WHERE
                 id = @id;
         ";
@@ -291,7 +291,7 @@ public class UnidadeOrganizacionalRepository
             SELECT
                 1
             FROM
-                inventario_vegetal.unidades_organizacionais
+                estoque.unidades_organizacionais
             WHERE
                 cpnj = @cpnj
             AND
