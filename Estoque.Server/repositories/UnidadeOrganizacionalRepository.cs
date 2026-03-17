@@ -2,7 +2,7 @@
 using System.Data;
 using Estoque.models;
 
-namespace Estoque.Server.repositories;
+namespace Estoque.Repositories;
 
 public class UnidadeOrganizacionalRepository
 {

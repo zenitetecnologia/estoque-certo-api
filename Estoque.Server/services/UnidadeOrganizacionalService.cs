@@ -1,6 +1,5 @@
 ﻿using Estoque.models;
 using Estoque.Repositories;
-using Estoque.Server.repositories;
 
 namespace Estoque.Services;
 
