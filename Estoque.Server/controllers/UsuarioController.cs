@@ -114,40 +114,6 @@ public static class UsuarioController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPut("v1/usuarios", async (int id, [FromQuery] int idAdmin, IUsuarioService service) =>
-        {
-            try
-            {
-                await service.AprovarUsuarioAsync(idAdmin, id);
-                return Results.Ok(new { mensagem = "Acesso de usuário aprovado com sucesso!" });
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Results.Json(new { erro = ex.Message }, statusCode: 401);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return Results.NotFound(new { erro = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Results.BadRequest(new { erro = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
-        })
-        .WithTags("usuarios")
-        .WithSummary("Aprova um usuário")
-        .WithDescription("Aprova o acesso de um usuário (Apenas Admin).")
-        .Produces(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status401Unauthorized)
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces(StatusCodes.Status500InternalServerError);
-
-
         app.MapDelete("v1/usuarios/{id:int}", async (int id, IUsuarioService service) =>
         {
             try

@@ -8,7 +8,6 @@ public interface IUsuarioService
     Task<List<Usuario>> ListarTodosAsync();
     Task<Usuario?> ObterPorIdAsync(int id);
     Task<int> RegistarUsuarioNormalAsync(Usuario usuario);
-    Task AprovarUsuarioAsync(int idUsuarioAdmin, int idUsuarioParaAprovar);
     Task<bool> AtualizarAsync(Usuario usuario);
     Task<bool> ExcluirAsync(int id);
 }
@@ -69,35 +68,6 @@ public class UsuarioService : IUsuarioService
         catch (Exception ex)
         {
             throw new Exception($"Erro ao registar usuário normal: {ex.Message}");
-        }
-    }
-
-    public async Task AprovarUsuarioAsync(int idUsuarioAdmin, int idUsuarioParaAprovar)
-    {
-        try
-        {
-            var admin = await _repository.ObterUsuarioPorId(idUsuarioAdmin)
-                        ?? throw new UnauthorizedAccessException("Administrador não encontrado.");
-
-            if (admin.Perfil != PerfilUsuario.Admin)
-            {
-                throw new UnauthorizedAccessException("Apenas administradores podem aprovar acessos.");
-            }
-
-            var usuarioPendente = await _repository.ObterUsuarioPorId(idUsuarioParaAprovar)
-                                  ?? throw new KeyNotFoundException("Usuário não encontrado.");
-
-            if (usuarioPendente.Validado)
-            {
-                throw new InvalidOperationException("Este usuário já está validado.");
-            }
-
-            usuarioPendente.Validado = true;
-            await _repository.AtualizarUsuario(usuarioPendente);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao aprovar usuário: {ex.Message}");
         }
     }
 
