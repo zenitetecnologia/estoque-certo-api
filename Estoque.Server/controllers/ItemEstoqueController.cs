@@ -1,6 +1,5 @@
 ﻿using Estoque.models;
 using Estoque.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Estoque.Controllers;
 

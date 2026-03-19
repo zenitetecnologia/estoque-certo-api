@@ -51,7 +51,7 @@ public static class UsuarioController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPost("v1/usuarios/registrar", async (Usuario usuario, IUsuarioService service) =>
+        app.MapPost("v1/usuarios", async (Usuario usuario, IUsuarioService service) =>
         {
             try
             {
@@ -114,7 +114,7 @@ public static class UsuarioController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPut("v1/usuarios/{id:int}/aprovar", async (int id, [FromQuery] int idAdmin, IUsuarioService service) =>
+        app.MapPut("v1/usuarios", async (int id, [FromQuery] int idAdmin, IUsuarioService service) =>
         {
             try
             {
