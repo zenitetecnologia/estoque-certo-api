@@ -1,5 +1,7 @@
-﻿using Estoque.models;
+﻿using cantinou.Server.Validations;
+using Estoque.models;
 using Estoque.Repositories;
+using Estoque.Server.Validations;
 
 namespace Estoque.Services;
 
@@ -15,6 +17,7 @@ public interface IUnidadeOrganizacionalService
 public class UnidadeOrganizacionalService : IUnidadeOrganizacionalService
 {
     private readonly UnidadeOrganizacionalRepository _repository;
+    private readonly List<ValidationError> _erros = new();
 
     public UnidadeOrganizacionalService(UnidadeOrganizacionalRepository repository)
     {
@@ -49,7 +52,12 @@ public class UnidadeOrganizacionalService : IUnidadeOrganizacionalService
     {
         try
         {
+            ValidarUnidadeOrganizacional(unidade);
             return await _repository.CadastrarUnidade(unidade);
+        }
+        catch (ValidationException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
@@ -80,4 +88,22 @@ public class UnidadeOrganizacionalService : IUnidadeOrganizacionalService
             throw new Exception($"Erro ao excluir unidade organizacional: {ex.Message}");
         }
     }
+
+    private void ValidarUnidadeOrganizacional(UnidadeOrganizacional unidade)
+    {
+        if (string.IsNullOrWhiteSpace(unidade.RazaoSocial))
+            _erros.Add(new ValidationError("RazaoSocial", "A Razão Social é obrigatória."));
+
+        if (!string.IsNullOrWhiteSpace(unidade.Cnpj) && !RulleValidation.IsCnpjValido(unidade.Cnpj))
+        {
+            _erros.Add(new ValidationError("Cnpj", "O CNPJ informado não é válido ou não existe."));
+        }
+
+        if (string.IsNullOrWhiteSpace(unidade.Email))
+            _erros.Add(new ValidationError("Email", "o Email é obrigatório"));
+
+        if (_erros.Any())
+            throw new ValidationException(_erros);
+    }
+
 }

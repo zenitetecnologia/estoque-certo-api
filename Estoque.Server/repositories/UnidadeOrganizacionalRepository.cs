@@ -19,7 +19,7 @@ public class UnidadeOrganizacionalRepository
             SELECT
                 id,
                 id_ou_matriz,
-                cpnj,
+                Cnpj,
                 razao_social,
                 nome_fantasia,
                 cep,
@@ -52,7 +52,7 @@ public class UnidadeOrganizacionalRepository
                 {
                     Id = reader.GetInt32(reader.GetOrdinal("id")),
                     IdOuMatriz = reader.GetInt32(reader.GetOrdinal("id_ou_matriz")),
-                    Cpnj = reader.IsDBNull(reader.GetOrdinal("cpnj")) ? string.Empty : reader.GetString(reader.GetOrdinal("cpnj")),
+                    Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
                     RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
                     NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
                     Cep = reader.IsDBNull(reader.GetOrdinal("cep")) ? string.Empty : reader.GetString(reader.GetOrdinal("cep")),
@@ -82,7 +82,7 @@ public class UnidadeOrganizacionalRepository
             SELECT
                 id,
                 id_ou_matriz,
-                cpnj,
+                Cnpj,
                 razao_social,
                 nome_fantasia,
                 cep,
@@ -116,7 +116,7 @@ public class UnidadeOrganizacionalRepository
             {
                 Id = reader.GetInt32(reader.GetOrdinal("id")),
                 IdOuMatriz = reader.GetInt32(reader.GetOrdinal("id_ou_matriz")),
-                Cpnj = reader.IsDBNull(reader.GetOrdinal("cpnj")) ? string.Empty : reader.GetString(reader.GetOrdinal("cpnj")),
+                Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
                 RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
                 NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
                 Cep = reader.IsDBNull(reader.GetOrdinal("cep")) ? string.Empty : reader.GetString(reader.GetOrdinal("cep")),
@@ -143,7 +143,7 @@ public class UnidadeOrganizacionalRepository
             INSERT INTO estoque.unidade_organizacional 
             (
                 id_ou_matriz,
-                cpnj,
+                Cnpj,
                 razao_social,
                 nome_fantasia,
                 cep,
@@ -159,7 +159,7 @@ public class UnidadeOrganizacionalRepository
             VALUES
             (
                 @id_ou_matriz,
-                @cpnj,
+                @Cnpj,
                 @razao_social,
                 @nome_fantasia,
                 @cep,
@@ -182,7 +182,7 @@ public class UnidadeOrganizacionalRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
             cmd.Parameters.AddWithValue("id_ou_matriz", unidade.IdOuMatriz);
-            cmd.Parameters.AddWithValue("cpnj", unidade.Cpnj);
+            cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
             cmd.Parameters.AddWithValue("cep", unidade.Cep);
@@ -213,7 +213,7 @@ public class UnidadeOrganizacionalRepository
                 estoque.unidade_organizacional
             SET
                 id_ou_matriz = @id_ou_matriz,
-                cpnj = @cpnj,
+                Cnpj = @Cnpj,
                 razao_social = @razao_social,
                 nome_fantasia = @nome_fantasia,
                 cep = @cep,
@@ -236,7 +236,7 @@ public class UnidadeOrganizacionalRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
             cmd.Parameters.AddWithValue("id", unidade.Id);
             cmd.Parameters.AddWithValue("id_ou_matriz", unidade.IdOuMatriz);
-            cmd.Parameters.AddWithValue("cpnj", unidade.Cpnj);
+            cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
             cmd.Parameters.AddWithValue("cep", unidade.Cep);
@@ -285,7 +285,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<bool> VerificaExisteUnidade(string cpnj, int ignoreId)
+    public async Task<bool> VerificaExisteUnidade(string Cnpj, int ignoreId)
     {
         const string sql = @"
             SELECT
@@ -293,7 +293,7 @@ public class UnidadeOrganizacionalRepository
             FROM
                 estoque.unidade_organizacional
             WHERE
-                cpnj = @cpnj
+                Cnpj = @Cnpj
             AND
                 id <> @ignoreId
             LIMIT 1;
@@ -304,7 +304,7 @@ public class UnidadeOrganizacionalRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("cpnj", cpnj);
+            cmd.Parameters.AddWithValue("Cnpj", Cnpj);
             cmd.Parameters.AddWithValue("ignoreId", ignoreId);
 
             var result = await cmd.ExecuteScalarAsync();

@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public int IdOuMatriz { get; set; }
-        public string Cpnj { get; set; } = string.Empty;
+        public string Cnpj { get; set; } = string.Empty;
         public string RazaoSocial { get; set; } = string.Empty;
         public string NomeFantasia { get; set; } = string.Empty;
         public string Cep { get; set; } = string.Empty;
