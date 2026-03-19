@@ -33,7 +33,7 @@ Abra um novo Editor SQL na sua ligação e execute o script abaixo. O script ir�
 CREATE SCHEMA IF NOT EXISTS estoque;
 
 -- 2. Tabela de Unidades Organizacionais (Matriz e Filiais)
-CREATE TABLE IF NOT EXISTS estoque.unidades_organizacionais (
+CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
     id SERIAL PRIMARY KEY,
     id_ou_matriz INTEGER NOT NULL,
     cpnj VARCHAR(20),
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS estoque.unidades_organizacionais (
 );
 
 -- 3. Tabela de Usuários (Utiliza Array nativo para as unidades)
-CREATE TABLE IF NOT EXISTS estoque.usuarios (
+CREATE TABLE IF NOT EXISTS estoque.usuario (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
     senha TEXT NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS estoque.usuarios (
 );
 
 -- 4. Tabela de Espaços (Locais físicos de armazenamento)
-CREATE TABLE IF NOT EXISTS estoque.espacos (
+CREATE TABLE IF NOT EXISTS estoque.espaco (
     id SERIAL PRIMARY KEY,
     id_unidade_organizacional INTEGER NOT NULL,
     nome VARCHAR(150) NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS estoque.espacos (
 );
 
 -- 5. Tabela de Itens de Estoque (Produtos)
-CREATE TABLE IF NOT EXISTS estoque.itens_estoque (
+CREATE TABLE IF NOT EXISTS estoque.item_estoque (
     id SERIAL PRIMARY KEY,
     id_unidade_organizacional INTEGER NOT NULL,
     espaco INTEGER NOT NULL,
