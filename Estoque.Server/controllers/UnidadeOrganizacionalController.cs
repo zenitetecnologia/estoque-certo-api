@@ -1,4 +1,5 @@
 ﻿using Estoque.models;
+using Estoque.Server.Validations;
 using Estoque.Services;
 
 namespace Estoque.Controllers;
@@ -12,7 +13,6 @@ public static class UnidadeOrganizacionalController
             try
             {
                 var result = await service.ObterTodasAsync();
-
                 return Results.Ok(result);
             }
             catch (Exception ex)
@@ -53,28 +53,20 @@ public static class UnidadeOrganizacionalController
 
         app.MapPost("v1/unidades-organizacionais", async (UnidadeOrganizacional unidade, IUnidadeOrganizacionalService service) =>
         {
-            try
-            {
-                var id = await service.CadastrarAsync(unidade);
-                unidade.Id = id;
 
-                return Results.Created($"/v1/unidades-organizacionais/{id}", unidade);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Results.BadRequest(new { erro = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
+            var id = await service.CadastrarAsync(unidade);
+
+            unidade.Id = id;
+
+            return Results.Created($"/v1/unidades-organizacionais/{id}", unidade);
+
         })
         .WithTags("unidades-organizacionais")
         .WithSummary("Cadastra uma nova unidade")
         .WithDescription("Cria uma nova unidade organizacional.")
-        .Produces(StatusCodes.Status201Created)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status500InternalServerError);
+        .Produces<UnidadeOrganizacional>(StatusCodes.Status201Created)
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
         app.MapPut("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacional unidade, IUnidadeOrganizacionalService service) =>
@@ -88,6 +80,10 @@ public static class UnidadeOrganizacionalController
                     return Results.NotFound(new { erro = "Unidade não encontrada para atualizar." });
 
                 return Results.Ok(new { mensagem = "Unidade atualizada com sucesso!" });
+            }
+            catch (ValidationException ex)
+            {
+                return Results.BadRequest(ex.Errors);
             }
             catch (InvalidOperationException ex)
             {

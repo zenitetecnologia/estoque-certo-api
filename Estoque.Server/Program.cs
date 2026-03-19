@@ -1,4 +1,6 @@
 using Estoque.Controllers;
+using Estoque.Server.Validations;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,5 +62,27 @@ app.MapHistoricoEndpoints();
 app.MapItemEstoqueEndpoints();
 app.MapUnidadeOrganizacionalEndpoints();
 app.MapUsuarioEndpoints();
+
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+        if (exception is ValidationException validationEx)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsJsonAsync(validationEx.Errors);
+            return;
+        }
+
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            error = exception?.Message
+        });
+    });
+});
 
 app.Run();
