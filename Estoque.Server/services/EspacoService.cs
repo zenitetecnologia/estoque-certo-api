@@ -12,11 +12,11 @@ public interface IEspacosService
     Task<bool> ExcluirAsync(int id);
 }
 
-public class EspacosService : IEspacosService
+public class EspacoService : IEspacosService
 {
-    private readonly EspacosRepository _repository;
+    private readonly EspacoRepository _repository;
 
-    public EspacosService(EspacosRepository repository)
+    public EspacoService(EspacoRepository repository)
     {
         _repository = repository;
     }

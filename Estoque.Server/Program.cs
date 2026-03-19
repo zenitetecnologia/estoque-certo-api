@@ -20,8 +20,8 @@ builder.Services.AddScoped<Estoque.Services.IItemEstoqueService, Estoque.Service
 builder.Services.AddScoped<Estoque.Repositories.UnidadeOrganizacionalRepository>();
 builder.Services.AddScoped<Estoque.Services.IUnidadeOrganizacionalService, Estoque.Services.UnidadeOrganizacionalService>();
 //espacos
-builder.Services.AddScoped<Estoque.Repositories.EspacosRepository>();
-builder.Services.AddScoped<Estoque.Services.IEspacosService, Estoque.Services.EspacosService>();
+builder.Services.AddScoped<Estoque.Repositories.EspacoRepository>();
+builder.Services.AddScoped<Estoque.Services.IEspacosService, Estoque.Services.EspacoService>();
 //historico
 builder.Services.AddScoped<Estoque.Repositories.HistoricoRepository>();
 builder.Services.AddScoped<Estoque.Services.IHistoricoService, Estoque.Services.HistoricoService>();

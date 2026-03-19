@@ -4,11 +4,11 @@ using Estoque.models;
 
 namespace Estoque.Repositories;
 
-public class EspacosRepository
+public class EspacoRepository
 {
     private readonly NpgsqlConnection _connection;
 
-    public EspacosRepository(IDbConnection connection)
+    public EspacoRepository(IDbConnection connection)
     {
         _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
     }
@@ -22,7 +22,7 @@ public class EspacosRepository
                 nome,
                 descricao
             FROM
-                estoque.espacos
+                estoque.espaco
             ORDER BY
                 nome;
         ";
@@ -67,7 +67,7 @@ public class EspacosRepository
                 nome,
                 descricao
             FROM
-                estoque.espacos
+                estoque.espaco
             WHERE
                 id = @id
             LIMIT 1;
@@ -104,7 +104,7 @@ public class EspacosRepository
     public async Task<int> CadastrarEspaco(Espacos espaco)
     {
         const string sql = @"
-            INSERT INTO estoque.espacos
+            INSERT INTO estoque.espaco
             (
                 id_unidade_organizacional,
                 nome,
@@ -144,7 +144,7 @@ public class EspacosRepository
     {
         const string sql = @"
             UPDATE
-                estoque.espacos
+                estoque.espaco
             SET
                 id_unidade_organizacional = @id_unidade_organizacional,
                 nome = @nome,
@@ -178,7 +178,7 @@ public class EspacosRepository
     {
         const string sql = @"
             DELETE FROM
-                estoque.espacos
+                estoque.espaco
             WHERE
                 id = @id;
         ";

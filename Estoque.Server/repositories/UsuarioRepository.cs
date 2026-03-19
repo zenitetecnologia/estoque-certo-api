@@ -26,7 +26,7 @@ public class UsuarioRepository
                 perfil,
                 id_unidades_organizacionais
             FROM
-                estoque.usuarios
+                estoque.usuario
             ORDER BY
                 nome;
         ";
@@ -79,7 +79,7 @@ public class UsuarioRepository
                 perfil,
                 id_unidades_organizacionais
             FROM
-                estoque.usuarios
+                estoque.usuario
             WHERE
                 id = @id
             LIMIT 1;
@@ -120,7 +120,7 @@ public class UsuarioRepository
     public async Task<int> CadastrarUsuario(Usuario usuario)
     {
         const string sql = @"
-            INSERT INTO estoque.usuarios
+            INSERT INTO estoque.usuario
             (
                 username,
                 senha,
@@ -172,7 +172,7 @@ public class UsuarioRepository
     {
         const string sql = @"
             UPDATE
-                estoque.usuarios
+                estoque.usuario
             SET
                 username = @username,
                 senha = @senha,
@@ -214,7 +214,7 @@ public class UsuarioRepository
     {
         const string sql = @"
             DELETE FROM
-                estoque.usuarios
+                estoque.usuario
             WHERE
                 id = @id";
 
@@ -241,7 +241,7 @@ public class UsuarioRepository
             SELECT
                 1
             FROM
-                estoque.usuarios
+                estoque.usuario
             WHERE
                 username = @username
             AND
