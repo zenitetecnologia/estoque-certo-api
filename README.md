@@ -36,7 +36,7 @@ CREATE SCHEMA IF NOT EXISTS estoque;
 CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
     id SERIAL PRIMARY KEY,
     id_ou_matriz INTEGER NOT NULL,
-    cpnj VARCHAR(20),
+    cnpj VARCHAR(20),
     razao_social TEXT,
     nome_fantasia TEXT,
     cep VARCHAR(20),
