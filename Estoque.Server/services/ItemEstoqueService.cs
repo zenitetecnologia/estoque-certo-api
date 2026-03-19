@@ -23,41 +23,76 @@ public class ItemEstoqueService : IItemEstoqueService
 
     public async Task<List<ItemEstoque>> ObterTodosAsync()
     {
-        return await _repository.ObterItensEstoque();
+        try
+        {
+            return await _repository.ObterItensEstoque();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao listar todos os itens: {ex.Message}");
+        }
     }
 
     public async Task<ItemEstoque?> ObterPorIdAsync(int id)
     {
-        return await _repository.ObterItemEstoquePorId(id);
+        try
+        {
+            return await _repository.ObterItemEstoquePorId(id);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao listar item por ID: {ex.Message}");
+        }
     }
 
     public async Task<int> CadastrarAsync(ItemEstoque item)
     {
-        if (string.IsNullOrWhiteSpace(item.Descricao))
+        try
         {
-            throw new ArgumentException("A descrição do item é obrigatória.");
-        }
+            if (string.IsNullOrWhiteSpace(item.Descricao))
+            {
+                throw new ArgumentException("A descrição do item é obrigatória.");
+            }
 
-        if (item.Quantidade < 0)
+            if (item.Quantidade < 0)
+            {
+                throw new ArgumentException("A quantidade inicial não pode ser negativa.");
+            }
+
+            return await _repository.CadastrarItemEstoque(item);
+        }
+        catch (Exception ex)
         {
-            throw new ArgumentException("A quantidade inicial não pode ser negativa.");
+            throw new Exception($"Erro ao cadastrar item de estoque: {ex.Message}");
         }
-
-        return await _repository.CadastrarItemEstoque(item);
     }
 
     public async Task<bool> AtualizarAsync(ItemEstoque item)
     {
-        if (string.IsNullOrWhiteSpace(item.Descricao))
+        try
         {
-            throw new ArgumentException("A descrição do item é obrigatória.");
-        }
+            if (string.IsNullOrWhiteSpace(item.Descricao))
+            {
+                throw new ArgumentException("A descrição do item é obrigatória.");
+            }
 
-        return await _repository.AtualizarItemEstoque(item);
+            return await _repository.AtualizarItemEstoque(item);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao atualizar item de estoque: {ex.Message}");
+        }
     }
 
     public async Task<bool> ExcluirAsync(int id)
     {
-        return await _repository.ExcluirItemEstoque(id);
+        try
+        {
+            return await _repository.ExcluirItemEstoque(id);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao excluir item: {ex.Message}");
+        }
     }
 }

@@ -1,70 +1,134 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Estoque.models;
+﻿using Estoque.models;
 using Estoque.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Estoque.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-[Produces("application/json")]
-public class UnidadeOrganizacionalController : ControllerBase
+public static class UnidadeOrganizacionalController
 {
-    private readonly IUnidadeOrganizacionalService _service;
-
-    public UnidadeOrganizacionalController(IUnidadeOrganizacionalService service)
+    public static void MapUnidadeOrganizacionalEndpoints(this WebApplication app)
     {
-        _service = service;
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> ListarTodas()
-    {
-        return Ok(await _service.ObterTodasAsync());
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> ObterPorId(int id)
-    {
-        var unidade = await _service.ObterPorIdAsync(id);
-        if (unidade == null) return NotFound("Unidade não encontrada.");
-        return Ok(unidade);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Cadastrar([FromBody] UnidadeOrganizacional unidade)
-    {
-        try
+        app.MapGet("v1/unidades-organizacionais", async (IUnidadeOrganizacionalService service) =>
         {
-            var id = await _service.CadastrarAsync(unidade);
-            return StatusCode(201, new { mensagem = "Unidade criada com sucesso", id = id });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { erro = ex.Message });
-        }
-    }
+            try
+            {
+                var result = await service.ObterTodasAsync();
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Atualizar(int id, [FromBody] UnidadeOrganizacional unidade)
-    {
-        try
-        {
-            unidade.Id = id;
-            var atualizado = await _service.AtualizarAsync(unidade);
-            if (!atualizado) return NotFound("Unidade não encontrada para atualizar.");
-            return Ok(new { mensagem = "Unidade atualizada com sucesso!" });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { erro = ex.Message });
-        }
-    }
+                return Results.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return Results.InternalServerError(ex.Message);
+            }
+        })
+        .WithTags("unidades-organizacionais")
+        .WithSummary("Lista as unidades organizacionais")
+        .WithDescription("Retorna a lista de todas as unidades.")
+        .Produces<List<UnidadeOrganizacional>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status500InternalServerError);
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Excluir(int id)
-    {
-        var excluido = await _service.ExcluirAsync(id);
-        if (!excluido) return NotFound("Unidade não encontrada.");
-        return Ok(new { mensagem = "Unidade excluída com sucesso!" });
+
+        app.MapGet("v1/unidades-organizacionais/{id:int}", async (int id, IUnidadeOrganizacionalService service) =>
+        {
+            try
+            {
+                var result = await service.ObterPorIdAsync(id);
+
+                if (result == null)
+                    return Results.NotFound(new { erro = "Unidade não encontrada." });
+
+                return Results.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return Results.InternalServerError(ex.Message);
+            }
+        })
+        .WithTags("unidades-organizacionais")
+        .WithSummary("Busca uma unidade por ID")
+        .WithDescription("Obtém os detalhes de uma unidade específica.")
+        .Produces<UnidadeOrganizacional>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status500InternalServerError);
+
+
+        app.MapPost("v1/unidades-organizacionais", async (UnidadeOrganizacional unidade, IUnidadeOrganizacionalService service) =>
+        {
+            try
+            {
+                var id = await service.CadastrarAsync(unidade);
+                unidade.Id = id;
+
+                return Results.Created($"/v1/unidades-organizacionais/{id}", unidade);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Results.BadRequest(new { erro = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return Results.InternalServerError(ex.Message);
+            }
+        })
+        .WithTags("unidades-organizacionais")
+        .WithSummary("Cadastra uma nova unidade")
+        .WithDescription("Cria uma nova unidade organizacional.")
+        .Produces(StatusCodes.Status201Created)
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status500InternalServerError);
+
+
+        app.MapPut("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacional unidade, IUnidadeOrganizacionalService service) =>
+        {
+            try
+            {
+                unidade.Id = id;
+                var atualizado = await service.AtualizarAsync(unidade);
+
+                if (!atualizado)
+                    return Results.NotFound(new { erro = "Unidade não encontrada para atualizar." });
+
+                return Results.Ok(new { mensagem = "Unidade atualizada com sucesso!" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Results.BadRequest(new { erro = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return Results.InternalServerError(ex.Message);
+            }
+        })
+        .WithTags("unidades-organizacionais")
+        .WithSummary("Atualiza uma unidade")
+        .WithDescription("Atualiza as informações de uma unidade existente.")
+        .Produces(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status500InternalServerError);
+
+
+        app.MapDelete("v1/unidades-organizacionais/{id:int}", async (int id, IUnidadeOrganizacionalService service) =>
+        {
+            try
+            {
+                var excluido = await service.ExcluirAsync(id);
+
+                if (!excluido)
+                    return Results.NotFound(new { erro = "Unidade não encontrada." });
+
+                return Results.Ok(new { mensagem = "Unidade excluída com sucesso!" });
+            }
+            catch (Exception ex)
+            {
+                return Results.InternalServerError(ex.Message);
+            }
+        })
+        .WithTags("unidades-organizacionais")
+        .WithSummary("Exclui uma unidade")
+        .WithDescription("Remove uma unidade organizacional do sistema.")
+        .Produces(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status500InternalServerError);
     }
 }

@@ -1,3 +1,5 @@
+using Estoque.Controllers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -24,6 +26,16 @@ builder.Services.AddScoped<Estoque.Services.IEspacosService, Estoque.Services.Es
 builder.Services.AddScoped<Estoque.Repositories.HistoricoRepository>();
 builder.Services.AddScoped<Estoque.Services.IHistoricoService, Estoque.Services.HistoricoService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirTudo", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -35,12 +47,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("PermitirTudo");
+
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
-
 app.MapFallbackToFile("/index.html");
+
+app.MapEspacosEndpoints();
+app.MapHistoricoEndpoints();
+app.MapItemEstoqueEndpoints();
+app.MapUnidadeOrganizacionalEndpoints();
+app.MapUsuarioEndpoints();
 
 app.Run();

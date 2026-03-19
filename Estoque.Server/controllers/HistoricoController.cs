@@ -1,41 +1,51 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Estoque.models;
+﻿using Estoque.models;
 using Estoque.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Estoque.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-[Produces("application/json")]
-public class HistoricoController : ControllerBase
+public static class HistoricoController
 {
-    private readonly IHistoricoService _service;
-
-    public HistoricoController(IHistoricoService service)
+    public static void MapHistoricoEndpoints(this WebApplication app)
     {
-        _service = service;
-    }
-
-    /// <summary>Obtém o histórico completo de movimentações de um item de estoque específico.</summary>
-    [HttpGet("item/{idItem}")]
-    public async Task<IActionResult> ObterHistoricoPorItem(int idItem)
-    {
-        var lista = await _service.ObterHistoricoPorItemAsync(idItem);
-        return Ok(lista);
-    }
-
-    /// <summary>Regista uma entrada ou saída no histórico de movimentações (Auditoria).</summary>
-    [HttpPost]
-    public async Task<IActionResult> RegistarMovimentacao([FromBody] Historico historico)
-    {
-        try
+        app.MapGet("v1/historicos/item/{idItem:int}", async (int idItem, IHistoricoService service) =>
         {
-            var id = await _service.RegistarMovimentacaoAsync(historico);
-            return StatusCode(201, new { mensagem = "Movimentação registada com sucesso", id = id });
-        }
-        catch (Exception ex)
+            try
+            {
+                var lista = await service.ObterHistoricoPorItemAsync(idItem);
+
+                return Results.Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return Results.InternalServerError(ex.Message);
+            }
+        })
+        .WithTags("historicos")
+        .WithSummary("Obtém o histórico de um item")
+        .WithDescription("Obtém o histórico completo de movimentações de um item específico.")
+        .Produces<List<Historico>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status500InternalServerError);
+
+
+        app.MapPost("v1/historicos", async (Historico historico, IHistoricoService service) =>
         {
-            return StatusCode(500, new { erro = "Erro interno no servidor.", detalhe = ex.Message });
-        }
+            try
+            {
+                var id = await service.RegistarMovimentacaoAsync(historico);
+                historico.Id = id;
+
+                return Results.Created($"/v1/historicos/{id}", historico);
+            }
+            catch (Exception ex)
+            {
+                return Results.InternalServerError(ex.Message);
+            }
+        })
+        .WithTags("historicos")
+        .WithSummary("Regista uma movimentação")
+        .WithDescription("Regista uma entrada ou saída no histórico de movimentações.")
+        .Produces(StatusCodes.Status201Created)
+        .Produces(StatusCodes.Status500InternalServerError);
     }
 }

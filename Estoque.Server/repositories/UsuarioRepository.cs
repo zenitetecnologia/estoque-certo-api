@@ -216,8 +216,7 @@ public class UsuarioRepository
             DELETE FROM
                 estoque.usuarios
             WHERE
-                id = @id;
-        ";
+                id = @id";
 
         try
         {

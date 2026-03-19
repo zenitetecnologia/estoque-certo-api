@@ -24,68 +24,110 @@ public class UsuarioService : IUsuarioService
 
     public async Task<List<Usuario>> ListarTodosAsync()
     {
-        return await _repository.ObterUsuarios();
+        try
+        {
+            return await _repository.ObterUsuarios();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao listar todos usuários: {ex.Message}");
+        }
     }
 
     public async Task<Usuario?> ObterPorIdAsync(int id)
     {
-        return await _repository.ObterUsuarioPorId(id);
+        try
+        {
+            return await _repository.ObterUsuarioPorId(id);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao listar usuário por ID: {ex.Message}");
+        }
     }
 
     public async Task<int> RegistarUsuarioNormalAsync(Usuario usuario)
     {
-        usuario.Perfil = PerfilUsuario.Normal;
-        usuario.Validado = false;
-
-        if (string.IsNullOrWhiteSpace(usuario.Username) || string.IsNullOrWhiteSpace(usuario.Senha))
+        try
         {
-            throw new ArgumentException("Username e Senha são obrigatórios.");
-        }
+            usuario.Perfil = PerfilUsuario.Normal;
+            usuario.Validado = false;
 
-        bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, 0);
-        if (usernameExiste)
+            if (string.IsNullOrWhiteSpace(usuario.Username) || string.IsNullOrWhiteSpace(usuario.Senha))
+            {
+                throw new ArgumentException("Username e Senha são obrigatórios.");
+            }
+
+            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, 0);
+            if (usernameExiste)
+            {
+                throw new InvalidOperationException("Este Username já está em uso.");
+            }
+
+            return await _repository.CadastrarUsuario(usuario);
+        }
+        catch (Exception ex)
         {
-            throw new InvalidOperationException("Este Username já está em uso.");
+            throw new Exception($"Erro ao registar usuário normal: {ex.Message}");
         }
-
-        return await _repository.CadastrarUsuario(usuario);
     }
 
     public async Task AprovarUsuarioAsync(int idUsuarioAdmin, int idUsuarioParaAprovar)
     {
-        var admin = await _repository.ObterUsuarioPorId(idUsuarioAdmin)
-                    ?? throw new UnauthorizedAccessException("Administrador não encontrado.");
-
-        if (admin.Perfil != PerfilUsuario.Admin)
+        try
         {
-            throw new UnauthorizedAccessException("Apenas administradores podem aprovar acessos.");
+            var admin = await _repository.ObterUsuarioPorId(idUsuarioAdmin)
+                        ?? throw new UnauthorizedAccessException("Administrador não encontrado.");
+
+            if (admin.Perfil != PerfilUsuario.Admin)
+            {
+                throw new UnauthorizedAccessException("Apenas administradores podem aprovar acessos.");
+            }
+
+            var usuarioPendente = await _repository.ObterUsuarioPorId(idUsuarioParaAprovar)
+                                  ?? throw new KeyNotFoundException("Usuário não encontrado.");
+
+            if (usuarioPendente.Validado)
+            {
+                throw new InvalidOperationException("Este usuário já está validado.");
+            }
+
+            usuarioPendente.Validado = true;
+            await _repository.AtualizarUsuario(usuarioPendente);
         }
-
-        var usuarioPendente = await _repository.ObterUsuarioPorId(idUsuarioParaAprovar)
-                              ?? throw new KeyNotFoundException("Utilizador não encontrado.");
-
-        if (usuarioPendente.Validado)
+        catch (Exception ex)
         {
-            throw new InvalidOperationException("Este utilizador já está validado.");
+            throw new Exception($"Erro ao aprovar usuário: {ex.Message}");
         }
-
-        usuarioPendente.Validado = true;
-        await _repository.AtualizarUsuario(usuarioPendente);
     }
 
     public async Task<bool> AtualizarAsync(Usuario usuario)
     {
-        bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuario.Id);
-        if (usernameExiste)
+        try
         {
-            throw new InvalidOperationException("Este Username já está a ser usado por outro utilizador.");
-        }
+            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuario.Id);
+            if (usernameExiste)
+            {
+                throw new InvalidOperationException("Este Username já está a ser usado por outro usuário.");
+            }
 
-        return await _repository.AtualizarUsuario(usuario);
+            return await _repository.AtualizarUsuario(usuario);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao atualizar usuário: {ex.Message}");
+        }
     }
 
     public async Task<bool> ExcluirAsync(int id)
     {
-        return await _repository.ExcluirUsuario(id);
+        try
+        {
+            return await _repository.ExcluirUsuario(id);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao excluir usuário: {ex.Message}");
+        }
     }
 }
