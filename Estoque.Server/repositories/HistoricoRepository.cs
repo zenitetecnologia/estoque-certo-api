@@ -18,9 +18,9 @@ public class HistoricoRepository
         const string sql = @"
             SELECT
                 id,
-                id_item_estoque,
+                item_estoque_id
                 tipo_movimentacao,
-                id_usuario,
+                usuario_id,
                 data_hora,
                 quantidade_anterior,
                 quantidade_resultante
@@ -47,10 +47,10 @@ public class HistoricoRepository
             {
                 historico.Add(new Historico
                 {
-                    Id = reader.GetInt32(reader.GetOrdinal("id")),
-                    IdItemEstoque = reader.GetInt32(reader.GetOrdinal("id_item_estoque")),
+                    HistoricoId = reader.GetInt32(reader.GetOrdinal("id")),
+                    ItemEstoqueId = reader.GetInt32(reader.GetOrdinal("id_item_estoque")),
                     TipoMovimentacao = (TipoMovimentacao)reader.GetInt32(reader.GetOrdinal("tipo_movimentacao")),
-                    IdUsuario = reader.GetInt32(reader.GetOrdinal("id_usuario")),
+                    UsuarioId = reader.GetInt32(reader.GetOrdinal("usuario_id")),
                     DataHora = reader.GetDateTime(reader.GetOrdinal("data_hora")),
                     QuantidadeAnterior = reader.GetDecimal(reader.GetOrdinal("quantidade_anterior")),
                     QuantidadeResultante = reader.GetDecimal(reader.GetOrdinal("quantidade_resultante"))
@@ -71,18 +71,18 @@ public class HistoricoRepository
         const string sql = @"
             INSERT INTO estoque.historico
             (
-                id_item_estoque,
+                item_estoque_id
                 tipo_movimentacao,
-                id_usuario,
+                usuario_id,
                 data_hora,
                 quantidade_anterior,
                 quantidade_resultante
             )
             VALUES
             (
-                @id_item_estoque,
+                @item_estoque_id
                 @tipo_movimentacao,
-                @id_usuario,
+                @usuario_id,
                 @data_hora,
                 @quantidade_anterior,
                 @quantidade_resultante
@@ -96,9 +96,9 @@ public class HistoricoRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("id_item_estoque", historico.IdItemEstoque);
+            cmd.Parameters.AddWithValue("id_item_estoque", historico.ItemEstoqueId);
             cmd.Parameters.AddWithValue("tipo_movimentacao", (int)historico.TipoMovimentacao);
-            cmd.Parameters.AddWithValue("id_usuario", historico.IdUsuario);
+            cmd.Parameters.AddWithValue("usuario_id", historico.UsuarioId);
             cmd.Parameters.AddWithValue("data_hora", historico.DataHora);
             cmd.Parameters.AddWithValue("quantidade_anterior", historico.QuantidadeAnterior);
             cmd.Parameters.AddWithValue("quantidade_resultante", historico.QuantidadeResultante);

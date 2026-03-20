@@ -32,7 +32,7 @@ public static class HistoricoController
             try
             {
                 var id = await service.RegistarMovimentacaoAsync(historico);
-                historico.Id = id;
+                historico.HistoricoId = id;
 
                 return Results.Created($"/v1/historicos/{id}", historico);
             }

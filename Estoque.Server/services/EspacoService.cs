@@ -52,7 +52,7 @@ public class EspacoService : IEspacosService
             if (string.IsNullOrWhiteSpace(espaco.Nome))
                 throw new ArgumentException("O nome do espaço é obrigatório.");
 
-            if (espaco.IdUnidadeOrganizacional <= 0)
+            if (espaco.UnidadeOrganizacionalId <= 0)
                 throw new ArgumentException("A Unidade Organizacional é obrigatória.");
 
             return await _repository.CadastrarEspaco(espaco);

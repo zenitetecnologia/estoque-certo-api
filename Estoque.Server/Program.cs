@@ -1,5 +1,7 @@
 using Estoque.Controllers;
+using Estoque.Repositories;
 using Estoque.Server.Validations;
+using Estoque.Services;
 using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,8 +15,8 @@ builder.Services.AddScoped<System.Data.IDbConnection>(sp =>
     new Npgsql.NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //usuario
-builder.Services.AddScoped<Estoque.Repositories.UsuarioRepository>();
-builder.Services.AddScoped<Estoque.Services.IUsuarioService, Estoque.Services.UsuarioService>();
+builder.Services.AddScoped<UsuarioRepository>();
+builder.Services.AddScoped<UsuarioService>();
 //item estoque
 builder.Services.AddScoped<Estoque.Repositories.ItemEstoqueRepository>();
 builder.Services.AddScoped<Estoque.Services.IItemEstoqueService, Estoque.Services.ItemEstoqueService>();

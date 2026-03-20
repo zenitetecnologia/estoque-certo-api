@@ -4,16 +4,7 @@ using Estoque.Server.Validations;
 
 namespace Estoque.Services;
 
-public interface IUsuarioService
-{
-    Task<List<Usuario>> ListarTodosAsync();
-    Task<Usuario?> ObterPorIdAsync(int id);
-    Task<int> CriarUsuario(Usuario usuario);
-    Task<bool> AtualizarUsuario(Usuario usuario);
-    Task<bool> ExcluirAsync(int id);
-}
-
-public class UsuarioService : IUsuarioService
+public class UsuarioService
 {
     private readonly UsuarioRepository _repository;
 
@@ -38,7 +29,7 @@ public class UsuarioService : IUsuarioService
     {
         try
         {
-            return await _repository.ObterUsuarioPorId(id);
+            return await _repository.ObterUsuario(id);
         }
         catch (Exception ex)
         {
@@ -54,7 +45,9 @@ public class UsuarioService : IUsuarioService
 
             usuario.Perfil = PerfilUsuario.Normal;
 
-            return await _repository.CadastrarUsuario(usuario);
+            int novoIdUsuario = await _repository.CadastrarUsuario(usuario);        
+
+            return novoIdUsuario;
         }
         catch (ValidationException)
         {
@@ -62,7 +55,7 @@ public class UsuarioService : IUsuarioService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao registar usuário normal: {ex.Message}");
+            throw new Exception($"Erro ao registar usuário: {ex.Message}");
         }
     }
 
@@ -72,9 +65,16 @@ public class UsuarioService : IUsuarioService
         {
             ValidarUsuario(usuario);
 
-            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuario.Id);
+            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuario.UsuarioId);
 
-            return await _repository.AtualizarUsuario(usuario);
+            if (usernameExiste)
+            {
+                throw new InvalidOperationException("Este Username já está a ser usado por outro usuário.");
+            }
+
+            bool atualizado = await _repository.AtualizarUsuario(usuario); 
+
+            return atualizado;
         }
         catch (ValidationException)
         {
@@ -95,6 +95,23 @@ public class UsuarioService : IUsuarioService
         catch (Exception ex)
         {
             throw new Exception($"Erro ao excluir usuário: {ex.Message}");
+        }
+    }
+
+    public async Task VincularComUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
+    {
+        try
+        {
+            var usuario = await _repository.ObterUsuario(idUsuario);
+            if (usuario == null)
+            {
+                throw new KeyNotFoundException("Usuário não encontrado.");
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao vincular unidade: {ex.Message}");
         }
     }
 

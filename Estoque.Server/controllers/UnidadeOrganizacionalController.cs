@@ -43,7 +43,7 @@ public static class UnidadeOrganizacionalController
 
             var id = await service.CadastrarAsync(unidade);
 
-            unidade.Id = id;
+            unidade.UnidadeOrganizacionalId = id;
  
             return Results.Created($"/v1/unidades-organizacionais/{id}", unidade);
 
@@ -58,7 +58,7 @@ public static class UnidadeOrganizacionalController
 
         app.MapPut("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacional unidade, IUnidadeOrganizacionalService service) =>
         {
-            unidade.Id = id;
+            unidade.UnidadeOrganizacionalId = id;
             var atualizado = await service.AtualizarAsync(unidade);
 
             if (!atualizado)

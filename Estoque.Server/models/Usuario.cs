@@ -2,7 +2,7 @@
 {
     public class Usuario
     {
-        public int Id { get; set; }
+        public int UsuarioId { get; set; }
         public string Username { get; set; } = string.Empty;
         public string Senha { get; set; } = string.Empty;
         public string Nome { get; set; } = string.Empty;

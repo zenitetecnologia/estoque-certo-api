@@ -56,7 +56,7 @@ public static class ItemEstoqueController
             try
             {
                 var id = await service.CadastrarAsync(item);
-                item.Id = id;
+                item.ItemEstoqueId = id;
 
                 return Results.Created($"/v1/itens-estoque/{id}", item);
             }
@@ -81,7 +81,7 @@ public static class ItemEstoqueController
         {
             try
             {
-                item.Id = id;
+                item.ItemEstoqueId = id;
                 var atualizado = await service.AtualizarAsync(item);
 
                 if (!atualizado)

@@ -50,8 +50,8 @@ public class UnidadeOrganizacionalRepository
             {
                 unidades.Add(new UnidadeOrganizacional
                 {
-                    Id = reader.GetInt32(reader.GetOrdinal("id")),
-                    IdOuMatriz = reader.GetInt32(reader.GetOrdinal("id_ou_matriz")),
+                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("id")),
+                    IdMatriz = reader.GetInt32(reader.GetOrdinal("id_ou_matriz")),
                     Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
                     RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
                     NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
@@ -114,8 +114,8 @@ public class UnidadeOrganizacionalRepository
 
             return new UnidadeOrganizacional
             {
-                Id = reader.GetInt32(reader.GetOrdinal("id")),
-                IdOuMatriz = reader.GetInt32(reader.GetOrdinal("id_ou_matriz")),
+                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("id")),
+                IdMatriz = reader.GetInt32(reader.GetOrdinal("id_ou_matriz")),
                 Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
                 RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
                 NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
@@ -142,7 +142,7 @@ public class UnidadeOrganizacionalRepository
         const string sql = @"
             INSERT INTO estoque.unidade_organizacional 
             (
-                id_ou_matriz,
+                id_matriz,
                 Cnpj,
                 razao_social,
                 nome_fantasia,
@@ -181,7 +181,7 @@ public class UnidadeOrganizacionalRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("id_ou_matriz", unidade.IdOuMatriz);
+            cmd.Parameters.AddWithValue("id_ou_matriz", unidade.IdMatriz);
             cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
@@ -234,8 +234,8 @@ public class UnidadeOrganizacionalRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("id", unidade.Id);
-            cmd.Parameters.AddWithValue("id_ou_matriz", unidade.IdOuMatriz);
+            cmd.Parameters.AddWithValue("id", unidade.UnidadeOrganizacionalId);
+            cmd.Parameters.AddWithValue("id_ou_matriz", unidade.IdMatriz);
             cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);

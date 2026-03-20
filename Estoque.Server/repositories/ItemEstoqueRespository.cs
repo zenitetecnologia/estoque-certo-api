@@ -18,7 +18,7 @@ public class ItemEstoqueRepository
         const string sql = @"
             SELECT
                 id,
-                id_unidade_organizacional,
+                unidade_organizacional_id,
                 espaco,
                 descricao,
                 tipo_unidade_medida,
@@ -42,8 +42,8 @@ public class ItemEstoqueRepository
             {
                 itens.Add(new ItemEstoque
                 {
-                    Id = reader.GetInt32(reader.GetOrdinal("id")),
-                    IdUnidadeOrganizacional = reader.GetInt32(reader.GetOrdinal("id_unidade_organizacional")),
+                    ItemEstoqueId = reader.GetInt32(reader.GetOrdinal("id")),
+                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
                     Espaco = reader.GetInt32(reader.GetOrdinal("espaco")),
                     Descricao = reader.GetString(reader.GetOrdinal("descricao")),
                     TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32(reader.GetOrdinal("tipo_unidade_medida")),
@@ -65,7 +65,7 @@ public class ItemEstoqueRepository
         const string sql = @"
             SELECT
                 id,
-                id_unidade_organizacional,
+                unidade_organizacional_id,
                 espaco,
                 descricao,
                 tipo_unidade_medida,
@@ -90,8 +90,8 @@ public class ItemEstoqueRepository
 
             return new ItemEstoque
             {
-                Id = reader.GetInt32(reader.GetOrdinal("id")),
-                IdUnidadeOrganizacional = reader.GetInt32(reader.GetOrdinal("id_unidade_organizacional")),
+                ItemEstoqueId = reader.GetInt32(reader.GetOrdinal("id")),
+                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
                 Espaco = reader.GetInt32(reader.GetOrdinal("espaco")),
                 Descricao = reader.GetString(reader.GetOrdinal("descricao")),
                 TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32(reader.GetOrdinal("tipo_unidade_medida")),
@@ -110,7 +110,7 @@ public class ItemEstoqueRepository
         const string sql = @"
             INSERT INTO estoque.item_estoque
             (
-                id_unidade_organizacional,
+                unidade_organizacional_id,
                 espaco,
                 descricao,
                 tipo_unidade_medida,
@@ -118,7 +118,7 @@ public class ItemEstoqueRepository
             )
             VALUES
             (
-                @id_unidade_organizacional,
+                @unidade_organizacional_id,
                 @espaco,
                 @descricao,
                 @tipo_unidade_medida,
@@ -133,7 +133,7 @@ public class ItemEstoqueRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("id_unidade_organizacional", item.IdUnidadeOrganizacional);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", item.UnidadeOrganizacionalId);
             cmd.Parameters.AddWithValue("espaco", item.Espaco);
             cmd.Parameters.AddWithValue("descricao", item.Descricao);
             cmd.Parameters.AddWithValue("tipo_unidade_medida", (int)item.TipoUnidadeMedida);
@@ -156,7 +156,7 @@ public class ItemEstoqueRepository
             UPDATE
                 estoque.item_estoque
             SET
-                id_unidade_organizacional = @id_unidade_organizacional,
+                unidade_organizacional_id = @unidade_organizacional_id,
                 espaco = @espaco,
                 descricao = @descricao,
                 tipo_unidade_medida = @tipo_unidade_medida,
@@ -171,8 +171,8 @@ public class ItemEstoqueRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("id", item.Id);
-            cmd.Parameters.AddWithValue("id_unidade_organizacional", item.IdUnidadeOrganizacional);
+            cmd.Parameters.AddWithValue("id", item.ItemEstoqueId);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", item.UnidadeOrganizacionalId);
             cmd.Parameters.AddWithValue("espaco", item.Espaco);
             cmd.Parameters.AddWithValue("descricao", item.Descricao);
             cmd.Parameters.AddWithValue("tipo_unidade_medida", (int)item.TipoUnidadeMedida);

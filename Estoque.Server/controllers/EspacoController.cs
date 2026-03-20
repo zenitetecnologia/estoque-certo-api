@@ -56,7 +56,7 @@ public static class EspacosController
             try
             {
                 var id = await service.CadastrarAsync(espaco);
-                espaco.Id = id;
+                espaco.EspacoId = id;
 
                 return Results.Created($"/v1/espacos/{id}", espaco);
             }
@@ -81,7 +81,7 @@ public static class EspacosController
         {
             try
             {
-                espaco.Id = id;
+                espaco.EspacoId = id;
                 var atualizado = await service.AtualizarAsync(espaco);
 
                 if (!atualizado)

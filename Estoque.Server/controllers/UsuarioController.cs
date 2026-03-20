@@ -8,7 +8,7 @@ public static class UsuarioController
 {
     public static void MapUsuarioEndpoints(this WebApplication app)
     {
-        app.MapGet("v1/usuarios", async (IUsuarioService service) =>
+        app.MapGet("v1/usuarios", async (UsuarioService service) =>
         {
             var result = await service.ListarTodosAsync();
 
@@ -22,7 +22,7 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
-        app.MapGet("v1/usuarios/{id:int}", async (int id, IUsuarioService service) =>
+        app.MapGet("v1/usuarios/{id:int}", async (int id, UsuarioService service) =>
         {
             var result = await service.ObterPorIdAsync(id);
 
@@ -40,11 +40,11 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPost("v1/usuarios/registrar", async (Usuario usuario, IUsuarioService service) =>
+        app.MapPost("v1/usuarios/registrar", async (Usuario usuario, UsuarioService service) =>
         {
             int idNovoUsuario = await service.CriarUsuario(usuario);
 
-            usuario.Id = idNovoUsuario;
+            usuario.UsuarioId = idNovoUsuario;
 
             return Results.Created($"/v1/usuarios/{idNovoUsuario}", new
             {
@@ -61,9 +61,9 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPut("v1/usuarios/{id:int}", async (int id, Usuario usuario, IUsuarioService service) =>
+        app.MapPut("v1/usuarios/{id:int}", async (int id, Usuario usuario, UsuarioService service) =>
         {
-            usuario.Id = id;
+            usuario.UsuarioId = id;
             var atualizado = await service.AtualizarUsuario(usuario);
 
             if (!atualizado)
@@ -81,7 +81,7 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
-        app.MapDelete("v1/usuarios/{id:int}", async (int id, IUsuarioService service) =>
+        app.MapDelete("v1/usuarios/{id:int}", async (int id, UsuarioService service) =>
         {
             var excluido = await service.ExcluirAsync(id);
 
@@ -96,6 +96,21 @@ public static class UsuarioController
         .WithDescription("Exclui um usuário do sistema.")
         .Produces(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+
+
+        app.MapPost("v1/usuarios/{id:int}/vincular-unidade/{idUnidade:int}", async (int id, int idUnidade, UsuarioService service) =>
+        {
+            await service.VincularComUnidadeOrganizacional(id, idUnidade);
+
+            return Results.Ok(new { mensagem = "Unidade vinculada ao usuário com suces  so!" });
+
+        })
+        .WithTags("usuarios")
+        .WithSummary("Vincula uma unidade a um usuário")
+        .WithDescription("Adiciona uma unidade organizacional à lista de acessos do usuário.")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
     }
 }

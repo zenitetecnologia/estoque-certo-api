@@ -18,7 +18,7 @@ public class EspacoRepository
         const string sql = @"
             SELECT
                 id,
-                id_unidade_organizacional,
+                unidade_organizacional_id,
                 nome,
                 descricao
             FROM
@@ -40,8 +40,8 @@ public class EspacoRepository
             {
                 espacos.Add(new Espacos
                 {
-                    Id = reader.GetInt32(reader.GetOrdinal("id")),
-                    IdUnidadeOrganizacional = reader.GetInt32(reader.GetOrdinal("id_unidade_organizacional")),
+                    EspacoId = reader.GetInt32(reader.GetOrdinal("id")),
+                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
                     Nome = reader.GetString(reader.GetOrdinal("nome")),
                     Descricao = reader.IsDBNull(reader.GetOrdinal("descricao"))
                         ? string.Empty
@@ -63,7 +63,7 @@ public class EspacoRepository
         const string sql = @"
             SELECT
                 id,
-                id_unidade_organizacional,
+                unidade_organizacional_id,
                 nome,
                 descricao
             FROM
@@ -86,8 +86,8 @@ public class EspacoRepository
 
             return new Espacos
             {
-                Id = reader.GetInt32(reader.GetOrdinal("id")),
-                IdUnidadeOrganizacional = reader.GetInt32(reader.GetOrdinal("id_unidade_organizacional")),
+                EspacoId = reader.GetInt32(reader.GetOrdinal("id")),
+                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
                 Nome = reader.GetString(reader.GetOrdinal("nome")),
                 Descricao = reader.IsDBNull(reader.GetOrdinal("descricao"))
                     ? string.Empty
@@ -106,13 +106,13 @@ public class EspacoRepository
         const string sql = @"
             INSERT INTO estoque.espaco
             (
-                id_unidade_organizacional,
+                unidade_organizacional_id,
                 nome,
                 descricao
             )
             VALUES
             (
-                @id_unidade_organizacional,
+                @unidade_organizacional_id,
                 @nome,
                 @descricao
             )
@@ -125,7 +125,7 @@ public class EspacoRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("id_unidade_organizacional", espaco.IdUnidadeOrganizacional);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", espaco.UnidadeOrganizacionalId);
             cmd.Parameters.AddWithValue("nome", espaco.Nome);
             cmd.Parameters.AddWithValue("descricao", (object?)espaco.Descricao ?? DBNull.Value);
 
@@ -146,7 +146,7 @@ public class EspacoRepository
             UPDATE
                 estoque.espaco
             SET
-                id_unidade_organizacional = @id_unidade_organizacional,
+                unidade_organizacional_id = @unidade_organizacional_id,
                 nome = @nome,
                 descricao = @descricao
             WHERE
@@ -159,8 +159,8 @@ public class EspacoRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("id", espaco.Id);
-            cmd.Parameters.AddWithValue("id_unidade_organizacional", espaco.IdUnidadeOrganizacional);
+            cmd.Parameters.AddWithValue("id", espaco.EspacoId);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", espaco.UnidadeOrganizacionalId);
             cmd.Parameters.AddWithValue("nome", espaco.Nome);
             cmd.Parameters.AddWithValue("descricao", (object?)espaco.Descricao ?? DBNull.Value);
 

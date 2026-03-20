@@ -17,14 +17,12 @@ public class UsuarioRepository
     {
         const string sql = @"
             SELECT
-                id,
+                usuario_id,
                 username,
                 senha,
                 nome,
                 telefone,
-                validado,
-                perfil,
-                id_unidades_organizacionais
+                perfil
             FROM
                 estoque.usuario
             ORDER BY
@@ -44,16 +42,12 @@ public class UsuarioRepository
             {
                 usuarios.Add(new Usuario
                 {
-                    Id = reader.GetInt32(reader.GetOrdinal("id")),
+                    UsuarioId = reader.GetInt32(reader.GetOrdinal("usuario_id")),
                     Username = reader.GetString(reader.GetOrdinal("username")),
                     Senha = reader.GetString(reader.GetOrdinal("senha")),
                     Nome = reader.GetString(reader.GetOrdinal("nome")),
                     Telefone = reader.GetString(reader.GetOrdinal("telefone")),
                     Perfil = (PerfilUsuario)reader.GetInt32(reader.GetOrdinal("perfil")),
-                    UnidadesOrganizacionais = reader.IsDBNull(reader.GetOrdinal("id_unidades_organizacionais"))
-                        ? new List<UnidadeOrganizacional>()
-                        : reader.GetFieldValue<List<int>>(reader.GetOrdinal("id_unidades_organizacionais"))
-                            .Select(idUnidade => new UnidadeOrganizacional { Id = idUnidade }).ToList()
                 });
             }
 
@@ -66,22 +60,20 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<Usuario?> ObterUsuarioPorId(int id)
+    public async Task<Usuario?> ObterUsuario(int id)
     {
         const string sql = @"
             SELECT
-                id,
+                usuario_id,
                 username,
                 senha,
                 nome,
                 telefone,
-                validado,
-                perfil,
-                id_unidades_organizacionais
+                perfil
             FROM
                 estoque.usuario
             WHERE
-                id = @id
+                usuario_id = @usuario_id
             LIMIT 1;
         ";
 
@@ -90,7 +82,7 @@ public class UsuarioRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("usuario_id", id);
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
@@ -98,16 +90,12 @@ public class UsuarioRepository
 
             return new Usuario
             {
-                Id = reader.GetInt32(reader.GetOrdinal("id")),
+                UsuarioId = reader.GetInt32(reader.GetOrdinal("usuario_id")),
                 Username = reader.GetString(reader.GetOrdinal("username")),
                 Senha = reader.GetString(reader.GetOrdinal("senha")),
                 Nome = reader.GetString(reader.GetOrdinal("nome")),
                 Telefone = reader.GetString(reader.GetOrdinal("telefone")),
                 Perfil = (PerfilUsuario)reader.GetInt32(reader.GetOrdinal("perfil")),
-                UnidadesOrganizacionais = reader.IsDBNull(reader.GetOrdinal("id_unidades_organizacionais"))
-                    ? new List<UnidadeOrganizacional>()
-                    : reader.GetFieldValue<List<int>>(reader.GetOrdinal("id_unidades_organizacionais"))
-                        .Select(idUnidade => new UnidadeOrganizacional { Id = idUnidade }).ToList()
             };
         }
         catch (Exception ex)
@@ -126,9 +114,7 @@ public class UsuarioRepository
                 senha,
                 nome,
                 telefone,
-                validado,
-                perfil,
-                id_unidades_organizacionais
+                perfil
             )
             VALUES
             (
@@ -136,11 +122,9 @@ public class UsuarioRepository
                 @senha,
                 @nome,
                 @telefone,
-                @validado,
-                @perfil,
-                @id_unidades_organizacionais
+                @perfil
             )
-            RETURNING id;
+            RETURNING usuario_id;
         ";
 
         try
@@ -154,11 +138,19 @@ public class UsuarioRepository
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
             cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
             cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
-            cmd.Parameters.AddWithValue("id_unidades_organizacionais", usuario.UnidadesOrganizacionais.Select(u => u.Id).ToArray());
 
             var result = await cmd.ExecuteScalarAsync();
+            int idGerado = (int)result!;
 
-            return (int)result!;
+            if (usuario.UnidadesOrganizacionais != null)
+            {
+                foreach (var unidade in usuario.UnidadesOrganizacionais)
+                {
+                    await VincularUnidadeOrganizacional(idGerado, unidade.UnidadeOrganizacionalId);
+                }
+            }
+
+            return idGerado;
         }
         catch (Exception ex)
         {
@@ -177,11 +169,9 @@ public class UsuarioRepository
                 senha = @senha,
                 nome = @nome,
                 telefone = @telefone,
-                validado = @validado,
-                perfil = @perfil,
-                id_unidades_organizacionais = @id_unidades_organizacionais
+                perfil = @perfil
             WHERE
-                id = @id;
+                usuario_id = @usuario_id;
         ";
 
         try
@@ -190,15 +180,28 @@ public class UsuarioRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("id", usuario.Id);
+            cmd.Parameters.AddWithValue("usuario_id", usuario.UsuarioId);
             cmd.Parameters.AddWithValue("username", usuario.Username);
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
             cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
             cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
-            cmd.Parameters.AddWithValue("id_unidades_organizacionais", usuario.UnidadesOrganizacionais.Select(u => u.Id).ToArray());
 
             var rowsAffected = await cmd.ExecuteNonQueryAsync();
+
+            if (rowsAffected > 0)
+            {
+                await RemoverUnidadesOrganizacionais(usuario.UsuarioId);
+
+                if (usuario.UnidadesOrganizacionais != null)
+                {
+                    foreach (var unidade in usuario.UnidadesOrganizacionais)
+                    {
+                        await VincularUnidadeOrganizacional(usuario.UsuarioId, unidade.UnidadeOrganizacionalId);
+                    }
+                }
+            }
+
             return rowsAffected > 0;
         }
         catch (Exception ex)
@@ -214,13 +217,13 @@ public class UsuarioRepository
             DELETE FROM
                 estoque.usuario
             WHERE
-                id = @id";
+                usuario_id = @usuario_id";
         try
         {
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("usuario_id", id);
 
             var affected = await cmd.ExecuteNonQueryAsync();
             return affected > 0;
@@ -242,7 +245,7 @@ public class UsuarioRepository
             WHERE
                 username = @username
             AND
-                id <> @ignoreId
+                usuario_id <> @ignoreId
             LIMIT 1;
         ";
 
@@ -269,5 +272,54 @@ public class UsuarioRepository
         if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
     }
 
-    //public async Task VincularComUnidadeOrganizacional
+    private async Task RemoverUnidadesOrganizacionais(int idUsuario)
+    {
+        const string sql = @"            
+            DELETE FROM estoque.usuario_unidade_organizacional WHERE usuario_id = @usuario_id;
+        ";
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+            cmd.Parameters.AddWithValue("usuario_id", idUsuario);
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw new Exception($"Erro ao remover unidades organizacionais: {ex.Message}");
+        }
+    }
+
+    private async Task VincularUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
+    {
+        const string sql = @"            
+            INSERT INTO estoque.usuario_unidade_organizacional
+            (
+                usuario_id,
+                unidade_organizacional_id
+            )
+            VALUES
+            (
+                @usuario_id,
+                @id_unidade
+            );
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+
+            cmd.Parameters.AddWithValue("usuario_id", idUsuario);
+            cmd.Parameters.AddWithValue("id_unidade", idUnidadeOrganizacional);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw new Exception($"Erro ao vincular unidade organizacional: {ex.Message}");
+        }
+    }
 }
