@@ -1,5 +1,6 @@
 ﻿using Estoque.models;
 using Estoque.Repositories;
+using Estoque.Server.Validations;
 
 namespace Estoque.Services;
 
@@ -7,8 +8,8 @@ public interface IUsuarioService
 {
     Task<List<Usuario>> ListarTodosAsync();
     Task<Usuario?> ObterPorIdAsync(int id);
-    Task<int> RegistarUsuarioNormalAsync(Usuario usuario);
-    Task<bool> AtualizarAsync(Usuario usuario);
+    Task<int> CriarUsuario(Usuario usuario);
+    Task<bool> AtualizarUsuario(Usuario usuario);
     Task<bool> ExcluirAsync(int id);
 }
 
@@ -45,25 +46,19 @@ public class UsuarioService : IUsuarioService
         }
     }
 
-    public async Task<int> RegistarUsuarioNormalAsync(Usuario usuario)
+    public async Task<int> CriarUsuario(Usuario usuario)
     {
         try
         {
+            ValidarUsuario(usuario);
+
             usuario.Perfil = PerfilUsuario.Normal;
-            usuario.Validado = false;
-
-            if (string.IsNullOrWhiteSpace(usuario.Username) || string.IsNullOrWhiteSpace(usuario.Senha))
-            {
-                throw new ArgumentException("Username e Senha são obrigatórios.");
-            }
-
-            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, 0);
-            if (usernameExiste)
-            {
-                throw new InvalidOperationException("Este Username já está em uso.");
-            }
 
             return await _repository.CadastrarUsuario(usuario);
+        }
+        catch (ValidationException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
@@ -71,17 +66,19 @@ public class UsuarioService : IUsuarioService
         }
     }
 
-    public async Task<bool> AtualizarAsync(Usuario usuario)
+    public async Task<bool> AtualizarUsuario(Usuario usuario)
     {
         try
         {
+            ValidarUsuario(usuario);
+
             bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuario.Id);
-            if (usernameExiste)
-            {
-                throw new InvalidOperationException("Este Username já está a ser usado por outro usuário.");
-            }
 
             return await _repository.AtualizarUsuario(usuario);
+        }
+        catch (ValidationException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
@@ -99,5 +96,28 @@ public class UsuarioService : IUsuarioService
         {
             throw new Exception($"Erro ao excluir usuário: {ex.Message}");
         }
+    }
+
+    private void ValidarUsuario(Usuario usuario)
+    {
+        var erros = new List<ValidationError>();
+
+        if (string.IsNullOrWhiteSpace(usuario.Username))
+            erros.Add(new ValidationError(nameof(usuario.Username), "Informe o username."));
+
+        if (string.IsNullOrWhiteSpace(usuario.Senha))
+            erros.Add(new ValidationError("Senha", "Informe a senha."));
+
+        if (string.IsNullOrWhiteSpace(usuario.Nome))
+            erros.Add(new ValidationError("Nome", "Informe o nome."));
+
+        if (string.IsNullOrWhiteSpace(usuario.Telefone))
+            erros.Add(new ValidationError("Telefone", "Informe o telefone."));
+
+        if (usuario.UnidadesOrganizacionais == null || !usuario.UnidadesOrganizacionais.Any())
+            erros.Add(new ValidationError(nameof(usuario.UnidadesOrganizacionais), "Informe pelo menos uma unidade organizacional."));
+
+        if (erros.Any())
+            throw new ValidationException(erros);
     }
 }

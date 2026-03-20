@@ -49,11 +49,11 @@ public class UsuarioRepository
                     Senha = reader.GetString(reader.GetOrdinal("senha")),
                     Nome = reader.GetString(reader.GetOrdinal("nome")),
                     Telefone = reader.GetString(reader.GetOrdinal("telefone")),
-                    Validado = reader.GetBoolean(reader.GetOrdinal("validado")),
                     Perfil = (PerfilUsuario)reader.GetInt32(reader.GetOrdinal("perfil")),
-                    IdUnidadesOrganizacionais = reader.IsDBNull(reader.GetOrdinal("id_unidades_organizacionais"))
-                        ? new List<int>()
+                    UnidadesOrganizacionais = reader.IsDBNull(reader.GetOrdinal("id_unidades_organizacionais"))
+                        ? new List<UnidadeOrganizacional>()
                         : reader.GetFieldValue<List<int>>(reader.GetOrdinal("id_unidades_organizacionais"))
+                            .Select(idUnidade => new UnidadeOrganizacional { Id = idUnidade }).ToList()
                 });
             }
 
@@ -103,11 +103,11 @@ public class UsuarioRepository
                 Senha = reader.GetString(reader.GetOrdinal("senha")),
                 Nome = reader.GetString(reader.GetOrdinal("nome")),
                 Telefone = reader.GetString(reader.GetOrdinal("telefone")),
-                Validado = reader.GetBoolean(reader.GetOrdinal("validado")),
                 Perfil = (PerfilUsuario)reader.GetInt32(reader.GetOrdinal("perfil")),
-                IdUnidadesOrganizacionais = reader.IsDBNull(reader.GetOrdinal("id_unidades_organizacionais"))
-                    ? new List<int>()
+                UnidadesOrganizacionais = reader.IsDBNull(reader.GetOrdinal("id_unidades_organizacionais"))
+                    ? new List<UnidadeOrganizacional>()
                     : reader.GetFieldValue<List<int>>(reader.GetOrdinal("id_unidades_organizacionais"))
+                        .Select(idUnidade => new UnidadeOrganizacional { Id = idUnidade }).ToList()
             };
         }
         catch (Exception ex)
@@ -153,9 +153,8 @@ public class UsuarioRepository
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
             cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
-            cmd.Parameters.AddWithValue("validado", usuario.Validado);
             cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
-            cmd.Parameters.AddWithValue("id_unidades_organizacionais", usuario.IdUnidadesOrganizacionais.ToArray());
+            cmd.Parameters.AddWithValue("id_unidades_organizacionais", usuario.UnidadesOrganizacionais.Select(u => u.Id).ToArray());
 
             var result = await cmd.ExecuteScalarAsync();
 
@@ -196,9 +195,8 @@ public class UsuarioRepository
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
             cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
-            cmd.Parameters.AddWithValue("validado", usuario.Validado);
             cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
-            cmd.Parameters.AddWithValue("id_unidades_organizacionais", usuario.IdUnidadesOrganizacionais.ToArray());
+            cmd.Parameters.AddWithValue("id_unidades_organizacionais", usuario.UnidadesOrganizacionais.Select(u => u.Id).ToArray());
 
             var rowsAffected = await cmd.ExecuteNonQueryAsync();
             return rowsAffected > 0;
@@ -217,7 +215,6 @@ public class UsuarioRepository
                 estoque.usuario
             WHERE
                 id = @id";
-
         try
         {
             await EnsureOpenAsync();
@@ -271,4 +268,6 @@ public class UsuarioRepository
     {
         if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
     }
+
+    //public async Task VincularComUnidadeOrganizacional
 }
