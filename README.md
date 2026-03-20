@@ -57,7 +57,6 @@ CREATE TABLE IF NOT EXISTS estoque.usuario (
     senha TEXT NOT NULL,
     nome VARCHAR(150) NOT NULL,
     telefone VARCHAR(50),
-    validado BOOLEAN DEFAULT FALSE,
     perfil INTEGER NOT NULL,
     id_unidades_organizacionais INTEGER[] 
 );
