@@ -52,13 +52,12 @@ CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
 
 -- 3. Tabela de Usuários (Utiliza Array nativo para as unidades)
 CREATE TABLE IF NOT EXISTS estoque.usuario (
-    id SERIAL PRIMARY KEY,
+    usuario_id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
     senha TEXT NOT NULL,
     nome VARCHAR(150) NOT NULL,
     telefone VARCHAR(50),
-    perfil INTEGER NOT NULL,
-    id_unidades_organizacionais INTEGER[] 
+    perfil INTEGER NOT NULL
 );
 
 -- 4. Tabela de Espaços (Locais físicos de armazenamento)
