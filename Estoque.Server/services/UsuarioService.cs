@@ -1,6 +1,6 @@
 ﻿using Estoque.models;
 using Estoque.Repositories;
-using Estoque.Server.Models.Usuario;
+using Estoque.Server.Models;
 using Estoque.Server.Validations;
 
 namespace Estoque.Services;
@@ -99,22 +99,20 @@ public class UsuarioService
         }
     }
 
-    public async Task VincularComUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
+    public async Task VincularComUnidades(UsuarioValido request)
     {
-        try
+        var usuario = await _repository.ObterUsuario(request.UsuarioId);
+
+        if (usuario == null)
         {
-            var usuario = await _repository.ObterUsuario(idUsuario);
-            if (usuario == null)
-            {
-                throw new KeyNotFoundException("Usuário não encontrado.");
-            }
-
-            await _repository.VincularUnidadeOrganizacional(idUsuario, idUnidadeOrganizacional);
-
+            throw new KeyNotFoundException("Usuário não encontrado.");
         }
-        catch (Exception ex)
+
+        await _repository.RemoverUnidadesOrganizacionais(request.UsuarioId);
+
+        foreach (var unidade in request.UnidadesOrganizacionais)
         {
-            throw new Exception($"Erro ao vincular unidade: {ex.Message}");
+            await _repository.VincularUnidadeOrganizacional(request.UsuarioId, unidade.UnidadeOrganizacionalId);
         }
     }
 

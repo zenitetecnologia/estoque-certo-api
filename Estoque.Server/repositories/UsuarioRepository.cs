@@ -1,7 +1,7 @@
 ﻿using Npgsql;
 using System.Data;
 using Estoque.models;
-using Estoque.Server.Models.Usuario;
+using Estoque.Server.Models;
 
 namespace Estoque.Repositories;
 
@@ -273,7 +273,7 @@ public class UsuarioRepository
         if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
     }
 
-    private async Task RemoverUnidadesOrganizacionais(int idUsuario)
+    public async Task RemoverUnidadesOrganizacionais(int idUsuario)
     {
         const string sql = @"            
             DELETE FROM estoque.usuario_unidade_organizacional WHERE usuario_id = @usuario_id;

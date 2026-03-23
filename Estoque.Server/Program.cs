@@ -12,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.CustomSchemaIds(type => type.FullName);
+    //options.CustomSchemaIds(type => type.FullName);
 });
 
 builder.Services.AddScoped<System.Data.IDbConnection>(sp =>
