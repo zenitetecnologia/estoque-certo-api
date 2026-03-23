@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using System.Data;
 using Estoque.models;
+using Estoque.Server.Models.Usuario;
 
 namespace Estoque.Repositories;
 
@@ -291,7 +292,7 @@ public class UsuarioRepository
         }
     }
 
-    private async Task VincularUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
+    public async Task VincularUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
     {
         const string sql = @"            
             INSERT INTO estoque.usuario_unidade_organizacional
@@ -302,7 +303,7 @@ public class UsuarioRepository
             VALUES
             (
                 @usuario_id,
-                @id_unidade
+                @unidade_organizacional_id
             );
         ";
 
@@ -312,7 +313,7 @@ public class UsuarioRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
             cmd.Parameters.AddWithValue("usuario_id", idUsuario);
-            cmd.Parameters.AddWithValue("id_unidade", idUnidadeOrganizacional);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", idUnidadeOrganizacional);
 
             await cmd.ExecuteNonQueryAsync();
         }

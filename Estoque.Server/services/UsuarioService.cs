@@ -1,5 +1,6 @@
 ﻿using Estoque.models;
 using Estoque.Repositories;
+using Estoque.Server.Models.Usuario;
 using Estoque.Server.Validations;
 
 namespace Estoque.Services;
@@ -107,6 +108,8 @@ public class UsuarioService
             {
                 throw new KeyNotFoundException("Usuário não encontrado.");
             }
+
+            await _repository.VincularUnidadeOrganizacional(idUsuario, idUnidadeOrganizacional);
 
         }
         catch (Exception ex)

@@ -9,7 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(type => type.FullName);
+});
 
 builder.Services.AddScoped<System.Data.IDbConnection>(sp =>
     new Npgsql.NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));

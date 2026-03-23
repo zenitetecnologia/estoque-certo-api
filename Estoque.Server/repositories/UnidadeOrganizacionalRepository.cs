@@ -17,8 +17,8 @@ public class UnidadeOrganizacionalRepository
     {
         const string sql = @"
             SELECT
-                id,
-                id_ou_matriz,
+                unidade_organizacional_id,
+                id_matriz,
                 Cnpj,
                 razao_social,
                 nome_fantasia,
@@ -50,8 +50,8 @@ public class UnidadeOrganizacionalRepository
             {
                 unidades.Add(new UnidadeOrganizacional
                 {
-                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("id")),
-                    IdMatriz = reader.GetInt32(reader.GetOrdinal("id_ou_matriz")),
+                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
+                    IdMatriz = reader.GetInt32(reader.GetOrdinal("id_matriz")),
                     Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
                     RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
                     NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
@@ -80,8 +80,8 @@ public class UnidadeOrganizacionalRepository
     {
         const string sql = @"
             SELECT
-                id,
-                id_ou_matriz,
+                unidade_organizacional_id,
+                id_matriz,
                 Cnpj,
                 razao_social,
                 nome_fantasia,
@@ -97,7 +97,7 @@ public class UnidadeOrganizacionalRepository
             FROM
                 estoque.unidade_organizacional
             WHERE
-                id = @id
+                unidade_organizacional_id, = @unidade_organizacional_id,
             LIMIT 1;
         ";
 
@@ -106,7 +106,7 @@ public class UnidadeOrganizacionalRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", id);
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
@@ -114,8 +114,8 @@ public class UnidadeOrganizacionalRepository
 
             return new UnidadeOrganizacional
             {
-                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("id")),
-                IdMatriz = reader.GetInt32(reader.GetOrdinal("id_ou_matriz")),
+                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
+                IdMatriz = reader.GetInt32(reader.GetOrdinal("id_matriz")),
                 Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
                 RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
                 NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
@@ -158,7 +158,7 @@ public class UnidadeOrganizacionalRepository
             )
             VALUES
             (
-                @id_ou_matriz,
+                @id_matriz,
                 @Cnpj,
                 @razao_social,
                 @nome_fantasia,
@@ -172,7 +172,7 @@ public class UnidadeOrganizacionalRepository
                 @telefone,
                 @email
             )
-            RETURNING id;
+            RETURNING unidade_organizacional_id;
         ";
 
         try
@@ -181,7 +181,7 @@ public class UnidadeOrganizacionalRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("id_ou_matriz", unidade.IdMatriz);
+            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz);
             cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
@@ -212,7 +212,7 @@ public class UnidadeOrganizacionalRepository
             UPDATE
                 estoque.unidade_organizacional
             SET
-                id_ou_matriz = @id_ou_matriz,
+                id_matriz = @id_matriz,
                 Cnpj = @Cnpj,
                 razao_social = @razao_social,
                 nome_fantasia = @nome_fantasia,
@@ -226,7 +226,7 @@ public class UnidadeOrganizacionalRepository
                 telefone = @telefone,
                 email = @email
             WHERE
-                id = @id;
+                unidade_organizacional_id = @unidade_organizacional_id;
         ";
 
         try
@@ -234,8 +234,8 @@ public class UnidadeOrganizacionalRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("id", unidade.UnidadeOrganizacionalId);
-            cmd.Parameters.AddWithValue("id_ou_matriz", unidade.IdMatriz);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidade.UnidadeOrganizacionalId);
+            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz);
             cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
@@ -265,7 +265,7 @@ public class UnidadeOrganizacionalRepository
             DELETE FROM
                 estoque.unidade_organizacional
             WHERE
-                id = @id;
+                unidade_organizacional_id = @unidade_organizacional_id;
         ";
 
         try
@@ -273,7 +273,7 @@ public class UnidadeOrganizacionalRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", id);
 
             var affected = await cmd.ExecuteNonQueryAsync();
             return affected > 0;
@@ -295,7 +295,7 @@ public class UnidadeOrganizacionalRepository
             WHERE
                 Cnpj = @Cnpj
             AND
-                id <> @ignoreId
+                unidade_organizacional_id <> @ignoreunidade_organizacional_id
             LIMIT 1;
         ";
 
@@ -305,7 +305,7 @@ public class UnidadeOrganizacionalRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
             cmd.Parameters.AddWithValue("Cnpj", Cnpj);
-            cmd.Parameters.AddWithValue("ignoreId", ignoreId);
+            cmd.Parameters.AddWithValue("ignoreunidade_organizacional_id", ignoreId);
 
             var result = await cmd.ExecuteScalarAsync();
             return result != null;

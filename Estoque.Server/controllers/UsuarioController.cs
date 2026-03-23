@@ -1,4 +1,4 @@
-﻿using Estoque.models;
+﻿using Estoque.Server.Models.Usuario;
 using Estoque.Server.Validations;
 using Estoque.Services;
 
