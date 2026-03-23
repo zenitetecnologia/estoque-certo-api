@@ -46,7 +46,7 @@ public class UsuarioService
 
             usuario.Perfil = PerfilUsuario.Normal;
 
-            int novoIdUsuario = await _repository.CadastrarUsuario(usuario);        
+            int novoIdUsuario = await _repository.CadastrarUsuario(usuario);
 
             return novoIdUsuario;
         }
@@ -60,20 +60,25 @@ public class UsuarioService
         }
     }
 
-    public async Task<bool> AtualizarUsuario(Usuario usuario)
+    public async Task<bool> AtualizarUsuario(UsuarioRecuperado usuario, int usuarioId)
     {
         try
         {
             ValidarUsuario(usuario);
 
-            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuario.UsuarioId);
+            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuarioId);
 
             if (usernameExiste)
             {
-                throw new InvalidOperationException("Este Username já está a ser usado por outro usuário.");
+                throw new InvalidOperationException("Este Username já está sendo usado por outro usuário.");
             }
 
-            bool atualizado = await _repository.AtualizarUsuario(usuario); 
+            bool atualizado = await _repository.AtualizarUsuario(usuario);
+
+            if (usernameExiste)
+            {
+                throw new InvalidOperationException("Este Username já está sendo usado por outro usuário.");
+            }
 
             return atualizado;
         }

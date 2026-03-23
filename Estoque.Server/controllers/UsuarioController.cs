@@ -7,7 +7,7 @@ namespace Estoque.Controllers;
 public static class UsuarioController
 {
     public static void MapUsuarioEndpoints(this WebApplication app)
-    {   
+    {
         //listar todos
         app.MapGet("v1/usuarios", async (UsuarioService service) =>
         {
@@ -19,7 +19,7 @@ public static class UsuarioController
         .WithTags("usuarios")
         .WithSummary("Lista os usuários")
         .WithDescription("Retorna a lista de todos os usuários.")
-        .Produces<List<Usuario>>(StatusCodes.Status200OK)
+        .Produces<List<UsuarioRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
         //get por id
@@ -36,7 +36,7 @@ public static class UsuarioController
         .WithTags("usuarios")
         .WithSummary("Busca um usuário por ID")
         .WithDescription("Retorna um usuário específico pelo seu ID.")
-        .Produces<Usuario>(StatusCodes.Status200OK)
+        .Produces<UsuarioRecuperado>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
@@ -45,14 +45,7 @@ public static class UsuarioController
         {
             int idNovoUsuario = await service.CriarUsuario(usuario);
 
-            usuario.UsuarioId = idNovoUsuario;
-
-            return Results.Created($"/v1/usuarios/{idNovoUsuario}", new
-            {
-                mensagem = "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.",
-                id = idNovoUsuario
-            });//lembrar dps do almoco
-
+            return Results.Created($"/v1/usuarios/{idNovoUsuario}", "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
         })
         .WithTags("usuarios")
         .WithSummary("Registra um novo usuário")
@@ -62,56 +55,27 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
         //atualizar
-        app.MapPut("v1/usuarios/{id:int}", async (int id, UsuarioAtualizar atualizar, UsuarioService service) =>
+        app.MapPut("v1/usuarios/{id:int}", async (int id, Usuario usuario, UsuarioService service) =>
         {
-            var usuario = new Usuario
-            {
-                UsuarioId = id,
-                Username = atualizar.Username,
-                Senha = atualizar.Senha,
-                Nome = atualizar.Nome,
-                Telefone = atualizar.Telefone,
-                Perfil = atualizar.Perfil,
-                UnidadesOrganizacionais = atualizar.UnidadesOrganizacionais
-            };
 
             var atualizado = await service.AtualizarUsuario(usuario);
 
-            if (!atualizado)
-            {
-                var erro = new List<ValidationError>
-                {
-                    new ValidationError("id", "nenhum usuario encontrado com esse id")
-                };
-
-                return Results.NotFound(erro);
-            }
-
-            return Results.Ok(new { mensagem = "Usuário atualizado com sucesso!" });
+            return Results.Ok("Usuário atualizado com sucesso.");
 
         })
         .WithTags("usuarios")
         .WithSummary("Atualiza um usuário")
         .WithDescription("Atualiza os dados de um usuário existente.")
-        .Produces(StatusCodes.Status204NoContent)
-        .Produces<List<ValidationError>>(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status200OK)
+        .Produces<InvalidOperationException>(StatusCodes.Status400BadRequest)
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
         //delete
         app.MapDelete("v1/usuarios/{id:int}", async (int id, UsuarioService service) =>
         {
             var excluido = await service.ExcluirAsync(id);
-
-            if (!excluido)
-            {
-                var erro = new List<ValidationError>
-                {
-                    new ValidationError("id", "nenhum usuario encontrado com esse id")
-                };
-
-                return Results.NotFound(erro);
-            }
-
+   
             return Results.Ok(new { mensagem = "Usuário excluído com sucesso!" });
 
         })
@@ -119,7 +83,7 @@ public static class UsuarioController
         .WithSummary("Exclui um usuário")
         .WithDescription("Exclui um usuário do sistema.")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<List<ValidationError>>(StatusCodes.Status404NotFound)
+        .Produces<InvalidOperationException>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
         //vincular unidades
@@ -134,7 +98,7 @@ public static class UsuarioController
         .WithSummary("Vincula unidades a um usuário")
         .WithDescription("Vincula usuário a uma ou mais unidades organizacionais.")
         .Produces(StatusCodes.Status200OK)
-        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<InvalidOperationException>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
     }
 }
