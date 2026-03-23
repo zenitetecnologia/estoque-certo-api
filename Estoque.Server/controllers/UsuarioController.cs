@@ -28,7 +28,7 @@ public static class UsuarioController
             var result = await service.ObterPorIdAsync(id);
 
             if (result == null)
-                return Results.NotFound(new { erro = "Usuário não encontrado." });
+            return Results.NotFound(new { erro = "Usuário não encontrado." });
 
             return Results.Ok(result);
 
@@ -55,10 +55,9 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
         //atualizar
-        app.MapPut("v1/usuarios/{id:int}", async (int id, Usuario usuario, UsuarioService service) =>
+        app.MapPut("v1/usuarios/{id:int}", async (int id, UsuarioRecuperado usuario, UsuarioService service) =>
         {
-
-            var atualizado = await service.AtualizarUsuario(usuario);
+            var atualizado = await service.AtualizarUsuario(usuario, id);
 
             return Results.Ok("Usuário atualizado com sucesso.");
 
@@ -71,7 +70,7 @@ public static class UsuarioController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        //delete
+        //deletar
         app.MapDelete("v1/usuarios/{id:int}", async (int id, UsuarioService service) =>
         {
             var excluido = await service.ExcluirAsync(id);

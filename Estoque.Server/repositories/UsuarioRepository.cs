@@ -14,7 +14,7 @@ public class UsuarioRepository
         _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
     }
 
-    public async Task<List<Usuario>> ObterUsuarios()
+    public async Task<List<UsuarioRecuperado>> ObterUsuarios()
     {
         const string sql = @"
             SELECT
@@ -37,11 +37,11 @@ public class UsuarioRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
             await using var reader = await cmd.ExecuteReaderAsync();
 
-            var usuarios = new List<Usuario>();
+            var usuarios = new List<UsuarioRecuperado>();
 
             while (await reader.ReadAsync())
             {
-                usuarios.Add(new Usuario
+                usuarios.Add(new UsuarioRecuperado
                 {
                     UsuarioId = reader.GetInt32(reader.GetOrdinal("usuario_id")),
                     Username = reader.GetString(reader.GetOrdinal("username")),
@@ -61,7 +61,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<Usuario?> ObterUsuario(int id)
+    public async Task<UsuarioRecuperado?> ObterUsuario(int id)
     {
         const string sql = @"
             SELECT
@@ -89,7 +89,7 @@ public class UsuarioRepository
 
             if (!await reader.ReadAsync()) return null;
 
-            return new Usuario
+            return new UsuarioRecuperado
             {
                 UsuarioId = reader.GetInt32(reader.GetOrdinal("usuario_id")),
                 Username = reader.GetString(reader.GetOrdinal("username")),
@@ -160,7 +160,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<bool> AtualizarUsuario(Usuario usuario)
+    public async Task<bool> AtualizarUsuario(UsuarioRecuperado usuario)
     {
         const string sql = @"
             UPDATE

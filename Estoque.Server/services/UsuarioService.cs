@@ -14,7 +14,7 @@ public class UsuarioService
         _repository = repository;
     }
 
-    public async Task<List<Usuario>> ListarTodosAsync()
+    public async Task<List<UsuarioRecuperado>> ListarTodosAsync()
     {
         try
         {
@@ -26,7 +26,7 @@ public class UsuarioService
         }
     }
 
-    public async Task<Usuario?> ObterPorIdAsync(int id)
+    public async Task<UsuarioRecuperado?> ObterPorIdAsync(int id)
     {
         try
         {
@@ -96,7 +96,18 @@ public class UsuarioService
     {
         try
         {
+            var usuario = await _repository.ObterUsuario(id);
+
+            if (usuario == null)
+            {
+                throw new InvalidOperationException("Nenhum usuário encontrado com esse id");
+            }
+
             return await _repository.ExcluirUsuario(id);
+        }
+        catch (InvalidOperationException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
