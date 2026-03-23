@@ -34,8 +34,8 @@ CREATE SCHEMA IF NOT EXISTS estoque;
 
 -- 2. Tabela de Unidades Organizacionais (Matriz e Filiais)
 CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
-    id SERIAL PRIMARY KEY,
-    id_ou_matriz INTEGER NOT NULL,
+    unidade_organizacional_id SERIAL PRIMARY KEY,
+    id__matriz INTEGER NOT NULL,
     cnpj VARCHAR(20),
     razao_social TEXT,
     nome_fantasia TEXT,
@@ -62,16 +62,16 @@ CREATE TABLE IF NOT EXISTS estoque.usuario (
 
 -- 4. Tabela de Espaços (Locais físicos de armazenamento)
 CREATE TABLE IF NOT EXISTS estoque.espaco (
-    id SERIAL PRIMARY KEY,
-    id_unidade_organizacional INTEGER NOT NULL,
+    iespaco_id SERIAL PRIMARY KEY,
+    unidade_organizacional_id INTEGER NOT NULL,
     nome VARCHAR(150) NOT NULL,
     descricao TEXT
 );
 
 -- 5. Tabela de Itens de Estoque (Produtos)
 CREATE TABLE IF NOT EXISTS estoque.item_estoque (
-    id SERIAL PRIMARY KEY,
-    id_unidade_organizacional INTEGER NOT NULL,
+    item_estoque_id SERIAL PRIMARY KEY,
+    unidade_organizacional_id INTEGER NOT NULL,
     espaco INTEGER NOT NULL,
     descricao TEXT NOT NULL,
     tipo_unidade_medida INTEGER NOT NULL,
@@ -80,10 +80,10 @@ CREATE TABLE IF NOT EXISTS estoque.item_estoque (
 
 -- 6. Tabela de Histórico (Auditoria de Movimentações)
 CREATE TABLE IF NOT EXISTS estoque.historico (
-    id SERIAL PRIMARY KEY,
-    id_item_estoque INTEGER NOT NULL,
+    historico_id SERIAL PRIMARY KEY,
+    item_estoque_id INTEGER NOT NULL,
     tipo_movimentacao INTEGER NOT NULL,
-    id_usuario INTEGER NOT NULL,
+    usuario_id INTEGER NOT NULL,
     data_hora TIMESTAMP NOT NULL DEFAULT NOW(),
     quantidade_anterior NUMERIC(18,4) NOT NULL,
     quantidade_resultante NUMERIC(18,4) NOT NULL
