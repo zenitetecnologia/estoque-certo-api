@@ -14,6 +14,140 @@ public class UsuarioRepository
         _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
     }
 
+    public async Task<int> CadastrarUsuario(Usuario usuario)
+    {
+        const string sql = @"
+            INSERT INTO estoque.usuario
+            (
+                username,
+                senha,
+                nome,
+                telefone,
+                perfil
+            )
+            VALUES
+            (
+                @username,
+                @senha,
+                @nome,
+                @telefone,
+                @perfil
+            )
+            RETURNING usuario_id;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+
+            cmd.Parameters.AddWithValue("username", usuario.Username);
+            cmd.Parameters.AddWithValue("senha", usuario.Senha);
+            cmd.Parameters.AddWithValue("nome", usuario.Nome);
+            cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
+            cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
+
+            var result = await cmd.ExecuteScalarAsync();
+            int idGerado = (int)result!;
+
+            foreach (var unidade in usuario.UnidadesOrganizacionais)
+            {
+                await VincularUnidadeOrganizacional(idGerado, unidade.UnidadeOrganizacionalId);
+            }
+
+            return idGerado;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task VincularUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
+    {
+        const string sql = @"            
+            INSERT INTO estoque.usuario_unidade_organizacional
+            (
+                usuario_id,
+                unidade_organizacional_id
+            )
+            VALUES
+            (
+                @usuario_id,
+                @unidade_organizacional_id
+            );
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+
+            cmd.Parameters.AddWithValue("usuario_id", idUsuario);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", idUnidadeOrganizacional);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<bool> VerificaExisteUsuario(string username, int ignoreId)
+    {
+        const string sql = @"
+            SELECT
+                1
+            FROM
+                estoque.usuario
+            WHERE
+                username = @username
+            AND
+                usuario_id <> @ignoreId
+            LIMIT 1;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+            cmd.Parameters.AddWithValue("username", username);
+            cmd.Parameters.AddWithValue("ignoreId", ignoreId);
+
+            var result = await cmd.ExecuteScalarAsync();
+            return result != null;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public async Task<List<UsuarioRecuperado>> ObterUsuarios()
     {
         const string sql = @"
@@ -106,61 +240,9 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<int> CadastrarUsuario(Usuario usuario)
-    {
-        const string sql = @"
-            INSERT INTO estoque.usuario
-            (
-                username,
-                senha,
-                nome,
-                telefone,
-                perfil
-            )
-            VALUES
-            (
-                @username,
-                @senha,
-                @nome,
-                @telefone,
-                @perfil
-            )
-            RETURNING usuario_id;
-        ";
 
-        try
-        {
-            await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-
-            cmd.Parameters.AddWithValue("username", usuario.Username);
-            cmd.Parameters.AddWithValue("senha", usuario.Senha);
-            cmd.Parameters.AddWithValue("nome", usuario.Nome);
-            cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
-            cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
-
-            var result = await cmd.ExecuteScalarAsync();
-            int idGerado = (int)result!;
-
-            if (usuario.UnidadesOrganizacionais != null)
-            {
-                foreach (var unidade in usuario.UnidadesOrganizacionais)
-                {
-                    await VincularUnidadeOrganizacional(idGerado, unidade.UnidadeOrganizacionalId);
-                }
-            }
-
-            return idGerado;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
-    }
-
-    public async Task<bool> AtualizarUsuario(UsuarioRecuperado usuario)
+    public async Task<bool> AtualizarUsuario(Usuario usuario, int usuarioId)
     {
         const string sql = @"
             UPDATE
@@ -181,7 +263,7 @@ public class UsuarioRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("usuario_id", usuario.UsuarioId);
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
             cmd.Parameters.AddWithValue("username", usuario.Username);
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
@@ -192,13 +274,13 @@ public class UsuarioRepository
 
             if (rowsAffected > 0)
             {
-                await RemoverUnidadesOrganizacionais(usuario.UsuarioId);
+                await RemoverUnidadesOrganizacionais(usuarioId);
 
                 if (usuario.UnidadesOrganizacionais != null)
                 {
                     foreach (var unidade in usuario.UnidadesOrganizacionais)
                     {
-                        await VincularUnidadeOrganizacional(usuario.UsuarioId, unidade.UnidadeOrganizacionalId);
+                        await VincularUnidadeOrganizacional(usuarioId, unidade.UnidadeOrganizacionalId);
                     }
                 }
             }
@@ -236,37 +318,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<bool> VerificaExisteUsuario(string username, int ignoreId)
-    {
-        const string sql = @"
-            SELECT
-                1
-            FROM
-                estoque.usuario
-            WHERE
-                username = @username
-            AND
-                usuario_id <> @ignoreId
-            LIMIT 1;
-        ";
 
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("ignoreId", ignoreId);
-
-            var result = await cmd.ExecuteScalarAsync();
-            return result != null;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
-    }
 
     private async Task EnsureOpenAsync()
     {
@@ -292,35 +344,5 @@ public class UsuarioRepository
         }
     }
 
-    public async Task VincularUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
-    {
-        const string sql = @"            
-            INSERT INTO estoque.usuario_unidade_organizacional
-            (
-                usuario_id,
-                unidade_organizacional_id
-            )
-            VALUES
-            (
-                @usuario_id,
-                @unidade_organizacional_id
-            );
-        ";
 
-        try
-        {
-            await EnsureOpenAsync();
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-
-            cmd.Parameters.AddWithValue("usuario_id", idUsuario);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", idUnidadeOrganizacional);
-
-            await cmd.ExecuteNonQueryAsync();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw new Exception($"Erro ao vincular unidade organizacional: {ex.Message}");
-        }
-    }
 }

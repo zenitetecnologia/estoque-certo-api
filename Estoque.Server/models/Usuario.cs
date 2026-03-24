@@ -9,6 +9,7 @@ public class Usuario
     public string Senha { get; set; } = string.Empty;
     public string Nome { get; set; } = string.Empty;
     public string Telefone { get; set; } = string.Empty;
+    [JsonIgnore]
     public PerfilUsuario Perfil { get; set; }
     public List<UnidadeOrganizacionalVinculo> UnidadesOrganizacionais { get; set; } = new List<UnidadeOrganizacionalVinculo>();
 }

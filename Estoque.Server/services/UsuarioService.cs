@@ -14,6 +14,52 @@ public class UsuarioService
         _repository = repository;
     }
 
+    public async Task<int> CriarUsuario(Usuario usuario)
+    {
+        try
+        {
+            await ValidarUsuario(usuario, 0);
+
+            usuario.Perfil = PerfilUsuario.Normal;
+
+            int novoIdUsuario = await _repository.CadastrarUsuario(usuario);
+
+            return novoIdUsuario;
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao registar usuário: {ex.Message}");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public async Task<List<UsuarioRecuperado>> ListarTodosAsync()
     {
         try
@@ -38,33 +84,13 @@ public class UsuarioService
         }
     }
 
-    public async Task<int> CriarUsuario(Usuario usuario)
+
+
+    public async Task<bool> AtualizarUsuario(Usuario usuario, int usuarioId)
     {
         try
         {
-            ValidarUsuario(usuario);
-
-            usuario.Perfil = PerfilUsuario.Normal;
-
-            int novoIdUsuario = await _repository.CadastrarUsuario(usuario);
-
-            return novoIdUsuario;
-        }
-        catch (ValidationException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao registar usuário: {ex.Message}");
-        }
-    }
-
-    public async Task<bool> AtualizarUsuario(UsuarioRecuperado usuario, int usuarioId)
-    {
-        try
-        {
-            ValidarUsuario(usuario);
+            await ValidarUsuario(usuario, usuarioId);
 
             bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuarioId);
 
@@ -73,7 +99,7 @@ public class UsuarioService
                 throw new InvalidOperationException("Este Username já está sendo usado por outro usuário.");
             }
 
-            bool atualizado = await _repository.AtualizarUsuario(usuario);
+            bool atualizado = await _repository.AtualizarUsuario(usuario, usuarioId);
 
             if (usernameExiste)
             {
@@ -105,10 +131,6 @@ public class UsuarioService
 
             return await _repository.ExcluirUsuario(id);
         }
-        catch (InvalidOperationException)
-        {
-            throw;
-        }
         catch (Exception ex)
         {
             throw new Exception($"Erro ao excluir usuário: {ex.Message}");
@@ -132,12 +154,21 @@ public class UsuarioService
         }
     }
 
-    private void ValidarUsuario(Usuario usuario)
+    private async Task ValidarUsuario(Usuario usuario, int usuarioId)
     {
         var erros = new List<ValidationError>();
 
         if (string.IsNullOrWhiteSpace(usuario.Username))
+        {
             erros.Add(new ValidationError(nameof(usuario.Username), "Informe o username."));
+        }
+        else
+        {
+            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuarioId);
+
+            if (usernameExiste)
+                erros.Add(new ValidationError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário."));
+        }
 
         if (string.IsNullOrWhiteSpace(usuario.Senha))
             erros.Add(new ValidationError("Senha", "Informe a senha."));
@@ -153,5 +184,8 @@ public class UsuarioService
 
         if (erros.Any())
             throw new ValidationException(erros);
+
+
+
     }
 }

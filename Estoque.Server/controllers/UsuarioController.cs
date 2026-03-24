@@ -8,6 +8,43 @@ public static class UsuarioController
 {
     public static void MapUsuarioEndpoints(this WebApplication app)
     {
+        app.MapPost("v1/usuarios/", async (Usuario usuario, UsuarioService service) =>
+        {
+            int idNovoUsuario = await service.CriarUsuario(usuario);
+
+            return Results.Created($"/v1/usuarios/{idNovoUsuario}", "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
+        })
+       .WithTags("usuarios")
+       .WithSummary("Registra um novo usuário")
+       .WithDescription("Registra um novo usuário com perfil Normal e não validado.")
+       .Produces(StatusCodes.Status201Created)
+       .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+       .Produces<string>(StatusCodes.Status500InternalServerError);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //listar todos
         app.MapGet("v1/usuarios", async (UsuarioService service) =>
         {
@@ -41,21 +78,10 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
         //criar
-        app.MapPost("v1/usuarios/", async (Usuario usuario, UsuarioService service) =>
-        {
-            int idNovoUsuario = await service.CriarUsuario(usuario);
-
-            return Results.Created($"/v1/usuarios/{idNovoUsuario}", "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
-        })
-        .WithTags("usuarios")
-        .WithSummary("Registra um novo usuário")
-        .WithDescription("Registra um novo usuário com perfil Normal e não validado.")
-        .Produces(StatusCodes.Status201Created)
-        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
+       
 
         //atualizar
-        app.MapPut("v1/usuarios/{id:int}", async (int id, UsuarioRecuperado usuario, UsuarioService service) =>
+        app.MapPut("v1/usuarios/{id:int}", async (int id, Usuario usuario, UsuarioService service) =>
         {
             var atualizado = await service.AtualizarUsuario(usuario, id);
 
