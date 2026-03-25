@@ -42,6 +42,8 @@ public class UsuarioService
         {
             await ValidarUsuario(usuario, usuarioId);
 
+            usuario.Perfil = PerfilUsuario.Normal;
+
             bool atualizado = await _repository.AtualizarUsuario(usuario, usuarioId);
 
             return atualizado;

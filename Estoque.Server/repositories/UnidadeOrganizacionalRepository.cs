@@ -103,7 +103,7 @@ public class UnidadeOrganizacionalRepository
 
 
 
-    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades()
+    public async Task<List<UnidadeOrganizacional>> ObterUnidades()
     {
         const string sql = @"
             SELECT
@@ -134,7 +134,7 @@ public class UnidadeOrganizacionalRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
             await using var reader = await cmd.ExecuteReaderAsync();
 
-            var unidades = new List<UnidadeOrganizacionalRecuperado>();
+            var unidades = new List<UnidadeOrganizacional>();
 
             while (await reader.ReadAsync())
             {
@@ -166,7 +166,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<UnidadeOrganizacionalRecuperado?> ObterUnidadePorId(int id)
+    public async Task<UnidadeOrganizacional?> ObterUnidadePorId(int id)
     {
         const string sql = @"
             SELECT

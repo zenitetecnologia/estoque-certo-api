@@ -11,13 +11,13 @@ public class Usuario
     public string Telefone { get; set; } = string.Empty;
     [JsonIgnore]
     public PerfilUsuario Perfil { get; set; }
-    public List<UnidadeOrganizacionalRecuperado> UnidadesOrganizacionais { get; set; } = new List<UnidadeOrganizacionalRecuperado>();
+    public List<UnidadeOrganizacionalVinculo> UnidadesOrganizacionais { get; set; } = new List<UnidadeOrganizacionalVinculo>();
 }
 
 public class UsuarioValido
 {
     public int UsuarioId { get; set; }
-    public List<UnidadeOrganizacionalRecuperado> UnidadesOrganizacionais { get; set; } = new List<UnidadeOrganizacionalRecuperado>();
+    public List<UnidadeOrganizacionalVinculo> UnidadesOrganizacionais { get; set; } = new List<UnidadeOrganizacionalVinculo>();
 }
 
 public class UsuarioRecuperado : Usuario

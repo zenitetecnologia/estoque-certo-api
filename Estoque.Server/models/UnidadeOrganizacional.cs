@@ -21,3 +21,8 @@ public class UnidadeOrganizacionalRecuperado : UnidadeOrganizacional
 {
     public int UnidadeOrganizacionalId { get; set; }
 }
+
+public class UnidadeOrganizacionalVinculo
+{
+    public int UnidadeOrganizacionalId { get; set; }
+}

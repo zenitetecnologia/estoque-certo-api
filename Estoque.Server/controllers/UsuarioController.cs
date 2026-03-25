@@ -21,6 +21,8 @@ public static class UsuarioController
        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
        .Produces<string>(StatusCodes.Status500InternalServerError);
 
+
+
         //atualizar
         app.MapPut("v1/usuarios/{id:int}", async (int id, Usuario usuario, UsuarioService service) =>
         {

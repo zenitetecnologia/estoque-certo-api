@@ -47,7 +47,7 @@ public class UnidadeOrganizacionalService
 
 
 
-    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterTodasAsync()
+    public async Task<List<UnidadeOrganizacional>> ObterTodasAsync()
     {
         try
         {
@@ -59,7 +59,7 @@ public class UnidadeOrganizacionalService
         }
     }
 
-    public async Task<UnidadeOrganizacionalRecuperado?> ObterPorIdAsync(int id)
+    public async Task<UnidadeOrganizacional?> ObterPorIdAsync(int id)
     {
         try
         {
@@ -116,8 +116,6 @@ public class UnidadeOrganizacionalService
                 }
             }
         }
-
-
 
         if (erros.Any())
             throw new ValidationException(erros);
