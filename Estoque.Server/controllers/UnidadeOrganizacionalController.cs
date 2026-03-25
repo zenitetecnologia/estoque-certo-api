@@ -79,11 +79,11 @@ public static class UnidadeOrganizacionalController
 
 
 
-        app.MapPut("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacionalRecuperado unidade, UnidadeOrganizacionalService service) =>
+        app.MapPut("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacional unidade, UnidadeOrganizacionalService service) =>
         {
-            unidade.UnidadeOrganizacionalId = id;
+            var atualizado = await service.AtualizarUnidade(unidade, id);
 
-            return Results.NotFound(new { erro = "Unidade não encontrada para atualizar." });
+            return Results.Ok("Unidade atualizada com sucesso");
 
         })
         .WithTags("unidades-organizacionais")

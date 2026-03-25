@@ -229,35 +229,37 @@ public class UnidadeOrganizacionalRepository
 
 
 
-    public async Task<bool> AtualizarUnidade(UnidadeOrganizacionalRecuperado unidade)
+    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade, int unidadeOrganizacionalId)
     {
         const string sql = @"
-            UPDATE
-                estoque.unidade_organizacional
-            SET
-                id_matriz = @id_matriz,
-                Cnpj = @Cnpj,
-                razao_social = @razao_social,
-                nome_fantasia = @nome_fantasia,
-                cep = @cep,
-                numero = @numero,
-                complemento = @complemento,
-                bairro = @bairro,
-                cidade = @cidade,
-                uf = @uf,
-                pais = @pais,
-                telefone = @telefone,
-                email = @email
-            WHERE
-                unidade_organizacional_id = @unidade_organizacional_id;
-        ";
+        UPDATE
+            estoque.unidade_organizacional
+        SET
+            id_matriz = @id_matriz,
+            Cnpj = @Cnpj,
+            razao_social = @razao_social,
+            nome_fantasia = @nome_fantasia,
+            cep = @cep,
+            numero = @numero,
+            complemento = @complemento,
+            bairro = @bairro,
+            cidade = @cidade,
+            uf = @uf,
+            pais = @pais,
+            telefone = @telefone,
+            email = @email
+        WHERE
+            unidade_organizacional_id = @unidade_organizacional_id;
+    ";
 
         try
         {
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidade.UnidadeOrganizacionalId);
+
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
+
             cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz);
             cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);

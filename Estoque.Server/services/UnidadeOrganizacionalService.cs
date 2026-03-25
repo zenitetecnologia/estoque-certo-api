@@ -32,6 +32,26 @@ public class UnidadeOrganizacionalService
         }
     }
 
+    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade, int unidadeOrganizacionalId)
+    {
+        try
+        {
+            await ValidarUnidadeOrganizacional(unidade, unidadeOrganizacionalId);
+
+            bool atualizado = await _repository.AtualizarUnidade(unidade, unidadeOrganizacionalId);
+
+            return atualizado;
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao atualizar unidade organizacional: {ex.Message}");
+        }
+
+    }
 
 
 
