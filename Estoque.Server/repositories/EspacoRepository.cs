@@ -1,6 +1,6 @@
-﻿using Npgsql;
+﻿using Estoque.models;
+using Npgsql;
 using System.Data;
-using Estoque.models;
 
 namespace Estoque.Repositories;
 
@@ -38,7 +38,7 @@ public class EspacoRepository
 
             while (await reader.ReadAsync())
             {
-                espacos.Add(new Espacos
+                espacos.Add(new EspacosRecuperado
                 {
                     EspacoId = reader.GetInt32(reader.GetOrdinal("id")),
                     UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
@@ -84,7 +84,7 @@ public class EspacoRepository
 
             if (!await reader.ReadAsync()) return null;
 
-            return new Espacos
+            return new EspacosRecuperado
             {
                 EspacoId = reader.GetInt32(reader.GetOrdinal("id")),
                 UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
@@ -140,7 +140,7 @@ public class EspacoRepository
         }
     }
 
-    public async Task<bool> AtualizarEspaco(Espacos espaco)
+    public async Task<bool> AtualizarEspaco(EspacosRecuperado espaco)
     {
         const string sql = @"
             UPDATE

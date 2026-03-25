@@ -1,6 +1,6 @@
 ﻿using Estoque.models;
-using Estoque.Services;
 using Estoque.Server.Validations;
+using Estoque.Services;
 
 namespace Estoque.Controllers;
 
@@ -8,7 +8,45 @@ public static class UnidadeOrganizacionalController
 {
     public static void MapUnidadeOrganizacionalEndpoints(this WebApplication app)
     {
-        app.MapGet("v1/unidades-organizacionais", async (IUnidadeOrganizacionalService service) =>
+
+        app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacional unidade, UnidadeOrganizacionalService service) =>
+        {
+            int idNovaUnidade = await service.CriarUnidade(unidade);
+
+            return Results.Created($"/v1/unidades-organizacionais/{idNovaUnidade}", "Unidade Organizacional cadastrada com sucesso.");
+        })
+        .WithTags("unidades-organizacionais")
+        .WithSummary("Registra uma nova unidade organizacional")
+        .WithDescription("Registra uma nova unidade organizacional no sistema.")
+        .Produces(StatusCodes.Status201Created)
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service) =>
         {
             var result = await service.ObterTodasAsync();
 
@@ -21,7 +59,7 @@ public static class UnidadeOrganizacionalController
         .Produces<List<UnidadeOrganizacional>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapGet("v1/unidades-organizacionais/{id:int}", async (int id, IUnidadeOrganizacionalService service) =>
+        app.MapGet("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacionalService service) =>
         {
             var result = await service.ObterPorIdAsync(id);
 
@@ -38,33 +76,14 @@ public static class UnidadeOrganizacionalController
         .Produces(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapPost("v1/unidades-organizacionais", async (UnidadeOrganizacional unidade, IUnidadeOrganizacionalService service) =>
-        {
-
-            var id = await service.CadastrarAsync(unidade);
-
-            unidade.UnidadeOrganizacionalId = id;
- 
-            return Results.Created($"/v1/unidades-organizacionais/{id}", unidade);
-
-        })
-        .WithTags("unidades-organizacionais")
-        .WithSummary("Cadastra uma nova unidade")
-        .WithDescription("Cria uma nova unidade organizacional.")
-        .Produces<UnidadeOrganizacional>(StatusCodes.Status201Created)
-        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPut("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacional unidade, IUnidadeOrganizacionalService service) =>
+
+        app.MapPut("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacionalRecuperado unidade, UnidadeOrganizacionalService service) =>
         {
             unidade.UnidadeOrganizacionalId = id;
-            var atualizado = await service.AtualizarAsync(unidade);
 
-            if (!atualizado)
-                return Results.NotFound(new { erro = "Unidade não encontrada para atualizar." });
-
-            return Results.Ok(unidade);
+            return Results.NotFound(new { erro = "Unidade não encontrada para atualizar." });
 
         })
         .WithTags("unidades-organizacionais")
@@ -76,7 +95,7 @@ public static class UnidadeOrganizacionalController
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
-        app.MapDelete("v1/unidades-organizacionais/{id:int}", async (int id, IUnidadeOrganizacionalService service) =>
+        app.MapDelete("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacionalService service) =>
         {
             var excluido = await service.ExcluirAsync(id);
 

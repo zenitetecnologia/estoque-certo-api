@@ -5,16 +5,8 @@ using Estoque.Server.Validations;
 
 namespace Estoque.Services;
 
-public interface IUnidadeOrganizacionalService
-{
-    Task<List<UnidadeOrganizacional>> ObterTodasAsync();
-    Task<UnidadeOrganizacional?> ObterPorIdAsync(int id);
-    Task<int> CadastrarAsync(UnidadeOrganizacional unidade);
-    Task<bool> AtualizarAsync(UnidadeOrganizacional unidade);
-    Task<bool> ExcluirAsync(int id);
-}
 
-public class UnidadeOrganizacionalService : IUnidadeOrganizacionalService
+public class UnidadeOrganizacionalService
 {
     private readonly UnidadeOrganizacionalRepository _repository;
 
@@ -23,7 +15,40 @@ public class UnidadeOrganizacionalService : IUnidadeOrganizacionalService
         _repository = repository;
     }
 
-    public async Task<List<UnidadeOrganizacional>> ObterTodasAsync()
+    public async Task<int> CriarUnidade(UnidadeOrganizacional unidade)
+    {
+        try
+        {
+            await ValidarUnidadeOrganizacional(unidade, 0);
+
+            return await _repository.CadastrarUnidade(unidade);
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao cadastrar unidade: {ex.Message}");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterTodasAsync()
     {
         try
         {
@@ -35,7 +60,7 @@ public class UnidadeOrganizacionalService : IUnidadeOrganizacionalService
         }
     }
 
-    public async Task<UnidadeOrganizacional?> ObterPorIdAsync(int id)
+    public async Task<UnidadeOrganizacionalRecuperado?> ObterPorIdAsync(int id)
     {
         try
         {
@@ -47,39 +72,7 @@ public class UnidadeOrganizacionalService : IUnidadeOrganizacionalService
         }
     }
 
-    public async Task<int> CadastrarAsync(UnidadeOrganizacional unidade)
-    {
-        try
-        {
-            ValidarUnidadeOrganizacional(unidade);
-            return await _repository.CadastrarUnidade(unidade);
-        }
-        catch (ValidationException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao cadastrar unidade organizacional: {ex.Message}");
-        }
-    }
 
-    public async Task<bool> AtualizarAsync(UnidadeOrganizacional unidade)
-    {
-        try
-        {
-            ValidarUnidadeOrganizacional(unidade);
-            return await _repository.AtualizarUnidade(unidade);
-        }
-        catch (ValidationException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao atualizar unidade organizacional: {ex.Message}");
-        }
-    }
 
     public async Task<bool> ExcluirAsync(int id)
     {
@@ -93,22 +86,42 @@ public class UnidadeOrganizacionalService : IUnidadeOrganizacionalService
         }
     }
 
-    private void ValidarUnidadeOrganizacional(UnidadeOrganizacional unidade)
+    private async Task ValidarUnidadeOrganizacional(UnidadeOrganizacional unidade, int unidadeId)
     {
         var erros = new List<ValidationError>();
 
-        if (string.IsNullOrWhiteSpace(unidade.RazaoSocial))
-            erros.Add(new ValidationError("RazaoSocial", "A Razão Social é obrigatória."));
-
-        if (!string.IsNullOrWhiteSpace(unidade.Cnpj) && !RulleValidation.IsCnpjValido(unidade.Cnpj))
+        if (unidadeId > 0)
         {
-            erros.Add(new ValidationError("Cnpj", "O CNPJ informado não é válido ou não existe."));
+            var unidadeExistente = await _repository.ObterUnidadePorId(unidadeId);
+            if (unidadeExistente == null)
+            {
+                erros.Add(new ValidationError("id", "Nenhuma unidade organizacional encontrada com esse ID"));
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(unidade.RazaoSocial))
+            erros.Add(new ValidationError("RazaoSocial", "Informe a razão social."));
+
+        if (!string.IsNullOrWhiteSpace(unidade.Cnpj))
+        {
+            if (!RulleValidation.IsCnpjValido(unidade.Cnpj))
+            {
+                erros.Add(new ValidationError("Cnpj", "O CNPJ informado não é válido."));
+            }
+            else
+            {
+                bool cnpjExiste = await _repository.VerificaExisteUnidade(unidade.Cnpj, unidadeId);
+                if (cnpjExiste)
+                {
+                    erros.Add(new ValidationError("Cnpj", "Este CNPJ já está cadastrado em outra unidade."));
+                }
+            }
         }
 
         if (string.IsNullOrWhiteSpace(unidade.Email))
-            erros.Add(new ValidationError("Email", "O Email é obrigatório."));
+            erros.Add(new ValidationError("Email", "Informe o email."));
 
         if (erros.Any())
-            throw new ValidationException(erros); 
+            throw new ValidationException(erros);
     }
 }

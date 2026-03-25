@@ -1,6 +1,6 @@
-﻿using Npgsql;
+﻿using Estoque.models;
+using Npgsql;
 using System.Data;
-using Estoque.models;
 
 namespace Estoque.Repositories;
 
@@ -11,130 +11,6 @@ public class UnidadeOrganizacionalRepository
     public UnidadeOrganizacionalRepository(IDbConnection connection)
     {
         _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
-    }
-
-    public async Task<List<UnidadeOrganizacional>> ObterUnidades()
-    {
-        const string sql = @"
-            SELECT
-                unidade_organizacional_id,
-                id_matriz,
-                Cnpj,
-                razao_social,
-                nome_fantasia,
-                cep,
-                numero,
-                complemento,
-                bairro,
-                cidade,
-                uf,
-                pais,
-                telefone,
-                email
-            FROM
-                estoque.unidade_organizacional
-            ORDER BY
-                razao_social;
-        ";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-            await using var reader = await cmd.ExecuteReaderAsync();
-
-            var unidades = new List<UnidadeOrganizacional>();
-
-            while (await reader.ReadAsync())
-            {
-                unidades.Add(new UnidadeOrganizacional
-                {
-                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
-                    IdMatriz = reader.GetInt32(reader.GetOrdinal("id_matriz")),
-                    Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
-                    RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
-                    NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
-                    Cep = reader.IsDBNull(reader.GetOrdinal("cep")) ? string.Empty : reader.GetString(reader.GetOrdinal("cep")),
-                    Numero = reader.IsDBNull(reader.GetOrdinal("numero")) ? string.Empty : reader.GetString(reader.GetOrdinal("numero")),
-                    Complemento = reader.IsDBNull(reader.GetOrdinal("complemento")) ? string.Empty : reader.GetString(reader.GetOrdinal("complemento")),
-                    Bairro = reader.IsDBNull(reader.GetOrdinal("bairro")) ? string.Empty : reader.GetString(reader.GetOrdinal("bairro")),
-                    Cidade = reader.IsDBNull(reader.GetOrdinal("cidade")) ? string.Empty : reader.GetString(reader.GetOrdinal("cidade")),
-                    Uf = reader.IsDBNull(reader.GetOrdinal("uf")) ? string.Empty : reader.GetString(reader.GetOrdinal("uf")),
-                    Pais = reader.IsDBNull(reader.GetOrdinal("pais")) ? string.Empty : reader.GetString(reader.GetOrdinal("pais")),
-                    Telefone = reader.IsDBNull(reader.GetOrdinal("telefone")) ? string.Empty : reader.GetString(reader.GetOrdinal("telefone")),
-                    Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email"))
-                });
-            }
-
-            return unidades;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
-    }
-
-    public async Task<UnidadeOrganizacional?> ObterUnidadePorId(int id)
-    {
-        const string sql = @"
-            SELECT
-                unidade_organizacional_id,
-                id_matriz,
-                Cnpj,
-                razao_social,
-                nome_fantasia,
-                cep,
-                numero,
-                complemento,
-                bairro,
-                cidade,
-                uf,
-                pais,
-                telefone,
-                email
-            FROM
-                estoque.unidade_organizacional
-            WHERE
-                unidade_organizacional_id, = @unidade_organizacional_id,
-            LIMIT 1;
-        ";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", id);
-
-            await using var reader = await cmd.ExecuteReaderAsync();
-
-            if (!await reader.ReadAsync()) return null;
-
-            return new UnidadeOrganizacional
-            {
-                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
-                IdMatriz = reader.GetInt32(reader.GetOrdinal("id_matriz")),
-                Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
-                RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
-                NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
-                Cep = reader.IsDBNull(reader.GetOrdinal("cep")) ? string.Empty : reader.GetString(reader.GetOrdinal("cep")),
-                Numero = reader.IsDBNull(reader.GetOrdinal("numero")) ? string.Empty : reader.GetString(reader.GetOrdinal("numero")),
-                Complemento = reader.IsDBNull(reader.GetOrdinal("complemento")) ? string.Empty : reader.GetString(reader.GetOrdinal("complemento")),
-                Bairro = reader.IsDBNull(reader.GetOrdinal("bairro")) ? string.Empty : reader.GetString(reader.GetOrdinal("bairro")),
-                Cidade = reader.IsDBNull(reader.GetOrdinal("cidade")) ? string.Empty : reader.GetString(reader.GetOrdinal("cidade")),
-                Uf = reader.IsDBNull(reader.GetOrdinal("uf")) ? string.Empty : reader.GetString(reader.GetOrdinal("uf")),
-                Pais = reader.IsDBNull(reader.GetOrdinal("pais")) ? string.Empty : reader.GetString(reader.GetOrdinal("pais")),
-                Telefone = reader.IsDBNull(reader.GetOrdinal("telefone")) ? string.Empty : reader.GetString(reader.GetOrdinal("telefone")),
-                Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email"))
-            };
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
     }
 
     public async Task<int> CadastrarUnidade(UnidadeOrganizacional unidade)
@@ -206,7 +82,154 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades()
+    {
+        const string sql = @"
+            SELECT
+                unidade_organizacional_id,
+                id_matriz,
+                Cnpj,
+                razao_social,
+                nome_fantasia,
+                cep,
+                numero,
+                complemento,
+                bairro,
+                cidade,
+                uf,
+                pais,
+                telefone,
+                email
+            FROM
+                estoque.unidade_organizacional
+            ORDER BY
+                razao_social;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var reader = await cmd.ExecuteReaderAsync();
+
+            var unidades = new List<UnidadeOrganizacionalRecuperado>();
+
+            while (await reader.ReadAsync())
+            {
+                unidades.Add(new UnidadeOrganizacionalRecuperado
+                {
+                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
+                    IdMatriz = reader.GetInt32(reader.GetOrdinal("id_matriz")),
+                    Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
+                    RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
+                    NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
+                    Cep = reader.IsDBNull(reader.GetOrdinal("cep")) ? string.Empty : reader.GetString(reader.GetOrdinal("cep")),
+                    Numero = reader.IsDBNull(reader.GetOrdinal("numero")) ? string.Empty : reader.GetString(reader.GetOrdinal("numero")),
+                    Complemento = reader.IsDBNull(reader.GetOrdinal("complemento")) ? string.Empty : reader.GetString(reader.GetOrdinal("complemento")),
+                    Bairro = reader.IsDBNull(reader.GetOrdinal("bairro")) ? string.Empty : reader.GetString(reader.GetOrdinal("bairro")),
+                    Cidade = reader.IsDBNull(reader.GetOrdinal("cidade")) ? string.Empty : reader.GetString(reader.GetOrdinal("cidade")),
+                    Uf = reader.IsDBNull(reader.GetOrdinal("uf")) ? string.Empty : reader.GetString(reader.GetOrdinal("uf")),
+                    Pais = reader.IsDBNull(reader.GetOrdinal("pais")) ? string.Empty : reader.GetString(reader.GetOrdinal("pais")),
+                    Telefone = reader.IsDBNull(reader.GetOrdinal("telefone")) ? string.Empty : reader.GetString(reader.GetOrdinal("telefone")),
+                    Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email"))
+                });
+            }
+
+            return unidades;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+    }
+
+    public async Task<UnidadeOrganizacionalRecuperado?> ObterUnidadePorId(int id)
+    {
+        const string sql = @"
+            SELECT
+                unidade_organizacional_id,
+                id_matriz,
+                Cnpj,
+                razao_social,
+                nome_fantasia,
+                cep,
+                numero,
+                complemento,
+                bairro,
+                cidade,
+                uf,
+                pais,
+                telefone,
+                email
+            FROM
+                estoque.unidade_organizacional
+            WHERE
+                unidade_organizacional_id, = @unidade_organizacional_id,
+            LIMIT 1;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", id);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+
+            if (!await reader.ReadAsync()) return null;
+
+            return new UnidadeOrganizacionalRecuperado
+            {
+                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
+                IdMatriz = reader.GetInt32(reader.GetOrdinal("id_matriz")),
+                Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
+                RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
+                NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
+                Cep = reader.IsDBNull(reader.GetOrdinal("cep")) ? string.Empty : reader.GetString(reader.GetOrdinal("cep")),
+                Numero = reader.IsDBNull(reader.GetOrdinal("numero")) ? string.Empty : reader.GetString(reader.GetOrdinal("numero")),
+                Complemento = reader.IsDBNull(reader.GetOrdinal("complemento")) ? string.Empty : reader.GetString(reader.GetOrdinal("complemento")),
+                Bairro = reader.IsDBNull(reader.GetOrdinal("bairro")) ? string.Empty : reader.GetString(reader.GetOrdinal("bairro")),
+                Cidade = reader.IsDBNull(reader.GetOrdinal("cidade")) ? string.Empty : reader.GetString(reader.GetOrdinal("cidade")),
+                Uf = reader.IsDBNull(reader.GetOrdinal("uf")) ? string.Empty : reader.GetString(reader.GetOrdinal("uf")),
+                Pais = reader.IsDBNull(reader.GetOrdinal("pais")) ? string.Empty : reader.GetString(reader.GetOrdinal("pais")),
+                Telefone = reader.IsDBNull(reader.GetOrdinal("telefone")) ? string.Empty : reader.GetString(reader.GetOrdinal("telefone")),
+                Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email"))
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+    }
+
+
+
+    public async Task<bool> AtualizarUnidade(UnidadeOrganizacionalRecuperado unidade)
     {
         const string sql = @"
             UPDATE

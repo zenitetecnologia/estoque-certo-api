@@ -25,8 +25,8 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<Estoque.Repositories.ItemEstoqueRepository>();
 builder.Services.AddScoped<Estoque.Services.IItemEstoqueService, Estoque.Services.ItemEstoqueService>();
 //unidade organizacional
-builder.Services.AddScoped<Estoque.Repositories.UnidadeOrganizacionalRepository>();
-builder.Services.AddScoped<Estoque.Services.IUnidadeOrganizacionalService, Estoque.Services.UnidadeOrganizacionalService>();
+builder.Services.AddScoped<UnidadeOrganizacionalRepository>();
+builder.Services.AddScoped<UnidadeOrganizacionalService>();
 //espacos
 builder.Services.AddScoped<Estoque.Repositories.EspacoRepository>();
 builder.Services.AddScoped<Estoque.Services.IEspacosService, Estoque.Services.EspacoService>();

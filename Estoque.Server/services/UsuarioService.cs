@@ -36,10 +36,25 @@ public class UsuarioService
         }
     }
 
+    public async Task<bool> AtualizarUsuario(Usuario usuario, int usuarioId)
+    {
+        try
+        {
+            await ValidarUsuario(usuario, usuarioId);
 
+            bool atualizado = await _repository.AtualizarUsuario(usuario, usuarioId);
 
-
-
+            return atualizado;
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao atualizar usuário: {ex.Message}");
+        }
+    }
 
 
 
@@ -86,38 +101,6 @@ public class UsuarioService
 
 
 
-    public async Task<bool> AtualizarUsuario(Usuario usuario, int usuarioId)
-    {
-        try
-        {
-            await ValidarUsuario(usuario, usuarioId);
-
-            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuarioId);
-
-            if (usernameExiste)
-            {
-                throw new InvalidOperationException("Este Username já está sendo usado por outro usuário.");
-            }
-
-            bool atualizado = await _repository.AtualizarUsuario(usuario, usuarioId);
-
-            if (usernameExiste)
-            {
-                throw new InvalidOperationException("Este Username já está sendo usado por outro usuário.");
-            }
-
-            return atualizado;
-        }
-        catch (ValidationException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao atualizar usuário: {ex.Message}");
-        }
-    }
-
     public async Task<bool> ExcluirAsync(int id)
     {
         try
@@ -137,20 +120,20 @@ public class UsuarioService
         }
     }
 
-    public async Task VincularComUnidades(UsuarioValido request)
+    public async Task VincularComUnidades(UsuarioValido valido)
     {
-        var usuario = await _repository.ObterUsuario(request.UsuarioId);
+        var usuario = await _repository.ObterUsuario(valido.UsuarioId);
 
         if (usuario == null)
         {
             throw new KeyNotFoundException("Usuário não encontrado.");
         }
 
-        await _repository.RemoverUnidadesOrganizacionais(request.UsuarioId);
+        await _repository.RemoverUnidadesOrganizacionais(valido.UsuarioId);
 
-        foreach (var unidade in request.UnidadesOrganizacionais)
+        foreach (var unidade in valido.UnidadesOrganizacionais)
         {
-            await _repository.VincularUnidadeOrganizacional(request.UsuarioId, unidade.UnidadeOrganizacionalId);
+            await _repository.VincularUnidadeOrganizacional(valido.UsuarioId, unidade.UnidadeOrganizacionalId);
         }
     }
 
@@ -170,6 +153,15 @@ public class UsuarioService
                 erros.Add(new ValidationError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário."));
         }
 
+        if (usuarioId > 0)
+        {
+            var usuarioExistente = await _repository.ObterUsuario(usuarioId);
+            if (usuarioExistente == null)
+            {
+                erros.Add(new ValidationError("id", "Nenhum usuário encontrado com esse ID"));
+            }
+        }
+
         if (string.IsNullOrWhiteSpace(usuario.Senha))
             erros.Add(new ValidationError("Senha", "Informe a senha."));
 
@@ -184,8 +176,5 @@ public class UsuarioService
 
         if (erros.Any())
             throw new ValidationException(erros);
-
-
-
     }
 }

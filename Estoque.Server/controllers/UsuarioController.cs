@@ -16,12 +16,26 @@ public static class UsuarioController
         })
        .WithTags("usuarios")
        .WithSummary("Registra um novo usuário")
-       .WithDescription("Registra um novo usuário com perfil Normal e não validado.")
+       .WithDescription("Registra um novo usuário com perfil normal e não validado.")
        .Produces(StatusCodes.Status201Created)
        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
        .Produces<string>(StatusCodes.Status500InternalServerError);
 
+        //atualizar
+        app.MapPut("v1/usuarios/{id:int}", async (int id, Usuario usuario, UsuarioService service) =>
+        {
+            var atualizado = await service.AtualizarUsuario(usuario, id);
 
+            return Results.Ok("Usuário atualizado com sucesso.");
+
+        })
+        .WithTags("usuarios")
+        .WithSummary("Atualiza um usuário")
+        .WithDescription("Atualiza os dados de um usuário existente.")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<InvalidOperationException>(StatusCodes.Status400BadRequest)
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
 
@@ -65,7 +79,7 @@ public static class UsuarioController
             var result = await service.ObterPorIdAsync(id);
 
             if (result == null)
-            return Results.NotFound(new { erro = "Usuário não encontrado." });
+                return Results.NotFound(new { erro = "Usuário não encontrado." });
 
             return Results.Ok(result);
 
@@ -77,30 +91,15 @@ public static class UsuarioController
         .Produces(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        //criar
-       
 
-        //atualizar
-        app.MapPut("v1/usuarios/{id:int}", async (int id, Usuario usuario, UsuarioService service) =>
-        {
-            var atualizado = await service.AtualizarUsuario(usuario, id);
 
-            return Results.Ok("Usuário atualizado com sucesso.");
 
-        })
-        .WithTags("usuarios")
-        .WithSummary("Atualiza um usuário")
-        .WithDescription("Atualiza os dados de um usuário existente.")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<InvalidOperationException>(StatusCodes.Status400BadRequest)
-        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
 
         //deletar
         app.MapDelete("v1/usuarios/{id:int}", async (int id, UsuarioService service) =>
         {
             var excluido = await service.ExcluirAsync(id);
-   
+
             return Results.Ok(new { mensagem = "Usuário excluído com sucesso!" });
 
         })

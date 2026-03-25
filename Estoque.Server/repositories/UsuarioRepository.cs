@@ -1,7 +1,7 @@
-﻿using Npgsql;
-using System.Data;
-using Estoque.models;
+﻿using Estoque.models;
 using Estoque.Server.Models;
+using Npgsql;
+using System.Data;
 
 namespace Estoque.Repositories;
 
@@ -64,9 +64,85 @@ public class UsuarioRepository
         }
     }
 
+    public async Task<bool> AtualizarUsuario(Usuario usuario, int usuarioId)
+    {
+        const string sql = @"
+            UPDATE
+                estoque.usuario
+            SET
+                username = @username,
+                senha = @senha,
+                nome = @nome,
+                telefone = @telefone,
+                perfil = @perfil
+            WHERE
+                usuario_id = @usuario_id;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+            cmd.Parameters.AddWithValue("username", usuario.Username);
+            cmd.Parameters.AddWithValue("senha", usuario.Senha);
+            cmd.Parameters.AddWithValue("nome", usuario.Nome);
+            cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
+            cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
+
+            var rowsAffected = await cmd.ExecuteNonQueryAsync();
+
+            if (rowsAffected > 0)
+            {
+                await RemoverUnidadesOrganizacionais(usuarioId);
+
+                if (usuario.UnidadesOrganizacionais != null)
+                {
+                    foreach (var unidade in usuario.UnidadesOrganizacionais)
+                    {
+                        await VincularUnidadeOrganizacional(usuarioId, unidade.UnidadeOrganizacionalId);
+                    }
+                }
+            }
+
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public async Task VincularUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
     {
-        const string sql = @"            
+        const string sql = @"
             INSERT INTO estoque.usuario_unidade_organizacional
             (
                 usuario_id,
@@ -125,28 +201,6 @@ public class UsuarioRepository
             throw;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public async Task<List<UsuarioRecuperado>> ObterUsuarios()
     {
@@ -240,60 +294,6 @@ public class UsuarioRepository
         }
     }
 
-
-
-    public async Task<bool> AtualizarUsuario(Usuario usuario, int usuarioId)
-    {
-        const string sql = @"
-            UPDATE
-                estoque.usuario
-            SET
-                username = @username,
-                senha = @senha,
-                nome = @nome,
-                telefone = @telefone,
-                perfil = @perfil
-            WHERE
-                usuario_id = @usuario_id;
-        ";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
-            cmd.Parameters.AddWithValue("username", usuario.Username);
-            cmd.Parameters.AddWithValue("senha", usuario.Senha);
-            cmd.Parameters.AddWithValue("nome", usuario.Nome);
-            cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
-            cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
-
-            var rowsAffected = await cmd.ExecuteNonQueryAsync();
-
-            if (rowsAffected > 0)
-            {
-                await RemoverUnidadesOrganizacionais(usuarioId);
-
-                if (usuario.UnidadesOrganizacionais != null)
-                {
-                    foreach (var unidade in usuario.UnidadesOrganizacionais)
-                    {
-                        await VincularUnidadeOrganizacional(usuarioId, unidade.UnidadeOrganizacionalId);
-                    }
-                }
-            }
-
-            return rowsAffected > 0;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
-    }
-
     public async Task<bool> ExcluirUsuario(int id)
     {
         const string sql = @"
@@ -318,8 +318,6 @@ public class UsuarioRepository
         }
     }
 
-
-
     private async Task EnsureOpenAsync()
     {
         if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
@@ -327,7 +325,7 @@ public class UsuarioRepository
 
     public async Task RemoverUnidadesOrganizacionais(int idUsuario)
     {
-        const string sql = @"            
+        const string sql = @"
             DELETE FROM estoque.usuario_unidade_organizacional WHERE usuario_id = @usuario_id;
         ";
         try
@@ -343,6 +341,4 @@ public class UsuarioRepository
             throw new Exception($"Erro ao remover unidades organizacionais: {ex.Message}");
         }
     }
-
-
 }

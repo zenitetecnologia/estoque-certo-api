@@ -2,7 +2,6 @@
 
 public class UnidadeOrganizacional
 {
-    public int UnidadeOrganizacionalId { get; set; }
     public int IdMatriz { get; set; }
     public string Cnpj { get; set; } = string.Empty;
     public string RazaoSocial { get; set; } = string.Empty;
@@ -18,7 +17,7 @@ public class UnidadeOrganizacional
     public string Email { get; set; } = string.Empty;
 }
 
-public class UnidadeOrganizacionalVinculo
+public class UnidadeOrganizacionalRecuperado : UnidadeOrganizacional
 {
     public int UnidadeOrganizacionalId { get; set; }
 }

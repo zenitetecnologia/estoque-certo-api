@@ -3,16 +3,8 @@ using Estoque.Repositories;
 
 namespace Estoque.Services;
 
-public interface IEspacosService
-{
-    Task<List<Espacos>> ObterTodosAsync();
-    Task<Espacos?> ObterPorIdAsync(int id);
-    Task<int> CadastrarAsync(Espacos espaco);
-    Task<bool> AtualizarAsync(Espacos espaco);
-    Task<bool> ExcluirAsync(int id);
-}
 
-public class EspacoService : IEspacosService
+public class EspacoService
 {
     private readonly EspacoRepository _repository;
 
@@ -20,6 +12,29 @@ public class EspacoService : IEspacosService
     {
         _repository = repository;
     }
+
+    public async Task<int> CriarEspaco(Espacos espaco)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(espaco.Nome))
+                throw new ArgumentException("O nome do espaço é obrigatório.");
+
+            if (espaco.UnidadeOrganizacionalId <= 0)
+                throw new ArgumentException("A Unidade Organizacional é obrigatória.");
+
+            return await _repository.CadastrarEspaco(espaco);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao cadastrar espaço: {ex.Message}");
+        }
+    }
+
+
+
+
+
 
     public async Task<List<Espacos>> ObterTodosAsync()
     {
@@ -45,25 +60,9 @@ public class EspacoService : IEspacosService
         }
     }
 
-    public async Task<int> CadastrarAsync(Espacos espaco)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(espaco.Nome))
-                throw new ArgumentException("O nome do espaço é obrigatório.");
 
-            if (espaco.UnidadeOrganizacionalId <= 0)
-                throw new ArgumentException("A Unidade Organizacional é obrigatória.");
 
-            return await _repository.CadastrarEspaco(espaco);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao cadastrar espaço: {ex.Message}");
-        }
-    }
-
-    public async Task<bool> AtualizarAsync(Espacos espaco)
+    public async Task<bool> AtualizarAsync(EspacosRecuperado espaco)
     {
         try
         {
@@ -88,5 +87,10 @@ public class EspacoService : IEspacosService
         {
             throw new Exception($"Erro ao excluir espaço: {ex.Message}");
         }
+    }
+
+    public async Task ValidarEspaco(Espacos espacos, int espacoId)
+    {
+
     }
 }
