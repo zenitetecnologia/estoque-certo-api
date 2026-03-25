@@ -76,18 +76,22 @@ app.UseExceptionHandler(errorApp =>
     {
         var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
 
-        if (exception is ValidationException validationEx)
+        if (exception is ValidationException validationException)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsJsonAsync(validationEx.Errors);
+            await context.Response.WriteAsJsonAsync(validationException.Errors);
+            return;
+        }
+
+        if (exception is NotFoundException notFoundException)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsync(notFoundException.Message);
             return;
         }
 
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        await context.Response.WriteAsJsonAsync(new
-        {
-            error = exception?.Message
-        });
+        await context.Response.WriteAsync(exception?.Message ?? "Erro não identificado.");
     });
 });
 

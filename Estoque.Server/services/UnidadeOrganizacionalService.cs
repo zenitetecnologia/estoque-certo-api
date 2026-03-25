@@ -91,8 +91,6 @@ public class UnidadeOrganizacionalService
         }
     }
 
-
-
     public async Task<bool> ExcluirAsync(int id)
     {
         try

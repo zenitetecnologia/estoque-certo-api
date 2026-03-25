@@ -82,7 +82,60 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
+    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade, int unidadeOrganizacionalId)
+    {
+        const string sql = @"
+        UPDATE
+            estoque.unidade_organizacional
+        SET
+            id_matriz = @id_matriz,
+            Cnpj = @Cnpj,
+            razao_social = @razao_social,
+            nome_fantasia = @nome_fantasia,
+            cep = @cep,
+            numero = @numero,
+            complemento = @complemento,
+            bairro = @bairro,
+            cidade = @cidade,
+            uf = @uf,
+            pais = @pais,
+            telefone = @telefone,
+            email = @email
+        WHERE
+            unidade_organizacional_id = @unidade_organizacional_id;
+    ";
 
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
+
+            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz);
+            cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
+            cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
+            cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
+            cmd.Parameters.AddWithValue("cep", unidade.Cep);
+            cmd.Parameters.AddWithValue("numero", unidade.Numero);
+            cmd.Parameters.AddWithValue("complemento", unidade.Complemento);
+            cmd.Parameters.AddWithValue("bairro", unidade.Bairro);
+            cmd.Parameters.AddWithValue("cidade", unidade.Cidade);
+            cmd.Parameters.AddWithValue("uf", unidade.Uf);
+            cmd.Parameters.AddWithValue("pais", unidade.Pais);
+            cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
+            cmd.Parameters.AddWithValue("email", unidade.Email);
+
+            var rowsAffected = await cmd.ExecuteNonQueryAsync();
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+    }
 
 
 
@@ -219,63 +272,6 @@ public class UnidadeOrganizacionalRepository
                 Telefone = reader.IsDBNull(reader.GetOrdinal("telefone")) ? string.Empty : reader.GetString(reader.GetOrdinal("telefone")),
                 Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email"))
             };
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
-    }
-
-
-
-    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade, int unidadeOrganizacionalId)
-    {
-        const string sql = @"
-        UPDATE
-            estoque.unidade_organizacional
-        SET
-            id_matriz = @id_matriz,
-            Cnpj = @Cnpj,
-            razao_social = @razao_social,
-            nome_fantasia = @nome_fantasia,
-            cep = @cep,
-            numero = @numero,
-            complemento = @complemento,
-            bairro = @bairro,
-            cidade = @cidade,
-            uf = @uf,
-            pais = @pais,
-            telefone = @telefone,
-            email = @email
-        WHERE
-            unidade_organizacional_id = @unidade_organizacional_id;
-    ";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
-
-            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz);
-            cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
-            cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
-            cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
-            cmd.Parameters.AddWithValue("cep", unidade.Cep);
-            cmd.Parameters.AddWithValue("numero", unidade.Numero);
-            cmd.Parameters.AddWithValue("complemento", unidade.Complemento);
-            cmd.Parameters.AddWithValue("bairro", unidade.Bairro);
-            cmd.Parameters.AddWithValue("cidade", unidade.Cidade);
-            cmd.Parameters.AddWithValue("uf", unidade.Uf);
-            cmd.Parameters.AddWithValue("pais", unidade.Pais);
-            cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
-            cmd.Parameters.AddWithValue("email", unidade.Email);
-
-            var rowsAffected = await cmd.ExecuteNonQueryAsync();
-            return rowsAffected > 0;
         }
         catch (Exception ex)
         {

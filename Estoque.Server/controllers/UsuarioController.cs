@@ -10,7 +10,7 @@ public static class UsuarioController
     {
         app.MapPost("v1/usuarios/", async (Usuario usuario, UsuarioService service) =>
         {
-            int idNovoUsuario = await service.CriarUsuario(usuario);
+            int idNovoUsuario = await service.CadastrarUsuario(usuario);
 
             return Results.Created($"/v1/usuarios/{idNovoUsuario}", "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
         })
@@ -21,22 +21,18 @@ public static class UsuarioController
        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
        .Produces<string>(StatusCodes.Status500InternalServerError);
 
-
-
-        //atualizar
-        app.MapPut("v1/usuarios/{id:int}", async (int id, Usuario usuario, UsuarioService service) =>
+        app.MapPut("v1/usuarios/{id}", async (int usuarioId, Usuario usuario, UsuarioService service) =>
         {
-            var atualizado = await service.AtualizarUsuario(usuario, id);
+            await service.AtualizarUsuario(usuario, usuarioId);
 
             return Results.Ok("Usuário atualizado com sucesso.");
-
         })
         .WithTags("usuarios")
-        .WithSummary("Atualiza um usuário")
+        .WithSummary("Atualiza registro de usuário")
         .WithDescription("Atualiza os dados de um usuário existente.")
         .Produces(StatusCodes.Status200OK)
-        .Produces<InvalidOperationException>(StatusCodes.Status400BadRequest)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
 

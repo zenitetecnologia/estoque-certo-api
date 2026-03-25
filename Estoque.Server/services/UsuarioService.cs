@@ -14,7 +14,7 @@ public class UsuarioService
         _repository = repository;
     }
 
-    public async Task<int> CriarUsuario(Usuario usuario)
+    public async Task<int> CadastrarUsuario(Usuario usuario)
     {
         try
         {
@@ -40,6 +40,13 @@ public class UsuarioService
     {
         try
         {
+            var usuarioExistente = await _repository.ObterUsuario(usuarioId);
+
+            if (usuarioExistente == null)
+            {
+                throw new NotFoundException("Usuário não encontrado para o ID informado.");
+            }
+
             await ValidarUsuario(usuario, usuarioId);
 
             usuario.Perfil = PerfilUsuario.Normal;
@@ -47,6 +54,10 @@ public class UsuarioService
             bool atualizado = await _repository.AtualizarUsuario(usuario, usuarioId);
 
             return atualizado;
+        }
+        catch (NotFoundException)
+        {
+            throw;
         }
         catch (ValidationException)
         {
@@ -153,15 +164,6 @@ public class UsuarioService
 
             if (usernameExiste)
                 erros.Add(new ValidationError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário."));
-        }
-
-        if (usuarioId > 0)
-        {
-            var usuarioExistente = await _repository.ObterUsuario(usuarioId);
-            if (usuarioExistente == null)
-            {
-                erros.Add(new ValidationError("id", "Nenhum usuário encontrado com esse ID"));
-            }
         }
 
         if (string.IsNullOrWhiteSpace(usuario.Senha))

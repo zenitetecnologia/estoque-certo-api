@@ -98,12 +98,9 @@ public class UsuarioRepository
             {
                 await RemoverUnidadesOrganizacionais(usuarioId);
 
-                if (usuario.UnidadesOrganizacionais != null)
+                foreach (var unidade in usuario.UnidadesOrganizacionais)
                 {
-                    foreach (var unidade in usuario.UnidadesOrganizacionais)
-                    {
-                        await VincularUnidadeOrganizacional(usuarioId, unidade.UnidadeOrganizacionalId);
-                    }
+                    await VincularUnidadeOrganizacional(usuarioId, unidade.UnidadeOrganizacionalId);
                 }
             }
 
@@ -140,36 +137,7 @@ public class UsuarioRepository
 
 
 
-    public async Task VincularUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
-    {
-        const string sql = @"
-            INSERT INTO estoque.usuario_unidade_organizacional
-            (
-                usuario_id,
-                unidade_organizacional_id
-            )
-            VALUES
-            (
-                @usuario_id,
-                @unidade_organizacional_id
-            );
-        ";
 
-        try
-        {
-            await EnsureOpenAsync();
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-
-            cmd.Parameters.AddWithValue("usuario_id", idUsuario);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", idUnidadeOrganizacional);
-
-            await cmd.ExecuteNonQueryAsync();
-        }
-        catch
-        {
-            throw;
-        }
-    }
 
     public async Task<bool> VerificaExisteUsuario(string username, int ignoreId)
     {
@@ -318,27 +286,78 @@ public class UsuarioRepository
         }
     }
 
-    private async Task EnsureOpenAsync()
-    {
-        if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
-    }
 
-    public async Task RemoverUnidadesOrganizacionais(int idUsuario)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public async Task RemoverUnidadesOrganizacionais(int usuarioId)
     {
-        const string sql = @"
-            DELETE FROM estoque.usuario_unidade_organizacional WHERE usuario_id = @usuario_id;
-        ";
+        const string sql = "DELETE FROM estoque.usuario_unidade_organizacional WHERE usuario_id = @usuario_id;";
+
         try
         {
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("usuario_id", idUsuario);
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
             await cmd.ExecuteNonQueryAsync();
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
-            throw new Exception($"Erro ao remover unidades organizacionais: {ex.Message}");
+            throw;
         }
+    }
+
+    public async Task VincularUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
+    {
+        const string sql = @"
+            INSERT INTO estoque.usuario_unidade_organizacional
+            (
+                usuario_id,
+                unidade_organizacional_id
+            )
+            VALUES
+            (
+                @usuario_id,
+                @unidade_organizacional_id
+            );
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+
+            cmd.Parameters.AddWithValue("usuario_id", idUsuario);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", idUnidadeOrganizacional);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    private async Task EnsureOpenAsync()
+    {
+        if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
     }
 }
