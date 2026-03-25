@@ -60,7 +60,13 @@ CREATE TABLE IF NOT EXISTS estoque.usuario (
     perfil INTEGER NOT NULL
 );
 
--- 4. Tabela de Espaços (Locais físicos de armazenamento)
+-- 4. Tabela de vinculo usuários e unidades organizacionais
+CREATE TABLE  IF NOT EXISTS estoque.usuario_unidade_organizacional (
+    usuario_id INT,
+    unidade_organizacional_id INT
+);
+
+-- 5. Tabela de Espaços (Locais físicos de armazenamento)
 CREATE TABLE IF NOT EXISTS estoque.espaco (
     iespaco_id SERIAL PRIMARY KEY,
     unidade_organizacional_id INTEGER NOT NULL,
@@ -68,7 +74,7 @@ CREATE TABLE IF NOT EXISTS estoque.espaco (
     descricao TEXT
 );
 
--- 5. Tabela de Itens de Estoque (Produtos)
+-- 6. Tabela de Itens de Estoque (Produtos)
 CREATE TABLE IF NOT EXISTS estoque.item_estoque (
     item_estoque_id SERIAL PRIMARY KEY,
     unidade_organizacional_id INTEGER NOT NULL,
@@ -78,7 +84,7 @@ CREATE TABLE IF NOT EXISTS estoque.item_estoque (
     quantidade NUMERIC(18,4) NOT NULL DEFAULT 0
 );
 
--- 6. Tabela de Histórico (Auditoria de Movimentações)
+-- 7. Tabela de Histórico (Auditoria de Movimentações)
 CREATE TABLE IF NOT EXISTS estoque.historico (
     historico_id SERIAL PRIMARY KEY,
     item_estoque_id INTEGER NOT NULL,
