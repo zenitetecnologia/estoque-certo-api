@@ -60,8 +60,6 @@ public class EspacoService
         }
     }
 
-
-
     public async Task<bool> AtualizarAsync(EspacosRecuperado espaco)
     {
         try

@@ -7,7 +7,7 @@ public static class HistoricoController
 {
     public static void MapHistoricoEndpoints(this WebApplication app)
     {
-        app.MapGet("v1/historicos/item/{idItem:int}", async (int idItem, IHistoricoService service) =>
+        app.MapGet("v1/historicos/item/{idItem:int}", async (int idItem, HistoricoService service) =>
         {
             try
             {
@@ -27,7 +27,7 @@ public static class HistoricoController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPost("v1/historicos", async (Historico historico, IHistoricoService service) =>
+        app.MapPost("v1/historicos", async (Historico historico, HistoricoService service) =>
         {
             try
             {

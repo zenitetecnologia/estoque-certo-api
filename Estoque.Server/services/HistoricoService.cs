@@ -3,13 +3,8 @@ using Estoque.Repositories;
 
 namespace Estoque.Services;
 
-public interface IHistoricoService
-{
-    Task<List<Historico>> ObterHistoricoPorItemAsync(int idItem);
-    Task<int> RegistarMovimentacaoAsync(Historico historico);
-}
 
-public class HistoricoService : IHistoricoService
+public class HistoricoService
 {
     private readonly HistoricoRepository _repository;
 

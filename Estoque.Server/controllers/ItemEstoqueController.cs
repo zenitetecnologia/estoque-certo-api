@@ -7,7 +7,7 @@ public static class ItemEstoqueController
 {
     public static void MapItemEstoqueEndpoints(this WebApplication app)
     {
-        app.MapGet("v1/itens-estoque", async (IItemEstoqueService service) =>
+        app.MapGet("v1/itens-estoque", async (ItemEstoqueService service) =>
         {
             try
             {
@@ -27,7 +27,7 @@ public static class ItemEstoqueController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapGet("v1/itens-estoque/{id:int}", async (int id, IItemEstoqueService service) =>
+        app.MapGet("v1/itens-estoque/{id:int}", async (int id, ItemEstoqueService service) =>
         {
             try
             {
@@ -51,7 +51,7 @@ public static class ItemEstoqueController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPost("v1/itens-estoque", async (ItemEstoque item, IItemEstoqueService service) =>
+        app.MapPost("v1/itens-estoque", async (ItemEstoque item, ItemEstoqueService service) =>
         {
             try
             {
@@ -77,7 +77,7 @@ public static class ItemEstoqueController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPut("v1/itens-estoque/{id:int}", async (int id, ItemEstoque item, IItemEstoqueService service) =>
+        app.MapPut("v1/itens-estoque/{id:int}", async (int id, ItemEstoque item, ItemEstoqueService service) =>
         {
             try
             {
@@ -107,7 +107,7 @@ public static class ItemEstoqueController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapDelete("v1/itens-estoque/{id:int}", async (int id, IItemEstoqueService service) =>
+        app.MapDelete("v1/itens-estoque/{id:int}", async (int id, ItemEstoqueService service) =>
         {
             try
             {

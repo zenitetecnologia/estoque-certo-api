@@ -22,17 +22,17 @@ builder.Services.AddScoped<System.Data.IDbConnection>(sp =>
 builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
 //item estoque
-builder.Services.AddScoped<Estoque.Repositories.ItemEstoqueRepository>();
-builder.Services.AddScoped<Estoque.Services.IItemEstoqueService, Estoque.Services.ItemEstoqueService>();
+builder.Services.AddScoped<ItemEstoqueRepository>();
+builder.Services.AddScoped<ItemEstoqueService>();
 //unidade organizacional
 builder.Services.AddScoped<UnidadeOrganizacionalRepository>();
 builder.Services.AddScoped<UnidadeOrganizacionalService>();
 //espacos
-builder.Services.AddScoped<Estoque.Repositories.EspacoRepository>();
-builder.Services.AddScoped<Estoque.Services.IEspacosService, Estoque.Services.EspacoService>();
+builder.Services.AddScoped<EspacoRepository>();
+builder.Services.AddScoped<EspacoService>();
 //historico
-builder.Services.AddScoped<Estoque.Repositories.HistoricoRepository>();
-builder.Services.AddScoped<Estoque.Services.IHistoricoService, Estoque.Services.HistoricoService>();
+builder.Services.AddScoped<HistoricoRepository>();
+builder.Services.AddScoped<HistoricoService>();
 
 builder.Services.AddCors(options =>
 {

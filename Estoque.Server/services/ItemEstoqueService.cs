@@ -3,16 +3,8 @@ using Estoque.Repositories;
 
 namespace Estoque.Services;
 
-public interface IItemEstoqueService
-{
-    Task<List<ItemEstoque>> ObterTodosAsync();
-    Task<ItemEstoque?> ObterPorIdAsync(int id);
-    Task<int> CadastrarAsync(ItemEstoque item);
-    Task<bool> AtualizarAsync(ItemEstoque item);
-    Task<bool> ExcluirAsync(int id);
-}
 
-public class ItemEstoqueService : IItemEstoqueService
+public class ItemEstoqueService
 {
     private readonly ItemEstoqueRepository _repository;
 

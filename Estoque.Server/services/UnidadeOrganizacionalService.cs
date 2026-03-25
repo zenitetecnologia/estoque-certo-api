@@ -5,7 +5,6 @@ using Estoque.Server.Validations;
 
 namespace Estoque.Services;
 
-
 public class UnidadeOrganizacionalService
 {
     private readonly UnidadeOrganizacionalRepository _repository;
@@ -118,8 +117,7 @@ public class UnidadeOrganizacionalService
             }
         }
 
-        if (string.IsNullOrWhiteSpace(unidade.Email))
-            erros.Add(new ValidationError("Email", "Informe o email."));
+
 
         if (erros.Any())
             throw new ValidationException(erros);

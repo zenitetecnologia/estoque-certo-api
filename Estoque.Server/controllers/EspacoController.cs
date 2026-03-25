@@ -7,7 +7,7 @@ public static class EspacosController
 {
     public static void MapEspacosEndpoints(this WebApplication app)
     {
-        app.MapGet("v1/espacos", async (IEspacosService service) =>
+        app.MapGet("v1/espacos", async (EspacoService service) =>
         {
             try
             {
@@ -27,7 +27,7 @@ public static class EspacosController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapGet("v1/espacos/{id:int}", async (int id, IEspacosService service) =>
+        app.MapGet("v1/espacos/{id:int}", async (int id, EspacoService service) =>
         {
             try
             {
@@ -51,11 +51,11 @@ public static class EspacosController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPost("v1/espacos", async (Espacos espaco, IEspacosService service) =>
+        app.MapPost("v1/espacos", async (EspacosRecuperado espaco, EspacoService service) =>
         {
             try
             {
-                var id = await service.CadastrarAsync(espaco);
+                var id = await service.CriarEspaco(espaco);
                 espaco.EspacoId = id;
 
                 return Results.Created($"/v1/espacos/{id}", espaco);
@@ -77,7 +77,7 @@ public static class EspacosController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPut("v1/espacos/{id:int}", async (int id, Espacos espaco, IEspacosService service) =>
+        app.MapPut("v1/espacos/{id:int}", async (int id, EspacosRecuperado espaco, EspacoService service) =>
         {
             try
             {
@@ -107,7 +107,7 @@ public static class EspacosController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapDelete("v1/espacos/{id:int}", async (int id, IEspacosService service) =>
+        app.MapDelete("v1/espacos/{id:int}", async (int id, EspacoService service) =>
         {
             try
             {
