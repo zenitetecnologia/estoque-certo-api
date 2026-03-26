@@ -35,7 +35,7 @@ CREATE SCHEMA IF NOT EXISTS estoque;
 -- 2. Tabela de Unidades Organizacionais (Matriz e Filiais)
 CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
     unidade_organizacional_id SERIAL PRIMARY KEY,
-    id__matriz INTEGER NOT NULL,
+    id_matriz INTEGER NOT NULL,
     cnpj VARCHAR(20),
     razao_social TEXT,
     nome_fantasia TEXT,
@@ -50,41 +50,50 @@ CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
     email VARCHAR(150)
 );
 
--- 3. Tabela de Usuários (Utiliza Array nativo para as unidades)
+-- 3. Tabela de Utilizadores (Relação 1:N direta com Unidade Organizacional)
 CREATE TABLE IF NOT EXISTS estoque.usuario (
     usuario_id SERIAL PRIMARY KEY,
-    username VARCHAR(100) UNIQUE NOT NULL,
+    username VARCHAR(100) NOT NULL,
     senha TEXT NOT NULL,
     nome VARCHAR(150) NOT NULL,
     telefone VARCHAR(50),
-    perfil INTEGER NOT NULL
+    perfil INTEGER NOT NULL,
+    unidade_organizacional_id INTEGER NOT NULL,
+    valido BOOLEAN NOT NULL DEFAULT FALSE,
+    
+    -- Restrição que permite o mesmo username apenas se for em unidades diferentes
+    CONSTRAINT uk_usuario_username_unidade UNIQUE (username, unidade_organizacional_id),
+    
+    -- Chave estrangeira para garantir a integridade referencial
+    CONSTRAINT fk_usuario_unidade FOREIGN KEY (unidade_organizacional_id) 
+        REFERENCES estoque.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
 );
 
--- 4. Tabela de vinculo usuários e unidades organizacionais
-CREATE TABLE  IF NOT EXISTS estoque.usuario_unidade_organizacional (
-    usuario_id INT,
-    unidade_organizacional_id INT
-);
-
--- 5. Tabela de Espaços (Locais físicos de armazenamento)
+-- 4. Tabela de Espaços (Locais físicos de armazenamento)
 CREATE TABLE IF NOT EXISTS estoque.espaco (
-    iespaco_id SERIAL PRIMARY KEY,
+    espaco_id SERIAL PRIMARY KEY,
     unidade_organizacional_id INTEGER NOT NULL,
     nome VARCHAR(150) NOT NULL,
-    descricao TEXT
+    descricao TEXT,
+    
+    CONSTRAINT fk_espaco_unidade FOREIGN KEY (unidade_organizacional_id) 
+        REFERENCES estoque.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
 );
 
--- 6. Tabela de Itens de Estoque (Produtos)
+-- 5. Tabela de Itens de Estoque (Produtos)
 CREATE TABLE IF NOT EXISTS estoque.item_estoque (
     item_estoque_id SERIAL PRIMARY KEY,
     unidade_organizacional_id INTEGER NOT NULL,
     espaco INTEGER NOT NULL,
     descricao TEXT NOT NULL,
     tipo_unidade_medida INTEGER NOT NULL,
-    quantidade NUMERIC(18,4) NOT NULL DEFAULT 0
+    quantidade NUMERIC(18,4) NOT NULL DEFAULT 0,
+    
+    CONSTRAINT fk_item_unidade FOREIGN KEY (unidade_organizacional_id) 
+        REFERENCES estoque.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
 );
 
--- 7. Tabela de Histórico (Auditoria de Movimentações)
+-- 6. Tabela de Histórico (Auditoria de Movimentações)
 CREATE TABLE IF NOT EXISTS estoque.historico (
     historico_id SERIAL PRIMARY KEY,
     item_estoque_id INTEGER NOT NULL,
@@ -92,5 +101,10 @@ CREATE TABLE IF NOT EXISTS estoque.historico (
     usuario_id INTEGER NOT NULL,
     data_hora TIMESTAMP NOT NULL DEFAULT NOW(),
     quantidade_anterior NUMERIC(18,4) NOT NULL,
-    quantidade_resultante NUMERIC(18,4) NOT NULL
+    quantidade_resultante NUMERIC(18,4) NOT NULL,
+    
+    CONSTRAINT fk_historico_item FOREIGN KEY (item_estoque_id) 
+        REFERENCES estoque.item_estoque (item_estoque_id) ON DELETE CASCADE,
+    CONSTRAINT fk_historico_usuario FOREIGN KEY (usuario_id) 
+        REFERENCES estoque.usuario (usuario_id) ON DELETE SET NULL
 );
