@@ -35,9 +35,18 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
+        app.MapPatch("v1/usuarios/{usuarioId:int}", async (int usuarioId, UsuarioService service) =>
+        {
+            await service.ValidarAcesso(usuarioId);
 
-
-
+            return Results.Ok(new { mensagem = "Usuário habilitado com sucesso!" });
+        })
+       .WithTags("usuarios")
+       .WithSummary("Habilita um usuário")
+       .WithDescription("Altera o status do usuário para válido no sistema.")
+       .Produces(StatusCodes.Status200OK)
+       .Produces<string>(StatusCodes.Status404NotFound)
+       .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
 
@@ -59,17 +68,17 @@ public static class UsuarioController
 
         //listar todos
         app.MapGet("v1/usuarios", async (UsuarioService service) =>
-        {
-            var result = await service.ListarTodosAsync();
+            {
+                var result = await service.ListarTodosAsync();
 
-            return Results.Ok(result);
+                return Results.Ok(result);
 
-        })
-        .WithTags("usuarios")
-        .WithSummary("Lista os usuários")
-        .WithDescription("Retorna a lista de todos os usuários.")
-        .Produces<List<UsuarioRecuperado>>(StatusCodes.Status200OK)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
+            })
+            .WithTags("usuarios")
+            .WithSummary("Lista os usuários")
+            .WithDescription("Retorna a lista de todos os usuários.")
+            .Produces<List<UsuarioRecuperado>>(StatusCodes.Status200OK)
+            .Produces<string>(StatusCodes.Status500InternalServerError);
 
         //get por id
         app.MapGet("v1/usuarios/{id:int}", async (int id, UsuarioService service) =>
@@ -107,20 +116,6 @@ public static class UsuarioController
         .Produces(StatusCodes.Status204NoContent)
         .Produces<InvalidOperationException>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
-
-        //vincular unidades
-        app.MapPost("v1/usuarios/validar", async (UsuarioValido request, UsuarioService service) =>
-        {
-            await service.VincularComUnidades(request);
-
-            return Results.Ok(new { mensagem = "Unidades vinculadas com sucesso!" });
-
-        })
-        .WithTags("usuarios")
-        .WithSummary("Vincula unidades a um usuário")
-        .WithDescription("Vincula usuário a uma ou mais unidades organizacionais.")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<InvalidOperationException>(StatusCodes.Status400BadRequest)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
     }
+
 }

@@ -65,8 +65,29 @@ public class UsuarioService
         }
     }
 
+    public async Task ValidarAcesso(int usuarioId)
+    {
+        try
+        {
+            var usuarioExistente = await _repository.ObterUsuario(usuarioId);
 
+            if (usuarioExistente == null)
+            {
+                throw new NotFoundException("Usuário não encontrado para o ID informado.");
+            }
+            if (usuarioExistente.Valido) throw new InvalidOperationException("O usuário já está habilitado.");
 
+            await _repository.ValidarAcesso(usuarioId);
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao habilitar usuário: {ex.Message}");
+        }
+    }
 
 
 
@@ -108,8 +129,6 @@ public class UsuarioService
         }
     }
 
-
-
     public async Task<bool> ExcluirAsync(int id)
     {
         try
@@ -126,23 +145,6 @@ public class UsuarioService
         catch (Exception ex)
         {
             throw new Exception($"Erro ao excluir usuário: {ex.Message}");
-        }
-    }
-
-    public async Task VincularComUnidades(UsuarioValido valido)
-    {
-        var usuario = await _repository.ObterUsuario(valido.UsuarioId);
-
-        if (usuario == null)
-        {
-            throw new KeyNotFoundException("Usuário não encontrado.");
-        }
-
-        await _repository.RemoverUnidadesOrganizacionais(valido.UsuarioId);
-
-        foreach (var unidade in valido.UnidadesOrganizacionais)
-        {
-            await _repository.VincularUnidadeOrganizacional(valido.UsuarioId, unidade.UnidadeOrganizacionalId);
         }
     }
 

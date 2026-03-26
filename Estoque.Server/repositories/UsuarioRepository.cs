@@ -215,7 +215,9 @@ public class UsuarioRepository
                 senha,
                 nome,
                 telefone,
-                perfil
+                perfil,
+                unidade_organizacional_id,
+                valido
             FROM
                 estoque.usuario
             ORDER BY
@@ -241,6 +243,8 @@ public class UsuarioRepository
                     Nome = reader.GetString(reader.GetOrdinal("nome")),
                     Telefone = reader.GetString(reader.GetOrdinal("telefone")),
                     Perfil = (PerfilUsuario)reader.GetInt32(reader.GetOrdinal("perfil")),
+                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
+                    Valido = reader.GetBoolean(reader.GetOrdinal("valido"))
                 });
             }
 
@@ -301,51 +305,28 @@ public class UsuarioRepository
 
 
 
-    public async Task RemoverUnidadesOrganizacionais(int usuarioId)
-    {
-        const string sql = "DELETE FROM estoque.usuario_unidade_organizacional WHERE usuario_id = @usuario_id;";
-
-        try
-        {
-            await EnsureOpenAsync();
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
-            await cmd.ExecuteNonQueryAsync();
-        }
-        catch
-        {
-            throw;
-        }
-    }
-
-    public async Task VincularUnidadeOrganizacional(int idUsuario, int idUnidadeOrganizacional)
+    public async Task<bool> ValidarAcesso(int usuarioId)
     {
         const string sql = @"
-            INSERT INTO estoque.usuario_unidade_organizacional
-            (
-                usuario_id,
-                unidade_organizacional_id
-            )
-            VALUES
-            (
-                @usuario_id,
-                @unidade_organizacional_id
-            );
-        ";
+        UPDATE estoque.usuario
+        SET valido = true
+        WHERE usuario_id = @usuario_id;
+    ";
 
         try
         {
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("usuario_id", idUsuario);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", idUnidadeOrganizacional);
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
-            await cmd.ExecuteNonQueryAsync();
+            var rowsAffected = await cmd.ExecuteNonQueryAsync();
+            return rowsAffected > 0;
         }
-        catch
+        catch (Exception ex)
         {
-            throw;
+            Console.WriteLine(ex.Message);
+            throw new Exception($"Erro ao habilitar usuário no banco de dados: {ex.Message}");
         }
     }
 
