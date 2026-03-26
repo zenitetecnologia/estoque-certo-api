@@ -307,11 +307,7 @@ public class UsuarioRepository
 
     public async Task<bool> ValidarAcesso(int usuarioId)
     {
-        const string sql = @"
-        UPDATE estoque.usuario
-        SET valido = true
-        WHERE usuario_id = @usuario_id;
-    ";
+        const string sql = "UPDATE estoque.usuario SET valido = true WHERE usuario_id = @usuario_id";
 
         try
         {

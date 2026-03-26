@@ -39,10 +39,10 @@ public static class UsuarioController
         {
             await service.ValidarAcesso(usuarioId);
 
-            return Results.Ok(new { mensagem = "Usuário habilitado com sucesso!" });
+            return Results.Ok(new { mensagem = "Usuário validado com sucesso!" });
         })
        .WithTags("usuarios")
-       .WithSummary("Habilita um usuário")
+       .WithSummary("Valida um usuário")
        .WithDescription("Altera o status do usuário para válido no sistema.")
        .Produces(StatusCodes.Status200OK)
        .Produces<string>(StatusCodes.Status404NotFound)
@@ -69,7 +69,7 @@ public static class UsuarioController
         //listar todos
         app.MapGet("v1/usuarios", async (UsuarioService service) =>
             {
-                var result = await service.ListarTodosAsync();
+                var result = await service.ListarTodosUsuarios();
 
                 return Results.Ok(result);
 
@@ -81,9 +81,9 @@ public static class UsuarioController
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
         //get por id
-        app.MapGet("v1/usuarios/{id:int}", async (int id, UsuarioService service) =>
+        app.MapGet("v1/usuarios/{usuarioId:int}", async (int usuarioId, UsuarioService service) =>
         {
-            var result = await service.ObterPorIdAsync(id);
+            var result = await service.ObterUsuario(usuarioId);
 
             if (result == null)
                 return Results.NotFound(new { erro = "Usuário não encontrado." });

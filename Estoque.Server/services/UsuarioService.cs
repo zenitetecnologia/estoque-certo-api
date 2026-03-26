@@ -105,7 +105,7 @@ public class UsuarioService
 
 
 
-    public async Task<List<UsuarioRecuperado>> ListarTodosAsync()
+    public async Task<List<UsuarioRecuperado>> ListarTodosUsuarios()
     {
         try
         {
@@ -117,11 +117,11 @@ public class UsuarioService
         }
     }
 
-    public async Task<UsuarioRecuperado?> ObterPorIdAsync(int id)
+    public async Task<UsuarioRecuperado?> ObterUsuario(int usuarioId)
     {
         try
         {
-            return await _repository.ObterUsuario(id);
+            return await _repository.ObterUsuario(usuarioId);
         }
         catch (Exception ex)
         {
