@@ -23,7 +23,9 @@ public class UsuarioRepository
                 senha,
                 nome,
                 telefone,
-                perfil
+                perfil,
+                unidade_organizacional_id,
+                valido
             )
             VALUES
             (
@@ -31,7 +33,9 @@ public class UsuarioRepository
                 @senha,
                 @nome,
                 @telefone,
-                @perfil
+                @perfil,
+                @unidade_organizacional_id,
+                @valido
             )
             RETURNING usuario_id;
         ";
@@ -47,16 +51,12 @@ public class UsuarioRepository
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
             cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
             cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId);
+            cmd.Parameters.AddWithValue("valido", usuario.Valido);
 
             var result = await cmd.ExecuteScalarAsync();
-            int idGerado = (int)result!;
 
-            foreach (var unidade in usuario.UnidadesOrganizacionais)
-            {
-                await VincularUnidadeOrganizacional(idGerado, unidade.UnidadeOrganizacionalId);
-            }
-
-            return idGerado;
+            return (int)result!;
         }
         catch
         {
@@ -64,7 +64,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<bool> AtualizarUsuario(Usuario usuario, int usuarioId)
+    public async Task<int> AtualizarUsuario(Usuario usuario, int usuarioId)
     {
         const string sql = @"
             UPDATE
@@ -73,8 +73,7 @@ public class UsuarioRepository
                 username = @username,
                 senha = @senha,
                 nome = @nome,
-                telefone = @telefone,
-                perfil = @perfil
+                telefone = @telefone             
             WHERE
                 usuario_id = @usuario_id;
         ";
@@ -90,56 +89,64 @@ public class UsuarioRepository
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
             cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
-            cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
 
-            var rowsAffected = await cmd.ExecuteNonQueryAsync();
-
-            if (rowsAffected > 0)
-            {
-                await RemoverUnidadesOrganizacionais(usuarioId);
-
-                foreach (var unidade in usuario.UnidadesOrganizacionais)
-                {
-                    await VincularUnidadeOrganizacional(usuarioId, unidade.UnidadeOrganizacionalId);
-                }
-            }
-
-            return rowsAffected > 0;
+            return await cmd.ExecuteNonQueryAsync();
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
 
+    public async Task<UsuarioRecuperado?> ObterUsuario(int usuarioId)
+    {
+        const string sql = @"
+            SELECT
+                usuario_id,
+                username,
+                senha,
+                nome,
+                telefone,
+                perfil,
+                unidade_organizacional_id,
+                valido
+            FROM
+                estoque.usuario
+            WHERE
+                usuario_id = @usuario_id
+            LIMIT 1;
+        ";
 
+        try
+        {
+            await EnsureOpenAsync();
 
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
+            await using var reader = await cmd.ExecuteReaderAsync();
 
+            if (!await reader.ReadAsync()) return null;
 
+            return new UsuarioRecuperado
+            {
+                UsuarioId = reader.GetInt32(reader.GetOrdinal("usuario_id")),
+                Username = reader.GetString(reader.GetOrdinal("username")),
+                Senha = reader.GetString(reader.GetOrdinal("senha")),
+                Nome = reader.GetString(reader.GetOrdinal("nome")),
+                Telefone = reader.GetString(reader.GetOrdinal("telefone")),
+                Perfil = (PerfilUsuario)reader.GetInt32(reader.GetOrdinal("perfil")),
+                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
+                Valido = reader.GetBoolean(reader.GetOrdinal("valido"))
+            };
+        }
+        catch
+        {
+            throw;
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public async Task<bool> VerificaExisteUsuario(string username, int ignoreId)
+    public async Task<bool> VerificaExisteUsuario(string username, int unidadeOrganizacionalId, int ignoreId)
     {
         const string sql = @"
             SELECT
@@ -148,6 +155,8 @@ public class UsuarioRepository
                 estoque.usuario
             WHERE
                 username = @username
+            AND
+                unidade_organizacional_id = @unidade_organizacional_id
             AND
                 usuario_id <> @ignoreId
             LIMIT 1;
@@ -159,9 +168,11 @@ public class UsuarioRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
             cmd.Parameters.AddWithValue("username", username);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
             cmd.Parameters.AddWithValue("ignoreId", ignoreId);
 
             var result = await cmd.ExecuteScalarAsync();
+
             return result != null;
         }
         catch
@@ -169,6 +180,31 @@ public class UsuarioRepository
             throw;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public async Task<List<UsuarioRecuperado>> ObterUsuarios()
     {
@@ -217,50 +253,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<UsuarioRecuperado?> ObterUsuario(int id)
-    {
-        const string sql = @"
-            SELECT
-                usuario_id,
-                username,
-                senha,
-                nome,
-                telefone,
-                perfil
-            FROM
-                estoque.usuario
-            WHERE
-                usuario_id = @usuario_id
-            LIMIT 1;
-        ";
 
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("usuario_id", id);
-
-            await using var reader = await cmd.ExecuteReaderAsync();
-
-            if (!await reader.ReadAsync()) return null;
-
-            return new UsuarioRecuperado
-            {
-                UsuarioId = reader.GetInt32(reader.GetOrdinal("usuario_id")),
-                Username = reader.GetString(reader.GetOrdinal("username")),
-                Senha = reader.GetString(reader.GetOrdinal("senha")),
-                Nome = reader.GetString(reader.GetOrdinal("nome")),
-                Telefone = reader.GetString(reader.GetOrdinal("telefone")),
-                Perfil = (PerfilUsuario)reader.GetInt32(reader.GetOrdinal("perfil")),
-            };
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
-    }
 
     public async Task<bool> ExcluirUsuario(int id)
     {

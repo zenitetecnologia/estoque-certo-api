@@ -20,7 +20,7 @@ public class UnidadeOrganizacionalService
         {
             await ValidarUnidadeOrganizacional(unidade, 0);
 
-            return await _repository.CadastrarUnidade(unidade);
+            return await _repository.CriarUnidade(unidade);
         }
         catch (ValidationException)
         {
@@ -36,11 +36,22 @@ public class UnidadeOrganizacionalService
     {
         try
         {
+            var unidadeExistente = await _repository.ObterUnidadePorId(unidadeOrganizacionalId);
+
+            if (unidadeExistente == null)
+            {
+                throw new NotFoundException("Unidade organizacional não encontrada para o id informado.");
+            }
+
             await ValidarUnidadeOrganizacional(unidade, unidadeOrganizacionalId);
 
             bool atualizado = await _repository.AtualizarUnidade(unidade, unidadeOrganizacionalId);
 
             return atualizado;
+        }
+        catch (NotFoundException)
+        {
+            throw;
         }
         catch (ValidationException)
         {
@@ -50,7 +61,6 @@ public class UnidadeOrganizacionalService
         {
             throw new Exception($"Erro ao atualizar unidade organizacional: {ex.Message}");
         }
-
     }
 
 

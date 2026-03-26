@@ -22,19 +22,20 @@ public static class UnidadeOrganizacionalController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
+        app.MapPut("v1/unidades-organizacionais/{id}", async (int unidadeId, UnidadeOrganizacional unidade, UnidadeOrganizacionalService service) =>
+        {
+            await service.AtualizarUnidade(unidade, unidadeId);
 
+            return Results.Ok("Unidade atualizada com sucesso");
 
-
-
-
-
-
-
-
-
-
-
-
+        })
+        .WithTags("unidades-organizacionais")
+        .WithSummary("Atualiza uma unidade")
+        .WithDescription("Atualiza as informações de uma unidade existente.")
+        .Produces<UnidadeOrganizacional>(StatusCodes.Status200OK)
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
 
@@ -73,24 +74,6 @@ public static class UnidadeOrganizacionalController
         .WithSummary("Busca uma unidade por ID")
         .WithDescription("Obtém os detalhes de uma unidade específica.")
         .Produces<UnidadeOrganizacional>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
-
-
-
-
-        app.MapPut("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacional unidade, UnidadeOrganizacionalService service) =>
-        {
-            var atualizado = await service.AtualizarUnidade(unidade, id);
-
-            return Results.Ok("Unidade atualizada com sucesso");
-
-        })
-        .WithTags("unidades-organizacionais")
-        .WithSummary("Atualiza uma unidade")
-        .WithDescription("Atualiza as informações de uma unidade existente.")
-        .Produces<UnidadeOrganizacional>(StatusCodes.Status200OK)
-        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 

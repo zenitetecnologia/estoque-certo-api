@@ -13,7 +13,7 @@ public class UnidadeOrganizacionalRepository
         _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
     }
 
-    public async Task<int> CadastrarUnidade(UnidadeOrganizacional unidade)
+    public async Task<int> CriarUnidade(UnidadeOrganizacional unidade)
     {
         const string sql = @"
             INSERT INTO estoque.unidade_organizacional 

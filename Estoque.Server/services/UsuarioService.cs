@@ -36,7 +36,7 @@ public class UsuarioService
         }
     }
 
-    public async Task<bool> AtualizarUsuario(Usuario usuario, int usuarioId)
+    public async Task<int> AtualizarUsuario(Usuario usuario, int usuarioId)
     {
         try
         {
@@ -49,11 +49,7 @@ public class UsuarioService
 
             await ValidarUsuario(usuario, usuarioId);
 
-            usuario.Perfil = PerfilUsuario.Normal;
-
-            bool atualizado = await _repository.AtualizarUsuario(usuario, usuarioId);
-
-            return atualizado;
+            return await _repository.AtualizarUsuario(usuario, usuarioId);
         }
         catch (NotFoundException)
         {
@@ -154,13 +150,16 @@ public class UsuarioService
     {
         var erros = new List<ValidationError>();
 
+        if (usuario.UnidadeOrganizacionalId <= 0)
+            erros.Add(new ValidationError("UnidadeOrganizacional", "Informe a unidade organizacional."));
+
         if (string.IsNullOrWhiteSpace(usuario.Username))
         {
             erros.Add(new ValidationError(nameof(usuario.Username), "Informe o username."));
         }
         else
         {
-            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuarioId);
+            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
 
             if (usernameExiste)
                 erros.Add(new ValidationError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário."));
@@ -174,9 +173,6 @@ public class UsuarioService
 
         if (string.IsNullOrWhiteSpace(usuario.Telefone))
             erros.Add(new ValidationError("Telefone", "Informe o telefone."));
-
-        if (usuario.UnidadesOrganizacionais == null || !usuario.UnidadesOrganizacionais.Any())
-            erros.Add(new ValidationError(nameof(usuario.UnidadesOrganizacionais), "Informe pelo menos uma unidade organizacional."));
 
         if (erros.Any())
             throw new ValidationException(erros);
