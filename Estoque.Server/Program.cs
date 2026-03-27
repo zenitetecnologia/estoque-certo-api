@@ -90,6 +90,13 @@ app.UseExceptionHandler(errorApp =>
             return;
         }
 
+        if (exception is InvalidOperationException invalidOperationException)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsync(invalidOperationException.Message);
+            return;
+        }
+
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
         await context.Response.WriteAsync(exception?.Message ?? "Erro não identificado.");
     });

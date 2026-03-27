@@ -146,7 +146,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<bool> VerificaExisteUsuario(string username, int unidadeOrganizacionalId, int ignoreId)
+    public async Task<bool> VerificarUsuarioExiste(string username, int unidadeOrganizacionalId, int ignoreId)
     {
         const string sql = @"
             SELECT
@@ -181,30 +181,45 @@ public class UsuarioRepository
         }
     }
 
+    public async Task<bool> ValidarAcesso(int usuarioId)
+    {
+        const string sql = "UPDATE estoque.usuario SET valido = true WHERE usuario_id = @usuario_id";
 
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, _connection);
 
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
+            var rowsAffected = await cmd.ExecuteNonQueryAsync();
+            return rowsAffected > 0;
+        }
+        catch
+        {
+            throw;
+        }
+    }
 
+    public async Task<bool> ExcluirUsuario(int usuarioId)
+    {
+        const string sql = "DELETE FROM estoque.usuario WHERE usuario_id = @usuario_id";
 
+        try
+        {
+            await EnsureOpenAsync();
 
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            var affected = await cmd.ExecuteNonQueryAsync();
+            return affected > 0;
+        }
+        catch
+        {
+            throw;
+        }
+    }
 
     public async Task<List<UsuarioRecuperado>> ObterUsuarios()
     {
@@ -250,79 +265,9 @@ public class UsuarioRepository
 
             return usuarios;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
-        }
-    }
-
-
-
-    public async Task<bool> ExcluirUsuario(int id)
-    {
-        const string sql = @"
-            DELETE FROM
-                estoque.usuario
-            WHERE
-                usuario_id = @usuario_id";
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("usuario_id", id);
-
-            var affected = await cmd.ExecuteNonQueryAsync();
-            return affected > 0;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public async Task<bool> ValidarAcesso(int usuarioId)
-    {
-        const string sql = "UPDATE estoque.usuario SET valido = true WHERE usuario_id = @usuario_id";
-
-        try
-        {
-            await EnsureOpenAsync();
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
-
-            var rowsAffected = await cmd.ExecuteNonQueryAsync();
-            return rowsAffected > 0;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw new Exception($"Erro ao habilitar usuário no banco de dados: {ex.Message}");
         }
     }
 

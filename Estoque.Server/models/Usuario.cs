@@ -10,19 +10,21 @@ public class Usuario
     public string Nome { get; set; } = string.Empty;
     public string Telefone { get; set; } = string.Empty;
     [JsonIgnore]
-    public PerfilUsuario Perfil { get; set; }
-    public int UnidadeOrganizacionalId { get; set; }
+    public virtual PerfilUsuario Perfil { get; set; }
+    public virtual int UnidadeOrganizacionalId { get; set; }
     [JsonIgnore]
-    public bool Valido { get; set; }
+    public virtual bool Valido { get; set; }
+}
+
+public class UsuarioAtualizado : Usuario
+{
+    [JsonIgnore]
+    public override int UnidadeOrganizacionalId { get; set; }
 }
 
 public class UsuarioRecuperado : Usuario
 {
     public int UsuarioId { get; set; }
-}
-
-public class UsuarioValido
-{
-    public int UsuarioId { get; set; }
-    public List<UnidadeOrganizacionalVinculo> UnidadesOrganizacionais { get; set; } = new List<UnidadeOrganizacionalVinculo>();
+    public override PerfilUsuario Perfil { get; set; }
+    public override bool Valido { get; set; }
 }

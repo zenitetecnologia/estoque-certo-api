@@ -22,9 +22,9 @@ public class UsuarioService
 
             usuario.Perfil = PerfilUsuario.Normal;
 
-            int novoIdUsuario = await _repository.CadastrarUsuario(usuario);
+            int usuarioId = await _repository.CadastrarUsuario(usuario);
 
-            return novoIdUsuario;
+            return usuarioId;
         }
         catch (ValidationException)
         {
@@ -32,7 +32,7 @@ public class UsuarioService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao registar usuário: {ex.Message}");
+            throw new Exception($"Erro ao cadastrar usuário: {ex.Message}");
         }
     }
 
@@ -40,12 +40,9 @@ public class UsuarioService
     {
         try
         {
-            var usuarioExistente = await _repository.ObterUsuario(usuarioId);
+            var usuarioAux = await _repository.ObterUsuario(usuarioId);
 
-            if (usuarioExistente == null)
-            {
-                throw new NotFoundException("Usuário não encontrado para o ID informado.");
-            }
+            if (usuarioAux == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
 
             await ValidarUsuario(usuario, usuarioId);
 
@@ -69,13 +66,11 @@ public class UsuarioService
     {
         try
         {
-            var usuarioExistente = await _repository.ObterUsuario(usuarioId);
+            var usuario = await _repository.ObterUsuario(usuarioId);
 
-            if (usuarioExistente == null)
-            {
-                throw new NotFoundException("Usuário não encontrado para o ID informado.");
-            }
-            if (usuarioExistente.Valido) throw new InvalidOperationException("O usuário já está habilitado.");
+            if (usuario == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
+
+            if (usuario.Valido) throw new InvalidOperationException("O acesso do usuário já está validado.");
 
             await _repository.ValidarAcesso(usuarioId);
         }
@@ -83,29 +78,37 @@ public class UsuarioService
         {
             throw;
         }
+        catch (InvalidOperationException)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao habilitar usuário: {ex.Message}");
+            throw new Exception($"Erro ao validar acesso do usuário: {ex.Message}");
         }
     }
 
+    public async Task<bool> ExcluirUsuario(int usuarioId)
+    {
+        try
+        {
+            var usuario = await _repository.ObterUsuario(usuarioId);
 
+            if (usuario == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
 
+            return await _repository.ExcluirUsuario(usuarioId);
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao excluir usuário: {ex.Message}");
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public async Task<List<UsuarioRecuperado>> ListarTodosUsuarios()
+    public async Task<List<UsuarioRecuperado>> ObterUsuarios()
     {
         try
         {
@@ -113,38 +116,27 @@ public class UsuarioService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao listar todos usuários: {ex.Message}");
+            throw new Exception($"Erro ao recuperar usuários: {ex.Message}");
         }
     }
 
-    public async Task<UsuarioRecuperado?> ObterUsuario(int usuarioId)
+    public async Task<UsuarioRecuperado> ObterUsuario(int usuarioId)
     {
         try
         {
-            return await _repository.ObterUsuario(usuarioId);
+            var usuario = await _repository.ObterUsuario(usuarioId);
+
+            if (usuario == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
+
+            return usuario;
+        }
+        catch (NotFoundException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao listar usuário por ID: {ex.Message}");
-        }
-    }
-
-    public async Task<bool> ExcluirAsync(int id)
-    {
-        try
-        {
-            var usuario = await _repository.ObterUsuario(id);
-
-            if (usuario == null)
-            {
-                throw new InvalidOperationException("Nenhum usuário encontrado com esse id");
-            }
-
-            return await _repository.ExcluirUsuario(id);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao excluir usuário: {ex.Message}");
+            throw new Exception($"Erro ao recuperar usuário por ID: {ex.Message}");
         }
     }
 
@@ -161,7 +153,7 @@ public class UsuarioService
         }
         else
         {
-            bool usernameExiste = await _repository.VerificaExisteUsuario(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
+            bool usernameExiste = await _repository.VerificarUsuarioExiste(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
 
             if (usernameExiste)
                 erros.Add(new ValidationError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário."));

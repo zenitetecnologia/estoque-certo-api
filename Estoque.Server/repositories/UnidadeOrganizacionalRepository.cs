@@ -75,9 +75,8 @@ public class UnidadeOrganizacionalRepository
 
             return (int)result!;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
@@ -130,9 +129,8 @@ public class UnidadeOrganizacionalRepository
             var rowsAffected = await cmd.ExecuteNonQueryAsync();
             return rowsAffected > 0;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
@@ -212,9 +210,8 @@ public class UnidadeOrganizacionalRepository
 
             return unidades;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
@@ -273,9 +270,8 @@ public class UnidadeOrganizacionalRepository
                 Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email"))
             };
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
@@ -299,9 +295,8 @@ public class UnidadeOrganizacionalRepository
             var affected = await cmd.ExecuteNonQueryAsync();
             return affected > 0;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
@@ -331,9 +326,8 @@ public class UnidadeOrganizacionalRepository
             var result = await cmd.ExecuteScalarAsync();
             return result != null;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }

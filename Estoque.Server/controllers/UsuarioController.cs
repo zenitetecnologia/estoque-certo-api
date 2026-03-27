@@ -21,7 +21,7 @@ public static class UsuarioController
        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
        .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapPut("v1/usuarios/{usuarioId:int}", async (int usuarioId, Usuario usuario, UsuarioService service) =>
+        app.MapPut("v1/usuarios/{usuarioId:int}", async (int usuarioId, UsuarioAtualizado usuario, UsuarioService service) =>
         {
             await service.AtualizarUsuario(usuario, usuarioId);
 
@@ -39,83 +39,54 @@ public static class UsuarioController
         {
             await service.ValidarAcesso(usuarioId);
 
-            return Results.Ok(new { mensagem = "Usuário validado com sucesso!" });
+            return Results.Ok("Acesso do usuário validado com sucesso.");
         })
        .WithTags("usuarios")
-       .WithSummary("Valida um usuário")
-       .WithDescription("Altera o status do usuário para válido no sistema.")
+       .WithSummary("Valida o acesso do usuário")
+       .WithDescription("Valida o acesso do usuário no sistema.")
        .Produces(StatusCodes.Status200OK)
+       .Produces<string>(StatusCodes.Status400BadRequest)
        .Produces<string>(StatusCodes.Status404NotFound)
        .Produces<string>(StatusCodes.Status500InternalServerError);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //listar todos
-        app.MapGet("v1/usuarios", async (UsuarioService service) =>
-            {
-                var result = await service.ListarTodosUsuarios();
-
-                return Results.Ok(result);
-
-            })
-            .WithTags("usuarios")
-            .WithSummary("Lista os usuários")
-            .WithDescription("Retorna a lista de todos os usuários.")
-            .Produces<List<UsuarioRecuperado>>(StatusCodes.Status200OK)
-            .Produces<string>(StatusCodes.Status500InternalServerError);
-
-        //get por id
-        app.MapGet("v1/usuarios/{usuarioId:int}", async (int usuarioId, UsuarioService service) =>
+        app.MapDelete("v1/usuarios/{usuarioId:int}", async (int usuarioId, UsuarioService service) =>
         {
-            var result = await service.ObterUsuario(usuarioId);
+            await service.ExcluirUsuario(usuarioId);
 
-            if (result == null)
-                return Results.NotFound(new { erro = "Usuário não encontrado." });
-
-            return Results.Ok(result);
-
-        })
-        .WithTags("usuarios")
-        .WithSummary("Busca um usuário por ID")
-        .WithDescription("Retorna um usuário específico pelo seu ID.")
-        .Produces<UsuarioRecuperado>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
-
-
-
-
-
-        //deletar
-        app.MapDelete("v1/usuarios/{id:int}", async (int id, UsuarioService service) =>
-        {
-            var excluido = await service.ExcluirAsync(id);
-
-            return Results.Ok(new { mensagem = "Usuário excluído com sucesso!" });
+            return Results.Ok("Usuário excluído com sucesso.");
 
         })
         .WithTags("usuarios")
         .WithSummary("Exclui um usuário")
         .WithDescription("Exclui um usuário do sistema.")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<InvalidOperationException>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+
+        app.MapGet("v1/usuarios", async (UsuarioService service) =>
+        {
+            var result = await service.ObterUsuarios();
+
+            return Results.Ok(result);
+
+        })
+        .WithTags("usuarios")
+        .WithSummary("Retorna lista de usuários")
+        .WithDescription("Retorna uma lista com todos os usuários.")
+        .Produces<List<UsuarioRecuperado>>(StatusCodes.Status200OK)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+
+        app.MapGet("v1/usuarios/{usuarioId:int}", async (int usuarioId, UsuarioService service) =>
+        {
+            var result = await service.ObterUsuario(usuarioId);
+
+            return Results.Ok(result);
+        })
+        .WithTags("usuarios")
+        .WithSummary("Retorna um usuário por ID")
+        .WithDescription("Retorna um usuário específico por ID.")
+        .Produces<UsuarioRecuperado>(StatusCodes.Status200OK)
+        .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
     }
-
 }
