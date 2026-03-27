@@ -44,6 +44,8 @@ public class UsuarioService
 
             if (usuarioAux == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
 
+            usuario.UnidadeOrganizacionalId = usuarioAux.UnidadeOrganizacionalId;
+
             await ValidarUsuario(usuario, usuarioId);
 
             return await _repository.AtualizarUsuario(usuario, usuarioId);
