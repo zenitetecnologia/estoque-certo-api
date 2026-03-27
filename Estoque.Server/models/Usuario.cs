@@ -36,6 +36,7 @@ public class Usuario
 public class UsuarioAtualizado : Usuario
 {
     [JsonIgnore]
+    [JsonPropertyOrder(2)]
     public override int UnidadeOrganizacionalId { get; set; }
 }
 
