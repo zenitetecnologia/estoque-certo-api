@@ -136,24 +136,6 @@ public class UnidadeOrganizacionalRepository
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public async Task<List<UnidadeOrganizacional>> ObterUnidades()
     {
         const string sql = @"
@@ -191,20 +173,20 @@ public class UnidadeOrganizacionalRepository
             {
                 unidades.Add(new UnidadeOrganizacionalRecuperado
                 {
-                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
-                    IdMatriz = reader.GetInt32(reader.GetOrdinal("id_matriz")),
-                    Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
-                    RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
-                    NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
-                    Cep = reader.IsDBNull(reader.GetOrdinal("cep")) ? string.Empty : reader.GetString(reader.GetOrdinal("cep")),
-                    Numero = reader.IsDBNull(reader.GetOrdinal("numero")) ? string.Empty : reader.GetString(reader.GetOrdinal("numero")),
-                    Complemento = reader.IsDBNull(reader.GetOrdinal("complemento")) ? string.Empty : reader.GetString(reader.GetOrdinal("complemento")),
-                    Bairro = reader.IsDBNull(reader.GetOrdinal("bairro")) ? string.Empty : reader.GetString(reader.GetOrdinal("bairro")),
-                    Cidade = reader.IsDBNull(reader.GetOrdinal("cidade")) ? string.Empty : reader.GetString(reader.GetOrdinal("cidade")),
-                    Uf = reader.IsDBNull(reader.GetOrdinal("uf")) ? string.Empty : reader.GetString(reader.GetOrdinal("uf")),
-                    Pais = reader.IsDBNull(reader.GetOrdinal("pais")) ? string.Empty : reader.GetString(reader.GetOrdinal("pais")),
-                    Telefone = reader.IsDBNull(reader.GetOrdinal("telefone")) ? string.Empty : reader.GetString(reader.GetOrdinal("telefone")),
-                    Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email"))
+                    UnidadeOrganizacionalId = (int)reader["unidade_organizacional_id"],
+                    IdMatriz = (int)reader["id_matriz"],
+                    Cnpj = (string)reader["cnpj"],
+                    RazaoSocial = (string)reader["razao_social"],
+                    NomeFantasia = (string)reader["nome_fantasia"],
+                    Cep = (string)reader["cep"],
+                    Numero = (string)reader["numero"],
+                    Complemento = (string)reader["complemento"],
+                    Bairro = (string)reader["bairro"],
+                    Cidade = (string)reader["cidade"],
+                    Uf = (string)reader["uf"],
+                    Pais = (string)reader["pais"],
+                    Telefone = (string)reader["telefone"],
+                    Email = (string)reader["email"]
                 });
             }
 
@@ -254,20 +236,20 @@ public class UnidadeOrganizacionalRepository
 
             return new UnidadeOrganizacionalRecuperado
             {
-                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
-                IdMatriz = reader.GetInt32(reader.GetOrdinal("id_matriz")),
-                Cnpj = reader.IsDBNull(reader.GetOrdinal("Cnpj")) ? string.Empty : reader.GetString(reader.GetOrdinal("Cnpj")),
-                RazaoSocial = reader.IsDBNull(reader.GetOrdinal("razao_social")) ? string.Empty : reader.GetString(reader.GetOrdinal("razao_social")),
-                NomeFantasia = reader.IsDBNull(reader.GetOrdinal("nome_fantasia")) ? string.Empty : reader.GetString(reader.GetOrdinal("nome_fantasia")),
-                Cep = reader.IsDBNull(reader.GetOrdinal("cep")) ? string.Empty : reader.GetString(reader.GetOrdinal("cep")),
-                Numero = reader.IsDBNull(reader.GetOrdinal("numero")) ? string.Empty : reader.GetString(reader.GetOrdinal("numero")),
-                Complemento = reader.IsDBNull(reader.GetOrdinal("complemento")) ? string.Empty : reader.GetString(reader.GetOrdinal("complemento")),
-                Bairro = reader.IsDBNull(reader.GetOrdinal("bairro")) ? string.Empty : reader.GetString(reader.GetOrdinal("bairro")),
-                Cidade = reader.IsDBNull(reader.GetOrdinal("cidade")) ? string.Empty : reader.GetString(reader.GetOrdinal("cidade")),
-                Uf = reader.IsDBNull(reader.GetOrdinal("uf")) ? string.Empty : reader.GetString(reader.GetOrdinal("uf")),
-                Pais = reader.IsDBNull(reader.GetOrdinal("pais")) ? string.Empty : reader.GetString(reader.GetOrdinal("pais")),
-                Telefone = reader.IsDBNull(reader.GetOrdinal("telefone")) ? string.Empty : reader.GetString(reader.GetOrdinal("telefone")),
-                Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email"))
+                UnidadeOrganizacionalId = (int)reader["unidade_organizacional_id"],
+                IdMatriz = (int)reader["id_matriz"],
+                Cnpj = (string)reader["cnpj"],
+                RazaoSocial = (string)reader["razao_social"],
+                NomeFantasia = (string)reader["nome_fantasia"],
+                Cep = (string)reader["cep"],
+                Numero = (string)reader["numero"],
+                Complemento = (string)reader["complemento"],
+                Bairro = (string)reader["bairro"],
+                Cidade = (string)reader["cidade"],
+                Uf = (string)reader["uf"],
+                Pais = (string)reader["pais"],
+                Telefone = (string)reader["telefone"],
+                Email = (string)reader["email"]
             };
         }
         catch

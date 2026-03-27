@@ -142,35 +142,29 @@ public class UsuarioService
         }
     }
 
-    private async Task ValidarUsuario(Usuario usuario, int usuarioId)
+    public async Task ValidarUsuario(Usuario usuario, int usuarioId)
     {
-        var erros = new List<ValidationError>();
+        var validador = new ValidationNotification();
 
         if (usuario.UnidadeOrganizacionalId <= 0)
-            erros.Add(new ValidationError("UnidadeOrganizacional", "Informe a unidade organizacional."));
+            validador.AdicionarErro(new ValidationError("UnidadeOrganizacionalId", "Informe a unidade organizacional"));
 
         if (string.IsNullOrWhiteSpace(usuario.Username))
         {
-            erros.Add(new ValidationError(nameof(usuario.Username), "Informe o username."));
+            validador.AdicionarErro(new ValidationError(nameof(usuario.Username), "Informe o Username"));
         }
         else
         {
             bool usernameExiste = await _repository.VerificarUsuarioExiste(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
 
             if (usernameExiste)
-                erros.Add(new ValidationError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário."));
+                validador.AdicionarErro(new ValidationError(nameof(usuario.Username), "Este username ja Esta sendo usado por outro usúario."));
         }
 
-        if (string.IsNullOrWhiteSpace(usuario.Senha))
-            erros.Add(new ValidationError("Senha", "Informe a senha."));
+        validador.ValidarTexto(usuario.Senha, "senha", "informe a senha");
+        validador.ValidarTexto(usuario.Nome, "Nome", "Informe o nome");
+        validador.ValidarTexto(usuario.Telefone, "Telefone", "Informe o telefone");
 
-        if (string.IsNullOrWhiteSpace(usuario.Nome))
-            erros.Add(new ValidationError("Nome", "Informe o nome."));
-
-        if (string.IsNullOrWhiteSpace(usuario.Telefone))
-            erros.Add(new ValidationError("Telefone", "Informe o telefone."));
-
-        if (erros.Any())
-            throw new ValidationException(erros);
+        validador.DispararExcecao();
     }
 }
