@@ -49,7 +49,7 @@ public static class UnidadeOrganizacionalController
 
         app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service) =>
         {
-            var result = await service.ObterTodasAsync();
+            var result = await service.ObterUnidades();
 
             return Results.Ok(result);
 
@@ -80,7 +80,7 @@ public static class UnidadeOrganizacionalController
 
         app.MapDelete("v1/unidades-organizacionais/{id:int}", async (int id, UnidadeOrganizacionalService service) =>
         {
-            var excluido = await service.ExcluirAsync(id);
+            var excluido = await service.ExcluirUnidade(id);
 
             if (!excluido)
                 return Results.NotFound(new { erro = "Unidade não encontrada." });

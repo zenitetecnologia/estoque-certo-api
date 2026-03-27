@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace cantinou.Server.Validations;
+namespace Estoque.Server.Validations;
 
 public class RulleValidation
 {

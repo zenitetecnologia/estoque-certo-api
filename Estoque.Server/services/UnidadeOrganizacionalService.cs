@@ -1,5 +1,4 @@
-﻿using cantinou.Server.Validations;
-using Estoque.models;
+﻿using Estoque.models;
 using Estoque.Repositories;
 using Estoque.Server.Validations;
 
@@ -77,7 +76,7 @@ public class UnidadeOrganizacionalService
 
 
 
-    public async Task<List<UnidadeOrganizacional>> ObterTodasAsync()
+    public async Task<List<UnidadeOrganizacional>> ObterUnidades()
     {
         try
         {
@@ -101,7 +100,7 @@ public class UnidadeOrganizacionalService
         }
     }
 
-    public async Task<bool> ExcluirAsync(int id)
+    public async Task<bool> ExcluirUnidade(int id)
     {
         try
         {
