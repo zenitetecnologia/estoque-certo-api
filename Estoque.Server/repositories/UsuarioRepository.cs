@@ -130,14 +130,14 @@ public class UsuarioRepository
 
             return new UsuarioRecuperado
             {
-                UsuarioId = reader.GetInt32(reader.GetOrdinal("usuario_id")),
-                Username = reader.GetString(reader.GetOrdinal("username")),
-                Senha = reader.GetString(reader.GetOrdinal("senha")),
-                Nome = reader.GetString(reader.GetOrdinal("nome")),
-                Telefone = reader.GetString(reader.GetOrdinal("telefone")),
-                Perfil = (PerfilUsuario)reader.GetInt32(reader.GetOrdinal("perfil")),
-                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
-                Valido = reader.GetBoolean(reader.GetOrdinal("valido"))
+                UsuarioId = (int)reader["usuario_id"],
+                Username = (string)reader["username"],
+                Senha = (string)reader["senha"],
+                Nome = (string)reader["nome"],
+                Telefone = (string)reader["telefone"],
+                Perfil = (PerfilUsuario)(int)reader["perfil"],
+                UnidadeOrganizacionalId = (int)reader["unidade_organizacional_id"],
+                Valido = (bool)reader["valido"]
             };
         }
         catch
@@ -252,14 +252,14 @@ public class UsuarioRepository
             {
                 usuarios.Add(new UsuarioRecuperado
                 {
-                    UsuarioId = reader.GetInt32(reader.GetOrdinal("usuario_id")),
-                    Username = reader.GetString(reader.GetOrdinal("username")),
-                    Senha = reader.GetString(reader.GetOrdinal("senha")),
-                    Nome = reader.GetString(reader.GetOrdinal("nome")),
-                    Telefone = reader.GetString(reader.GetOrdinal("telefone")),
-                    Perfil = (PerfilUsuario)reader.GetInt32(reader.GetOrdinal("perfil")),
-                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
-                    Valido = reader.GetBoolean(reader.GetOrdinal("valido"))
+                    UsuarioId = (int)reader["usuario_id"],
+                    Username = (string)reader["username"],
+                    Senha = (string)reader["senha"],
+                    Nome = (string)reader["nome"],
+                    Telefone = (string)reader["telefone"],
+                    Perfil = (PerfilUsuario)(int)reader["perfil"],
+                    UnidadeOrganizacionalId = (int)reader["unidade_organizacional_id"],
+                    Valido = (bool)reader["valido"]
                 });
             }
 
