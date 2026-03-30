@@ -27,11 +27,11 @@ public static class EspacosController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapGet("v1/espacos/{id:int}", async (int id, EspacoService service) =>
+        app.MapGet("v1/espacos/{espacoId:int}", async (int espacoId, EspacoService service) =>
         {
             try
             {
-                var result = await service.ObterPorIdAsync(id);
+                var result = await service.ObterPorIdAsync(espacoId);
 
                 if (result == null)
                     return Results.NotFound(new { erro = "Espaço não encontrado." });
@@ -77,11 +77,11 @@ public static class EspacosController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPut("v1/espacos/{id:int}", async (int id, EspacosRecuperado espaco, EspacoService service) =>
+        app.MapPut("v1/espacos/{espacoId:int}", async (int espacoId, EspacosRecuperado espaco, EspacoService service) =>
         {
             try
             {
-                espaco.EspacoId = id;
+                espaco.EspacoId = espacoId;
                 var atualizado = await service.AtualizarAsync(espaco);
 
                 if (!atualizado)
@@ -107,11 +107,11 @@ public static class EspacosController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapDelete("v1/espacos/{id:int}", async (int id, EspacoService service) =>
+        app.MapDelete("v1/espacos/{espacoId:int}", async (int espacoId, EspacoService service) =>
         {
             try
             {
-                var excluido = await service.ExcluirAsync(id);
+                var excluido = await service.ExcluirAsync(espacoId);
 
                 if (!excluido)
                     return Results.NotFound(new { erro = "Espaço não encontrado." });

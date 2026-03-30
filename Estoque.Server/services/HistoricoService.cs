@@ -13,7 +13,7 @@ public class HistoricoService
         _repository = repository;
     }
 
-    public async Task<List<Historico>> ObterHistoricoPorItemAsync(int idItem)
+    public async Task<List<Historico>> ObterHistoricoPorItem(int idItem)
     {
         try
         {
@@ -25,11 +25,11 @@ public class HistoricoService
         }
     }
 
-    public async Task<int> RegistarMovimentacaoAsync(Historico historico)
+    public async Task<int> RegistrarHistorico(Historico historico)
     {
         try
         {
-            return await _repository.RegistarHistorico(historico);
+            return await _repository.RegistrarHistorico(historico);
         }
         catch (Exception ex)
         {

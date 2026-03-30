@@ -1,6 +1,6 @@
-﻿using Npgsql;
+﻿using Estoque.models;
+using Npgsql;
 using System.Data;
-using Estoque.models;
 
 namespace Estoque.Repositories;
 
@@ -47,13 +47,13 @@ public class HistoricoRepository
             {
                 historico.Add(new Historico
                 {
-                    HistoricoId = reader.GetInt32(reader.GetOrdinal("id")),
-                    ItemEstoqueId = reader.GetInt32(reader.GetOrdinal("id_item_estoque")),
-                    TipoMovimentacao = (TipoMovimentacao)reader.GetInt32(reader.GetOrdinal("tipo_movimentacao")),
-                    UsuarioId = reader.GetInt32(reader.GetOrdinal("usuario_id")),
-                    DataHora = reader.GetDateTime(reader.GetOrdinal("data_hora")),
-                    QuantidadeAnterior = reader.GetDecimal(reader.GetOrdinal("quantidade_anterior")),
-                    QuantidadeResultante = reader.GetDecimal(reader.GetOrdinal("quantidade_resultante"))
+                    HistoricoId = (int)reader["historico_id"],
+                    ItemEstoqueId = (int)reader["item_estoque_id"],
+                    TipoMovimentacao = (TipoMovimentacao)reader["tipo_movimentacao"],
+                    UsuarioId = (int)reader["usuario_id"],
+                    DataHora = (DateTime)reader["data_hora"],
+                    QuantidadeAnterior = (decimal)reader["quantidade_anterior"],
+                    QuantidadeResultante = (decimal)reader["quantidade_resultante"]
                 });
             }
 
@@ -66,7 +66,7 @@ public class HistoricoRepository
         }
     }
 
-    public async Task<int> RegistarHistorico(Historico historico)
+    public async Task<int> RegistrarHistorico(Historico historico)
     {
         const string sql = @"
             INSERT INTO estoque.historico

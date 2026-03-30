@@ -1,11 +1,12 @@
 ﻿using Estoque.models;
 using Estoque.Repositories;
 using Estoque.Server.Models;
+using Estoque.Server.Services;
 using Estoque.Server.Validations;
 
 namespace Estoque.Services;
 
-public class UsuarioService
+public class UsuarioService : BaseService
 {
     private readonly UsuarioRepository _repository;
 
@@ -142,29 +143,34 @@ public class UsuarioService
         }
     }
 
-    public async Task ValidarUsuario(Usuario usuario, int usuarioId)
+    private async Task ValidarUsuario(Usuario usuario, int usuarioId)
     {
-        var validador = new ValidationNotification();
 
         if (usuario.UnidadeOrganizacionalId <= 0)
-            validador.AdicionarErro(new ValidationError("UnidadeOrganizacionalId", "Informe a unidade organizacional"));
+            Errors.Add(new ValidationError("UnidadeOrganizacional", "Informe a unidade organizacional."));
 
         if (string.IsNullOrWhiteSpace(usuario.Username))
         {
-            validador.AdicionarErro(new ValidationError(nameof(usuario.Username), "Informe o Username"));
+            Errors.Add(new ValidationError(nameof(usuario.Username), "Informe o username."));
         }
         else
         {
             bool usernameExiste = await _repository.VerificarUsuarioExiste(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
 
             if (usernameExiste)
-                validador.AdicionarErro(new ValidationError(nameof(usuario.Username), "Este username ja Esta sendo usado por outro usúario."));
+                Errors.Add(new ValidationError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário."));
         }
 
-        validador.ValidarTexto(usuario.Senha, "senha", "informe a senha");
-        validador.ValidarTexto(usuario.Nome, "Nome", "Informe o nome");
-        validador.ValidarTexto(usuario.Telefone, "Telefone", "Informe o telefone");
+        if (string.IsNullOrWhiteSpace(usuario.Senha))
+            AddError(nameof(usuario.Senha), "Informe a senha.");
 
-        validador.DispararExcecao();
+        if (string.IsNullOrWhiteSpace(usuario.Nome))
+            AddError(nameof(usuario.Nome), "Informe o nome.");
+
+        if (string.IsNullOrWhiteSpace(usuario.Telefone))
+            AddError(nameof(usuario.Telefone), "Informe o telefone.");
+
+        if (Errors.Any())
+            throw new ValidationException(Errors);
     }
 }

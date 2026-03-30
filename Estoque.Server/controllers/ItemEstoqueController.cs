@@ -11,7 +11,7 @@ public static class ItemEstoqueController
         {
             try
             {
-                var result = await service.ObterTodosAsync();
+                var result = await service.ObterItens();
 
                 return Results.Ok(result);
             }
@@ -27,11 +27,11 @@ public static class ItemEstoqueController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapGet("v1/itens-estoque/{id:int}", async (int id, ItemEstoqueService service) =>
+        app.MapGet("v1/itens-estoque/{itemEstoqueId:int}", async (int itemEstoqueId, ItemEstoqueService service) =>
         {
             try
             {
-                var result = await service.ObterPorIdAsync(id);
+                var result = await service.ObterItem(itemEstoqueId);
 
                 if (result == null)
                     return Results.NotFound(new { erro = "Item de estoque não encontrado." });
@@ -55,7 +55,7 @@ public static class ItemEstoqueController
         {
             try
             {
-                var id = await service.CadastrarAsync(item);
+                var id = await service.CadastrarItemEstoque(item);
                 item.ItemEstoqueId = id;
 
                 return Results.Created($"/v1/itens-estoque/{id}", item);
@@ -77,12 +77,12 @@ public static class ItemEstoqueController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPut("v1/itens-estoque/{id:int}", async (int id, ItemEstoque item, ItemEstoqueService service) =>
+        app.MapPut("v1/itens-estoque/{itemEstoqueId:int}", async (int itemEstoqueId, ItemEstoque item, ItemEstoqueService service) =>
         {
             try
             {
-                item.ItemEstoqueId = id;
-                var atualizado = await service.AtualizarAsync(item);
+                item.ItemEstoqueId = itemEstoqueId;
+                var atualizado = await service.AtualizarItemEstoque(item);
 
                 if (!atualizado)
                     return Results.NotFound(new { erro = "Item de estoque não encontrado para atualizar." });
@@ -107,11 +107,11 @@ public static class ItemEstoqueController
         .Produces(StatusCodes.Status500InternalServerError);
 
 
-        app.MapDelete("v1/itens-estoque/{id:int}", async (int id, ItemEstoqueService service) =>
+        app.MapDelete("v1/itens-estoque/{itemEstoqueId:int}", async (int itemEstoqueId, ItemEstoqueService service) =>
         {
             try
             {
-                var excluido = await service.ExcluirAsync(id);
+                var excluido = await service.ExcluirItemEstoque(itemEstoqueId);
 
                 if (!excluido)
                     return Results.NotFound(new { erro = "Item de estoque não encontrado." });

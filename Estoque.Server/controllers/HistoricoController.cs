@@ -11,7 +11,7 @@ public static class HistoricoController
         {
             try
             {
-                var lista = await service.ObterHistoricoPorItemAsync(idItem);
+                var lista = await service.ObterHistoricoPorItem(idItem);
 
                 return Results.Ok(lista);
             }
@@ -31,7 +31,7 @@ public static class HistoricoController
         {
             try
             {
-                var id = await service.RegistarMovimentacaoAsync(historico);
+                var id = await service.RegistrarHistorico(historico);
                 historico.HistoricoId = id;
 
                 return Results.Created($"/v1/historicos/{id}", historico);

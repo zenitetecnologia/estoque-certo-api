@@ -130,15 +130,65 @@ public class UsuarioRepository
 
             return new UsuarioRecuperado
             {
-                UsuarioId = (int)reader["usuario_id"],
-                Username = (string)reader["username"],
-                Senha = (string)reader["senha"],
-                Nome = (string)reader["nome"],
-                Telefone = (string)reader["telefone"],
-                Perfil = (PerfilUsuario)(int)reader["perfil"],
-                UnidadeOrganizacionalId = (int)reader["unidade_organizacional_id"],
-                Valido = (bool)reader["valido"]
+                UsuarioId = reader.GetInt32("usuario_id"),
+                Username = reader.GetString("username"),
+                Senha = reader.GetString("senha"),
+                Nome = reader.GetString("nome"),
+                Telefone = reader.GetString("telefone"),
+                Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
+                UnidadeOrganizacionalId = reader.GetInt32("unidade_organizacional_id"),
+                Valido = reader.GetBoolean("valido")
             };
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<List<UsuarioRecuperado>> ObterUsuarios()
+    {
+        const string sql = @"
+            SELECT
+                usuario_id,
+                username,
+                senha,
+                nome,
+                telefone,
+                perfil,
+                unidade_organizacional_id,
+                valido
+            FROM
+                estoque.usuario
+            ORDER BY
+                nome;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var reader = await cmd.ExecuteReaderAsync();
+
+            var usuarios = new List<UsuarioRecuperado>();
+
+            while (await reader.ReadAsync())
+            {
+                usuarios.Add(new UsuarioRecuperado
+                {
+                    UsuarioId = reader.GetInt32("usuario_id"),
+                    Username = reader.GetString("username"),
+                    Senha = reader.GetString("senha"),
+                    Nome = reader.GetString("nome"),
+                    Telefone = reader.GetString("telefone"),
+                    Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
+                    UnidadeOrganizacionalId = reader.GetInt32("unidade_organizacional_id"),
+                    Valido = reader.GetBoolean("valido")
+                });
+            }
+
+            return usuarios;
         }
         catch
         {
@@ -214,56 +264,6 @@ public class UsuarioRepository
 
             var affected = await cmd.ExecuteNonQueryAsync();
             return affected > 0;
-        }
-        catch
-        {
-            throw;
-        }
-    }
-
-    public async Task<List<UsuarioRecuperado>> ObterUsuarios()
-    {
-        const string sql = @"
-            SELECT
-                usuario_id,
-                username,
-                senha,
-                nome,
-                telefone,
-                perfil,
-                unidade_organizacional_id,
-                valido
-            FROM
-                estoque.usuario
-            ORDER BY
-                nome;
-        ";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-            await using var reader = await cmd.ExecuteReaderAsync();
-
-            var usuarios = new List<UsuarioRecuperado>();
-
-            while (await reader.ReadAsync())
-            {
-                usuarios.Add(new UsuarioRecuperado
-                {
-                    UsuarioId = (int)reader["usuario_id"],
-                    Username = (string)reader["username"],
-                    Senha = (string)reader["senha"],
-                    Nome = (string)reader["nome"],
-                    Telefone = (string)reader["telefone"],
-                    Perfil = (PerfilUsuario)(int)reader["perfil"],
-                    UnidadeOrganizacionalId = (int)reader["unidade_organizacional_id"],
-                    Valido = (bool)reader["valido"]
-                });
-            }
-
-            return usuarios;
         }
         catch
         {

@@ -13,11 +13,11 @@ public class ItemEstoqueService
         _repository = repository;
     }
 
-    public async Task<List<ItemEstoque>> ObterTodosAsync()
+    public async Task<List<ItemEstoque>> ObterItens()
     {
         try
         {
-            return await _repository.ObterItensEstoque();
+            return await _repository.ObterItens();
         }
         catch (Exception ex)
         {
@@ -25,11 +25,11 @@ public class ItemEstoqueService
         }
     }
 
-    public async Task<ItemEstoque?> ObterPorIdAsync(int id)
+    public async Task<ItemEstoque?> ObterItem(int itemEstoqueId)
     {
         try
         {
-            return await _repository.ObterItemEstoquePorId(id);
+            return await _repository.ObterItem(itemEstoqueId);
         }
         catch (Exception ex)
         {
@@ -37,7 +37,7 @@ public class ItemEstoqueService
         }
     }
 
-    public async Task<int> CadastrarAsync(ItemEstoque item)
+    public async Task<int> CadastrarItemEstoque(ItemEstoque item)
     {
         try
         {
@@ -59,7 +59,7 @@ public class ItemEstoqueService
         }
     }
 
-    public async Task<bool> AtualizarAsync(ItemEstoque item)
+    public async Task<bool> AtualizarItemEstoque(ItemEstoque item)
     {
         try
         {
@@ -76,15 +76,20 @@ public class ItemEstoqueService
         }
     }
 
-    public async Task<bool> ExcluirAsync(int id)
+    public async Task<bool> ExcluirItemEstoque(int itemEstoqueId)
     {
         try
         {
-            return await _repository.ExcluirItemEstoque(id);
+            return await _repository.ExcluirItemEstoque(itemEstoqueId);
         }
         catch (Exception ex)
         {
             throw new Exception($"Erro ao excluir item: {ex.Message}");
         }
+    }
+
+    private async Task ValidarItemEstoque(ItemEstoque itemEstoque, int itemEstoqueId)
+    {
+
     }
 }

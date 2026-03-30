@@ -1,6 +1,6 @@
-﻿using Npgsql;
+﻿using Estoque.models;
+using Npgsql;
 using System.Data;
-using Estoque.models;
 
 namespace Estoque.Repositories;
 
@@ -13,7 +13,7 @@ public class ItemEstoqueRepository
         _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
     }
 
-    public async Task<List<ItemEstoque>> ObterItensEstoque()
+    public async Task<List<ItemEstoque>> ObterItens()
     {
         const string sql = @"
             SELECT
@@ -42,12 +42,12 @@ public class ItemEstoqueRepository
             {
                 itens.Add(new ItemEstoque
                 {
-                    ItemEstoqueId = reader.GetInt32(reader.GetOrdinal("id")),
-                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
-                    Espaco = reader.GetInt32(reader.GetOrdinal("espaco")),
-                    Descricao = reader.GetString(reader.GetOrdinal("descricao")),
-                    TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32(reader.GetOrdinal("tipo_unidade_medida")),
-                    Quantidade = reader.GetDecimal(reader.GetOrdinal("quantidade"))
+                    ItemEstoqueId = (int)reader["item_estoque_id"],
+                    UnidadeOrganizacionalId = (int)reader["unidade_organizacional_id"],
+                    Espaco = (int)reader["espaco"],
+                    Descricao = (string)reader["descricao"],
+                    TipoUnidadeMedida = (TipoUnidadeMedida)reader["tipo_unidade_medida"],
+                    Quantidade = (decimal)reader["quantidade"]
                 });
             }
 
@@ -60,7 +60,7 @@ public class ItemEstoqueRepository
         }
     }
 
-    public async Task<ItemEstoque?> ObterItemEstoquePorId(int id)
+    public async Task<ItemEstoque?> ObterItem(int id)
     {
         const string sql = @"
             SELECT
@@ -90,12 +90,12 @@ public class ItemEstoqueRepository
 
             return new ItemEstoque
             {
-                ItemEstoqueId = reader.GetInt32(reader.GetOrdinal("id")),
-                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
-                Espaco = reader.GetInt32(reader.GetOrdinal("espaco")),
-                Descricao = reader.GetString(reader.GetOrdinal("descricao")),
-                TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32(reader.GetOrdinal("tipo_unidade_medida")),
-                Quantidade = reader.GetDecimal(reader.GetOrdinal("quantidade"))
+                ItemEstoqueId = (int)reader["item_estoque_id"],
+                UnidadeOrganizacionalId = (int)reader["unidade_organizacional_id"],
+                Espaco = (int)reader["espaco"],
+                Descricao = (string)reader["descricao"],
+                TipoUnidadeMedida = (TipoUnidadeMedida)reader["tipo_unidade_medida"],
+                Quantidade = (decimal)reader["quantidade"]
             };
         }
         catch (Exception ex)
@@ -188,21 +188,16 @@ public class ItemEstoqueRepository
         }
     }
 
-    public async Task<bool> ExcluirItemEstoque(int id)
+    public async Task<bool> ExcluirItemEstoque(int itemEstoqueId)
     {
-        const string sql = @"
-            DELETE FROM
-                estoque.item_estoque
-            WHERE
-                id = @id;
-        ";
+        const string sql = "DELETE FROM estoque.item_estoque WHERE id = @id";
 
         try
         {
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("id", itemEstoqueId);
 
             var affected = await cmd.ExecuteNonQueryAsync();
             return affected > 0;

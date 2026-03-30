@@ -135,7 +135,6 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-
     public async Task<List<UnidadeOrganizacional>> ObterUnidades()
     {
         const string sql = @"
@@ -189,7 +188,6 @@ public class UnidadeOrganizacionalRepository
                     Email = (string)reader["email"]
                 });
             }
-
             return unidades;
         }
         catch
@@ -198,7 +196,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<UnidadeOrganizacional?> ObterUnidadePorId(int id)
+    public async Task<UnidadeOrganizacional?> ObterUnidade(int unidadeOrganizacionald)
     {
         const string sql = @"
             SELECT
@@ -219,7 +217,7 @@ public class UnidadeOrganizacionalRepository
             FROM
                 estoque.unidade_organizacional
             WHERE
-                unidade_organizacional_id, = @unidade_organizacional_id,
+                unidade_organizacional_id = @unidade_organizacional_id
             LIMIT 1;
         ";
 
@@ -228,7 +226,7 @@ public class UnidadeOrganizacionalRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", id);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionald);
 
             await using var reader = await cmd.ExecuteReaderAsync();
 

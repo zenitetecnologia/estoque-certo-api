@@ -58,7 +58,7 @@ public class EspacoRepository
         }
     }
 
-    public async Task<Espacos?> ObterEspacoPorId(int id)
+    public async Task<Espacos?> ObterEspacoPorId(int espacoId)
     {
         const string sql = @"
             SELECT
@@ -78,7 +78,7 @@ public class EspacoRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("id", espacoId);
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
@@ -174,7 +174,7 @@ public class EspacoRepository
         }
     }
 
-    public async Task<bool> ExcluirEspaco(int id)
+    public async Task<bool> ExcluirEspaco(int espacoId)
     {
         const string sql = @"
             DELETE FROM
@@ -188,7 +188,7 @@ public class EspacoRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("id", espacoId);
 
             var affected = await cmd.ExecuteNonQueryAsync();
             return affected > 0;
