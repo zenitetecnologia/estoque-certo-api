@@ -1,10 +1,11 @@
 ﻿using Estoque.models;
 using Estoque.Repositories;
+using Estoque.Server.Services;
 using Estoque.Server.Validations;
 
 namespace Estoque.Services;
 
-public class UnidadeOrganizacionalService
+public class UnidadeOrganizacionalService : BaseService
 {
     private readonly UnidadeOrganizacionalRepository _repository;
 
@@ -117,26 +118,27 @@ public class UnidadeOrganizacionalService
 
     private async Task ValidarUnidadeOrganizacional(UnidadeOrganizacional unidade, int unidadeOrganizacionalId)
     {
-        var validador = new ValidationNotification();
 
-        validador.ValidarTexto(unidade.RazaoSocial, "razão social", "informe a razão social");
+        if (string.IsNullOrWhiteSpace(unidade.RazaoSocial))
+            AddError(nameof(unidade.RazaoSocial), "Informe a razão social.");
 
         if (!string.IsNullOrWhiteSpace(unidade.Cnpj))
         {
             if (!RulleValidation.IsCnpjValido(unidade.Cnpj))
             {
-                validador.AdicionarErro(new ValidationError("Cnpj", "O CNPJ informado não é válido."));
+                Errors.Add(new ValidationError("Cnpj", "O CNPJ informado não é válido."));
             }
             else
             {
                 bool cnpjExiste = await _repository.VerificaExisteUnidade(unidade.Cnpj, unidadeOrganizacionalId);
                 if (cnpjExiste)
                 {
-                    validador.AdicionarErro(new ValidationError("Cnpj", "Este CNPJ já está cadastrado em outra unidade."));
+                    Errors.Add(new ValidationError("Cnpj", "Este CNPJ já está cadastrado em outra unidade."));
                 }
             }
         }
 
-        validador.DispararExcecao();
+        if (Errors.Any())
+            throw new ValidationException(Errors);
     }
 }
