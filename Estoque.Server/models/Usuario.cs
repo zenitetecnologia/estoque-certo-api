@@ -7,7 +7,7 @@ public class Usuario
 {
     [JsonIgnore]
     [JsonPropertyOrder(1)]
-    public virtual int UsuarioId { get; set; }
+    public virtual Guid UsuarioId { get; set; }
 
     [JsonPropertyOrder(2)]
     public virtual int UnidadeOrganizacionalId { get; set; }
@@ -44,7 +44,7 @@ public class UsuarioRecuperado : Usuario
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     [JsonPropertyOrder(1)]
-    public override int UsuarioId { get; set; }
+    public override Guid UsuarioId { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     [JsonPropertyOrder(7)]

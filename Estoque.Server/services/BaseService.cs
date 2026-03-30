@@ -4,10 +4,12 @@ namespace Estoque.Server.Services;
 
 public class BaseService
 {
-    public List<ValidationError> Errors { get; set; } = new();
+    private List<ValidationError> _errors = new();
+
+    public List<ValidationError> Errors { get => _errors; }
 
     protected void AddError(string field, string message)
     {
-        Errors.Add(new ValidationError(field, message));
+        _errors.Add(new ValidationError(field, message));
     }
 }

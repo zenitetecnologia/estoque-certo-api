@@ -145,20 +145,19 @@ public class UsuarioService : BaseService
 
     private async Task ValidarUsuario(Usuario usuario, int usuarioId)
     {
-
         if (usuario.UnidadeOrganizacionalId <= 0)
-            Errors.Add(new ValidationError("UnidadeOrganizacional", "Informe a unidade organizacional."));
+            AddError(nameof(usuario.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
 
         if (string.IsNullOrWhiteSpace(usuario.Username))
         {
-            Errors.Add(new ValidationError(nameof(usuario.Username), "Informe o username."));
+            AddError(nameof(usuario.Username), "Informe o username");
         }
         else
         {
             bool usernameExiste = await _repository.VerificarUsuarioExiste(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
 
             if (usernameExiste)
-                Errors.Add(new ValidationError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário."));
+                AddError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário.");
         }
 
         if (string.IsNullOrWhiteSpace(usuario.Senha))

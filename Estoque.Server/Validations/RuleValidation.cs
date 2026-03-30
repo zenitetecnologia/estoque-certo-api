@@ -4,7 +4,7 @@ namespace Estoque.Server.Validations;
 
 public class RulleValidation
 {
-    public static bool IsCnpjValido(string cnpj)
+    public static bool CnpjValido(string cnpj)
     {
         if (string.IsNullOrWhiteSpace(cnpj))
             return true;
