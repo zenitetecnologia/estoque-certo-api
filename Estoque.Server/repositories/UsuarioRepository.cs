@@ -14,7 +14,7 @@ public class UsuarioRepository
         _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
     }
 
-    public async Task<int> CadastrarUsuario(Usuario usuario)
+    public async Task<Guid> CadastrarUsuario(Usuario usuario)
     {
         const string sql = @"
             INSERT INTO estoque.usuario
@@ -56,7 +56,7 @@ public class UsuarioRepository
 
             var result = await cmd.ExecuteScalarAsync();
 
-            return (int)result!;
+            return (Guid)result!;
         }
         catch
         {
@@ -64,7 +64,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<int> AtualizarUsuario(Usuario usuario, int usuarioId)
+    public async Task<int> AtualizarUsuario(Usuario usuario, Guid usuarioId)
     {
         const string sql = @"
             UPDATE
@@ -98,7 +98,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<UsuarioRecuperado?> ObterUsuario(int usuarioId)
+    public async Task<UsuarioRecuperado?> ObterUsuario(Guid usuarioId)
     {
         const string sql = @"
             SELECT
@@ -130,7 +130,7 @@ public class UsuarioRepository
 
             return new UsuarioRecuperado
             {
-                UsuarioId = reader.GetInt32("usuario_id"),
+                UsuarioId = reader.GetGuid("usuario_id"),
                 Username = reader.GetString("username"),
                 Senha = reader.GetString("senha"),
                 Nome = reader.GetString("nome"),
@@ -177,7 +177,7 @@ public class UsuarioRepository
             {
                 usuarios.Add(new UsuarioRecuperado
                 {
-                    UsuarioId = reader.GetInt32("usuario_id"),
+                    UsuarioId = reader.GetGuid("usuario_id"),
                     Username = reader.GetString("username"),
                     Senha = reader.GetString("senha"),
                     Nome = reader.GetString("nome"),
@@ -196,7 +196,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<bool> VerificarUsuarioExiste(string username, int unidadeOrganizacionalId, int ignoreId)
+    public async Task<bool> VerificarUsuarioExiste(string username, int unidadeOrganizacionalId, Guid ignoreId)
     {
         const string sql = @"
             SELECT
@@ -231,7 +231,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<bool> ValidarAcesso(int usuarioId)
+    public async Task<bool> ValidarAcesso(Guid usuarioId)
     {
         const string sql = "UPDATE estoque.usuario SET valido = true WHERE usuario_id = @usuario_id";
 
@@ -251,7 +251,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<bool> ExcluirUsuario(int usuarioId)
+    public async Task<bool> ExcluirUsuario(Guid usuarioId)
     {
         const string sql = "DELETE FROM estoque.usuario WHERE usuario_id = @usuario_id";
 

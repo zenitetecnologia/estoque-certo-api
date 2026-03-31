@@ -126,21 +126,19 @@ public class UnidadeOrganizacionalService : BaseService
         {
             if (!RulleValidation.CnpjValido(unidade.Cnpj))
             {
-                //        _errors.Add(new ValidationError("Cnpj", "O CNPJ informado não é válido."));
-                //    }
-                //    else
-                //    {
-                //        bool cnpjExiste = await _repository.VerificaExisteUnidade(unidade.Cnpj, unidadeOrganizacionalId);
-                //        if (cnpjExiste)
-                //        {
-                //            _errors.Add(new ValidationError("Cnpj", "Este CNPJ já está cadastrado em outra unidade."));
-                //        }
-                //    }
-                //}
-
-                //if (_errors.Any())
-                //    throw new ValidationException(_errors);
+                AddError(nameof(unidade.Cnpj), "o cnpj informado não é válido.");
+            }
+            else
+            {
+                bool cnpjexiste = await _repository.VerificaExisteUnidade(unidade.Cnpj, unidadeOrganizacionalId);
+                if (cnpjexiste)
+                {
+                    AddError(nameof(unidade.Cnpj), "este cnpj já está cadastrado em outra unidade.");
+                }
             }
         }
+
+        if (Errors.Any())
+            throw new ValidationException(Errors);
     }
 }

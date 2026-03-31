@@ -15,15 +15,15 @@ public class UsuarioService : BaseService
         _repository = repository;
     }
 
-    public async Task<int> CadastrarUsuario(Usuario usuario)
+    public async Task<Guid> CadastrarUsuario(Usuario usuario)
     {
         try
         {
-            await ValidarUsuario(usuario, 0);
+            await ValidarUsuario(usuario, Guid.Empty);
 
             usuario.Perfil = PerfilUsuario.Normal;
 
-            int usuarioId = await _repository.CadastrarUsuario(usuario);
+            Guid usuarioId = await _repository.CadastrarUsuario(usuario);
 
             return usuarioId;
         }
@@ -37,7 +37,7 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<int> AtualizarUsuario(Usuario usuario, int usuarioId)
+    public async Task<int> AtualizarUsuario(Usuario usuario, Guid usuarioId)
     {
         try
         {
@@ -65,7 +65,7 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task ValidarAcesso(int usuarioId)
+    public async Task ValidarAcesso(Guid usuarioId)
     {
         try
         {
@@ -91,7 +91,7 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<bool> ExcluirUsuario(int usuarioId)
+    public async Task<bool> ExcluirUsuario(Guid usuarioId)
     {
         try
         {
@@ -123,7 +123,7 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<UsuarioRecuperado> ObterUsuario(int usuarioId)
+    public async Task<UsuarioRecuperado> ObterUsuario(Guid usuarioId)
     {
         try
         {
@@ -143,7 +143,7 @@ public class UsuarioService : BaseService
         }
     }
 
-    private async Task ValidarUsuario(Usuario usuario, int usuarioId)
+    private async Task ValidarUsuario(Usuario usuario, Guid usuarioId)
     {
         if (usuario.UnidadeOrganizacionalId <= 0)
             AddError(nameof(usuario.UnidadeOrganizacionalId), "Informe a unidade organizacional.");

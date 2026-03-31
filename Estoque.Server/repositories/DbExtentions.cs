@@ -12,4 +12,7 @@ public static class DbExtentions
 
     public static bool GetBoolean(this IDataReader reader, string column) =>
         reader.GetBoolean(reader.GetOrdinal(column));
+
+    public static Guid GetGuid(this IDataReader reader, string column) =>
+    reader.GetGuid(reader.GetOrdinal(column));
 }
