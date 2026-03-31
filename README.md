@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
 
 -- 3. Tabela de Utilizadores (Relação 1:N direta com Unidade Organizacional)
 CREATE TABLE IF NOT EXISTS estoque.usuario (
-    usuario_id SERIAL PRIMARY KEY,
+    usuario_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR(100) NOT NULL,
     senha TEXT NOT NULL,
     nome VARCHAR(150) NOT NULL,
