@@ -78,3 +78,4 @@ dist-ssr
 *.sln
 *.sw?
 .vs/
+.github/
