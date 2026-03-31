@@ -57,7 +57,7 @@ public class UnidadeOrganizacionalRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz);
+            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz.HasValue ? (object)unidade.IdMatriz.Value : DBNull.Value);
             cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
@@ -112,7 +112,7 @@ public class UnidadeOrganizacionalRepository
 
             cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
 
-            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz);
+            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz.HasValue ? (object)unidade.IdMatriz.Value : DBNull.Value);
             cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
@@ -172,7 +172,7 @@ public class UnidadeOrganizacionalRepository
                 unidades.Add(new UnidadeOrganizacionalRecuperado
                 {
                     UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                    IdMatriz = reader.GetGuid("id_matriz"),
+                    IdMatriz = reader.GetNullableGuid("id_matriz"),
                     Cnpj = reader.GetString("cnpj"),
                     RazaoSocial = reader.GetString("razao_social"),
                     NomeFantasia = reader.GetString("nome_fantasia"),
@@ -234,7 +234,7 @@ public class UnidadeOrganizacionalRepository
             return new UnidadeOrganizacionalRecuperado
             {
                 UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                IdMatriz = reader.GetGuid("id_matriz"),
+                IdMatriz = reader.GetNullableGuid("id_matriz"),
                 Cnpj = reader.GetString("cnpj"),
                 RazaoSocial = reader.GetString("razao_social"),
                 NomeFantasia = reader.GetString("nome_fantasia"),

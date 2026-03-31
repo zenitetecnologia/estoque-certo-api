@@ -15,4 +15,10 @@ public static class DbExtentions
 
     public static Guid GetGuid(this IDataReader reader, string column) =>
     reader.GetGuid(reader.GetOrdinal(column));
+
+    public static Guid? GetNullableGuid(this IDataReader reader, string column)
+    {
+        int ordinal = reader.GetOrdinal(column);
+        return reader.IsDBNull(ordinal) ? null : reader.GetGuid(ordinal);
+    }
 }
