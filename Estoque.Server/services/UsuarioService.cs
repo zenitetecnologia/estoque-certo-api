@@ -143,9 +143,6 @@ public class UsuarioService : BaseService
 
     private async Task ValidarUsuario(Usuario usuario, Guid usuarioId)
     {
-        if (usuario.UnidadeOrganizacionalId <= 0)
-            AddError(nameof(usuario.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
-
         if (string.IsNullOrWhiteSpace(usuario.Username))
         {
             AddError(nameof(usuario.Username), "Informe o username");

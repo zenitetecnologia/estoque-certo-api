@@ -196,7 +196,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<bool> VerificarUsuarioExiste(string username, int unidadeOrganizacionalId, Guid ignoreId)
+    public async Task<bool> VerificarUsuarioExiste(string username, Guid unidadeOrganizacionalId, Guid ignoreId)
     {
         const string sql = @"
             SELECT

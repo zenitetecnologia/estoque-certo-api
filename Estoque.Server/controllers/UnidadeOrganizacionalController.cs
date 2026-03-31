@@ -10,7 +10,7 @@ public static class UnidadeOrganizacionalController
     {
         app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacional unidade, UnidadeOrganizacionalService service) =>
         {
-            int unidadeOrganizacionalId = await service.CriarUnidade(unidade);
+            Guid unidadeOrganizacionalId = await service.CriarUnidade(unidade);
 
             return Results.Created($"/v1/unidades-organizacionais/{unidadeOrganizacionalId}", "Unidade Organizacional criada com sucesso.");
         })
