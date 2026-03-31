@@ -32,17 +32,16 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
-    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade, Guid unidadeOrganizacionalId)
+    public async Task<int> AtualizarUnidade(UnidadeOrganizacional unidade, Guid unidadeOrganizacionalId)
     {
         try
         {
-            var unidadeorganizacional = await _repository.ObterUnidade(unidadeOrganizacionalId);
+            var affected = await _repository.AtualizarUnidade(unidade, unidadeOrganizacionalId);
 
-            if (unidadeorganizacional == null) throw new NotFoundException("Unidade organizacional não encontrada para o ID informado.");
+            if (affected <= 0) throw new NotFoundException("Unidade organizacional não encontrada para o ID informado.");
 
-            await ValidarUnidadeOrganizacional(unidade, unidadeOrganizacionalId);
+            return affected;
 
-            return await _repository.AtualizarUnidade(unidade, unidadeOrganizacionalId);
         }
         catch (NotFoundException)
         {
@@ -58,7 +57,7 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
-    public async Task<List<UnidadeOrganizacional>> ObterUnidades()
+    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades()
     {
         try
         {
@@ -70,7 +69,7 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
-    public async Task<UnidadeOrganizacional> ObterUnidadePorId(Guid unidadeOrganizacionalId)
+    public async Task<UnidadeOrganizacionalRecuperado> ObterUnidadePorId(Guid unidadeOrganizacionalId)
     {
         try
         {
@@ -93,18 +92,15 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
-    public async Task<bool> ExcluirUnidade(Guid unidadeOrganizacionalId)
+    public async Task<int> ExcluirUnidade(Guid unidadeOrganizacionalId)
     {
         try
         {
-            var unidadeExistente = await _repository.ObterUnidade(unidadeOrganizacionalId);
+            var affected = await _repository.ExcluirUnidade(unidadeOrganizacionalId);
 
-            if (unidadeExistente == null)
-            {
-                throw new NotFoundException("Unidade organizacional não encontrada para o id informado.");
-            }
+            if (affected <= 0) throw new NotFoundException("Unidade organizacional não encontrada para o ID informado.");
 
-            return await _repository.ExcluirUnidade(unidadeOrganizacionalId);
+            return affected;
         }
         catch (NotFoundException)
         {

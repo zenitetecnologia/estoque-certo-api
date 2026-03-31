@@ -1,8 +1,15 @@
-﻿namespace Estoque.models;
+﻿using System.Text.Json.Serialization;
+
+namespace Estoque.models;
 
 public class UnidadeOrganizacional
 {
-    public int IdMatriz { get; set; }
+    [JsonIgnore]
+    [JsonPropertyOrder(-1)]
+    public virtual Guid UnidadeOrganizacionalId { get; set; }
+
+
+    public Guid IdMatriz { get; set; }
     public string Cnpj { get; set; } = string.Empty;
     public string RazaoSocial { get; set; } = string.Empty;
     public string NomeFantasia { get; set; } = string.Empty;
@@ -19,10 +26,7 @@ public class UnidadeOrganizacional
 
 public class UnidadeOrganizacionalRecuperado : UnidadeOrganizacional
 {
-    public Guid UnidadeOrganizacionalId { get; set; }
-}
-
-public class UnidadeOrganizacionalVinculo
-{
-    public int UnidadeOrganizacionalId { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    [JsonPropertyOrder(-1)]
+    public override Guid UnidadeOrganizacionalId { get; set; }
 }

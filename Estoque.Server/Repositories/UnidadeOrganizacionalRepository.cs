@@ -81,7 +81,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade, Guid unidadeOrganizacionalId)
+    public async Task<int> AtualizarUnidade(UnidadeOrganizacional unidade, Guid unidadeOrganizacionalId)
     {
         const string sql = @"
         UPDATE
@@ -126,8 +126,7 @@ public class UnidadeOrganizacionalRepository
             cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
             cmd.Parameters.AddWithValue("email", unidade.Email);
 
-            var rowsAffected = await cmd.ExecuteNonQueryAsync();
-            return rowsAffected > 0;
+            return await cmd.ExecuteNonQueryAsync();
         }
         catch
         {
@@ -135,7 +134,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<List<UnidadeOrganizacional>> ObterUnidades()
+    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades()
     {
         const string sql = @"
             SELECT
@@ -166,14 +165,14 @@ public class UnidadeOrganizacionalRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
             await using var reader = await cmd.ExecuteReaderAsync();
 
-            var unidades = new List<UnidadeOrganizacional>();
+            var unidades = new List<UnidadeOrganizacionalRecuperado>();
 
             while (await reader.ReadAsync())
             {
                 unidades.Add(new UnidadeOrganizacionalRecuperado
                 {
                     UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                    IdMatriz = reader.GetInt32("id_matriz"),
+                    IdMatriz = reader.GetGuid("id_matriz"),
                     Cnpj = reader.GetString("cnpj"),
                     RazaoSocial = reader.GetString("razao_social"),
                     NomeFantasia = reader.GetString("nome_fantasia"),
@@ -196,7 +195,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<UnidadeOrganizacional?> ObterUnidade(Guid unidadeOrganizacionald)
+    public async Task<UnidadeOrganizacionalRecuperado?> ObterUnidade(Guid unidadeOrganizacionald)
     {
         const string sql = @"
             SELECT
@@ -235,7 +234,7 @@ public class UnidadeOrganizacionalRepository
             return new UnidadeOrganizacionalRecuperado
             {
                 UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                IdMatriz = reader.GetInt32("id_matriz"),
+                IdMatriz = reader.GetGuid("id_matriz"),
                 Cnpj = reader.GetString("cnpj"),
                 RazaoSocial = reader.GetString("razao_social"),
                 NomeFantasia = reader.GetString("nome_fantasia"),
@@ -256,7 +255,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<bool> ExcluirUnidade(Guid id)
+    public async Task<int> ExcluirUnidade(Guid unidadeOrganizacionalId)
     {
         const string sql = @"
             DELETE FROM
@@ -270,10 +269,9 @@ public class UnidadeOrganizacionalRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", id);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
 
-            var affected = await cmd.ExecuteNonQueryAsync();
-            return affected > 0;
+            return await cmd.ExecuteNonQueryAsync();
         }
         catch
         {
