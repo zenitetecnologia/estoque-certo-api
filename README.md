@@ -35,7 +35,7 @@ CREATE SCHEMA IF NOT EXISTS estoque;
 -- 2. Tabela de Unidades Organizacionais (Matriz e Filiais)
 CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
     unidade_organizacional_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    id_matriz INTEGER NOT NULL,
+    id_matriz UUID,
     cnpj VARCHAR(20),
     razao_social TEXT,
     nome_fantasia TEXT,
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
     email VARCHAR(150)
 );
 
--- 3. Tabela de Utilizadores (Relação 1:N direta com Unidade Organizacional)
+-- 3. Tabela de Usuários (Relação 1:N direta com Unidade Organizacional)
 CREATE TABLE IF NOT EXISTS estoque.usuario (
     usuario_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR(100) NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS estoque.usuario (
     nome VARCHAR(150) NOT NULL,
     telefone VARCHAR(50),
     perfil INTEGER NOT NULL,
-    unidade_organizacional_id INTEGER NOT NULL,
+    unidade_organizacional_id UUID NOT NULL,
     valido BOOLEAN NOT NULL DEFAULT FALSE,
     
     -- Restrição que permite o mesmo username apenas se for em unidades diferentes
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS estoque.usuario (
 -- 4. Tabela de Espaços (Locais físicos de armazenamento)
 CREATE TABLE IF NOT EXISTS estoque.espaco (
     espaco_id SERIAL PRIMARY KEY,
-    unidade_organizacional_id INTEGER NOT NULL,
+    unidade_organizacional_id UUID NOT NULL,
     nome VARCHAR(150) NOT NULL,
     descricao TEXT,
     
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS estoque.espaco (
 -- 5. Tabela de Itens de Estoque (Produtos)
 CREATE TABLE IF NOT EXISTS estoque.item_estoque (
     item_estoque_id SERIAL PRIMARY KEY,
-    unidade_organizacional_id INTEGER NOT NULL,
+    unidade_organizacional_id UUID NOT NULL,
     espaco INTEGER NOT NULL,
     descricao TEXT NOT NULL,
     tipo_unidade_medida INTEGER NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS estoque.historico (
     historico_id SERIAL PRIMARY KEY,
     item_estoque_id INTEGER NOT NULL,
     tipo_movimentacao INTEGER NOT NULL,
-    usuario_id INTEGER NOT NULL,
+    usuario_id UUID,
     data_hora TIMESTAMP NOT NULL DEFAULT NOW(),
     quantidade_anterior NUMERIC(18,4) NOT NULL,
     quantidade_resultante NUMERIC(18,4) NOT NULL,
