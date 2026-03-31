@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS estoque.usuario (
 
 -- 4. Tabela de Espaços (Locais físicos de armazenamento)
 CREATE TABLE IF NOT EXISTS estoque.espaco (
-    espaco_id SERIAL PRIMARY KEY,
+    espaco_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     unidade_organizacional_id UUID NOT NULL,
     nome VARCHAR(150) NOT NULL,
     descricao TEXT,
@@ -82,22 +82,26 @@ CREATE TABLE IF NOT EXISTS estoque.espaco (
 
 -- 5. Tabela de Itens de Estoque (Produtos)
 CREATE TABLE IF NOT EXISTS estoque.item_estoque (
-    item_estoque_id SERIAL PRIMARY KEY,
+    item_estoque_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     unidade_organizacional_id UUID NOT NULL,
-    espaco INTEGER NOT NULL,
+    espaco UUID NOT NULL, -- Convertido para UUID para referenciar a tabela de espaços
     descricao TEXT NOT NULL,
-    tipo_unidade_medida INTEGER NOT NULL,
+    tipo_unidade_medida INTEGER NOT NULL, -- Enum mantido como INTEGER
     quantidade NUMERIC(18,4) NOT NULL DEFAULT 0,
     
     CONSTRAINT fk_item_unidade FOREIGN KEY (unidade_organizacional_id) 
-        REFERENCES estoque.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
+        REFERENCES estoque.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE,
+        
+    -- Nova chave estrangeira para garantir integridade estrutural do espaço
+    CONSTRAINT fk_item_espaco FOREIGN KEY (espaco) 
+        REFERENCES estoque.espaco (espaco_id) ON DELETE RESTRICT
 );
 
 -- 6. Tabela de Histórico (Auditoria de Movimentações)
 CREATE TABLE IF NOT EXISTS estoque.historico (
-    historico_id SERIAL PRIMARY KEY,
-    item_estoque_id INTEGER NOT NULL,
-    tipo_movimentacao INTEGER NOT NULL,
+    historico_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    item_estoque_id UUID NOT NULL,
+    tipo_movimentacao INTEGER NOT NULL, -- Enum mantido como INTEGER
     usuario_id UUID,
     data_hora TIMESTAMP NOT NULL DEFAULT NOW(),
     quantidade_anterior NUMERIC(18,4) NOT NULL,
@@ -105,6 +109,7 @@ CREATE TABLE IF NOT EXISTS estoque.historico (
     
     CONSTRAINT fk_historico_item FOREIGN KEY (item_estoque_id) 
         REFERENCES estoque.item_estoque (item_estoque_id) ON DELETE CASCADE,
+        
     CONSTRAINT fk_historico_usuario FOREIGN KEY (usuario_id) 
         REFERENCES estoque.usuario (usuario_id) ON DELETE SET NULL
 );
