@@ -34,7 +34,7 @@ CREATE SCHEMA IF NOT EXISTS estoque;
 
 -- 2. Tabela de Unidades Organizacionais (Matriz e Filiais)
 CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
-    unidade_organizacional_id SERIAL PRIMARY KEY,
+    unidade_organizacional_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_matriz INTEGER NOT NULL,
     cnpj VARCHAR(20),
     razao_social TEXT,
