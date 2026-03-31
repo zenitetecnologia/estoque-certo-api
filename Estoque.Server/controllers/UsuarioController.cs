@@ -10,9 +10,9 @@ public static class UsuarioController
     {
         app.MapPost("v1/usuarios/", async (Usuario usuario, UsuarioService service) =>
         {
-            Guid idNovoUsuario = await service.CadastrarUsuario(usuario);
+            Guid usuarioId = await service.CadastrarUsuario(usuario);
 
-            return Results.Created($"/v1/usuarios/{idNovoUsuario}", "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
+            return Results.Created($"/v1/usuarios/{usuarioId}", "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
         })
        .WithTags("usuarios")
        .WithSummary("Registra um novo usuário")

@@ -136,7 +136,7 @@ public class UsuarioRepository
                 Nome = reader.GetString("nome"),
                 Telefone = reader.GetString("telefone"),
                 Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
-                UnidadeOrganizacionalId = reader.GetInt32("unidade_organizacional_id"),
+                UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
                 Valido = reader.GetBoolean("valido")
             };
         }
@@ -183,7 +183,7 @@ public class UsuarioRepository
                     Nome = reader.GetString("nome"),
                     Telefone = reader.GetString("telefone"),
                     Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
-                    UnidadeOrganizacionalId = reader.GetInt32("unidade_organizacional_id"),
+                    UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
                     Valido = reader.GetBoolean("valido")
                 });
             }
@@ -231,7 +231,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<bool> ValidarAcesso(Guid usuarioId)
+    public async Task<int> ValidarAcesso(Guid usuarioId)
     {
         const string sql = "UPDATE estoque.usuario SET valido = true WHERE usuario_id = @usuario_id";
 
@@ -242,8 +242,7 @@ public class UsuarioRepository
 
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
-            var rowsAffected = await cmd.ExecuteNonQueryAsync();
-            return rowsAffected > 0;
+            return await cmd.ExecuteNonQueryAsync();
         }
         catch
         {
@@ -251,7 +250,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<bool> ExcluirUsuario(Guid usuarioId)
+    public async Task<int> ExcluirUsuario(Guid usuarioId)
     {
         const string sql = "DELETE FROM estoque.usuario WHERE usuario_id = @usuario_id";
 
@@ -262,8 +261,7 @@ public class UsuarioRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
-            var affected = await cmd.ExecuteNonQueryAsync();
-            return affected > 0;
+            return await cmd.ExecuteNonQueryAsync();
         }
         catch
         {

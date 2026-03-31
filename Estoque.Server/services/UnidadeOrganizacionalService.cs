@@ -14,11 +14,11 @@ public class UnidadeOrganizacionalService : BaseService
         _repository = repository;
     }
 
-    public async Task<int> CriarUnidade(UnidadeOrganizacional unidade)
+    public async Task<Guid> CriarUnidade(UnidadeOrganizacional unidade)
     {
         try
         {
-            await ValidarUnidadeOrganizacional(unidade, 0);
+            await ValidarUnidadeOrganizacional(unidade, Guid.Empty);
 
             return await _repository.CriarUnidade(unidade);
         }
@@ -32,7 +32,7 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
-    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade, int unidadeOrganizacionalId)
+    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade, Guid unidadeOrganizacionalId)
     {
         try
         {
@@ -70,7 +70,7 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
-    public async Task<UnidadeOrganizacional> ObterUnidadePorId(int unidadeOrganizacionalId)
+    public async Task<UnidadeOrganizacional> ObterUnidadePorId(Guid unidadeOrganizacionalId)
     {
         try
         {
@@ -93,7 +93,7 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
-    public async Task<bool> ExcluirUnidade(int unidadeOrganizacionalId)
+    public async Task<bool> ExcluirUnidade(Guid unidadeOrganizacionalId)
     {
         try
         {
@@ -116,7 +116,7 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
-    private async Task ValidarUnidadeOrganizacional(UnidadeOrganizacional unidade, int unidadeOrganizacionalId)
+    private async Task ValidarUnidadeOrganizacional(UnidadeOrganizacional unidade, Guid unidadeOrganizacionalId)
     {
 
         if (string.IsNullOrWhiteSpace(unidade.RazaoSocial))

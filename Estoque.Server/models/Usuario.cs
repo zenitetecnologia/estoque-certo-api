@@ -10,7 +10,7 @@ public class Usuario
     public virtual Guid UsuarioId { get; set; }
 
     [JsonPropertyOrder(2)]
-    public virtual int UnidadeOrganizacionalId { get; set; }
+    public virtual Guid UnidadeOrganizacionalId { get; set; }
 
     [JsonPropertyOrder(3)]
     public string Username { get; set; } = string.Empty;
@@ -37,7 +37,7 @@ public class UsuarioAtualizado : Usuario
 {
     [JsonIgnore]
     [JsonPropertyOrder(2)]
-    public override int UnidadeOrganizacionalId { get; set; }
+    public override Guid UnidadeOrganizacionalId { get; set; }
 }
 
 public class UsuarioRecuperado : Usuario

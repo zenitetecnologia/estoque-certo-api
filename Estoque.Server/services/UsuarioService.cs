@@ -41,15 +41,13 @@ public class UsuarioService : BaseService
     {
         try
         {
-            var usuarioAux = await _repository.ObterUsuario(usuarioId);
-
-            if (usuarioAux == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
-
-            usuario.UnidadeOrganizacionalId = usuarioAux.UnidadeOrganizacionalId;
-
             await ValidarUsuario(usuario, usuarioId);
 
-            return await _repository.AtualizarUsuario(usuario, usuarioId);
+            var affected = await _repository.AtualizarUsuario(usuario, usuarioId);
+
+            if (affected <= 0) throw new NotFoundException("Usuário não encontrado para o ID informado.");
+
+            return affected;
         }
         catch (NotFoundException)
         {
@@ -91,15 +89,15 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<bool> ExcluirUsuario(Guid usuarioId)
+    public async Task<int> ExcluirUsuario(Guid usuarioId)
     {
         try
         {
-            var usuario = await _repository.ObterUsuario(usuarioId);
+            var affected = await _repository.ExcluirUsuario(usuarioId);
 
-            if (usuario == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
+            if (affected <= 0) throw new NotFoundException("Usuário não encontrado para o ID informado.");
 
-            return await _repository.ExcluirUsuario(usuarioId);
+            return affected;
         }
         catch (NotFoundException)
         {

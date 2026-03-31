@@ -13,7 +13,7 @@ public class UnidadeOrganizacionalRepository
         _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
     }
 
-    public async Task<int> CriarUnidade(UnidadeOrganizacional unidade)
+    public async Task<Guid> CriarUnidade(UnidadeOrganizacional unidade)
     {
         const string sql = @"
             INSERT INTO estoque.unidade_organizacional 
@@ -73,7 +73,7 @@ public class UnidadeOrganizacionalRepository
 
             var result = await cmd.ExecuteScalarAsync();
 
-            return (int)result!;
+            return (Guid)result!;
         }
         catch
         {
@@ -81,7 +81,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade, int unidadeOrganizacionalId)
+    public async Task<bool> AtualizarUnidade(UnidadeOrganizacional unidade, Guid unidadeOrganizacionalId)
     {
         const string sql = @"
         UPDATE
@@ -172,20 +172,20 @@ public class UnidadeOrganizacionalRepository
             {
                 unidades.Add(new UnidadeOrganizacionalRecuperado
                 {
-                    UnidadeOrganizacionalId = (int)reader["unidade_organizacional_id"],
-                    IdMatriz = (int)reader["id_matriz"],
-                    Cnpj = (string)reader["cnpj"],
-                    RazaoSocial = (string)reader["razao_social"],
-                    NomeFantasia = (string)reader["nome_fantasia"],
-                    Cep = (string)reader["cep"],
-                    Numero = (string)reader["numero"],
-                    Complemento = (string)reader["complemento"],
-                    Bairro = (string)reader["bairro"],
-                    Cidade = (string)reader["cidade"],
-                    Uf = (string)reader["uf"],
-                    Pais = (string)reader["pais"],
-                    Telefone = (string)reader["telefone"],
-                    Email = (string)reader["email"]
+                    UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
+                    IdMatriz = reader.GetInt32("id_matriz"),
+                    Cnpj = reader.GetString("cnpj"),
+                    RazaoSocial = reader.GetString("razao_social"),
+                    NomeFantasia = reader.GetString("nome_fantasia"),
+                    Cep = reader.GetString("cep"),
+                    Numero = reader.GetString("numero"),
+                    Complemento = reader.GetString("complemento"),
+                    Bairro = reader.GetString("bairro"),
+                    Cidade = reader.GetString("cidade"),
+                    Uf = reader.GetString("uf"),
+                    Pais = reader.GetString("pais"),
+                    Telefone = reader.GetString("telefone"),
+                    Email = reader.GetString("email")
                 });
             }
             return unidades;
@@ -196,7 +196,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<UnidadeOrganizacional?> ObterUnidade(int unidadeOrganizacionald)
+    public async Task<UnidadeOrganizacional?> ObterUnidade(Guid unidadeOrganizacionald)
     {
         const string sql = @"
             SELECT
@@ -234,20 +234,20 @@ public class UnidadeOrganizacionalRepository
 
             return new UnidadeOrganizacionalRecuperado
             {
-                UnidadeOrganizacionalId = (int)reader["unidade_organizacional_id"],
-                IdMatriz = (int)reader["id_matriz"],
-                Cnpj = (string)reader["cnpj"],
-                RazaoSocial = (string)reader["razao_social"],
-                NomeFantasia = (string)reader["nome_fantasia"],
-                Cep = (string)reader["cep"],
-                Numero = (string)reader["numero"],
-                Complemento = (string)reader["complemento"],
-                Bairro = (string)reader["bairro"],
-                Cidade = (string)reader["cidade"],
-                Uf = (string)reader["uf"],
-                Pais = (string)reader["pais"],
-                Telefone = (string)reader["telefone"],
-                Email = (string)reader["email"]
+                UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
+                IdMatriz = reader.GetInt32("id_matriz"),
+                Cnpj = reader.GetString("cnpj"),
+                RazaoSocial = reader.GetString("razao_social"),
+                NomeFantasia = reader.GetString("nome_fantasia"),
+                Cep = reader.GetString("cep"),
+                Numero = reader.GetString("numero"),
+                Complemento = reader.GetString("complemento"),
+                Bairro = reader.GetString("bairro"),
+                Cidade = reader.GetString("cidade"),
+                Uf = reader.GetString("uf"),
+                Pais = reader.GetString("pais"),
+                Telefone = reader.GetString("telefone"),
+                Email = reader.GetString("email")
             };
         }
         catch
@@ -256,7 +256,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<bool> ExcluirUnidade(int id)
+    public async Task<bool> ExcluirUnidade(Guid id)
     {
         const string sql = @"
             DELETE FROM
@@ -281,7 +281,7 @@ public class UnidadeOrganizacionalRepository
         }
     }
 
-    public async Task<bool> VerificaExisteUnidade(string Cnpj, int ignoreId)
+    public async Task<bool> VerificaExisteUnidade(string Cnpj, Guid ignoreId)
     {
         const string sql = @"
             SELECT

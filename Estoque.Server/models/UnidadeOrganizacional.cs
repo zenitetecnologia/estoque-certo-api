@@ -19,7 +19,7 @@ public class UnidadeOrganizacional
 
 public class UnidadeOrganizacionalRecuperado : UnidadeOrganizacional
 {
-    public int UnidadeOrganizacionalId { get; set; }
+    public Guid UnidadeOrganizacionalId { get; set; }
 }
 
 public class UnidadeOrganizacionalVinculo
