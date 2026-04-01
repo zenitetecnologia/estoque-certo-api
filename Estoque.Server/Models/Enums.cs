@@ -8,12 +8,12 @@ public enum PerfilUsuario
 
 public enum TipoUnidadeMedida
 {
-    Quilos,
-    Gramas,
-    Miligramas,
-    Litros,
-    Mililitros,
-    Unidades
+    Quilos = 1,
+    Gramas = 2,
+    Miligramas = 2,
+    Litros = 3,
+    Mililitros = 4,
+    Unidades = 5
 }
 
 public enum TipoMovimentacao

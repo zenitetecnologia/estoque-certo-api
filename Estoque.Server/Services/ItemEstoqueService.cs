@@ -117,8 +117,8 @@ public class ItemEstoqueService : BaseService
         if (itemEstoqueId == Guid.Empty && item.UnidadeOrganizacionalId == Guid.Empty)
             AddError(nameof(item.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
 
-        if (item.Espaco <= 0)
-            AddError(nameof(item.Espaco), "Informe um espaço para o item.");
+        if (item.EspacoId == Guid.Empty)
+            AddError(nameof(item.EspacoId), "Informe um espaço para o item.");
 
         if (string.IsNullOrWhiteSpace(item.Descricao))
             AddError(nameof(item.Descricao), "Informe a descrição do item.");

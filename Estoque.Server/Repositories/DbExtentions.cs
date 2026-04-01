@@ -24,4 +24,13 @@ public static class DbExtentions
 
     public static decimal GetDecimal(this IDataReader reader, string column) =>
         reader.GetDecimal(reader.GetOrdinal(column));
+
+    public static string GetSafeString(this IDataReader reader, string column)
+    {
+        int ordinal = reader.GetOrdinal(column);
+        return reader.IsDBNull(ordinal) ? string.Empty : reader.GetString(ordinal);
+    }
+
+    public static DateTime GetDateTime(this IDataReader reader, string column) =>
+        reader.GetDateTime(reader.GetOrdinal(column));
 }

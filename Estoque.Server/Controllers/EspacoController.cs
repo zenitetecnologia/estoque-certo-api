@@ -21,7 +21,6 @@ public static class EspacoController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-
         app.MapPut("v1/espacos/{espacoId:guid}", async (Guid espacoId, EspacoAtualizado espaco, EspacoService service) =>
         {
             await service.AtualizarEspaco(espaco, espacoId);
@@ -36,7 +35,6 @@ public static class EspacoController
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-
         app.MapDelete("v1/espacos/{espacoId:guid}", async (Guid espacoId, EspacoService service) =>
         {
             await service.ExcluirEspaco(espacoId);
@@ -48,8 +46,8 @@ public static class EspacoController
         .WithDescription("Remove um espaço do sistema permanentemente.")
         .Produces(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
-
 
         app.MapGet("v1/espacos", async (EspacoService service) =>
         {
@@ -62,7 +60,6 @@ public static class EspacoController
         .WithDescription("Retorna a lista completa de espaços de armazenamento.")
         .Produces<List<EspacoRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
-
 
         app.MapGet("v1/espacos/{espacoId:guid}", async (Guid espacoId, EspacoService service) =>
         {

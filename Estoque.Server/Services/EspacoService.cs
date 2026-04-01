@@ -36,14 +36,13 @@ public class EspacoService : BaseService
     {
         try
         {
-            var espacoExistente = await _repository.ObterEspaco(espacoId);
-            if (espacoExistente == null) throw new NotFoundException("Espaço não encontrado para o ID informado.");
-
-            espaco.UnidadeOrganizacionalId = espacoExistente.UnidadeOrganizacionalId;
-
             await ValidarEspaco(espaco, espacoId);
 
-            return await _repository.AtualizarEspaco(espaco, espacoId);
+            var affected = await _repository.AtualizarEspaco(espaco, espacoId);
+
+            if (affected <= 0) throw new NotFoundException("Espaço não encontrado para o ID informado.");
+
+            return affected;
         }
         catch (NotFoundException)
         {
@@ -75,6 +74,11 @@ public class EspacoService : BaseService
         }
         catch (Exception ex)
         {
+            if (ex.Message.Contains("fk_item_espaco") || ex.InnerException?.Message.Contains("fk_item_espaco") == true)
+            {
+                AddError("EspacoId", "Não é possível excluir este espaço porque ainda existem itens de estoque armazenados nele. Mova ou exclua os itens primeiro.");
+                throw new ValidationException(Errors);
+            }
             throw new Exception($"Erro ao excluir espaço: {ex.Message}");
         }
     }

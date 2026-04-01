@@ -16,11 +16,10 @@ public static class ItemEstoqueController
         })
         .WithTags("itens-estoque")
         .WithSummary("Cadastra um novo item de estoque")
-        .WithDescription("Regista um novo item no estoque.")
+        .WithDescription("Cadastra um novo item no estoque.")
         .Produces(StatusCodes.Status201Created)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
-
 
         app.MapPut("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, ItemEstoqueAtualizado item, ItemEstoqueService service) =>
         {
@@ -36,7 +35,6 @@ public static class ItemEstoqueController
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-
         app.MapDelete("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, ItemEstoqueService service) =>
         {
             await service.ExcluirItemEstoque(itemEstoqueId);
@@ -50,7 +48,6 @@ public static class ItemEstoqueController
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-
         app.MapGet("v1/itens-estoque", async (ItemEstoqueService service) =>
         {
             var result = await service.ObterItens();
@@ -63,7 +60,6 @@ public static class ItemEstoqueController
         .Produces<List<ItemEstoqueRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-
         app.MapGet("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, ItemEstoqueService service) =>
         {
             var result = await service.ObterItem(itemEstoqueId);
@@ -72,7 +68,7 @@ public static class ItemEstoqueController
         })
         .WithTags("itens-estoque")
         .WithSummary("Busca um item de estoque por ID")
-        .WithDescription("Obtém os detalhes de um item específico pelo seu ID.")
+        .WithDescription("Obtém os detalhes de um item pelo seu ID.")
         .Produces<ItemEstoqueRecuperado>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);

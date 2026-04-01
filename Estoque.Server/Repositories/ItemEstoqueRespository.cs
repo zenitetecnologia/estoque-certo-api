@@ -19,7 +19,7 @@ public class ItemEstoqueRepository
             SELECT
                 item_estoque_id,
                 unidade_organizacional_id,
-                espaco,
+                espaco_id,
                 descricao,
                 tipo_unidade_medida,
                 quantidade
@@ -44,9 +44,9 @@ public class ItemEstoqueRepository
                 {
                     ItemEstoqueId = reader.GetGuid("item_estoque_id"),
                     UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                    Espaco = reader.GetInt32("espaco"),
+                    EspacoId = reader.GetGuid("espaco_id"),
                     Descricao = reader.GetString("descricao"),
-                    TipoUnidadeMedida = (Estoque.Models.TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida"),
+                    TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida"),
                     Quantidade = reader.GetDecimal("quantidade")
                 });
             }
@@ -65,7 +65,7 @@ public class ItemEstoqueRepository
             SELECT
                 item_estoque_id,
                 unidade_organizacional_id,
-                espaco,
+                espaco_id,
                 descricao,
                 tipo_unidade_medida,
                 quantidade
@@ -91,9 +91,9 @@ public class ItemEstoqueRepository
             {
                 ItemEstoqueId = reader.GetGuid("item_estoque_id"),
                 UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                Espaco = reader.GetInt32("espaco"),
+                EspacoId = reader.GetGuid("espaco_id"),
                 Descricao = reader.GetString("descricao"),
-                TipoUnidadeMedida = (Estoque.Models.TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida"),
+                TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida"),
                 Quantidade = reader.GetDecimal("quantidade")
             };
         }
@@ -109,7 +109,7 @@ public class ItemEstoqueRepository
             INSERT INTO estoque.item_estoque
             (
                 unidade_organizacional_id,
-                espaco,
+                espaco_id,
                 descricao,
                 tipo_unidade_medida,
                 quantidade
@@ -117,7 +117,7 @@ public class ItemEstoqueRepository
             VALUES
             (
                 @unidade_organizacional_id,
-                @espaco,
+                @espaco_id,
                 @descricao,
                 @tipo_unidade_medida,
                 @quantidade
@@ -132,7 +132,7 @@ public class ItemEstoqueRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
             cmd.Parameters.AddWithValue("unidade_organizacional_id", item.UnidadeOrganizacionalId);
-            cmd.Parameters.AddWithValue("espaco", item.Espaco);
+            cmd.Parameters.AddWithValue("espaco_id", item.EspacoId);
             cmd.Parameters.AddWithValue("descricao", item.Descricao);
             cmd.Parameters.AddWithValue("tipo_unidade_medida", (int)item.TipoUnidadeMedida);
             cmd.Parameters.AddWithValue("quantidade", item.Quantidade);
@@ -153,7 +153,7 @@ public class ItemEstoqueRepository
             UPDATE
                 estoque.item_estoque
             SET
-                espaco = @espaco,
+                espaco_id = @espaco_id,
                 descricao = @descricao,
                 tipo_unidade_medida = @tipo_unidade_medida,
                 quantidade = @quantidade
@@ -168,7 +168,7 @@ public class ItemEstoqueRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
             cmd.Parameters.AddWithValue("id", itemEstoqueId);
-            cmd.Parameters.AddWithValue("espaco", item.Espaco);
+            cmd.Parameters.AddWithValue("espaco_id", item.EspacoId);
             cmd.Parameters.AddWithValue("descricao", item.Descricao);
             cmd.Parameters.AddWithValue("tipo_unidade_medida", (int)item.TipoUnidadeMedida);
             cmd.Parameters.AddWithValue("quantidade", item.Quantidade);

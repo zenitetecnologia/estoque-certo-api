@@ -36,6 +36,8 @@ public class UnidadeOrganizacionalService : BaseService
     {
         try
         {
+            await ValidarUnidadeOrganizacional(unidade, unidadeOrganizacionalId);
+
             var affected = await _repository.AtualizarUnidade(unidade, unidadeOrganizacionalId);
 
             if (affected <= 0) throw new NotFoundException("Unidade organizacional não encontrada para o ID informado.");

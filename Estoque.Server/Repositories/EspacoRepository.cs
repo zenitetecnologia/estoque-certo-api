@@ -41,11 +41,9 @@ public class EspacoRepository
                 espacos.Add(new EspacoRecuperado
                 {
                     EspacoId = reader.GetGuid(reader.GetOrdinal("espaco_id")),
-                    UnidadeOrganizacionalId = reader.GetGuid(reader.GetOrdinal("unidade_organizacional_id")),
+                    UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
                     Nome = reader.GetString(reader.GetOrdinal("nome")),
-                    Descricao = reader.IsDBNull(reader.GetOrdinal("descricao"))
-                        ? string.Empty
-                        : reader.GetString(reader.GetOrdinal("descricao"))
+                    Descricao = reader.GetSafeString("descricao")
                 });
             }
 
@@ -86,11 +84,9 @@ public class EspacoRepository
             return new EspacoRecuperado
             {
                 EspacoId = reader.GetGuid(reader.GetOrdinal("espaco_id")),
-                UnidadeOrganizacionalId = reader.GetGuid(reader.GetOrdinal("unidade_organizacional_id")),
+                UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
                 Nome = reader.GetString(reader.GetOrdinal("nome")),
-                Descricao = reader.IsDBNull(reader.GetOrdinal("descricao"))
-                    ? string.Empty
-                    : reader.GetString(reader.GetOrdinal("descricao"))
+                Descricao = reader.GetSafeString("descricao")
             };
         }
         catch
@@ -169,12 +165,7 @@ public class EspacoRepository
 
     public async Task<int> ExcluirEspaco(Guid espacoId)
     {
-        const string sql = @"
-            DELETE FROM
-                estoque.espaco
-            WHERE
-                espaco_id = @id;
-        ";
+        const string sql = "DELETE FROM estoque.espaco WHERE espaco_id = @id";
 
         try
         {

@@ -29,7 +29,7 @@ public static class UnidadeOrganizacionalController
         })
         .WithTags("unidades-organizacionais")
         .WithSummary("Atualiza uma unidade")
-        .WithDescription("Atualiza as informações de uma unidade existente.")
+        .WithDescription("Atualiza as informações de uma unidade.")
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
@@ -48,7 +48,6 @@ public static class UnidadeOrganizacionalController
         .Produces<string>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
-
 
         app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service) =>
         {

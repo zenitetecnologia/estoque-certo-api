@@ -12,7 +12,7 @@ public class ItemEstoque
     public virtual Guid UnidadeOrganizacionalId { get; set; }
 
     [JsonPropertyOrder(3)]
-    public int Espaco { get; set; }
+    public Guid EspacoId { get; set; }
 
     [JsonPropertyOrder(4)]
     public string Descricao { get; set; } = string.Empty;
