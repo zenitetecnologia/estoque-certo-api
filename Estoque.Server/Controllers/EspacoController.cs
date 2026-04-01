@@ -1,133 +1,80 @@
 ﻿using Estoque.models;
+using Estoque.Server.Validations;
 using Estoque.Services;
 
 namespace Estoque.Controllers;
 
-public static class EspacosController
+public static class EspacoController
 {
     public static void MapEspacosEndpoints(this WebApplication app)
     {
-        app.MapGet("v1/espacos", async (EspacoService service) =>
+        app.MapPost("v1/espacos", async (Espaco espaco, EspacoService service) =>
         {
-            try
-            {
-                var result = await service.ObterTodosAsync();
+            Guid espacoId = await service.CadastrarEspaco(espaco);
 
-                return Results.Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
-        })
-        .WithTags("espacos")
-        .WithSummary("Lista os espaços")
-        .WithDescription("Retorna a lista de espaços de armazenamento.")
-        .Produces<List<Espacos>>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status500InternalServerError);
-
-
-        app.MapGet("v1/espacos/{espacoId:int}", async (int espacoId, EspacoService service) =>
-        {
-            try
-            {
-                var result = await service.ObterPorIdAsync(espacoId);
-
-                if (result == null)
-                    return Results.NotFound(new { erro = "Espaço não encontrado." });
-
-                return Results.Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
-        })
-        .WithTags("espacos")
-        .WithSummary("Busca um espaço por ID")
-        .WithDescription("Retorna um espaço específico pelo seu ID.")
-        .Produces<Espacos>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces(StatusCodes.Status500InternalServerError);
-
-
-        app.MapPost("v1/espacos", async (EspacosRecuperado espaco, EspacoService service) =>
-        {
-            try
-            {
-                var id = await service.CriarEspaco(espaco);
-                espaco.EspacoId = id;
-
-                return Results.Created($"/v1/espacos/{id}", espaco);
-            }
-            catch (ArgumentException ex)
-            {
-                return Results.BadRequest(new { erro = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
+            return Results.Created($"/v1/espacos/{espacoId}", "Espaço cadastrado com sucesso.");
         })
         .WithTags("espacos")
         .WithSummary("Cadastra um novo espaço")
         .WithDescription("Cadastra um novo espaço de armazenamento.")
         .Produces(StatusCodes.Status201Created)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status500InternalServerError);
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPut("v1/espacos/{espacoId:int}", async (int espacoId, EspacosRecuperado espaco, EspacoService service) =>
+        app.MapPut("v1/espacos/{espacoId:guid}", async (Guid espacoId, EspacoAtualizado espaco, EspacoService service) =>
         {
-            try
-            {
-                espaco.EspacoId = espacoId;
-                var atualizado = await service.AtualizarAsync(espaco);
+            await service.AtualizarEspaco(espaco, espacoId);
 
-                if (!atualizado)
-                    return Results.NotFound(new { erro = "Espaço não encontrado para atualizar." });
-
-                return Results.Ok(new { mensagem = "Espaço atualizado com sucesso!" });
-            }
-            catch (ArgumentException ex)
-            {
-                return Results.BadRequest(new { erro = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
+            return Results.Ok("Espaço atualizado com sucesso.");
         })
         .WithTags("espacos")
         .WithSummary("Atualiza um espaço")
-        .WithDescription("Atualiza as informações de um espaço.")
+        .WithDescription("Atualiza as informações de um espaço de armazenamento existente.")
         .Produces(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces(StatusCodes.Status500InternalServerError);
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
-        app.MapDelete("v1/espacos/{espacoId:int}", async (int espacoId, EspacoService service) =>
+        app.MapDelete("v1/espacos/{espacoId:guid}", async (Guid espacoId, EspacoService service) =>
         {
-            try
-            {
-                var excluido = await service.ExcluirAsync(espacoId);
+            await service.ExcluirEspaco(espacoId);
 
-                if (!excluido)
-                    return Results.NotFound(new { erro = "Espaço não encontrado." });
-
-                return Results.Ok(new { mensagem = "Espaço excluído com sucesso!" });
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
+            return Results.Ok("Espaço excluído com sucesso.");
         })
         .WithTags("espacos")
         .WithSummary("Exclui um espaço")
-        .WithDescription("Remove um espaço do sistema.")
+        .WithDescription("Remove um espaço do sistema permanentemente.")
         .Produces(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces(StatusCodes.Status500InternalServerError);
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+
+
+        app.MapGet("v1/espacos", async (EspacoService service) =>
+        {
+            var result = await service.ObterEspacos();
+
+            return Results.Ok(result);
+        })
+        .WithTags("espacos")
+        .WithSummary("Lista os espaços")
+        .WithDescription("Retorna a lista completa de espaços de armazenamento.")
+        .Produces<List<EspacoRecuperado>>(StatusCodes.Status200OK)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+
+
+        app.MapGet("v1/espacos/{espacoId:guid}", async (Guid espacoId, EspacoService service) =>
+        {
+            var result = await service.ObterEspaco(espacoId);
+
+            return Results.Ok(result);
+        })
+        .WithTags("espacos")
+        .WithSummary("Busca um espaço por ID")
+        .WithDescription("Retorna um espaço específico pelo seu ID.")
+        .Produces<EspacoRecuperado>(StatusCodes.Status200OK)
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
     }
 }

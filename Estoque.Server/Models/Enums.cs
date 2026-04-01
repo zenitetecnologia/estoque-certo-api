@@ -1,4 +1,4 @@
-﻿namespace Estoque.models;
+﻿namespace Estoque.Models;
 
 public enum PerfilUsuario
 {

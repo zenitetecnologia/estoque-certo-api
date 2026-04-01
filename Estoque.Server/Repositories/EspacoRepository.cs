@@ -13,11 +13,11 @@ public class EspacoRepository
         _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
     }
 
-    public async Task<List<Espacos>> ObterEspacos()
+    public async Task<List<EspacoRecuperado>> ObterEspacos()
     {
         const string sql = @"
             SELECT
-                id,
+                espaco_id,
                 unidade_organizacional_id,
                 nome,
                 descricao
@@ -34,14 +34,14 @@ public class EspacoRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
             await using var reader = await cmd.ExecuteReaderAsync();
 
-            var espacos = new List<Espacos>();
+            var espacos = new List<EspacoRecuperado>();
 
             while (await reader.ReadAsync())
             {
-                espacos.Add(new EspacosRecuperado
+                espacos.Add(new EspacoRecuperado
                 {
-                    EspacoId = reader.GetInt32(reader.GetOrdinal("id")),
-                    UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
+                    EspacoId = reader.GetGuid(reader.GetOrdinal("espaco_id")),
+                    UnidadeOrganizacionalId = reader.GetGuid(reader.GetOrdinal("unidade_organizacional_id")),
                     Nome = reader.GetString(reader.GetOrdinal("nome")),
                     Descricao = reader.IsDBNull(reader.GetOrdinal("descricao"))
                         ? string.Empty
@@ -51,25 +51,24 @@ public class EspacoRepository
 
             return espacos;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
 
-    public async Task<Espacos?> ObterEspacoPorId(int espacoId)
+    public async Task<EspacoRecuperado?> ObterEspaco(Guid espacoId)
     {
         const string sql = @"
             SELECT
-                id,
+                espaco_id,
                 unidade_organizacional_id,
                 nome,
                 descricao
             FROM
                 estoque.espaco
             WHERE
-                id = @id
+                espaco_id = @id
             LIMIT 1;
         ";
 
@@ -84,24 +83,23 @@ public class EspacoRepository
 
             if (!await reader.ReadAsync()) return null;
 
-            return new EspacosRecuperado
+            return new EspacoRecuperado
             {
-                EspacoId = reader.GetInt32(reader.GetOrdinal("id")),
-                UnidadeOrganizacionalId = reader.GetInt32(reader.GetOrdinal("unidade_organizacional_id")),
+                EspacoId = reader.GetGuid(reader.GetOrdinal("espaco_id")),
+                UnidadeOrganizacionalId = reader.GetGuid(reader.GetOrdinal("unidade_organizacional_id")),
                 Nome = reader.GetString(reader.GetOrdinal("nome")),
                 Descricao = reader.IsDBNull(reader.GetOrdinal("descricao"))
                     ? string.Empty
                     : reader.GetString(reader.GetOrdinal("descricao"))
             };
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
 
-    public async Task<int> CadastrarEspaco(Espacos espaco)
+    public async Task<Guid> CadastrarEspaco(Espaco espaco)
     {
         const string sql = @"
             INSERT INTO estoque.espaco
@@ -116,7 +114,7 @@ public class EspacoRepository
                 @nome,
                 @descricao
             )
-            RETURNING id;
+            RETURNING espaco_id;
         ";
 
         try
@@ -127,30 +125,28 @@ public class EspacoRepository
 
             cmd.Parameters.AddWithValue("unidade_organizacional_id", espaco.UnidadeOrganizacionalId);
             cmd.Parameters.AddWithValue("nome", espaco.Nome);
-            cmd.Parameters.AddWithValue("descricao", (object?)espaco.Descricao ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("descricao", string.IsNullOrWhiteSpace(espaco.Descricao) ? DBNull.Value : espaco.Descricao);
 
             var result = await cmd.ExecuteScalarAsync();
 
-            return (int)result!;
+            return (Guid)result!;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
 
-    public async Task<bool> AtualizarEspaco(EspacosRecuperado espaco)
+    public async Task<int> AtualizarEspaco(Espaco espaco, Guid espacoId)
     {
         const string sql = @"
             UPDATE
                 estoque.espaco
             SET
-                unidade_organizacional_id = @unidade_organizacional_id,
                 nome = @nome,
                 descricao = @descricao
             WHERE
-                id = @id;
+                espaco_id = @id;
         ";
 
         try
@@ -159,28 +155,25 @@ public class EspacoRepository
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
-            cmd.Parameters.AddWithValue("id", espaco.EspacoId);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", espaco.UnidadeOrganizacionalId);
+            cmd.Parameters.AddWithValue("id", espacoId);
             cmd.Parameters.AddWithValue("nome", espaco.Nome);
-            cmd.Parameters.AddWithValue("descricao", (object?)espaco.Descricao ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("descricao", string.IsNullOrWhiteSpace(espaco.Descricao) ? DBNull.Value : espaco.Descricao);
 
-            var rowsAffected = await cmd.ExecuteNonQueryAsync();
-            return rowsAffected > 0;
+            return await cmd.ExecuteNonQueryAsync();
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
 
-    public async Task<bool> ExcluirEspaco(int espacoId)
+    public async Task<int> ExcluirEspaco(Guid espacoId)
     {
         const string sql = @"
             DELETE FROM
                 estoque.espaco
             WHERE
-                id = @id;
+                espaco_id = @id;
         ";
 
         try
@@ -190,12 +183,10 @@ public class EspacoRepository
             await using var cmd = new NpgsqlCommand(sql, _connection);
             cmd.Parameters.AddWithValue("id", espacoId);
 
-            var affected = await cmd.ExecuteNonQueryAsync();
-            return affected > 0;
+            return await cmd.ExecuteNonQueryAsync();
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }

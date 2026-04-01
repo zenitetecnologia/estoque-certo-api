@@ -21,4 +21,7 @@ public static class DbExtentions
         int ordinal = reader.GetOrdinal(column);
         return reader.IsDBNull(ordinal) ? null : reader.GetGuid(ordinal);
     }
+
+    public static decimal GetDecimal(this IDataReader reader, string column) =>
+        reader.GetDecimal(reader.GetOrdinal(column));
 }

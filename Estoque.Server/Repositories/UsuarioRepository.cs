@@ -1,4 +1,4 @@
-﻿using Estoque.models;
+﻿using Estoque.Models;
 using Estoque.Server.Models;
 using Npgsql;
 using System.Data;

@@ -1,39 +1,33 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Estoque.Models;
+namespace Estoque.models;
 
-public class ItemEstoque
+public class Espaco
 {
     [JsonIgnore]
     [JsonPropertyOrder(1)]
-    public virtual Guid ItemEstoqueId { get; set; }
+    public virtual Guid EspacoId { get; set; }
 
     [JsonPropertyOrder(2)]
     public virtual Guid UnidadeOrganizacionalId { get; set; }
 
     [JsonPropertyOrder(3)]
-    public int Espaco { get; set; }
+    public string Nome { get; set; } = string.Empty;
 
     [JsonPropertyOrder(4)]
     public string Descricao { get; set; } = string.Empty;
-
-    [JsonPropertyOrder(5)]
-    public TipoUnidadeMedida TipoUnidadeMedida { get; set; }
-
-    [JsonPropertyOrder(6)]
-    public decimal Quantidade { get; set; }
 }
 
-public class ItemEstoqueAtualizado : ItemEstoque
+public class EspacoAtualizado : Espaco
 {
     [JsonIgnore]
     [JsonPropertyOrder(2)]
     public override Guid UnidadeOrganizacionalId { get; set; }
 }
 
-public class ItemEstoqueRecuperado : ItemEstoque
+public class EspacoRecuperado : Espaco
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     [JsonPropertyOrder(1)]
-    public override Guid ItemEstoqueId { get; set; }
+    public override Guid EspacoId { get; set; }
 }

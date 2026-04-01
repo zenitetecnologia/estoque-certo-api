@@ -1,14 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Estoque.models;
+namespace Estoque.Models;
 
 public class UnidadeOrganizacional
 {
     [JsonIgnore]
     [JsonPropertyOrder(-1)]
     public virtual Guid UnidadeOrganizacionalId { get; set; }
-
-
     public Guid? IdMatriz { get; set; }
     public string Cnpj { get; set; } = string.Empty;
     public string RazaoSocial { get; set; } = string.Empty;

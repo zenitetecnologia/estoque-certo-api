@@ -1,4 +1,4 @@
-﻿using Estoque.models;
+﻿using Estoque.Models;
 using System.Text.Json.Serialization;
 
 namespace Estoque.Server.Models;

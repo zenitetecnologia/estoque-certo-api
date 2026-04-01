@@ -1,10 +1,11 @@
-﻿using Estoque.models;
+﻿using Estoque.Models;
 using Estoque.Repositories;
+using Estoque.Server.Services;
+using Estoque.Server.Validations;
 
 namespace Estoque.Services;
 
-
-public class ItemEstoqueService
+public class ItemEstoqueService : BaseService
 {
     private readonly ItemEstoqueRepository _repository;
 
@@ -13,7 +14,73 @@ public class ItemEstoqueService
         _repository = repository;
     }
 
-    public async Task<List<ItemEstoque>> ObterItens()
+    public async Task<Guid> CadastrarItemEstoque(ItemEstoque item)
+    {
+        try
+        {
+            await ValidarItemEstoque(item, Guid.Empty);
+
+            return await _repository.CadastrarItemEstoque(item);
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao cadastrar item de estoque: {ex.Message}");
+        }
+    }
+
+    public async Task<int> AtualizarItemEstoque(ItemEstoque item, Guid itemEstoqueId)
+    {
+        try
+        {
+            var itemExistente = await _repository.ObterItem(itemEstoqueId);
+
+            if (itemExistente == null) throw new NotFoundException("Item de estoque não encontrado para o ID informado.");
+
+            item.UnidadeOrganizacionalId = itemExistente.UnidadeOrganizacionalId;
+
+            await ValidarItemEstoque(item, itemEstoqueId);
+
+            return await _repository.AtualizarItemEstoque(item, itemEstoqueId);
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao atualizar item de estoque: {ex.Message}");
+        }
+    }
+
+    public async Task<int> ExcluirItemEstoque(Guid itemEstoqueId)
+    {
+        try
+        {
+            var affected = await _repository.ExcluirItemEstoque(itemEstoqueId);
+
+            if (affected <= 0) throw new NotFoundException("Item de estoque não encontrado para o ID informado.");
+
+            return affected;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao excluir item: {ex.Message}");
+        }
+    }
+
+    public async Task<List<ItemEstoqueRecuperado>> ObterItens()
     {
         try
         {
@@ -25,11 +92,19 @@ public class ItemEstoqueService
         }
     }
 
-    public async Task<ItemEstoque?> ObterItem(int itemEstoqueId)
+    public async Task<ItemEstoqueRecuperado> ObterItem(Guid itemEstoqueId)
     {
         try
         {
-            return await _repository.ObterItem(itemEstoqueId);
+            var item = await _repository.ObterItem(itemEstoqueId);
+
+            if (item == null) throw new NotFoundException("Item de estoque não encontrado para o ID informado.");
+
+            return item;
+        }
+        catch (NotFoundException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
@@ -37,59 +112,21 @@ public class ItemEstoqueService
         }
     }
 
-    public async Task<int> CadastrarItemEstoque(ItemEstoque item)
+    private async Task ValidarItemEstoque(ItemEstoque item, Guid itemEstoqueId)
     {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(item.Descricao))
-            {
-                throw new ArgumentException("A descrição do item é obrigatória.");
-            }
+        if (itemEstoqueId == Guid.Empty && item.UnidadeOrganizacionalId == Guid.Empty)
+            AddError(nameof(item.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
 
-            if (item.Quantidade < 0)
-            {
-                throw new ArgumentException("A quantidade inicial não pode ser negativa.");
-            }
+        if (item.Espaco <= 0)
+            AddError(nameof(item.Espaco), "Informe um espaço para o item.");
 
-            return await _repository.CadastrarItemEstoque(item);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao cadastrar item de estoque: {ex.Message}");
-        }
-    }
+        if (string.IsNullOrWhiteSpace(item.Descricao))
+            AddError(nameof(item.Descricao), "Informe a descrição do item.");
 
-    public async Task<bool> AtualizarItemEstoque(ItemEstoque item)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(item.Descricao))
-            {
-                throw new ArgumentException("A descrição do item é obrigatória.");
-            }
+        if (item.Quantidade < 0)
+            AddError(nameof(item.Quantidade), "Informe a quantidade.");
 
-            return await _repository.AtualizarItemEstoque(item);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao atualizar item de estoque: {ex.Message}");
-        }
-    }
-
-    public async Task<bool> ExcluirItemEstoque(int itemEstoqueId)
-    {
-        try
-        {
-            return await _repository.ExcluirItemEstoque(itemEstoqueId);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao excluir item: {ex.Message}");
-        }
-    }
-
-    private async Task ValidarItemEstoque(ItemEstoque itemEstoque, int itemEstoqueId)
-    {
-
+        if (Errors.Any())
+            throw new ValidationException(Errors);
     }
 }

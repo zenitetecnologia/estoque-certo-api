@@ -1,4 +1,4 @@
-﻿using Estoque.models;
+﻿using Estoque.Models;
 using Estoque.Repositories;
 using Estoque.Server.Models;
 using Estoque.Server.Services;

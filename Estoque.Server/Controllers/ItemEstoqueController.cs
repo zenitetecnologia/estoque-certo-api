@@ -1,4 +1,5 @@
-﻿using Estoque.models;
+﻿using Estoque.Models;
+using Estoque.Server.Validations;
 using Estoque.Services;
 
 namespace Estoque.Controllers;
@@ -7,127 +8,73 @@ public static class ItemEstoqueController
 {
     public static void MapItemEstoqueEndpoints(this WebApplication app)
     {
-        app.MapGet("v1/itens-estoque", async (ItemEstoqueService service) =>
-        {
-            try
-            {
-                var result = await service.ObterItens();
-
-                return Results.Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
-        })
-        .WithTags("itens-estoque")
-        .WithSummary("Lista os itens de estoque")
-        .WithDescription("Lista todos os itens presentes no estoque.")
-        .Produces<List<ItemEstoque>>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status500InternalServerError);
-
-
-        app.MapGet("v1/itens-estoque/{itemEstoqueId:int}", async (int itemEstoqueId, ItemEstoqueService service) =>
-        {
-            try
-            {
-                var result = await service.ObterItem(itemEstoqueId);
-
-                if (result == null)
-                    return Results.NotFound(new { erro = "Item de estoque não encontrado." });
-
-                return Results.Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
-        })
-        .WithTags("itens-estoque")
-        .WithSummary("Busca um item de estoque por ID")
-        .WithDescription("Obtém os detalhes de um item específico pelo seu ID.")
-        .Produces<ItemEstoque>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces(StatusCodes.Status500InternalServerError);
-
-
         app.MapPost("v1/itens-estoque", async (ItemEstoque item, ItemEstoqueService service) =>
         {
-            try
-            {
-                var id = await service.CadastrarItemEstoque(item);
-                item.ItemEstoqueId = id;
+            Guid itemEstoqueId = await service.CadastrarItemEstoque(item);
 
-                return Results.Created($"/v1/itens-estoque/{id}", item);
-            }
-            catch (ArgumentException ex)
-            {
-                return Results.BadRequest(new { erro = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
+            return Results.Created($"/v1/itens-estoque/{itemEstoqueId}", "Item cadastrado com sucesso.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Cadastra um novo item de estoque")
         .WithDescription("Regista um novo item no estoque.")
         .Produces(StatusCodes.Status201Created)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status500InternalServerError);
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
-        app.MapPut("v1/itens-estoque/{itemEstoqueId:int}", async (int itemEstoqueId, ItemEstoque item, ItemEstoqueService service) =>
+        app.MapPut("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, ItemEstoqueAtualizado item, ItemEstoqueService service) =>
         {
-            try
-            {
-                item.ItemEstoqueId = itemEstoqueId;
-                var atualizado = await service.AtualizarItemEstoque(item);
+            await service.AtualizarItemEstoque(item, itemEstoqueId);
 
-                if (!atualizado)
-                    return Results.NotFound(new { erro = "Item de estoque não encontrado para atualizar." });
-
-                return Results.Ok(new { mensagem = "Item de estoque atualizado com sucesso!" });
-            }
-            catch (ArgumentException ex)
-            {
-                return Results.BadRequest(new { erro = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
+            return Results.Ok("Item de estoque atualizado com sucesso.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Atualiza um item de estoque")
         .WithDescription("Atualiza as informações de um item de estoque existente.")
         .Produces(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces(StatusCodes.Status500InternalServerError);
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
 
 
-        app.MapDelete("v1/itens-estoque/{itemEstoqueId:int}", async (int itemEstoqueId, ItemEstoqueService service) =>
+        app.MapDelete("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, ItemEstoqueService service) =>
         {
-            try
-            {
-                var excluido = await service.ExcluirItemEstoque(itemEstoqueId);
+            await service.ExcluirItemEstoque(itemEstoqueId);
 
-                if (!excluido)
-                    return Results.NotFound(new { erro = "Item de estoque não encontrado." });
-
-                return Results.Ok(new { mensagem = "Item de estoque excluído com sucesso!" });
-            }
-            catch (Exception ex)
-            {
-                return Results.InternalServerError(ex.Message);
-            }
+            return Results.Ok("Item de estoque excluído com sucesso.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Exclui um item de estoque")
         .WithDescription("Exclui um item do estoque permanentemente.")
         .Produces(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces(StatusCodes.Status500InternalServerError);
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+
+
+        app.MapGet("v1/itens-estoque", async (ItemEstoqueService service) =>
+        {
+            var result = await service.ObterItens();
+
+            return Results.Ok(result);
+        })
+        .WithTags("itens-estoque")
+        .WithSummary("Lista os itens de estoque")
+        .WithDescription("Lista todos os itens presentes no estoque.")
+        .Produces<List<ItemEstoqueRecuperado>>(StatusCodes.Status200OK)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+
+
+        app.MapGet("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, ItemEstoqueService service) =>
+        {
+            var result = await service.ObterItem(itemEstoqueId);
+
+            return Results.Ok(result);
+        })
+        .WithTags("itens-estoque")
+        .WithSummary("Busca um item de estoque por ID")
+        .WithDescription("Obtém os detalhes de um item específico pelo seu ID.")
+        .Produces<ItemEstoqueRecuperado>(StatusCodes.Status200OK)
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
     }
 }

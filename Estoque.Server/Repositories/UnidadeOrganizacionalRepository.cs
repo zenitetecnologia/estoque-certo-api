@@ -1,4 +1,4 @@
-﻿using Estoque.models;
+﻿using Estoque.Models;
 using Npgsql;
 using System.Data;
 
@@ -257,12 +257,7 @@ public class UnidadeOrganizacionalRepository
 
     public async Task<int> ExcluirUnidade(Guid unidadeOrganizacionalId)
     {
-        const string sql = @"
-            DELETE FROM
-                estoque.unidade_organizacional
-            WHERE
-                unidade_organizacional_id = @unidade_organizacional_id;
-        ";
+        const string sql = "DELETE FROM estoque.unidade_organizacional WHERE unidade_organizacional_id = @unidade_organizacional_id";
 
         try
         {
