@@ -6,6 +6,8 @@ namespace Estoque.Controllers;
 
 public static class ItemEstoqueController
 {
+    public record RequisicaoMovimentacao(decimal Quantidade, TipoMovimentacao TipoMovimentacao);
+
     public static void MapItemEstoqueEndpoints(this WebApplication app)
     {
         app.MapPost("v1/itens-estoque", async (ItemEstoque item, ItemEstoqueService service) =>
@@ -71,6 +73,39 @@ public static class ItemEstoqueController
         .WithDescription("Obtém os detalhes de um item pelo seu ID.")
         .Produces<ItemEstoqueRecuperado>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+
+        app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, RequisicaoMovimentacao req, ItemEstoqueService service) =>
+        {
+            try
+            {
+                await service.MovimentarEstoque(itemEstoqueId, req.Quantidade, req.TipoMovimentacao, null);
+
+                return Results.Ok(new { mensagem = "Movimentação registada e estoque atualizado com sucesso." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Results.BadRequest(new { erro = ex.Message });
+            }
+        })
+        .WithTags("itens-estoque")
+        .WithSummary("Movimenta o estoque de um item")
+        .WithDescription("Altera a quantidade de estoque de um item via PATCH, gerando histórico automático.")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+
+        app.MapGet("v1/itens-estoque/{itemEstoqueId:guid}/historico", async (Guid itemEstoqueId, ItemEstoqueService service) =>
+        {
+            var result = await service.ObterHistorico(itemEstoqueId);
+
+            return Results.Ok(result);
+        })
+        .WithTags("itens-estoque")
+        .WithSummary("Obtém o histórico de movimentações do item")
+        .WithDescription("Lista todas as entradas e saídas que ocorreram para este item de estoque específico.")
+        .Produces<List<HistoricoRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
     }
 }

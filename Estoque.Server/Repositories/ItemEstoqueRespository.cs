@@ -200,6 +200,64 @@ public class ItemEstoqueRepository
         }
     }
 
+    public async Task<bool> MovimentarEstoque(Guid itemEstoqueId, decimal quantidadeMovimento, TipoMovimentacao tipoMovimentacao, Guid? usuarioId)
+    {
+        string operacao = tipoMovimentacao == TipoMovimentacao.Acrescimo ? "+" : "-";
+
+        string sql = $@"
+            WITH updated_item AS (
+                UPDATE 
+                    estoque.item_estoque
+                SET 
+                    quantidade = quantidade {operacao} @quantidade_movimento
+                WHERE 
+                    item_estoque_id = @item_estoque_id
+                    AND (quantidade {operacao} @quantidade_movimento) >= 0
+                RETURNING 
+                    item_estoque_id, 
+                    
+                    quantidade {(operacao == "+" ? "-" : "+")} @quantidade_movimento AS qtd_anterior, 
+                    quantidade AS qtd_resultante
+            )
+            INSERT INTO estoque.historico
+            (
+                item_estoque_id,
+                tipo_movimentacao,
+                usuario_id,
+                quantidade_anterior,
+                quantidade_resultante
+            )
+            SELECT
+                item_estoque_id,
+                @tipo_movimentacao,
+                @usuario_id,
+                qtd_anterior,
+                qtd_resultante
+            FROM
+                updated_item
+            RETURNING
+                item_estoque_id;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, _connection);
+
+            cmd.Parameters.AddWithValue("item_estoque_id", itemEstoqueId);
+            cmd.Parameters.AddWithValue("quantidade_movimento", quantidadeMovimento);
+            cmd.Parameters.AddWithValue("tipo_movimentacao", (int)tipoMovimentacao);
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId.HasValue ? (object)usuarioId.Value : DBNull.Value);
+
+            var result = await cmd.ExecuteScalarAsync();
+            return result != null;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
     private async Task EnsureOpenAsync()
     {
         if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();

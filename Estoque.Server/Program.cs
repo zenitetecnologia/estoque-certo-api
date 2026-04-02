@@ -32,7 +32,6 @@ builder.Services.AddScoped<EspacoRepository>();
 builder.Services.AddScoped<EspacoService>();
 //historico
 builder.Services.AddScoped<HistoricoRepository>();
-builder.Services.AddScoped<HistoricoService>();
 
 builder.Services.AddCors(options =>
 {
@@ -47,6 +46,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 app.UseDefaultFiles();
+
 app.MapStaticAssets();
 
 if (app.Environment.IsDevelopment())
@@ -57,18 +57,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("PermitirTudo");
 
-//app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapFallbackToFile("/index.html");
 
 app.MapEspacosEndpoints();
-app.MapHistoricoEndpoints();
 app.MapItemEstoqueEndpoints();
 app.MapUnidadeOrganizacionalEndpoints();
 app.MapUsuarioEndpoints();
-
 
 app.UseExceptionHandler(errorApp =>
 {

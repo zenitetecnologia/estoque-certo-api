@@ -13,12 +13,12 @@ public class HistoricoRepository
         _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
     }
 
-    public async Task<List<Historico>> ObterHistoricoPorItem(int idItemEstoque)
+    public async Task<List<HistoricoRecuperado>> ObterHistoricoPorItem(Guid itemEstoqueId)
     {
         const string sql = @"
             SELECT
-                id,
-                item_estoque_id
+                historico_id,
+                item_estoque_id,
                 tipo_movimentacao,
                 usuario_id,
                 data_hora,
@@ -27,7 +27,7 @@ public class HistoricoRepository
             FROM
                 estoque.historico
             WHERE
-                id_item_estoque = @id_item_estoque
+                item_estoque_id = @item_estoque_id
             ORDER BY
                 data_hora DESC;
         ";
@@ -37,79 +37,30 @@ public class HistoricoRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
-            cmd.Parameters.AddWithValue("id_item_estoque", idItemEstoque);
+            cmd.Parameters.AddWithValue("item_estoque_id", itemEstoqueId);
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
-            var historico = new List<Historico>();
+            var historicos = new List<HistoricoRecuperado>();
 
             while (await reader.ReadAsync())
             {
-                historico.Add(new Historico
+                historicos.Add(new HistoricoRecuperado
                 {
-                    HistoricoId = (int)reader["historico_id"],
-                    ItemEstoqueId = (int)reader["item_estoque_id"],
-                    TipoMovimentacao = (TipoMovimentacao)reader["tipo_movimentacao"],
-                    UsuarioId = (int)reader["usuario_id"],
-                    DataHora = (DateTime)reader["data_hora"],
-                    QuantidadeAnterior = (decimal)reader["quantidade_anterior"],
-                    QuantidadeResultante = (decimal)reader["quantidade_resultante"]
+                    HistoricoId = reader.GetGuid("historico_id"),
+                    ItemEstoqueId = reader.GetGuid("item_estoque_id"),
+                    TipoMovimentacao = (TipoMovimentacao)reader.GetInt32("tipo_movimentacao"),
+                    UsuarioId = reader.GetNullableGuid("usuario_id"),
+                    DataHora = reader.GetDateTime(reader.GetOrdinal("data_hora")),
+                    QuantidadeAnterior = reader.GetDecimal("quantidade_anterior"),
+                    QuantidadeResultante = reader.GetDecimal("quantidade_resultante")
                 });
             }
 
-            return historico;
+            return historicos;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
-    }
-
-    public async Task<int> RegistrarHistorico(Historico historico)
-    {
-        const string sql = @"
-            INSERT INTO estoque.historico
-            (
-                item_estoque_id
-                tipo_movimentacao,
-                usuario_id,
-                data_hora,
-                quantidade_anterior,
-                quantidade_resultante
-            )
-            VALUES
-            (
-                @item_estoque_id
-                @tipo_movimentacao,
-                @usuario_id,
-                @data_hora,
-                @quantidade_anterior,
-                @quantidade_resultante
-            )
-            RETURNING id;
-        ";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, _connection);
-
-            cmd.Parameters.AddWithValue("id_item_estoque", historico.ItemEstoqueId);
-            cmd.Parameters.AddWithValue("tipo_movimentacao", (int)historico.TipoMovimentacao);
-            cmd.Parameters.AddWithValue("usuario_id", historico.UsuarioId);
-            cmd.Parameters.AddWithValue("data_hora", historico.DataHora);
-            cmd.Parameters.AddWithValue("quantidade_anterior", historico.QuantidadeAnterior);
-            cmd.Parameters.AddWithValue("quantidade_resultante", historico.QuantidadeResultante);
-
-            var result = await cmd.ExecuteScalarAsync();
-
-            return (int)result!;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }

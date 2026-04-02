@@ -8,10 +8,12 @@ namespace Estoque.Services;
 public class ItemEstoqueService : BaseService
 {
     private readonly ItemEstoqueRepository _repository;
+    private readonly HistoricoRepository _historicoRepository;
 
-    public ItemEstoqueService(ItemEstoqueRepository repository)
+    public ItemEstoqueService(ItemEstoqueRepository repository, HistoricoRepository historicoRepository)
     {
         _repository = repository;
+        _historicoRepository = historicoRepository;
     }
 
     public async Task<Guid> CadastrarItemEstoque(ItemEstoque item)
@@ -66,7 +68,7 @@ public class ItemEstoqueService : BaseService
         {
             var affected = await _repository.ExcluirItemEstoque(itemEstoqueId);
 
-            if (affected <= 0) throw new NotFoundException("Item de estoque não encontrado para o ID informado.");
+            if (affected <= 0) throw new NotFoundException("Item não encontrado para o ID informado.");
 
             return affected;
         }
@@ -98,7 +100,7 @@ public class ItemEstoqueService : BaseService
         {
             var item = await _repository.ObterItem(itemEstoqueId);
 
-            if (item == null) throw new NotFoundException("Item de estoque não encontrado para o ID informado.");
+            if (item == null) throw new NotFoundException("Item não encontrado para o ID informado.");
 
             return item;
         }
@@ -109,6 +111,58 @@ public class ItemEstoqueService : BaseService
         catch (Exception ex)
         {
             throw new Exception($"Erro ao listar item por ID: {ex.Message}");
+        }
+    }
+
+    public async Task<List<HistoricoRecuperado>> ObterHistorico(Guid itemEstoqueId)
+    {
+        try
+        {
+            return await _historicoRepository.ObterHistoricoPorItem(itemEstoqueId);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao buscar histórico do item: {ex.Message}");
+        }
+    }
+
+    public async Task<bool> MovimentarEstoque(Guid itemEstoqueId, decimal quantidade, TipoMovimentacao tipo, Guid? usuarioId)
+    {
+        try
+        {
+            if (quantidade <= 0)
+            {
+                AddError("Quantidade", "A quantidade de movimentação deve ser maior que zero.");
+                throw new ValidationException(Errors);
+            }
+
+            var sucesso = await _repository.MovimentarEstoque(itemEstoqueId, quantidade, tipo, usuarioId);
+
+            if (!sucesso)
+            {
+                if (tipo == TipoMovimentacao.Subtracao)
+                    throw new InvalidOperationException("Estoque insuficiente para realizar esta saída ou item não encontrado.");
+                else
+                    throw new NotFoundException("Item não encontrado.");
+            }
+
+            return true;
+        }
+        catch (InvalidOperationException)
+        {
+            throw;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao movimentar estoque: {ex.Message}");
         }
     }
 

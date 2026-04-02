@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Estoque.models;
+namespace Estoque.Models;
 
 public class Espaco
 {

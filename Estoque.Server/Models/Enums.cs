@@ -18,6 +18,6 @@ public enum TipoUnidadeMedida
 
 public enum TipoMovimentacao
 {
-    Acrescimo,
-    Subtracao
+    Acrescimo = 1,
+    Subtracao = 2
 }

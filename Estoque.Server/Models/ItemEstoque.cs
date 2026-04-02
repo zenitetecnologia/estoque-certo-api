@@ -12,7 +12,7 @@ public class ItemEstoque
     public virtual Guid UnidadeOrganizacionalId { get; set; }
 
     [JsonPropertyOrder(3)]
-    public Guid EspacoId { get; set; }
+    public virtual Guid EspacoId { get; set; }
 
     [JsonPropertyOrder(4)]
     public string Descricao { get; set; } = string.Empty;
@@ -33,7 +33,6 @@ public class ItemEstoqueAtualizado : ItemEstoque
 
 public class ItemEstoqueRecuperado : ItemEstoque
 {
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     [JsonPropertyOrder(1)]
     public override Guid ItemEstoqueId { get; set; }
 }
