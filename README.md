@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS estoque.espaco (
 CREATE TABLE IF NOT EXISTS estoque.item_estoque (
     item_estoque_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     unidade_organizacional_id UUID NOT NULL,
-    espaco UUID NOT NULL, -- Convertido para UUID para referenciar a tabela de espaços
+    espaco_id UUID NOT NULL, -- CORREÇÃO: Alterado de 'espaco' para 'espaco_id'
     descricao TEXT NOT NULL,
     tipo_unidade_medida INTEGER NOT NULL, -- Enum mantido como INTEGER
     quantidade NUMERIC(18,4) NOT NULL DEFAULT 0,
@@ -92,8 +92,8 @@ CREATE TABLE IF NOT EXISTS estoque.item_estoque (
     CONSTRAINT fk_item_unidade FOREIGN KEY (unidade_organizacional_id) 
         REFERENCES estoque.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE,
         
-    -- Nova chave estrangeira para garantir integridade estrutural do espaço
-    CONSTRAINT fk_item_espaco FOREIGN KEY (espaco) 
+    -- Nova chave estrangeira atualizada para usar espaco_id
+    CONSTRAINT fk_item_espaco FOREIGN KEY (espaco_id) 
         REFERENCES estoque.espaco (espaco_id) ON DELETE RESTRICT
 );
 
