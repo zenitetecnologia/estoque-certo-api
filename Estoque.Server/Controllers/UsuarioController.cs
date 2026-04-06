@@ -54,7 +54,6 @@ public static class UsuarioController
             await service.ExcluirUsuario(usuarioId);
 
             return Results.Ok("Usuário excluído com sucesso.");
-
         })
         .WithTags("usuarios")
         .WithSummary("Exclui um usuário")
@@ -63,16 +62,15 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapGet("v1/usuarios", async (string? username, Guid? unidadeOrganizacionalId, UsuarioService service) =>
+        app.MapGet("v1/usuarios", async (string? username, string? unidadeOrganizacionalId, UsuarioService service) =>
         {
             var result = await service.ObterUsuarios(username, unidadeOrganizacionalId);
 
             return Results.Ok(result);
-
         })
         .WithTags("usuarios")
         .WithSummary("Retorna lista de usuários")
-        .WithDescription("Retorna uma lista com todos os usuários.")
+        .WithDescription("Retorna uma lista de usuários de acordo com os parâmetros informados.")
         .Produces<List<UsuarioRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 

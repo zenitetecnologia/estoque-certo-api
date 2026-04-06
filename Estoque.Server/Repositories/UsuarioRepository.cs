@@ -166,7 +166,7 @@ public class UsuarioRepository
         if (!string.IsNullOrWhiteSpace(username))
             sql += " AND username ILIKE @username";
 
-        if (unidadeOrganizacionalId.HasValue && unidadeOrganizacionalId.Value != Guid.Empty)
+        if (unidadeOrganizacionalId != null)
             sql += " AND unidade_organizacional_id = @unidade_id";
 
         sql += " ORDER BY nome;";
@@ -180,7 +180,7 @@ public class UsuarioRepository
             if (!string.IsNullOrWhiteSpace(username))
                 cmd.Parameters.AddWithValue("username", $"%{username}%");
 
-            if (unidadeOrganizacionalId.HasValue && unidadeOrganizacionalId.Value != Guid.Empty)
+            if (unidadeOrganizacionalId != null)
                 cmd.Parameters.AddWithValue("unidade_id", unidadeOrganizacionalId.Value);
 
             await using var reader = await cmd.ExecuteReaderAsync();
