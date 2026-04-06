@@ -109,7 +109,7 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<List<UsuarioRecuperado>> ObterUsuarios(string? username = null, string? unidadeOrganizacionalId = null)
+    public async Task<List<UsuarioRecuperado>> ObterUsuarios(string? username = null, string? unidadeOrganizacionalId = null, int skip = 0, int top = 50)
     {
         try
         {
@@ -117,7 +117,11 @@ public class UsuarioService : BaseService
 
             if (!string.IsNullOrEmpty(unidadeOrganizacionalId)) unidadeOrganizacionalIdAux = Guid.Parse(unidadeOrganizacionalId);
 
-            return await _repository.ObterUsuarios(username, unidadeOrganizacionalIdAux);
+            if (skip < 0) skip = 0;
+            if (top <= 0) top = 3;
+            if (top > 100) top = 100;
+
+            return await _repository.ObterUsuarios(username, unidadeOrganizacionalIdAux, skip, top);
         }
         catch (Exception ex)
         {

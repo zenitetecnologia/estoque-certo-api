@@ -146,7 +146,7 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<List<UsuarioRecuperado>> ObterUsuarios(string? username = null, Guid? unidadeOrganizacionalId = null)
+    public async Task<List<UsuarioRecuperado>> ObterUsuarios(string? username = null, Guid? unidadeOrganizacionalId = null, int skip = 0, int top = 3)
     {
         string sql = @"
             SELECT
@@ -169,7 +169,7 @@ public class UsuarioRepository
         if (unidadeOrganizacionalId != null)
             sql += " AND unidade_organizacional_id = @unidade_id";
 
-        sql += " ORDER BY nome;";
+        sql += " ORDER BY nome, username LIMIT @top OFFSET @skip;";
 
         try
         {
@@ -182,6 +182,9 @@ public class UsuarioRepository
 
             if (unidadeOrganizacionalId != null)
                 cmd.Parameters.AddWithValue("unidade_id", unidadeOrganizacionalId.Value);
+
+            cmd.Parameters.AddWithValue("top", top);
+            cmd.Parameters.AddWithValue("skip", skip);
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
