@@ -109,11 +109,11 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<List<UsuarioRecuperado>> ObterUsuarios()
+    public async Task<List<UsuarioRecuperado>> ObterUsuarios(string? username = null, Guid? unidadeOrganizacionalId = null)
     {
         try
         {
-            return await _repository.ObterUsuarios();
+            return await _repository.ObterUsuarios(username, unidadeOrganizacionalId);
         }
         catch (Exception ex)
         {

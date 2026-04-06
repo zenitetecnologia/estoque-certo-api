@@ -146,9 +146,9 @@ public class UsuarioRepository
         }
     }
 
-    public async Task<List<UsuarioRecuperado>> ObterUsuarios()
+    public async Task<List<UsuarioRecuperado>> ObterUsuarios(string? username = null, Guid? unidadeOrganizacionalId = null)
     {
-        const string sql = @"
+        string sql = @"
             SELECT
                 usuario_id,
                 username,
@@ -160,15 +160,29 @@ public class UsuarioRepository
                 valido
             FROM
                 estoque.usuario
-            ORDER BY
-                nome;
+            WHERE 1 = 1
         ";
+
+        if (!string.IsNullOrWhiteSpace(username))
+            sql += " AND username ILIKE @username";
+
+        if (unidadeOrganizacionalId.HasValue && unidadeOrganizacionalId.Value != Guid.Empty)
+            sql += " AND unidade_organizacional_id = @unidade_id";
+
+        sql += " ORDER BY nome;";
 
         try
         {
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
+
+            if (!string.IsNullOrWhiteSpace(username))
+                cmd.Parameters.AddWithValue("username", $"%{username}%");
+
+            if (unidadeOrganizacionalId.HasValue && unidadeOrganizacionalId.Value != Guid.Empty)
+                cmd.Parameters.AddWithValue("unidade_id", unidadeOrganizacionalId.Value);
+
             await using var reader = await cmd.ExecuteReaderAsync();
 
             var usuarios = new List<UsuarioRecuperado>();
