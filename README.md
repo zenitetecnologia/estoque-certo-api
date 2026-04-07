@@ -6,9 +6,9 @@ Siga os passos abaixo para preparar a base de dados:
 
 ## Passo 1: Subir o contentor do PostgreSQL
 
-Certifique-se de que tem o Docker Desktop instalado e a correr. Abra o seu terminal e execute o seguinte comando para baixar a imagem do Postgres e iniciar a base de dados `estoque` na porta `5432`:
+Certifique-se de que tem o Docker Desktop instalado e a correr. Abra o seu terminal e execute o seguinte comando para baixar a imagem do Postgres e iniciar a base de dados `estoque-certo` na porta `5432`:
 
-> docker run --name pg-estoque -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=estoque -p 5432:5432 -d postgres:latest
+> docker run --name pg-estoque -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=estoque-certo -p 5432:5432 -d postgres:latest
 
 ---
 
