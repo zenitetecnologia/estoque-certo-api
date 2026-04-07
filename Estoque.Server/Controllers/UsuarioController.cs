@@ -62,9 +62,9 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapGet("v1/usuarios", async (string? username, string? unidadeOrganizacionalId, UsuarioService service, int skip = 0, int top = 3) =>
+        app.MapGet("v1/usuarios", async (UsuarioService service, int skip = 0, int top = 3, string? username = null, string? unidadeOrganizacionalId = null) =>
         {
-            var result = await service.ObterUsuarios(username, unidadeOrganizacionalId, skip, top);
+            var result = await service.ObterUsuarios(skip, top, username, unidadeOrganizacionalId);
 
             return Results.Ok(result);
         })

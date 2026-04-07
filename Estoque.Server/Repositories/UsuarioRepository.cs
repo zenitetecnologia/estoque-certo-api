@@ -140,7 +140,7 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<List<UsuarioRecuperado>> ObterUsuarios(string? username = null, Guid? unidadeOrganizacionalId = null, int skip = 0, int top = 3)
+    public async Task<List<UsuarioRecuperado>> ObterUsuarios(int skip, int top, string? username = null, Guid? unidadeOrganizacionalId = null)
     {
         string sql = @"
             SELECT
@@ -163,7 +163,14 @@ public class UsuarioRepository : BaseRepository
         if (unidadeOrganizacionalId != null)
             sql += " AND unidade_organizacional_id = @unidade_id";
 
-        sql += " ORDER BY nome, username LIMIT @top OFFSET @skip;";
+        sql += @" ORDER BY
+                        nome,
+                        username
+                  LIMIT
+                        @top
+                  OFFSET
+                        @skip;
+        ";
 
         try
         {
@@ -171,12 +178,8 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            if (!string.IsNullOrWhiteSpace(username))
-                cmd.Parameters.AddWithValue("username", $"%{username}%");
-
-            if (unidadeOrganizacionalId != null)
-                cmd.Parameters.AddWithValue("unidade_id", unidadeOrganizacionalId.Value);
-
+            cmd.Parameters.AddWithValue("username", $"%{username}%");
+            cmd.Parameters.AddWithValue("unidade_id", unidadeOrganizacionalId);
             cmd.Parameters.AddWithValue("top", top);
             cmd.Parameters.AddWithValue("skip", skip);
 
