@@ -4,14 +4,9 @@ using System.Data;
 
 namespace Estoque.Server.Repositories;
 
-public class HistoricoRepository
+public class HistoricoRepository : BaseRepository
 {
-    private readonly NpgsqlConnection _connection;
-
-    public HistoricoRepository(IDbConnection connection)
-    {
-        _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
-    }
+    public HistoricoRepository(IDbConnection connection) : base(connection) { }
 
     public async Task<List<HistoricoRecuperado>> ObterHistoricoPorItem(Guid itemEstoqueId)
     {
@@ -25,7 +20,7 @@ public class HistoricoRepository
                 quantidade_anterior,
                 quantidade_resultante
             FROM
-                estoque.historico
+                estoque_certo.historico
             WHERE
                 item_estoque_id = @item_estoque_id
             ORDER BY
@@ -36,7 +31,7 @@ public class HistoricoRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.AddWithValue("item_estoque_id", itemEstoqueId);
 
             await using var reader = await cmd.ExecuteReaderAsync();
@@ -63,10 +58,5 @@ public class HistoricoRepository
         {
             throw;
         }
-    }
-
-    private async Task EnsureOpenAsync()
-    {
-        if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
     }
 }

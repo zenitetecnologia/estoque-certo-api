@@ -4,14 +4,9 @@ using System.Data;
 
 namespace Estoque.Server.Repositories;
 
-public class EspacoRepository
+public class EspacoRepository : BaseRepository
 {
-    private readonly NpgsqlConnection _connection;
-
-    public EspacoRepository(IDbConnection connection)
-    {
-        _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
-    }
+    public EspacoRepository(IDbConnection connection) : base(connection) { }
 
     public async Task<List<EspacoRecuperado>> ObterEspacos()
     {
@@ -22,7 +17,7 @@ public class EspacoRepository
                 nome,
                 descricao
             FROM
-                estoque.espaco
+                estoque_certo.espaco
             ORDER BY
                 nome;
         ";
@@ -31,7 +26,7 @@ public class EspacoRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             await using var reader = await cmd.ExecuteReaderAsync();
 
             var espacos = new List<EspacoRecuperado>();
@@ -64,7 +59,7 @@ public class EspacoRepository
                 nome,
                 descricao
             FROM
-                estoque.espaco
+                estoque_certo.espaco
             WHERE
                 espaco_id = @id
             LIMIT 1;
@@ -74,7 +69,7 @@ public class EspacoRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.AddWithValue("id", espacoId);
 
             await using var reader = await cmd.ExecuteReaderAsync();
@@ -98,7 +93,7 @@ public class EspacoRepository
     public async Task<Guid> CadastrarEspaco(Espaco espaco)
     {
         const string sql = @"
-            INSERT INTO estoque.espaco
+            INSERT INTO estoque_certo.espaco
             (
                 unidade_organizacional_id,
                 nome,
@@ -117,7 +112,7 @@ public class EspacoRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("unidade_organizacional_id", espaco.UnidadeOrganizacionalId);
             cmd.Parameters.AddWithValue("nome", espaco.Nome);
@@ -137,7 +132,7 @@ public class EspacoRepository
     {
         const string sql = @"
             UPDATE
-                estoque.espaco
+                estoque_certo.espaco
             SET
                 nome = @nome,
                 descricao = @descricao
@@ -149,7 +144,7 @@ public class EspacoRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("id", espacoId);
             cmd.Parameters.AddWithValue("nome", espaco.Nome);
@@ -165,13 +160,13 @@ public class EspacoRepository
 
     public async Task<int> ExcluirEspaco(Guid espacoId)
     {
-        const string sql = "DELETE FROM estoque.espaco WHERE espaco_id = @id";
+        const string sql = "DELETE FROM estoque_certo.espaco WHERE espaco_id = @id";
 
         try
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.AddWithValue("id", espacoId);
 
             return await cmd.ExecuteNonQueryAsync();
@@ -180,10 +175,5 @@ public class EspacoRepository
         {
             throw;
         }
-    }
-
-    private async Task EnsureOpenAsync()
-    {
-        if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
     }
 }

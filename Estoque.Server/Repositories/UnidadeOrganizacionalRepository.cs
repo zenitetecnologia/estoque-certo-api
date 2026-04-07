@@ -4,19 +4,14 @@ using System.Data;
 
 namespace Estoque.Server.Repositories;
 
-public class UnidadeOrganizacionalRepository
+public class UnidadeOrganizacionalRepository : BaseRepository
 {
-    private readonly NpgsqlConnection _connection;
-
-    public UnidadeOrganizacionalRepository(IDbConnection connection)
-    {
-        _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
-    }
+    public UnidadeOrganizacionalRepository(IDbConnection connection) : base(connection) { }
 
     public async Task<Guid> CriarUnidade(UnidadeOrganizacional unidade)
     {
         const string sql = @"
-            INSERT INTO estoque.unidade_organizacional 
+            INSERT INTO estoque_certo.unidade_organizacional 
             (
                 id_matriz,
                 Cnpj,
@@ -55,7 +50,7 @@ public class UnidadeOrganizacionalRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz.HasValue ? (object)unidade.IdMatriz.Value : DBNull.Value);
             cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
@@ -85,7 +80,7 @@ public class UnidadeOrganizacionalRepository
     {
         const string sql = @"
         UPDATE
-            estoque.unidade_organizacional
+            estoque_certo.unidade_organizacional
         SET
             id_matriz = @id_matriz,
             Cnpj = @Cnpj,
@@ -108,7 +103,7 @@ public class UnidadeOrganizacionalRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
 
@@ -153,7 +148,7 @@ public class UnidadeOrganizacionalRepository
                 telefone,
                 email
             FROM
-                estoque.unidade_organizacional
+                estoque_certo.unidade_organizacional
             ORDER BY
                 razao_social;
         ";
@@ -162,7 +157,7 @@ public class UnidadeOrganizacionalRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             await using var reader = await cmd.ExecuteReaderAsync();
 
             var unidades = new List<UnidadeOrganizacionalRecuperado>();
@@ -214,7 +209,7 @@ public class UnidadeOrganizacionalRepository
                 telefone,
                 email
             FROM
-                estoque.unidade_organizacional
+                estoque_certo.unidade_organizacional
             WHERE
                 unidade_organizacional_id = @unidade_organizacional_id
             LIMIT 1;
@@ -224,7 +219,7 @@ public class UnidadeOrganizacionalRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionald);
 
             await using var reader = await cmd.ExecuteReaderAsync();
@@ -257,13 +252,13 @@ public class UnidadeOrganizacionalRepository
 
     public async Task<int> ExcluirUnidade(Guid unidadeOrganizacionalId)
     {
-        const string sql = "DELETE FROM estoque.unidade_organizacional WHERE unidade_organizacional_id = @unidade_organizacional_id";
+        const string sql = "DELETE FROM estoque_certo.unidade_organizacional WHERE unidade_organizacional_id = @unidade_organizacional_id";
 
         try
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
 
             return await cmd.ExecuteNonQueryAsync();
@@ -280,7 +275,7 @@ public class UnidadeOrganizacionalRepository
             SELECT
                 1
             FROM
-                estoque.unidade_organizacional
+                estoque_certo.unidade_organizacional
             WHERE
                 Cnpj = @Cnpj
             AND
@@ -292,7 +287,7 @@ public class UnidadeOrganizacionalRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.AddWithValue("Cnpj", Cnpj);
             cmd.Parameters.AddWithValue("ignoreunidade_organizacional_id", ignoreId);
 
@@ -303,10 +298,5 @@ public class UnidadeOrganizacionalRepository
         {
             throw;
         }
-    }
-
-    private async Task EnsureOpenAsync()
-    {
-        if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
     }
 }

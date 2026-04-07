@@ -4,14 +4,10 @@ using System.Data;
 
 namespace Estoque.Server.Repositories;
 
-public class ItemEstoqueRepository
+public class ItemEstoqueRepository : BaseRepository
 {
-    private readonly NpgsqlConnection _connection;
+    public ItemEstoqueRepository(IDbConnection connection) : base(connection) { }
 
-    public ItemEstoqueRepository(IDbConnection connection)
-    {
-        _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
-    }
 
     public async Task<List<ItemEstoqueRecuperado>> ObterItens()
     {
@@ -24,7 +20,7 @@ public class ItemEstoqueRepository
                 tipo_unidade_medida,
                 quantidade
             FROM
-                estoque.item_estoque
+                estoque_certo.item_estoque
             ORDER BY
                 descricao;
         ";
@@ -33,7 +29,7 @@ public class ItemEstoqueRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             await using var reader = await cmd.ExecuteReaderAsync();
 
             var itens = new List<ItemEstoqueRecuperado>();
@@ -70,7 +66,7 @@ public class ItemEstoqueRepository
                 tipo_unidade_medida,
                 quantidade
             FROM
-                estoque.item_estoque
+                estoque_certo.item_estoque
             WHERE
                 item_estoque_id = @id
             LIMIT 1;
@@ -80,7 +76,7 @@ public class ItemEstoqueRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.AddWithValue("id", itemEstoqueId);
 
             await using var reader = await cmd.ExecuteReaderAsync();
@@ -106,7 +102,7 @@ public class ItemEstoqueRepository
     public async Task<Guid> CadastrarItemEstoque(ItemEstoque item)
     {
         const string sql = @"
-            INSERT INTO estoque.item_estoque
+            INSERT INTO estoque_certo.item_estoque
             (
                 unidade_organizacional_id,
                 espaco_id,
@@ -129,7 +125,7 @@ public class ItemEstoqueRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("unidade_organizacional_id", item.UnidadeOrganizacionalId);
             cmd.Parameters.AddWithValue("espaco_id", item.EspacoId);
@@ -151,7 +147,7 @@ public class ItemEstoqueRepository
     {
         const string sql = @"
             UPDATE
-                estoque.item_estoque
+                estoque_certo.item_estoque
             SET
                 espaco_id = @espaco_id,
                 descricao = @descricao,
@@ -165,7 +161,7 @@ public class ItemEstoqueRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("id", itemEstoqueId);
             cmd.Parameters.AddWithValue("espaco_id", item.EspacoId);
@@ -183,13 +179,13 @@ public class ItemEstoqueRepository
 
     public async Task<int> ExcluirItemEstoque(Guid itemEstoqueId)
     {
-        const string sql = "DELETE FROM estoque.item_estoque WHERE item_estoque_id = @id";
+        const string sql = "DELETE FROM estoque_certo.item_estoque WHERE item_estoque_id = @id";
 
         try
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.AddWithValue("id", itemEstoqueId);
 
             return await cmd.ExecuteNonQueryAsync();
@@ -207,7 +203,7 @@ public class ItemEstoqueRepository
         string sql = $@"
             WITH updated_item AS (
                 UPDATE 
-                    estoque.item_estoque
+                    estoque_certo.item_estoque
                 SET 
                     quantidade = quantidade {operacao} @quantidade_movimento
                 WHERE 
@@ -219,7 +215,7 @@ public class ItemEstoqueRepository
                     quantidade {(operacao == "+" ? "-" : "+")} @quantidade_movimento AS qtd_anterior, 
                     quantidade AS qtd_resultante
             )
-            INSERT INTO estoque.historico
+            INSERT INTO estoque_certo.historico
             (
                 item_estoque_id,
                 tipo_movimentacao,
@@ -242,7 +238,7 @@ public class ItemEstoqueRepository
         try
         {
             await EnsureOpenAsync();
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("item_estoque_id", itemEstoqueId);
             cmd.Parameters.AddWithValue("quantidade_movimento", quantidadeMovimento);
@@ -256,10 +252,5 @@ public class ItemEstoqueRepository
         {
             throw;
         }
-    }
-
-    private async Task EnsureOpenAsync()
-    {
-        if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
     }
 }
