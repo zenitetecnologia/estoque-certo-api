@@ -1,0 +1,164 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: estoque-certo
+meta:
+  id: wrk_5ed8700748b4459ea2eb660e2200c1eb
+  created: 1775585088623
+  modified: 1775585088623
+  description: ""
+collection:
+  - url: "{{url}}/v1/usuarios"
+    name: usuarios-400
+    meta:
+      id: req_d0531baff18846d387dcd7f379497f05
+      created: 1775585256048
+      modified: 1775586348758
+      isPrivate: false
+      description: ""
+      sortKey: -1775585256048
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
+          "username": "",
+          "senha": "",
+          "nome": "",
+          "telefone": ""
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{url}}/v1/usuarios"
+    name: usuarios-500
+    meta:
+      id: req_72bbb17acda74ca59e17b1f0768775db
+      created: 1775585735184
+      modified: 1775585745645
+      isPrivate: false
+      description: ""
+      sortKey: -1775579032296
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "unidadeOrganizacionalId": "",
+          "username": "",
+          "senha": "",
+          "nome": "",
+          "telefone": ""
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{url}}/v1/usuarios"
+    name: usuarios-201
+    meta:
+      id: req_866eef86bf6d4959b717aa29ec9f2b56
+      created: 1775586371894
+      modified: 1775586423527
+      isPrivate: false
+      description: ""
+      sortKey: -1775585256148
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
+          "username": "cristiano.ronaldo",
+          "senha": "cr7@melhordomundo",
+          "nome": "Cristiano Ronaldo",
+          "telefone": "37988779966"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{url}}/v1/usuarios"
+    name: usuarios-usuario-existente-400
+    meta:
+      id: req_fdf7402b55d04844a1ac4f0e76f6820f
+      created: 1775587645021
+      modified: 1775587645021
+      isPrivate: false
+      description: ""
+      sortKey: -1775585256098
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
+          "username": "cristiano.ronaldo",
+          "senha": "cr7@melhordomundo",
+          "nome": "Cristiano Ronaldo",
+          "telefone": "37988779966"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_58a1e423f45a35afcf4f01b0a7f65505faded2a5
+    created: 1775585088758
+    modified: 1775585088758
+environments:
+  name: dev
+  meta:
+    id: env_58a1e423f45a35afcf4f01b0a7f65505faded2a5
+    created: 1775585088646
+    modified: 1775585243399
+    isPrivate: false
+  data:
+    url: http://localhost:5120

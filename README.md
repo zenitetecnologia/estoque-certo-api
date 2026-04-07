@@ -30,10 +30,10 @@ Abra um novo Editor SQL na sua ligação e execute o script abaixo. O script ir�
 
 ```sql
 -- 1. Criar o Esquema Principal
-CREATE SCHEMA IF NOT EXISTS estoque;
+CREATE SCHEMA IF NOT EXISTS estoque_certo;
 
 -- 2. Tabela de Unidades Organizacionais (Matriz e Filiais)
-CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
+CREATE TABLE IF NOT EXISTS estoque_certo.unidade_organizacional (
     unidade_organizacional_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_matriz UUID,
     cnpj VARCHAR(20),
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS estoque.unidade_organizacional (
 );
 
 -- 3. Tabela de Usuários (Relação 1:N direta com Unidade Organizacional)
-CREATE TABLE IF NOT EXISTS estoque.usuario (
+CREATE TABLE IF NOT EXISTS estoque_certo.usuario (
     usuario_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR(100) NOT NULL,
     senha TEXT NOT NULL,
@@ -66,22 +66,22 @@ CREATE TABLE IF NOT EXISTS estoque.usuario (
     
     -- Chave estrangeira para garantir a integridade referencial
     CONSTRAINT fk_usuario_unidade FOREIGN KEY (unidade_organizacional_id) 
-        REFERENCES estoque.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
+        REFERENCES estoque_certo.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
 );
 
 -- 4. Tabela de Espaços (Locais físicos de armazenamento)
-CREATE TABLE IF NOT EXISTS estoque.espaco (
+CREATE TABLE IF NOT EXISTS estoque_certo.espaco (
     espaco_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     unidade_organizacional_id UUID NOT NULL,
     nome VARCHAR(150) NOT NULL,
     descricao TEXT,
     
     CONSTRAINT fk_espaco_unidade FOREIGN KEY (unidade_organizacional_id) 
-        REFERENCES estoque.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
+        REFERENCES estoque_certo.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
 );
 
 -- 5. Tabela de Itens de Estoque (Produtos)
-CREATE TABLE IF NOT EXISTS estoque.item_estoque (
+CREATE TABLE IF NOT EXISTS estoque_certo.item_estoque (
     item_estoque_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     unidade_organizacional_id UUID NOT NULL,
     espaco_id UUID NOT NULL, -- CORREÇÃO: Alterado de 'espaco' para 'espaco_id'
@@ -90,15 +90,15 @@ CREATE TABLE IF NOT EXISTS estoque.item_estoque (
     quantidade NUMERIC(18,4) NOT NULL DEFAULT 0,
     
     CONSTRAINT fk_item_unidade FOREIGN KEY (unidade_organizacional_id) 
-        REFERENCES estoque.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE,
+        REFERENCES estoque_certo.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE,
         
     -- Nova chave estrangeira atualizada para usar espaco_id
     CONSTRAINT fk_item_espaco FOREIGN KEY (espaco_id) 
-        REFERENCES estoque.espaco (espaco_id) ON DELETE RESTRICT
+        REFERENCES estoque_certo.espaco (espaco_id) ON DELETE RESTRICT
 );
 
 -- 6. Tabela de Histórico (Auditoria de Movimentações)
-CREATE TABLE IF NOT EXISTS estoque.historico (
+CREATE TABLE IF NOT EXISTS estoque_certo.historico (
     historico_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     item_estoque_id UUID NOT NULL,
     tipo_movimentacao INTEGER NOT NULL, -- Enum mantido como INTEGER
@@ -108,8 +108,23 @@ CREATE TABLE IF NOT EXISTS estoque.historico (
     quantidade_resultante NUMERIC(18,4) NOT NULL,
     
     CONSTRAINT fk_historico_item FOREIGN KEY (item_estoque_id) 
-        REFERENCES estoque.item_estoque (item_estoque_id) ON DELETE CASCADE,
+        REFERENCES estoque_certo.item_estoque (item_estoque_id) ON DELETE CASCADE,
         
     CONSTRAINT fk_historico_usuario FOREIGN KEY (usuario_id) 
-        REFERENCES estoque.usuario (usuario_id) ON DELETE SET NULL
+        REFERENCES estoque_certo.usuario (usuario_id) ON DELETE SET NULL
+);
+
+INSERT INTO estoque_certo.unidade_organizacional
+(
+unidade_organizacional_id,
+razao_social,
+nome_fantasia,
+cnpj
+)
+VALUES
+(
+'e286f99e-5075-4b73-96d9-af462c36a5a6',
+'Zênite Tecnologia LTDA',
+'Zênite Tecnologia',
+'60935686000134'
 );

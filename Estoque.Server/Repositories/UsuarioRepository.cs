@@ -4,19 +4,14 @@ using System.Data;
 
 namespace Estoque.Server.Repositories;
 
-public class UsuarioRepository
+public class UsuarioRepository : BaseRepository
 {
-    private readonly NpgsqlConnection _connection;
-
-    public UsuarioRepository(IDbConnection connection)
-    {
-        _connection = (NpgsqlConnection)connection ?? throw new ArgumentNullException(nameof(connection));
-    }
+    public UsuarioRepository(IDbConnection connection) : base(connection) { }
 
     public async Task<Guid> CadastrarUsuario(Usuario usuario)
     {
         const string sql = @"
-            INSERT INTO estoque.usuario
+            INSERT INTO estoque_certo.usuario
             (
                 username,
                 senha,
@@ -43,7 +38,7 @@ public class UsuarioRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("username", usuario.Username);
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
@@ -67,7 +62,7 @@ public class UsuarioRepository
     {
         const string sql = @"
             UPDATE
-                estoque.usuario
+                estoque_certo.usuario
             SET
                 username = @username,
                 senha = @senha,
@@ -81,7 +76,7 @@ public class UsuarioRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
             cmd.Parameters.AddWithValue("username", usuario.Username);
@@ -110,7 +105,7 @@ public class UsuarioRepository
                 unidade_organizacional_id,
                 valido
             FROM
-                estoque.usuario
+                estoque_certo.usuario
             WHERE
                 usuario_id = @usuario_id
             LIMIT 1;
@@ -120,7 +115,7 @@ public class UsuarioRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
             await using var reader = await cmd.ExecuteReaderAsync();
@@ -158,7 +153,7 @@ public class UsuarioRepository
                 unidade_organizacional_id,
                 valido
             FROM
-                estoque.usuario
+                estoque_certo.usuario
             WHERE 1 = 1
         ";
 
@@ -174,7 +169,7 @@ public class UsuarioRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             if (!string.IsNullOrWhiteSpace(username))
                 cmd.Parameters.AddWithValue("username", $"%{username}%");
@@ -218,7 +213,7 @@ public class UsuarioRepository
             SELECT
                 1
             FROM
-                estoque.usuario
+                estoque_certo.usuario
             WHERE
                 username = @username
             AND
@@ -232,7 +227,7 @@ public class UsuarioRepository
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("username", username);
             cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
@@ -250,13 +245,13 @@ public class UsuarioRepository
 
     public async Task<int> ValidarAcesso(Guid usuarioId)
     {
-        const string sql = "UPDATE estoque.usuario SET valido = true WHERE usuario_id = @usuario_id";
+        const string sql = "UPDATE estoque_certo.usuario SET valido = true WHERE usuario_id = @usuario_id";
 
         try
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
@@ -270,13 +265,13 @@ public class UsuarioRepository
 
     public async Task<int> ExcluirUsuario(Guid usuarioId)
     {
-        const string sql = "DELETE FROM estoque.usuario WHERE usuario_id = @usuario_id";
+        const string sql = "DELETE FROM estoque_certo.usuario WHERE usuario_id = @usuario_id";
 
         try
         {
             await EnsureOpenAsync();
 
-            await using var cmd = new NpgsqlCommand(sql, _connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
@@ -286,10 +281,5 @@ public class UsuarioRepository
         {
             throw;
         }
-    }
-
-    private async Task EnsureOpenAsync()
-    {
-        if (_connection.State != ConnectionState.Open) await _connection.OpenAsync();
     }
 }
