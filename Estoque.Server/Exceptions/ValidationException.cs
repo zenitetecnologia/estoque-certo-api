@@ -1,4 +1,6 @@
-﻿namespace Estoque.Server.Validations;
+﻿using Estoque.Server.Validations;
+
+namespace Estoque.Server.Exceptions;
 
 public class ValidationException : Exception
 {

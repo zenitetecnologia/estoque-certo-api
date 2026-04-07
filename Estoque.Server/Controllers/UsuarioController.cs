@@ -1,8 +1,8 @@
 ﻿using Estoque.Server.Models;
+using Estoque.Server.Services;
 using Estoque.Server.Validations;
-using Estoque.Services;
 
-namespace Estoque.Controllers;
+namespace Estoque.Server.Controllers;
 
 public static class UsuarioController
 {

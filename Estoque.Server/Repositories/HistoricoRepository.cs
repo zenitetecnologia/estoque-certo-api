@@ -1,8 +1,8 @@
-﻿using Estoque.Models;
+﻿using Estoque.Server.Models;
 using Npgsql;
 using System.Data;
 
-namespace Estoque.Repositories;
+namespace Estoque.Server.Repositories;
 
 public class HistoricoRepository
 {
@@ -50,7 +50,7 @@ public class HistoricoRepository
                     HistoricoId = reader.GetGuid("historico_id"),
                     ItemEstoqueId = reader.GetGuid("item_estoque_id"),
                     TipoMovimentacao = (TipoMovimentacao)reader.GetInt32("tipo_movimentacao"),
-                    UsuarioId = reader.GetNullableGuid("usuario_id"),
+                    UsuarioId = reader.GetGuidNullable("usuario_id"),
                     DataHora = reader.GetDateTime(reader.GetOrdinal("data_hora")),
                     QuantidadeAnterior = reader.GetDecimal("quantidade_anterior"),
                     QuantidadeResultante = reader.GetDecimal("quantidade_resultante")

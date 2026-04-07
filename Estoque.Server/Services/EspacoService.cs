@@ -1,9 +1,8 @@
-﻿using Estoque.Models;
-using Estoque.Repositories;
-using Estoque.Server.Services;
-using Estoque.Server.Validations;
+﻿using Estoque.Server.Exceptions;
+using Estoque.Server.Models;
+using Estoque.Server.Repositories;
 
-namespace Estoque.Services;
+namespace Estoque.Server.Services;
 
 public class EspacoService : BaseService
 {

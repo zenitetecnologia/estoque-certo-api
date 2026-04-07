@@ -1,9 +1,9 @@
-﻿using Estoque.Models;
-using Estoque.Repositories;
-using Estoque.Server.Services;
+﻿using Estoque.Server.Exceptions;
+using Estoque.Server.Models;
+using Estoque.Server.Repositories;
 using Estoque.Server.Validations;
 
-namespace Estoque.Services;
+namespace Estoque.Server.Services;
 
 public class UnidadeOrganizacionalService : BaseService
 {
@@ -122,7 +122,7 @@ public class UnidadeOrganizacionalService : BaseService
 
         if (!string.IsNullOrWhiteSpace(unidade.Cnpj))
         {
-            if (!RulleValidation.CnpjValido(unidade.Cnpj))
+            if (!RuleValidation.CnpjValido(unidade.Cnpj))
             {
                 AddError(nameof(unidade.Cnpj), "o cnpj informado não é válido.");
             }

@@ -1,8 +1,8 @@
-﻿using Estoque.Models;
+﻿using Estoque.Server.Models;
 using Npgsql;
 using System.Data;
 
-namespace Estoque.Repositories;
+namespace Estoque.Server.Repositories;
 
 public class ItemEstoqueRepository
 {

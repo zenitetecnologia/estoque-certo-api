@@ -1,8 +1,8 @@
-﻿using Estoque.Models;
+﻿using Estoque.Server.Models;
 using Npgsql;
 using System.Data;
 
-namespace Estoque.Repositories;
+namespace Estoque.Server.Repositories;
 
 public class UnidadeOrganizacionalRepository
 {
@@ -172,7 +172,7 @@ public class UnidadeOrganizacionalRepository
                 unidades.Add(new UnidadeOrganizacionalRecuperado
                 {
                     UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                    IdMatriz = reader.GetNullableGuid("id_matriz"),
+                    IdMatriz = reader.GetGuidNullable("id_matriz"),
                     Cnpj = reader.GetString("cnpj"),
                     RazaoSocial = reader.GetString("razao_social"),
                     NomeFantasia = reader.GetString("nome_fantasia"),
@@ -234,7 +234,7 @@ public class UnidadeOrganizacionalRepository
             return new UnidadeOrganizacionalRecuperado
             {
                 UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                IdMatriz = reader.GetNullableGuid("id_matriz"),
+                IdMatriz = reader.GetGuidNullable("id_matriz"),
                 Cnpj = reader.GetString("cnpj"),
                 RazaoSocial = reader.GetString("razao_social"),
                 NomeFantasia = reader.GetString("nome_fantasia"),

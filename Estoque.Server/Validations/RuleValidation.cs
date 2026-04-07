@@ -2,7 +2,7 @@
 
 namespace Estoque.Server.Validations;
 
-public class RulleValidation
+public class RuleValidation
 {
     public static bool CnpjValido(string cnpj)
     {

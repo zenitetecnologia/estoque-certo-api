@@ -1,9 +1,8 @@
-﻿using Estoque.Models;
-using Estoque.Server.Models;
+﻿using Estoque.Server.Models;
 using Npgsql;
 using System.Data;
 
-namespace Estoque.Repositories;
+namespace Estoque.Server.Repositories;
 
 public class UsuarioRepository
 {
@@ -234,6 +233,7 @@ public class UsuarioRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
+
             cmd.Parameters.AddWithValue("username", username);
             cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
             cmd.Parameters.AddWithValue("ignoreId", ignoreId);
@@ -255,6 +255,7 @@ public class UsuarioRepository
         try
         {
             await EnsureOpenAsync();
+
             await using var cmd = new NpgsqlCommand(sql, _connection);
 
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
@@ -276,6 +277,7 @@ public class UsuarioRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, _connection);
+
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
             return await cmd.ExecuteNonQueryAsync();

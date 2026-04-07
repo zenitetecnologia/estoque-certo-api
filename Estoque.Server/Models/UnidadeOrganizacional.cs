@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Estoque.Models;
+namespace Estoque.Server.Models;
 
 public class UnidadeOrganizacional
 {

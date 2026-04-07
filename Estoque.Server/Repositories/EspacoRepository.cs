@@ -1,8 +1,8 @@
-﻿using Estoque.Models;
+﻿using Estoque.Server.Models;
 using Npgsql;
 using System.Data;
 
-namespace Estoque.Repositories;
+namespace Estoque.Server.Repositories;
 
 public class EspacoRepository
 {
@@ -43,7 +43,7 @@ public class EspacoRepository
                     EspacoId = reader.GetGuid(reader.GetOrdinal("espaco_id")),
                     UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
                     Nome = reader.GetString(reader.GetOrdinal("nome")),
-                    Descricao = reader.GetSafeString("descricao")
+                    Descricao = reader.GetStringSafe("descricao")
                 });
             }
 
@@ -86,7 +86,7 @@ public class EspacoRepository
                 EspacoId = reader.GetGuid(reader.GetOrdinal("espaco_id")),
                 UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
                 Nome = reader.GetString(reader.GetOrdinal("nome")),
-                Descricao = reader.GetSafeString("descricao")
+                Descricao = reader.GetStringSafe("descricao")
             };
         }
         catch
