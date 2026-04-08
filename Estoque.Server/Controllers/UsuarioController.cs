@@ -8,7 +8,7 @@ public static class UsuarioController
 {
     public static void MapUsuarioEndpoints(this WebApplication app)
     {
-        app.MapPost("v1/usuarios/", async (Usuario usuario, UsuarioService service) =>
+        app.MapPost("v1/usuarios/", async (UsuarioService service, Usuario usuario) =>
         {
             Guid usuarioId = await service.CadastrarUsuario(usuario);
 
@@ -21,7 +21,7 @@ public static class UsuarioController
        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
        .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapPut("v1/usuarios/{usuarioId:guid}", async (Guid usuarioId, UsuarioAtualizado usuario, UsuarioService service) =>
+        app.MapPut("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId, UsuarioAtualizado usuario) =>
         {
             await service.AtualizarUsuario(usuario, usuarioId);
 
@@ -35,7 +35,7 @@ public static class UsuarioController
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapPatch("v1/usuarios/{usuarioId:guid}", async (Guid usuarioId, UsuarioService service) =>
+        app.MapPatch("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId) =>
         {
             await service.ValidarAcesso(usuarioId);
 
@@ -49,7 +49,7 @@ public static class UsuarioController
        .Produces<string>(StatusCodes.Status404NotFound)
        .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapDelete("v1/usuarios/{usuarioId:guid}", async (Guid usuarioId, UsuarioService service) =>
+        app.MapDelete("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId) =>
         {
             await service.ExcluirUsuario(usuarioId);
 
@@ -74,7 +74,7 @@ public static class UsuarioController
         .Produces<List<UsuarioRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapGet("v1/usuarios/{usuarioId:guid}", async (Guid usuarioId, UsuarioService service) =>
+        app.MapGet("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId) =>
         {
             var result = await service.ObterUsuario(usuarioId);
 

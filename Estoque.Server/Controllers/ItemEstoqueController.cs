@@ -10,7 +10,7 @@ public static class ItemEstoqueController
 
     public static void MapItemEstoqueEndpoints(this WebApplication app)
     {
-        app.MapPost("v1/itens-estoque", async (ItemEstoque item, ItemEstoqueService service) =>
+        app.MapPost("v1/itens-estoque", async (ItemEstoqueService service, ItemEstoque item) =>
         {
             Guid itemEstoqueId = await service.CadastrarItemEstoque(item);
 
@@ -23,7 +23,7 @@ public static class ItemEstoqueController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapPut("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, ItemEstoqueAtualizado item, ItemEstoqueService service) =>
+        app.MapPut("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, Guid itemEstoqueId, ItemEstoqueAtualizado item) =>
         {
             await service.AtualizarItemEstoque(item, itemEstoqueId);
 
@@ -37,7 +37,7 @@ public static class ItemEstoqueController
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapDelete("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, ItemEstoqueService service) =>
+        app.MapDelete("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, Guid itemEstoqueId) =>
         {
             await service.ExcluirItemEstoque(itemEstoqueId);
 
@@ -62,7 +62,7 @@ public static class ItemEstoqueController
         .Produces<List<ItemEstoqueRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapGet("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, ItemEstoqueService service) =>
+        app.MapGet("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, Guid itemEstoqueId) =>
         {
             var result = await service.ObterItem(itemEstoqueId);
 
@@ -75,7 +75,7 @@ public static class ItemEstoqueController
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}", async (Guid itemEstoqueId, RequisicaoMovimentacao req, ItemEstoqueService service) =>
+        app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, Guid itemEstoqueId, RequisicaoMovimentacao req) =>
         {
             try
             {
@@ -96,7 +96,7 @@ public static class ItemEstoqueController
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        app.MapGet("v1/itens-estoque/{itemEstoqueId:guid}/historico", async (Guid itemEstoqueId, ItemEstoqueService service) =>
+        app.MapGet("v1/itens-estoque/{itemEstoqueId:guid}/historico", async (ItemEstoqueService service, Guid itemEstoqueId) =>
         {
             var result = await service.ObterHistorico(itemEstoqueId);
 
