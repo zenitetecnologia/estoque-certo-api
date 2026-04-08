@@ -2,161 +2,262 @@ type: collection.insomnia.rest/5.0
 schema_version: "5.1"
 name: estoque-certo
 meta:
-  id: wrk_5ed8700748b4459ea2eb660e2200c1eb
-  created: 1775585088623
-  modified: 1775585088623
+  id: wrk_e975362bae0c4d76bdafa2f15c8e7766
+  created: 1775675874437
+  modified: 1775675874437
   description: ""
 collection:
-  - url: "{{url}}/v1/usuarios"
-    name: usuarios-400
+  - name: usuarios
     meta:
-      id: req_d0531baff18846d387dcd7f379497f05
-      created: 1775585256048
-      modified: 1775586348758
-      isPrivate: false
+      id: fld_46ab38489c214a00973e57857120b13d
+      created: 1775589075182
+      modified: 1775589111706
+      sortKey: -1775589075182
       description: ""
-      sortKey: -1775585256048
-    method: POST
-    body:
-      mimeType: application/json
-      text: |-
-        {
-          "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
-          "username": "",
-          "senha": "",
-          "nome": "",
-          "telefone": ""
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-      - name: User-Agent
-        value: insomnia/12.5.0
-        description: ""
-        disabled: false
-    settings:
-      renderRequestBody: true
-      encodeUrl: true
-      followRedirects: global
-      cookies:
-        send: true
-        store: true
-      rebuildPath: true
-  - url: "{{url}}/v1/usuarios"
-    name: usuarios-500
+    children:
+      - name: POST usuarios
+        meta:
+          id: fld_62218e34be194bf682c6ad538e6a76bb
+          created: 1775680251155
+          modified: 1775680299849
+          sortKey: -1775680295630
+          description: ""
+        children:
+          - url: "{{url}}/v1/usuarios"
+            name: usuarios-400
+            meta:
+              id: req_299674bdb99b4a568a033db37498013f
+              created: 1775585256048
+              modified: 1775680260269
+              isPrivate: false
+              description: ""
+              sortKey: -1775680256541
+            method: POST
+            body:
+              mimeType: application/json
+              text: >-
+                {
+                  "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
+                  "username": "",
+                  "senha": "",
+                  "nome": "",
+                  "telefone": ""
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/v1/usuarios"
+            name: usuarios-500
+            meta:
+              id: req_ffe15e2b2e524f518bcc0a6ea3525687
+              created: 1775585735184
+              modified: 1775680258671
+              isPrivate: false
+              description: ""
+              sortKey: -1775680256441
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "unidadeOrganizacionalId": "",
+                  "username": "",
+                  "senha": "",
+                  "nome": "",
+                  "telefone": ""
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/v1/usuarios"
+            name: usuarios-201
+            meta:
+              id: req_9731c08a49844b558e6ee7407035a18f
+              created: 1775586371894
+              modified: 1775681375496
+              isPrivate: false
+              description: ""
+              sortKey: -1775680256741
+            method: POST
+            body:
+              mimeType: application/json
+              text: >-
+                {
+                  "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
+                  "username": "cristiano.ronaldo",
+                  "senha": "cr7@melhordomundo",
+                  "nome": "Cristiano Ronaldo",
+                  "telefone": "37988779966"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{url}}/v1/usuarios"
+            name: usuarios-400-usuario-existente
+            meta:
+              id: req_1e751ca3ad904fd986ee7ea03105af1a
+              created: 1775587645021
+              modified: 1775680455791
+              isPrivate: false
+              description: ""
+              sortKey: -1775680256491
+            method: POST
+            body:
+              mimeType: application/json
+              text: >-
+                {
+                  "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
+                  "username": "cristiano.ronaldo",
+                  "senha": "cr7@melhordomundo",
+                  "nome": "Cristiano Ronaldo",
+                  "telefone": "37988779966"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: PUT usuarios
+        meta:
+          id: fld_9b1521c51c6644c997245d80d3dca5a7
+          created: 1775680295530
+          modified: 1775680295530
+          sortKey: -1775680295530
+          description: ""
+        children:
+          - url: https://localhost:7254/v1/usuarios/833f73e3-20e8-4a71-9f11-98ba22e93f26
+            name: usuarios-200
+            meta:
+              id: req_c02235876c734d0581989884f305d86c
+              created: 1775680317216
+              modified: 1775682168284
+              isPrivate: false
+              description: ""
+              sortKey: -1775680317216
+            method: PUT
+            body:
+              mimeType: application/json
+              text: >-
+                {
+                  "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
+                  "username": "cristiano.ronaldo",
+                  "senha": "cr7@piordomundo",
+                  "nome": "Cristiano Ronaldo",
+                  "telefone": "37988779966"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: https://localhost:7254/v1/usuarios/833f73e3-20e8-4a71-9f11-98ba22e93f27
+            name: usuarrio-404
+            meta:
+              id: req_3437b358045a42ad8a3e30e67ab722aa
+              created: 1775682407429
+              modified: 1775682482527
+              isPrivate: false
+              description: ""
+              sortKey: -1775680317116
+            method: PUT
+            body:
+              mimeType: application/json
+              text: >-
+                {
+                  "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
+                  "username": "cristiano.ronaldo",
+                  "senha": "cr7@piordomundo",
+                  "nome": "Cristiano Ronaldo",
+                  "telefone": "37988779966"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+  - name: unidade-organizacional
     meta:
-      id: req_72bbb17acda74ca59e17b1f0768775db
-      created: 1775585735184
-      modified: 1775585745645
-      isPrivate: false
+      id: fld_ad0eabd5fb304724ad2c7a0b0218b52f
+      created: 1775592464394
+      modified: 1775592618838
+      sortKey: -1775592464394
       description: ""
-      sortKey: -1775579032296
-    method: POST
-    body:
-      mimeType: application/json
-      text: |-
-        {
-          "unidadeOrganizacionalId": "",
-          "username": "",
-          "senha": "",
-          "nome": "",
-          "telefone": ""
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-      - name: User-Agent
-        value: insomnia/12.5.0
-        description: ""
-        disabled: false
-    settings:
-      renderRequestBody: true
-      encodeUrl: true
-      followRedirects: global
-      cookies:
-        send: true
-        store: true
-      rebuildPath: true
-  - url: "{{url}}/v1/usuarios"
-    name: usuarios-201
-    meta:
-      id: req_866eef86bf6d4959b717aa29ec9f2b56
-      created: 1775586371894
-      modified: 1775586423527
-      isPrivate: false
-      description: ""
-      sortKey: -1775585256148
-    method: POST
-    body:
-      mimeType: application/json
-      text: |-
-        {
-          "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
-          "username": "cristiano.ronaldo",
-          "senha": "cr7@melhordomundo",
-          "nome": "Cristiano Ronaldo",
-          "telefone": "37988779966"
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-      - name: User-Agent
-        value: insomnia/12.5.0
-        description: ""
-        disabled: false
-    settings:
-      renderRequestBody: true
-      encodeUrl: true
-      followRedirects: global
-      cookies:
-        send: true
-        store: true
-      rebuildPath: true
-  - url: "{{url}}/v1/usuarios"
-    name: usuarios-usuario-existente-400
-    meta:
-      id: req_fdf7402b55d04844a1ac4f0e76f6820f
-      created: 1775587645021
-      modified: 1775587645021
-      isPrivate: false
-      description: ""
-      sortKey: -1775585256098
-    method: POST
-    body:
-      mimeType: application/json
-      text: |-
-        {
-          "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
-          "username": "cristiano.ronaldo",
-          "senha": "cr7@melhordomundo",
-          "nome": "Cristiano Ronaldo",
-          "telefone": "37988779966"
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-      - name: User-Agent
-        value: insomnia/12.5.0
-        description: ""
-        disabled: false
-    settings:
-      renderRequestBody: true
-      encodeUrl: true
-      followRedirects: global
-      cookies:
-        send: true
-        store: true
-      rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_58a1e423f45a35afcf4f01b0a7f65505faded2a5
+    id: jar_d6aa485d79624692ad9a0b979c377a21
     created: 1775585088758
     modified: 1775585088758
 environments:
   name: dev
   meta:
-    id: env_58a1e423f45a35afcf4f01b0a7f65505faded2a5
+    id: env_5a68187cd4b64a6db67796cba5a03feb
     created: 1775585088646
     modified: 1775585243399
     isPrivate: false
