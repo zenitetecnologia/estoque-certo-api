@@ -128,3 +128,41 @@ VALUES
 'Zênite Tecnologia',
 '60935686000134'
 );
+
+INSERT INTO estoque_certo.espaco
+(
+espaco_id,
+unidade_organizacional_id,
+nome,
+descricao
+)
+VALUES
+(
+'6ab71fef-cf4e-4dbf-af76-f2058224721a',
+'e286f99e-5075-4b73-96d9-af462c36a5a6',
+'Sala 307',
+'Sede Moema'
+);
+
+INSERT INTO estoque_certo.usuario
+(
+usuario_id,
+username,
+senha,
+nome,
+telefone,
+perfil,
+unidade_organizacional_id,
+valido
+)
+VALUES
+(
+'bcfd8e5d-ccdb-46cf-bfe2-da19e5514981',
+'teste_de_username_duplicado',
+'insomnia',
+'teste',
+'99966mole60',
+'1',
+'e286f99e-5075-4b73-96d9-af462c36a5a6',
+'true'
+);

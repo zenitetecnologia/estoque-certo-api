@@ -12,7 +12,7 @@ public static class UsuarioController
         {
             Guid usuarioId = await service.CadastrarUsuario(usuario);
 
-            return Results.Created($"/v1/usuarios/{usuarioId}", "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
+            return TypedResults.CreatedAtRoute(routeName: "get", routeValues: new { id = usuarioId }, value: "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
         })
        .WithTags("usuarios")
        .WithSummary("Registra um novo usuário")
