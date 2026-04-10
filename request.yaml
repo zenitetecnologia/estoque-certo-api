@@ -63,20 +63,20 @@ collection:
             meta:
               id: req_ffe15e2b2e524f518bcc0a6ea3525687
               created: 1775585735184
-              modified: 1775680258671
+              modified: 1775849975091
               isPrivate: false
               description: ""
               sortKey: -1775680256441
             method: POST
             body:
               mimeType: application/json
-              text: |-
+              text: >-
                 {
-                  "unidadeOrganizacionalId": "",
-                  "username": "",
-                  "senha": "",
-                  "nome": "",
-                  "telefone": ""
+                  "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
+                  "username": "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passag",
+                  "senha": "cr7@melhordomundo",
+                  "nome": "Cristiano Ronaldo",
+                  "telefone": "37988779966"
                 }
             headers:
               - name: Content-Type
@@ -98,7 +98,7 @@ collection:
             meta:
               id: req_9731c08a49844b558e6ee7407035a18f
               created: 1775586371894
-              modified: 1775766670463
+              modified: 1775845192591
               isPrivate: false
               description: ""
               sortKey: -1775680256741
@@ -133,7 +133,7 @@ collection:
             meta:
               id: req_1e751ca3ad904fd986ee7ea03105af1a
               created: 1775587645021
-              modified: 1775754387925
+              modified: 1775850241318
               isPrivate: false
               description: ""
               sortKey: -1775680256491
@@ -167,18 +167,17 @@ collection:
         meta:
           id: fld_9b1521c51c6644c997245d80d3dca5a7
           created: 1775680295530
-          modified: 1775680295530
-          sortKey: -1775680295530
+          modified: 1775851291824
+          sortKey: -1775680295623.75
           description: ""
         children:
-          - url: "{{url}}/v1/usuarios/{% response 'body',
-              'req_9731c08a49844b558e6ee7407035a18f', 'b64::JC5pZA==::46b',
-              'never', 60 %}"
+          - url: "{% response 'header', 'req_9731c08a49844b558e6ee7407035a18f',
+              'b64::TG9jYXRpb24=::46b', 'never', 60 %}"
             name: usuarios-200
             meta:
               id: req_c02235876c734d0581989884f305d86c
               created: 1775680317216
-              modified: 1775763199578
+              modified: 1775849024026
               isPrivate: false
               description: ""
               sortKey: -1775680317216
@@ -208,14 +207,13 @@ collection:
                 send: true
                 store: true
               rebuildPath: true
-          - url: "{{url}}/v1/usuarios/{% response 'body',
-              'req_9731c08a49844b558e6ee7407035a18f', 'b64::JC5pZA==::46b',
-              'never', 60 %}"
-            name: usuarrio-404
+          - url: "{% response 'header', 'req_9731c08a49844b558e6ee7407035a18f',
+              'b64::TG9jYXRpb24=::46b', 'never', 60 %}"
+            name: usuarios-400
             meta:
               id: req_3437b358045a42ad8a3e30e67ab722aa
               created: 1775682407429
-              modified: 1775763414083
+              modified: 1775849529393
               isPrivate: false
               description: ""
               sortKey: -1775680317116
@@ -245,14 +243,12 @@ collection:
                 send: true
                 store: true
               rebuildPath: true
-          - url: "{{url}}/v1/usuarios/{% response 'body',
-              'req_9731c08a49844b558e6ee7407035a18f', 'b64::JC5pZA==::46b',
-              'never', 60 %}"
-            name: usuarrio-404-username-existente
+          - url: "{{url}}/v1/usuarios/54644ab1-4b3e-4ce0-a5e7-d30f5ff5a861"
+            name: usuarios-404
             meta:
               id: req_036ff02b90684b509f7c0e1f0c30f752
               created: 1775763478383
-              modified: 1775764419837
+              modified: 1775849519725
               isPrivate: false
               description: ""
               sortKey: -1775680286928.5
@@ -262,14 +258,275 @@ collection:
               text: >-
                 {
                   "unidadeOrganizacionalId": "e286f99e-5075-4b73-96d9-af462c36a5a6",
-                  "username": "teste_de_username_duplicado",
-                  "senha": "1234",
-                  "nome": "teste",
-                  "telefone": "1234567789"
+                  "username": "cristiano.ronaldo",
+                  "senha": "cr7@piordomundo",
+                  "nome": "Cristiano Ronaldo",
+                  "telefone": "37988779966"
                 }
             headers:
               - name: Content-Type
                 value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{% response 'header', 'req_9731c08a49844b558e6ee7407035a18f',
+              'b64::TG9jYXRpb24=::46b', 'never', 60 %}"
+            name: usuarios-500
+            meta:
+              id: req_468c377bbb524201aa6f9a39ffa32d8d
+              created: 1775847427087
+              modified: 1775849803997
+              isPrivate: false
+              description: ""
+              sortKey: -1775680271834.75
+            method: PUT
+            body:
+              mimeType: application/json
+              text: >-
+                {
+                  "username": "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passag",
+                  "senha": "cr7@piordomundo",
+                  "nome": "Cristiano Ronaldo",
+                  "telefone": "37988779966"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: GET-ID usuarios
+        meta:
+          id: fld_1e48e111acc54420849e938e109b35f8
+          created: 1775847665477
+          modified: 1775851281414
+          sortKey: -1775680295617.5
+          description: ""
+        children:
+          - url: "{% response 'header', 'req_9731c08a49844b558e6ee7407035a18f',
+              'b64::TG9jYXRpb24=::46b', 'never', 60 %}"
+            name: usuarios-200
+            meta:
+              id: req_0fd925b37e6344f4bfdb84da7d9eab72
+              created: 1775847701616
+              modified: 1775851437547
+              isPrivate: false
+              description: ""
+              sortKey: -1775847701616
+            method: GET
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:5120/v1/usuarios/aaf98706-a2f4-45cb-865a-59831a8b4e81
+            name: usuarios-404
+            meta:
+              id: req_007d0c34585c413ab36148562ffdc1e1
+              created: 1775850881289
+              modified: 1775851033422
+              isPrivate: false
+              description: ""
+              sortKey: -1775802795199
+            method: GET
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:5120/v1/usuarios/
+            name: usuarios-500
+            meta:
+              id: req_63d1dd99da6b494da260671e1233ff56
+              created: 1775851178798
+              modified: 1775851219866
+              isPrivate: false
+              description: ""
+              sortKey: -1775780341990.5
+            method: GET
+            body:
+              mimeType: application/json
+              text: ""
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: PATCH usuarios
+        meta:
+          id: fld_45537bdeb28f4f4e9e42fc22e424c30b
+          created: 1775851268374
+          modified: 1775852022528
+          sortKey: -1775680295615.9375
+          description: ""
+        children:
+          - url: "{% response 'header', 'req_9731c08a49844b558e6ee7407035a18f',
+              'b64::TG9jYXRpb24=::46b', 'never', 60 %}"
+            name: usuarios-200
+            meta:
+              id: req_2d346e5221724fc58c76c9e2a7325d73
+              created: 1775851301750
+              modified: 1775851528926
+              isPrivate: false
+              description: ""
+              sortKey: -1775851301750
+            method: PATCH
+            headers:
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:5120/v1/usuarios/bcfd8e5d-ccdb-46cf-bfe2-da19e5514981
+            name: usuarios-400
+            meta:
+              id: req_fa39647f36034771b82cec9a55c0df45
+              created: 1775851547456
+              modified: 1775851649053
+              isPrivate: false
+              description: ""
+              sortKey: -1775849501683
+            method: PATCH
+            headers:
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.url }}/v1/usuarios/cee51ede-fbc0-47e6-8b1a-08cc306f1fe6"
+            name: usuarios-404
+            meta:
+              id: req_8830f046dcc942b8b5072cf1e348fab1
+              created: 1775851671257
+              modified: 1775851740298
+              isPrivate: false
+              description: ""
+              sortKey: -1775848601649.5
+            method: PATCH
+            headers:
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: DELETE usuarios
+        meta:
+          id: fld_6be0f340cdc2469a8d082c95979a55d8
+          created: 1775852001383
+          modified: 1775852035277
+          sortKey: -1775680295614.375
+          description: ""
+        children:
+          - url: "{% response 'header', 'req_9731c08a49844b558e6ee7407035a18f',
+              'b64::TG9jYXRpb24=::46b', 'never', 60 %}"
+            name: usuario-204
+            meta:
+              id: req_0a8e23736cf84ab59797abaf5a03c1e1
+              created: 1775852136946
+              modified: 1775852240046
+              isPrivate: false
+              description: ""
+              sortKey: -1775852136946
+            method: DELETE
+            headers:
+              - name: User-Agent
+                value: insomnia/12.5.0
+                description: ""
+                disabled: false
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.url }}/v1/usuarios/300290b2-7f3c-4093-9b6a-5483fd8d3584"
+            name: usuario-404
+            meta:
+              id: req_626759126c814e48b5ab0ee18d864a41
+              created: 1775852263430
+              modified: 1775852339960
+              isPrivate: false
+              description: ""
+              sortKey: -1775851719348
+            method: DELETE
+            headers:
               - name: User-Agent
                 value: insomnia/12.5.0
                 description: ""
