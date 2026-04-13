@@ -8,6 +8,7 @@ public static class UnidadeOrganizacionalController
 {
     public static void MapUnidadeOrganizacionalEndpoints(this WebApplication app)
     {
+        #region [ post ]
         app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacionalService service, UnidadeOrganizacional unidade) =>
         {
             Guid unidadeOrganizacionalId = await service.CriarUnidade(unidade);
@@ -20,7 +21,9 @@ public static class UnidadeOrganizacionalController
         .Produces(StatusCodes.Status201Created)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ put ]
         app.MapPut("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId, UnidadeOrganizacional unidade) =>
         {
             await service.AtualizarUnidade(unidade, unidadeOrganizacionalId);
@@ -34,7 +37,9 @@ public static class UnidadeOrganizacionalController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ delete ]
         app.MapDelete("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId) =>
         {
             await service.ExcluirUnidade(unidadeOrganizacionalId);
@@ -48,7 +53,9 @@ public static class UnidadeOrganizacionalController
         .Produces<string>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ get ]
         app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service) =>
         {
             var result = await service.ObterUnidades();
@@ -60,7 +67,9 @@ public static class UnidadeOrganizacionalController
         .WithDescription("Obtém todas as unidades organizacionais.")
         .Produces<List<UnidadeOrganizacionalRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ get by id ]
         app.MapGet("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId) =>
         {
             var result = await service.ObterUnidadePorId(unidadeOrganizacionalId);
@@ -73,5 +82,6 @@ public static class UnidadeOrganizacionalController
         .Produces<UnidadeOrganizacionalRecuperado>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
     }
 }

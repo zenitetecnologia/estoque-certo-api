@@ -27,7 +27,7 @@ public static class UsuarioController
         #endregion
 
         #region [ put ]
-        app.MapPut("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId, UsuarioAtualizado usuario) =>
+        app.MapPut("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId, Usuario usuario) =>
         {
             await service.AtualizarUsuario(usuario, usuarioId);
 

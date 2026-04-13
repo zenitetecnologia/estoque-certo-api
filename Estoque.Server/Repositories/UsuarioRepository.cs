@@ -45,7 +45,8 @@ public class UsuarioRepository : BaseRepository
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
             cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
             cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id",
+                                (object)usuario.UnidadeOrganizacionalId ?? DBNull.Value);
             cmd.Parameters.AddWithValue("valido", usuario.Valido);
 
             var result = await cmd.ExecuteScalarAsync();
@@ -69,7 +70,9 @@ public class UsuarioRepository : BaseRepository
                 nome = @nome,
                 telefone = @telefone             
             WHERE
-                usuario_id = @usuario_id;
+                usuario_id = @usuario_id
+            AND
+                unidade_organizacional_id = @unidade_organizacional_id
         ";
 
         try
@@ -78,6 +81,7 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId!);
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
             cmd.Parameters.AddWithValue("username", usuario.Username);
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
@@ -130,7 +134,7 @@ public class UsuarioRepository : BaseRepository
                 Nome = reader.GetString("nome"),
                 Telefone = reader.GetString("telefone"),
                 Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
-                UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
+                UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id"),
                 Valido = reader.GetBoolean("valido")
             };
         }
@@ -197,7 +201,7 @@ public class UsuarioRepository : BaseRepository
                     Nome = reader.GetString("nome"),
                     Telefone = reader.GetString("telefone"),
                     Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
-                    UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
+                    UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id"),
                     Valido = reader.GetBoolean("valido")
                 });
             }
@@ -210,7 +214,7 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<bool> VerificarUsuarioExiste(string username, Guid unidadeOrganizacionalId, Guid ignoreId)
+    public async Task<bool> VerificarUsuarioExiste(string username, Guid? unidadeOrganizacionalId, Guid ignoreId)
     {
         const string sql = @"
             SELECT
@@ -233,7 +237,7 @@ public class UsuarioRepository : BaseRepository
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", (object)unidadeOrganizacionalId ?? DBNull.Value);
             cmd.Parameters.AddWithValue("ignoreId", ignoreId);
 
             var result = await cmd.ExecuteScalarAsync();

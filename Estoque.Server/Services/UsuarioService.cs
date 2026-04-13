@@ -6,11 +6,13 @@ namespace Estoque.Server.Services;
 
 public class UsuarioService : BaseService
 {
-    private readonly UsuarioRepository _repository;
+    private readonly UsuarioRepository _usuarioRepository;
+    private readonly UnidadeOrganizacionalRepository _unidadeOrganizacionalRepository;
 
-    public UsuarioService(UsuarioRepository repository)
+    public UsuarioService(UsuarioRepository usuarioRepository, UnidadeOrganizacionalRepository unidadeOrganizacionalRepository)
     {
-        _repository = repository;
+        _usuarioRepository = usuarioRepository;
+        _unidadeOrganizacionalRepository = unidadeOrganizacionalRepository;
     }
 
     public async Task<Guid> CadastrarUsuario(Usuario usuario)
@@ -21,7 +23,7 @@ public class UsuarioService : BaseService
 
             usuario.Perfil = PerfilUsuario.Normal;
 
-            Guid usuarioId = await _repository.CadastrarUsuario(usuario);
+            Guid usuarioId = await _usuarioRepository.CadastrarUsuario(usuario);
 
             return usuarioId;
         }
@@ -41,9 +43,9 @@ public class UsuarioService : BaseService
         {
             await ValidarUsuario(usuario, usuarioId);
 
-            var affected = await _repository.AtualizarUsuario(usuario, usuarioId);
+            var affected = await _usuarioRepository.AtualizarUsuario(usuario, usuarioId);
 
-            if (affected <= 0) throw new NotFoundException("Usuário não encontrado para o ID informado.");
+            if (affected <= 0) throw new NotFoundException("Usuário não encontrado com os parâmetros informados.");
 
             return affected;
         }
@@ -65,13 +67,13 @@ public class UsuarioService : BaseService
     {
         try
         {
-            var usuario = await _repository.ObterUsuario(usuarioId);
+            var usuario = await _usuarioRepository.ObterUsuario(usuarioId);
 
             if (usuario == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
 
             if (usuario.Valido) throw new InvalidOperationException("O acesso do usuário já está validado.");
 
-            await _repository.ValidarAcesso(usuarioId);
+            await _usuarioRepository.ValidarAcesso(usuarioId);
         }
         catch (NotFoundException)
         {
@@ -91,7 +93,7 @@ public class UsuarioService : BaseService
     {
         try
         {
-            var affected = await _repository.ExcluirUsuario(usuarioId);
+            var affected = await _usuarioRepository.ExcluirUsuario(usuarioId);
 
             if (affected <= 0) throw new NotFoundException("Usuário não encontrado para o ID informado.");
 
@@ -115,7 +117,7 @@ public class UsuarioService : BaseService
 
             if (!string.IsNullOrEmpty(unidadeOrganizacionalId)) unidadeOrganizacionalIdAux = Guid.Parse(unidadeOrganizacionalId);
 
-            return await _repository.ObterUsuarios(skip, top, username, unidadeOrganizacionalIdAux);
+            return await _usuarioRepository.ObterUsuarios(skip, top, username, unidadeOrganizacionalIdAux);
         }
         catch (Exception ex)
         {
@@ -127,7 +129,7 @@ public class UsuarioService : BaseService
     {
         try
         {
-            var usuario = await _repository.ObterUsuario(usuarioId);
+            var usuario = await _usuarioRepository.ObterUsuario(usuarioId);
 
             if (usuario == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
 
@@ -145,13 +147,25 @@ public class UsuarioService : BaseService
 
     private async Task ValidarUsuario(Usuario usuario, Guid usuarioId)
     {
+        if (usuario.UnidadeOrganizacionalId == null || usuario.UnidadeOrganizacionalId == Guid.Empty)
+        {
+            AddError(nameof(usuario.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
+        }
+        else
+        {
+            var unidadeOrganizacionalExiste = await _unidadeOrganizacionalRepository.ObterUnidade(usuario.UnidadeOrganizacionalId.Value);
+
+            if (unidadeOrganizacionalExiste == null)
+                AddError(nameof(usuario.UnidadeOrganizacionalId), "Unidade organizacional não encontrada para o ID informado.");
+        }
+
         if (string.IsNullOrWhiteSpace(usuario.Username))
         {
             AddError(nameof(usuario.Username), "Informe o username");
         }
         else
         {
-            bool usernameExiste = await _repository.VerificarUsuarioExiste(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
+            bool usernameExiste = await _usuarioRepository.VerificarUsuarioExiste(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
 
             if (usernameExiste)
                 AddError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário.");

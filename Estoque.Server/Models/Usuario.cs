@@ -9,7 +9,7 @@ public class Usuario
     public virtual Guid UsuarioId { get; set; }
 
     [JsonPropertyOrder(2)]
-    public virtual Guid UnidadeOrganizacionalId { get; set; }
+    public virtual Guid? UnidadeOrganizacionalId { get; set; }
 
     [JsonPropertyOrder(3)]
     public string Username { get; set; } = string.Empty;
@@ -30,13 +30,6 @@ public class Usuario
     [JsonIgnore]
     [JsonPropertyOrder(8)]
     public virtual bool Valido { get; set; }
-}
-
-public class UsuarioAtualizado : Usuario
-{
-    [JsonIgnore]
-    [JsonPropertyOrder(2)]
-    public override Guid UnidadeOrganizacionalId { get; set; }
 }
 
 public class UsuarioRecuperado : Usuario

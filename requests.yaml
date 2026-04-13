@@ -2,25 +2,25 @@ type: collection.insomnia.rest/5.0
 schema_version: "5.1"
 name: estoque-certo
 meta:
-  id: wrk_15d25520037742829f13887438095258
-  created: 1776017077261
-  modified: 1776018683907
+  id: wrk_72db9a58b2d94b2096b4103086b2800f
+  created: 1776100246549
+  modified: 1776100246549
   description: ""
 collection:
   - name: usuarios
     meta:
-      id: fld_ef7892370bd34f5f93f820209fa63535
+      id: fld_90783140b2cb49a5968159892e2a1d5b
       created: 1776017077288
-      modified: 1776022444149
+      modified: 1776107584719
       sortKey: -1776017077288
       description: Rotas da entidade usuários.
     children:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_429002a104534dd582f8f759e6a19f55
+          id: req_5fbe9a1c757845aaac8c25f0f63d2a7d
           created: 1776017545694
-          modified: 1776022129927
+          modified: 1776110754467
           isPrivate: false
           description: ""
           sortKey: -1776017077843.5
@@ -29,7 +29,7 @@ collection:
           mimeType: application/json
           text: |-
             {
-              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+            	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "cristiano.ronaldo",
               "senha": "Senha@123",
               "nome": "Cristiano Ronaldo",
@@ -65,7 +65,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400
         meta:
-          id: req_2533fb1f0e2347c7835f93cbacd54fb3
+          id: req_6747fb009100401fa2c5f6327d5ea3fc
           created: 1776017553481
           modified: 1776021634697
           isPrivate: false
@@ -96,9 +96,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400-duplicated
         meta:
-          id: req_d278df81af9246b3b6d77aea95533e61
+          id: req_d004799075cd4147b6e542712c560c05
           created: 1776017752676
-          modified: 1776021642839
+          modified: 1776110801256
           isPrivate: false
           description: ""
           sortKey: -1776017077518.5
@@ -127,7 +127,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-500
         meta:
-          id: req_b706dc03801b421a96aad0399fc9dce2
+          id: req_ef9afb529ffd4765a37c5ebbfc96804a
           created: 1776018113743
           modified: 1776021671619
           isPrivate: false
@@ -158,9 +158,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-200
         meta:
-          id: req_dd04286bfda842c6939332c54ca9f9ab
+          id: req_f9362f1c4ee647ea89b84ed7bf41571a
           created: 1776018251916
-          modified: 1776022500527
+          modified: 1776100355855
           isPrivate: false
           description: ""
           sortKey: -1776016049418.4688
@@ -188,7 +188,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400
         meta:
-          id: req_333aaa17b9d647baae97a587bc062a0c
+          id: req_c9298495025e4dbba370c0b04469db73
           created: 1776020023293
           modified: 1776022540630
           isPrivate: false
@@ -218,7 +218,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
         name: usuarios-404
         meta:
-          id: req_dc70f497ec10433fb8a09200125ed1fb
+          id: req_79e1b72f474d4c0fa731755efa11cd10
           created: 1776020515113
           modified: 1776022592134
           isPrivate: false
@@ -248,7 +248,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500
         meta:
-          id: req_4ff7b62047fb4820b3b2f9b84bf17061
+          id: req_0d3bf6633ad94be9a9632584af93baad
           created: 1776020739660
           modified: 1776022648083
           isPrivate: false
@@ -278,9 +278,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_c39f3a9af93e4154956d5e2dd7ebe076
+          id: req_1e949f672dbd418eabb64d9299f06a61
           created: 1776021559940
-          modified: 1776022192606
+          modified: 1776110743529
           isPrivate: false
           description: ""
           sortKey: -1776017077743.5
@@ -325,9 +325,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_5b1785c88ff24a1eba6ccce057af4cdd
+          id: req_f732c46fa79a4ee4ba4fde4a70a6066a
           created: 1776022205862
-          modified: 1776022313138
+          modified: 1776105800533
           isPrivate: false
           description: ""
           sortKey: -1776017077643.5
@@ -372,7 +372,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400-duplicated
         meta:
-          id: req_128f43a8d242450f9ff700bb3fcce709
+          id: req_cb676374570646c0a092c5584e9c1812
           created: 1776022675661
           modified: 1776022744456
           isPrivate: false
@@ -399,23 +399,86 @@ collection:
             send: true
             store: true
           rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios"
+        name: usuarios-400-uo-notfound
+        meta:
+          id: req_db99a82117474702ad41e6ed98823ff8
+          created: 1776110440408
+          modified: 1776111087067
+          isPrivate: false
+          description: ""
+          sortKey: -1776017077506
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
+              "username": "cristiano.ronaldo",
+              "senha": "Senha@123",
+              "nome": "Cristiano Ronaldo",
+              "telefone": "37999990000"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios"
+        name: usuarios-400-uo-nulo
+        meta:
+          id: req_d4588bbde2a74b63b564f3632520a688
+          created: 1776111102435
+          modified: 1776111206970
+          isPrivate: false
+          description: ""
+          sortKey: -1776017077499.75
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": null,
+              "username": "cristiano.ronaldo",
+              "senha": "Senha@123",
+              "nome": "Cristiano Ronaldo",
+              "telefone": "37999990000"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_15642b4e5b68f16f44d6e32511dae01873ce377b
+    id: jar_31277e8a01034b3cac59d20ec15b0ff1
     created: 1776017078657
-    modified: 1776022444136
+    modified: 1776107584715
 environments:
   name: Base Environment
   meta:
-    id: env_b3cbc66f72924233b01c3c2ca30d995c
+    id: env_eac2d1596251455db38682ef981039dd
     created: 1776017077271
-    modified: 1776022444142
+    modified: 1776110568226
     isPrivate: false
   data:
     base_url: http://localhost:5120
     unidade_organizacional_id: e286f99e-5075-4b73-96d9-af462c36a5a6
-    usuario_id_mock_01: 9fa68f9b-3c77-4a15-8c48-f7362707254f
-    usuario_id_mock_02: c02cf515-374f-4eb2-b705-4e5d0aa9669a
-    usuario_id_mock_03: dad0ef54-58c6-4c42-8df7-177df803ff24
+    usuario_id_mock_01: 0e40d054-dbfc-48ad-9a8e-445ed97cb4ff
+    usuario_id_mock_02: 74f96d5c-de76-4512-999e-f016ecf357c3
+    usuario_id_mock_03: 96ef1ec9-e7a3-4331-bf5c-df83d1e48160
     usuario_id_fake: f6a30a56-c65c-41ac-ab07-8b0b113bd521
+    unidade_organizacional_id_fake: e525e8a8-5424-4a76-af26-c2ab45e1ef07

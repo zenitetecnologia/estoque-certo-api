@@ -8,6 +8,7 @@ public static class EspacoController
 {
     public static void MapEspacosEndpoints(this WebApplication app)
     {
+        #region [ post ]
         app.MapPost("v1/espacos", async (EspacoService service, Espaco espaco) =>
         {
             Guid espacoId = await service.CadastrarEspaco(espaco);
@@ -20,7 +21,9 @@ public static class EspacoController
         .Produces(StatusCodes.Status201Created)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ put ]
         app.MapPut("v1/espacos/{espacoId:guid}", async (EspacoService service, Guid espacoId, EspacoAtualizado espaco) =>
         {
             await service.AtualizarEspaco(espaco, espacoId);
@@ -34,7 +37,9 @@ public static class EspacoController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ delete ]
         app.MapDelete("v1/espacos/{espacoId:guid}", async (EspacoService service, Guid espacoId) =>
         {
             await service.ExcluirEspaco(espacoId);
@@ -48,7 +53,9 @@ public static class EspacoController
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ get ]
         app.MapGet("v1/espacos", async (EspacoService service) =>
         {
             var result = await service.ObterEspacos();
@@ -60,7 +67,9 @@ public static class EspacoController
         .WithDescription("Retorna a lista completa de espaços de armazenamento.")
         .Produces<List<EspacoRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ get by id ]
         app.MapGet("v1/espacos/{espacoId:guid}", async (EspacoService service, Guid espacoId) =>
         {
             var result = await service.ObterEspaco(espacoId);
@@ -73,5 +82,6 @@ public static class EspacoController
         .Produces<EspacoRecuperado>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
     }
 }
