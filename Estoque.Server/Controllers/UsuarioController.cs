@@ -8,19 +8,25 @@ public static class UsuarioController
 {
     public static void MapUsuarioEndpoints(this WebApplication app)
     {
+        #region [ post ]
         app.MapPost("v1/usuarios/", async (UsuarioService service, Usuario usuario) =>
         {
             Guid usuarioId = await service.CadastrarUsuario(usuario);
 
-            return TypedResults.CreatedAtRoute(routeName: "get", routeValues: new { usuarioId = usuarioId }, value: "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
+            return TypedResults.CreatedAtRoute(
+                routeName: "get",
+                routeValues: new { usuarioId },
+                value: "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
         })
        .WithTags("usuarios")
-       .WithSummary("Registra um novo usuário")
-       .WithDescription("Registra um novo usuário com perfil normal e não validado.")
+       .WithSummary("Cadastra um novo usuário")
+       .WithDescription("Cadastra um novo usuário com perfil normal e não validado.")
        .Produces(StatusCodes.Status201Created)
        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
        .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ put ]
         app.MapPut("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId, UsuarioAtualizado usuario) =>
         {
             await service.AtualizarUsuario(usuario, usuarioId);
@@ -34,7 +40,9 @@ public static class UsuarioController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ patch ]
         app.MapPatch("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId) =>
         {
             await service.ValidarAcesso(usuarioId);
@@ -48,7 +56,9 @@ public static class UsuarioController
        .Produces<string>(StatusCodes.Status400BadRequest)
        .Produces<string>(StatusCodes.Status404NotFound)
        .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ delete ]
         app.MapDelete("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId) =>
         {
             await service.ExcluirUsuario(usuarioId);
@@ -61,7 +71,9 @@ public static class UsuarioController
         .Produces(StatusCodes.Status204NoContent)
         .Produces<string>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ get ]
         app.MapGet("v1/usuarios", async (UsuarioService service, int skip = 0, int top = 3, string? username = null, string? unidadeOrganizacionalId = null) =>
         {
             var result = await service.ObterUsuarios(skip, top, username, unidadeOrganizacionalId);
@@ -73,7 +85,9 @@ public static class UsuarioController
         .WithDescription("Retorna uma lista de usuários de acordo com os parâmetros informados.")
         .Produces<List<UsuarioRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
 
+        #region [ get by id ]
         app.MapGet("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId) =>
         {
             var result = await service.ObterUsuario(usuarioId);
@@ -87,5 +101,6 @@ public static class UsuarioController
         .Produces<UsuarioRecuperado>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
     }
 }

@@ -1,0 +1,421 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: estoque-certo
+meta:
+  id: wrk_15d25520037742829f13887438095258
+  created: 1776017077261
+  modified: 1776018683907
+  description: ""
+collection:
+  - name: usuarios
+    meta:
+      id: fld_ef7892370bd34f5f93f820209fa63535
+      created: 1776017077288
+      modified: 1776022444149
+      sortKey: -1776017077288
+      description: Rotas da entidade usuários.
+    children:
+      - url: "{{ _.base_url }}/v1/usuarios"
+        name: usuarios-201
+        meta:
+          id: req_429002a104534dd582f8f759e6a19f55
+          created: 1776017545694
+          modified: 1776022129927
+          isPrivate: false
+          description: ""
+          sortKey: -1776017077843.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "username": "cristiano.ronaldo",
+              "senha": "Senha@123",
+              "nome": "Cristiano Ronaldo",
+              "telefone": "37999990000"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          afterResponse: |-
+            insomnia.test('Salvar usuario_id do Location', () => {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const usuarioId = locationHeader.value.split('/').pop();
+              insomnia.environment.set('usuario_id_mock_01', usuarioId);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios"
+        name: usuarios-400
+        meta:
+          id: req_2533fb1f0e2347c7835f93cbacd54fb3
+          created: 1776017553481
+          modified: 1776021634697
+          isPrivate: false
+          description: ""
+          sortKey: -1776017077543.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "username": "",
+              "senha": null,
+              "nome": "",
+              "telefone": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios"
+        name: usuarios-400-duplicated
+        meta:
+          id: req_d278df81af9246b3b6d77aea95533e61
+          created: 1776017752676
+          modified: 1776021642839
+          isPrivate: false
+          description: ""
+          sortKey: -1776017077518.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "username": "cristiano.ronaldo",
+              "senha": "Senha@123",
+              "nome": "Cristiano Ronaldo",
+              "telefone": "37999990000"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios"
+        name: usuarios-500
+        meta:
+          id: req_b706dc03801b421a96aad0399fc9dce2
+          created: 1776018113743
+          modified: 1776021671619
+          isPrivate: false
+          description: ""
+          sortKey: -1776017077493.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "username": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+              "senha": "Senha@123",
+              "nome": "Cristiano Ronaldo",
+              "telefone": "37999990000"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-200
+        meta:
+          id: req_dd04286bfda842c6939332c54ca9f9ab
+          created: 1776018251916
+          modified: 1776022500527
+          isPrivate: false
+          description: ""
+          sortKey: -1776016049418.4688
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "username": "cr7.omelhor",
+              "senha": "Senha@123",
+              "nome": "Cristiano Ronaldo dos Santos Aveiro",
+              "telefone": "37999990000"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-400
+        meta:
+          id: req_333aaa17b9d647baae97a587bc062a0c
+          created: 1776020023293
+          modified: 1776022540630
+          isPrivate: false
+          description: ""
+          sortKey: -1776015021343.4375
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"username": "",
+              "senha": null,
+              "nome": "",
+              "telefone": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
+        name: usuarios-404
+        meta:
+          id: req_dc70f497ec10433fb8a09200125ed1fb
+          created: 1776020515113
+          modified: 1776022592134
+          isPrivate: false
+          description: ""
+          sortKey: -1776014978513.0977
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "username": "cr7.omelhor",
+              "senha": "Senha@123",
+              "nome": "Cristiano Ronaldo dos Santos Aveiro",
+              "telefone": "37999990000"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-500
+        meta:
+          id: req_4ff7b62047fb4820b3b2f9b84bf17061
+          created: 1776020739660
+          modified: 1776022648083
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935682.7578
+        method: PUT
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "username": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+              "senha": "Senha@123",
+              "nome": "Cristiano Ronaldo dos Santos Aveiro",
+              "telefone": "37999990000"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios"
+        name: usuarios-201
+        meta:
+          id: req_c39f3a9af93e4154956d5e2dd7ebe076
+          created: 1776021559940
+          modified: 1776022192606
+          isPrivate: false
+          description: ""
+          sortKey: -1776017077743.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+                "username": "lionel.messi",
+                "senha": "Senha@123",
+                "nome": "Lionel Messi",
+                "telefone": "37999990001"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          afterResponse: |-
+            insomnia.test('Salvar usuario_id do Location', () => {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const usuarioId = locationHeader.value.split('/').pop();
+              insomnia.environment.set('usuario_id_mock_02', usuarioId);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios"
+        name: usuarios-201
+        meta:
+          id: req_5b1785c88ff24a1eba6ccce057af4cdd
+          created: 1776022205862
+          modified: 1776022313138
+          isPrivate: false
+          description: ""
+          sortKey: -1776017077643.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+                "username": "kylian.mbappe",
+                "senha": "Senha@123",
+                "nome": "Kylian Mbappé",
+                "telefone": "37999990003"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          afterResponse: |-
+            insomnia.test('Salvar usuario_id do Location', () => {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const usuarioId = locationHeader.value.split('/').pop();
+              insomnia.environment.set('usuario_id_mock_03', usuarioId);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-400-duplicated
+        meta:
+          id: req_128f43a8d242450f9ff700bb3fcce709
+          created: 1776022675661
+          modified: 1776022744456
+          isPrivate: false
+          description: ""
+          sortKey: -1776014999928.2676
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "username": "kylian.mbappe",
+              "senha": "Senha@123",
+              "nome": "Cristiano Ronaldo dos Santos Aveiro",
+              "telefone": "37999990000"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_15642b4e5b68f16f44d6e32511dae01873ce377b
+    created: 1776017078657
+    modified: 1776022444136
+environments:
+  name: Base Environment
+  meta:
+    id: env_b3cbc66f72924233b01c3c2ca30d995c
+    created: 1776017077271
+    modified: 1776022444142
+    isPrivate: false
+  data:
+    base_url: http://localhost:5120
+    unidade_organizacional_id: e286f99e-5075-4b73-96d9-af462c36a5a6
+    usuario_id_mock_01: 9fa68f9b-3c77-4a15-8c48-f7362707254f
+    usuario_id_mock_02: c02cf515-374f-4eb2-b705-4e5d0aa9669a
+    usuario_id_mock_03: dad0ef54-58c6-4c42-8df7-177df803ff24
+    usuario_id_fake: f6a30a56-c65c-41ac-ab07-8b0b113bd521

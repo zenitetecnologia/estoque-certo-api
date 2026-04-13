@@ -3,15 +3,16 @@ using Estoque.Server.Exceptions;
 using Estoque.Server.Repositories;
 using Estoque.Server.Services;
 using Microsoft.AspNetCore.Diagnostics;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
+
+builder.Services.AddScoped<IDbConnection>(x => new Npgsql.NpgsqlConnection(connectionString));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddScoped<System.Data.IDbConnection>(x =>
-    new Npgsql.NpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<UnidadeOrganizacionalRepository>();
@@ -38,9 +39,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("*");
-
 app.UseAuthorization();
-
 app.MapFallbackToFile("/index.html");
 
 app.MapUsuarioEndpoints();
