@@ -436,11 +436,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
-        name: usuarios-200-uo-notfound
+        name: usuarios-400-uo-notfound
         meta:
           id: req_393c1fe3284648b7bca52ca31872cc41
           created: 1776189148566
-          modified: 1776189195308
+          modified: 1776194723289
           isPrivate: false
           description: ""
           sortKey: -1776014989220.6826
@@ -458,6 +458,96 @@ collection:
         headers:
           - name: Content-Type
             value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-200
+        meta:
+          id: req_99bed690388643c3a865d3bc22dbc9c1
+          created: 1776194617008
+          modified: 1776194644736
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935582.7578
+        method: PATCH
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-400
+        meta:
+          id: req_03c68c08d8e844a8a0dc585836b5d9ae
+          created: 1776194696378
+          modified: 1776194736070
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935532.7578
+        method: PATCH
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
+        name: usuarios-404
+        meta:
+          id: req_ce66bc208f85488b943a70795c813c94
+          created: 1776194759352
+          modified: 1776194768870
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935482.7578
+        method: PATCH
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-200
+        meta:
+          id: req_5a2f2aa494ae433488723163fdc47179
+          created: 1776195028275
+          modified: 1776195073737
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935382.7578
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
+        name: usuarios-404
+        meta:
+          id: req_169f03e9735a42e2bf3486c9908a6673
+          created: 1776195083081
+          modified: 1776195101110
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935332.7578
+        method: GET
         settings:
           renderRequestBody: true
           encodeUrl: true
