@@ -45,8 +45,7 @@ public class UsuarioRepository : BaseRepository
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
             cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
             cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id",
-                                (object)usuario.UnidadeOrganizacionalId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId!);
             cmd.Parameters.AddWithValue("valido", usuario.Valido);
 
             var result = await cmd.ExecuteScalarAsync();
@@ -68,7 +67,7 @@ public class UsuarioRepository : BaseRepository
                 username = @username,
                 senha = @senha,
                 nome = @nome,
-                telefone = @telefone             
+                telefone = @telefone
             WHERE
                 usuario_id = @usuario_id
             AND

@@ -1,7 +1,3 @@
 <Solution>
-  <Project Path="estoque.client/estoque.client.esproj">
-    <Build />
-    <Deploy />
-  </Project>
   <Project Path="Estoque.Server/Estoque.Server.csproj" />
 </Solution>

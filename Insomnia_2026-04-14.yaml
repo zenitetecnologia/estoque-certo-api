@@ -11,7 +11,7 @@ collection:
     meta:
       id: fld_90783140b2cb49a5968159892e2a1d5b
       created: 1776017077288
-      modified: 1776107584719
+      modified: 1776188697798
       sortKey: -1776017077288
       description: Rotas da entidade usuários.
     children:
@@ -67,7 +67,7 @@ collection:
         meta:
           id: req_6747fb009100401fa2c5f6327d5ea3fc
           created: 1776017553481
-          modified: 1776021634697
+          modified: 1776188864139
           isPrivate: false
           description: ""
           sortKey: -1776017077543.5
@@ -76,7 +76,7 @@ collection:
           mimeType: application/json
           text: |-
             {
-              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+            	"unidadeOrganizacionalId": null,
               "username": "",
               "senha": null,
               "nome": "",
@@ -160,7 +160,7 @@ collection:
         meta:
           id: req_f9362f1c4ee647ea89b84ed7bf41571a
           created: 1776018251916
-          modified: 1776100355855
+          modified: 1776187583972
           isPrivate: false
           description: ""
           sortKey: -1776016049418.4688
@@ -169,6 +169,7 @@ collection:
           mimeType: application/json
           text: |-
             {
+            	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "cr7.omelhor",
               "senha": "Senha@123",
               "nome": "Cristiano Ronaldo dos Santos Aveiro",
@@ -190,7 +191,7 @@ collection:
         meta:
           id: req_c9298495025e4dbba370c0b04469db73
           created: 1776020023293
-          modified: 1776022540630
+          modified: 1776189071572
           isPrivate: false
           description: ""
           sortKey: -1776015021343.4375
@@ -199,6 +200,7 @@ collection:
           mimeType: application/json
           text: |-
             {
+            	"unidadeOrganizacionalId": null,
             	"username": "",
               "senha": null,
               "nome": "",
@@ -220,7 +222,7 @@ collection:
         meta:
           id: req_79e1b72f474d4c0fa731755efa11cd10
           created: 1776020515113
-          modified: 1776022592134
+          modified: 1776189346447
           isPrivate: false
           description: ""
           sortKey: -1776014978513.0977
@@ -229,7 +231,8 @@ collection:
           mimeType: application/json
           text: |-
             {
-              "username": "cr7.omelhor",
+            	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "username": "cr7.melhordomundo",
               "senha": "Senha@123",
               "nome": "Cristiano Ronaldo dos Santos Aveiro",
               "telefone": "37999990000"
@@ -250,7 +253,7 @@ collection:
         meta:
           id: req_0d3bf6633ad94be9a9632584af93baad
           created: 1776020739660
-          modified: 1776022648083
+          modified: 1776189414506
           isPrivate: false
           description: ""
           sortKey: -1776014935682.7578
@@ -259,6 +262,7 @@ collection:
           mimeType: application/json
           text: >-
             {
+            	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
               "senha": "Senha@123",
               "nome": "Cristiano Ronaldo dos Santos Aveiro",
@@ -374,7 +378,7 @@ collection:
         meta:
           id: req_cb676374570646c0a092c5584e9c1812
           created: 1776022675661
-          modified: 1776022744456
+          modified: 1776189116313
           isPrivate: false
           description: ""
           sortKey: -1776014999928.2676
@@ -383,6 +387,7 @@ collection:
           mimeType: application/json
           text: |-
             {
+            	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "kylian.mbappe",
               "senha": "Senha@123",
               "nome": "Cristiano Ronaldo dos Santos Aveiro",
@@ -404,7 +409,7 @@ collection:
         meta:
           id: req_db99a82117474702ad41e6ed98823ff8
           created: 1776110440408
-          modified: 1776111087067
+          modified: 1776188783474
           isPrivate: false
           description: ""
           sortKey: -1776017077506
@@ -430,24 +435,24 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.base_url }}/v1/usuarios"
-        name: usuarios-400-uo-nulo
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-200-uo-notfound
         meta:
-          id: req_d4588bbde2a74b63b564f3632520a688
-          created: 1776111102435
-          modified: 1776111206970
+          id: req_393c1fe3284648b7bca52ca31872cc41
+          created: 1776189148566
+          modified: 1776189195308
           isPrivate: false
           description: ""
-          sortKey: -1776017077499.75
-        method: POST
+          sortKey: -1776014989220.6826
+        method: PUT
         body:
           mimeType: application/json
-          text: |-
+          text: >-
             {
-              "unidadeOrganizacionalId": null,
-              "username": "cristiano.ronaldo",
+            	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
+              "username": "cr7.omelhor",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo",
+              "nome": "Cristiano Ronaldo dos Santos Aveiro",
               "telefone": "37999990000"
             }
         headers:
@@ -466,19 +471,19 @@ cookieJar:
   meta:
     id: jar_31277e8a01034b3cac59d20ec15b0ff1
     created: 1776017078657
-    modified: 1776107584715
+    modified: 1776188697790
 environments:
   name: Base Environment
   meta:
     id: env_eac2d1596251455db38682ef981039dd
     created: 1776017077271
-    modified: 1776110568226
+    modified: 1776188697795
     isPrivate: false
   data:
     base_url: http://localhost:5120
     unidade_organizacional_id: e286f99e-5075-4b73-96d9-af462c36a5a6
-    usuario_id_mock_01: 0e40d054-dbfc-48ad-9a8e-445ed97cb4ff
-    usuario_id_mock_02: 74f96d5c-de76-4512-999e-f016ecf357c3
-    usuario_id_mock_03: 96ef1ec9-e7a3-4331-bf5c-df83d1e48160
+    usuario_id_mock_01: 5084b27c-d665-4f92-a969-971d42b5309b
+    usuario_id_mock_02: e2efa355-a355-4bad-b75b-4356d507cb53
+    usuario_id_mock_03: a28afbd8-055a-45ef-b558-4f9948c5bc52
     usuario_id_fake: f6a30a56-c65c-41ac-ab07-8b0b113bd521
     unidade_organizacional_id_fake: e525e8a8-5424-4a76-af26-c2ab45e1ef07
