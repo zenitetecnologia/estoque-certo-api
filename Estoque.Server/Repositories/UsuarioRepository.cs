@@ -95,7 +95,7 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<UsuarioRecuperado?> ObterUsuario(Guid usuarioId)
+    public async Task<UsuarioGetResponse?> ObterUsuario(Guid usuarioId)
     {
         const string sql = @"
             SELECT
@@ -125,7 +125,7 @@ public class UsuarioRepository : BaseRepository
 
             if (!await reader.ReadAsync()) return null;
 
-            return new UsuarioRecuperado
+            return new UsuarioGetResponse
             {
                 UsuarioId = reader.GetGuid("usuario_id"),
                 Username = reader.GetString("username"),
@@ -143,8 +143,10 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<List<UsuarioRecuperado>> ObterUsuarios(int skip, int top, string? username = null, Guid? unidadeOrganizacionalId = null)
+    public async Task<List<UsuarioGetResponse>> ObterUsuarios(int skip, int top, string? username, Guid? unidadeOrganizacionalId)
     {
+        var usuarios = new List<UsuarioGetResponse>();
+
         string sql = @"
             SELECT
                 usuario_id,
@@ -160,20 +162,11 @@ public class UsuarioRepository : BaseRepository
             WHERE 1 = 1
         ";
 
-        if (!string.IsNullOrWhiteSpace(username))
-            sql += " AND username ILIKE @username";
+        if (!string.IsNullOrWhiteSpace(username)) sql += " AND username ILIKE @username";
 
-        if (unidadeOrganizacionalId != null)
-            sql += " AND unidade_organizacional_id = @unidade_id";
+        if (unidadeOrganizacionalId != null) sql += " AND unidade_organizacional_id = @unidade_organizacional_id";
 
-        sql += @" ORDER BY
-                        nome,
-                        username
-                  LIMIT
-                        @top
-                  OFFSET
-                        @skip;
-        ";
+        sql += " ORDER BY nome LIMIT @top OFFSET @skip";
 
         try
         {
@@ -182,27 +175,26 @@ public class UsuarioRepository : BaseRepository
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("username", $"%{username}%");
-            cmd.Parameters.AddWithValue("unidade_id", unidadeOrganizacionalId);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("top", top);
             cmd.Parameters.AddWithValue("skip", skip);
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
-            var usuarios = new List<UsuarioRecuperado>();
-
             while (await reader.ReadAsync())
             {
-                usuarios.Add(new UsuarioRecuperado
-                {
-                    UsuarioId = reader.GetGuid("usuario_id"),
-                    Username = reader.GetString("username"),
-                    Senha = reader.GetString("senha"),
-                    Nome = reader.GetString("nome"),
-                    Telefone = reader.GetString("telefone"),
-                    Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
-                    UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id"),
-                    Valido = reader.GetBoolean("valido")
-                });
+                var usuarioGetResponse = new UsuarioGetResponse();
+
+                usuarioGetResponse.UsuarioId = reader.GetGuid("usuario_id");
+                usuarioGetResponse.Username = reader.GetString("username");
+                usuarioGetResponse.Senha = reader.GetString("senha");
+                usuarioGetResponse.Nome = reader.GetString("nome");
+                usuarioGetResponse.Telefone = reader.GetString("telefone");
+                usuarioGetResponse.Perfil = (PerfilUsuario)reader.GetInt32("perfil");
+                usuarioGetResponse.UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id");
+                usuarioGetResponse.Valido = reader.GetBoolean("valido");
+
+                usuarios.Add(usuarioGetResponse);
             }
 
             return usuarios;

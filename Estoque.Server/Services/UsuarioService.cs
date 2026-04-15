@@ -109,15 +109,11 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<List<UsuarioRecuperado>> ObterUsuarios(int skip, int top, string? username = null, string? unidadeOrganizacionalId = null)
+    public async Task<List<UsuarioGetResponse>> ObterUsuarios(int skip, int top, string? username, Guid? unidadeOrganizacionalId)
     {
         try
         {
-            Guid? unidadeOrganizacionalIdAux = null;
-
-            if (!string.IsNullOrEmpty(unidadeOrganizacionalId)) unidadeOrganizacionalIdAux = Guid.Parse(unidadeOrganizacionalId);
-
-            return await _usuarioRepository.ObterUsuarios(skip, top, username, unidadeOrganizacionalIdAux);
+            return await _usuarioRepository.ObterUsuarios(skip, top, username, unidadeOrganizacionalId);
         }
         catch (Exception ex)
         {
@@ -125,7 +121,7 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<UsuarioRecuperado> ObterUsuario(Guid usuarioId)
+    public async Task<UsuarioGetResponse> ObterUsuario(Guid usuarioId)
     {
         try
         {

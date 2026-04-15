@@ -69,12 +69,12 @@ public static class UsuarioController
         .WithSummary("Exclui um usuário")
         .WithDescription("Exclui um usuário do sistema.")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<string>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
 
         #region [ get ]
-        app.MapGet("v1/usuarios", async (UsuarioService service, int skip = 0, int top = 3, string? username = null, string? unidadeOrganizacionalId = null) =>
+        app.MapGet("v1/usuarios", async (UsuarioService service, int skip = 0, int top = 10, string? username = null, Guid? unidadeOrganizacionalId = null) =>
         {
             var result = await service.ObterUsuarios(skip, top, username, unidadeOrganizacionalId);
 
@@ -83,7 +83,7 @@ public static class UsuarioController
         .WithTags("usuarios")
         .WithSummary("Retorna lista de usuários")
         .WithDescription("Retorna uma lista de usuários de acordo com os parâmetros informados.")
-        .Produces<List<UsuarioRecuperado>>(StatusCodes.Status200OK)
+        .Produces<List<UsuarioGetResponse>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
 
@@ -98,7 +98,7 @@ public static class UsuarioController
         .WithTags("usuarios")
         .WithSummary("Retorna um usuário por ID")
         .WithDescription("Retorna um usuário específico por ID.")
-        .Produces<UsuarioRecuperado>(StatusCodes.Status200OK)
+        .Produces<UsuarioGetResponse>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion

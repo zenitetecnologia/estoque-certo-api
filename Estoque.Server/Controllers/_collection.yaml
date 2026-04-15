@@ -11,7 +11,7 @@ collection:
     meta:
       id: fld_90783140b2cb49a5968159892e2a1d5b
       created: 1776017077288
-      modified: 1776188697798
+      modified: 1776281100626
       sortKey: -1776017077288
       description: Rotas da entidade usuários.
     children:
@@ -521,11 +521,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
-        name: usuarios-200
+        name: usuarios-200-by-id
         meta:
           id: req_5a2f2aa494ae433488723163fdc47179
           created: 1776195028275
-          modified: 1776195073737
+          modified: 1776281190854
           isPrivate: false
           description: ""
           sortKey: -1776014935382.7578
@@ -539,15 +539,217 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
-        name: usuarios-404
+        name: usuarios-404-by-id
         meta:
           id: req_169f03e9735a42e2bf3486c9908a6673
           created: 1776195083081
-          modified: 1776195101110
+          modified: 1776281204291
           isPrivate: false
           description: ""
           sortKey: -1776014935332.7578
         method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-500
+        meta:
+          id: req_2f5d8afccdf54d639d2bcb107cac0ad5
+          created: 1776276413179
+          modified: 1776276415911
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935432.7578
+        method: PATCH
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-500-by-id
+        meta:
+          id: req_65e806f9dece40858cdbc4150f40d2ec
+          created: 1776276425643
+          modified: 1776281210770
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935232.7578
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios"
+        name: usuarios-200
+        meta:
+          id: req_aed887edf8c648dcbbbaab4817b80f86
+          created: 1776281229001
+          modified: 1776281243454
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935132.7578
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url
+          }}/v1/usuarios?skip=0&top=10&username=li&unidadeOrganizacionalId={{
+          _.unidade_organizacional_id }}"
+        name: usuarios-200-paged
+        meta:
+          id: req_356ee65ccdf94cdc8580f9a4af8e86b9
+          created: 1776281994283
+          modified: 1776282936291
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935082.7578
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url
+          }}/v1/usuarios?skip=0&top=10&username=li&unidadeOrganizacionalId={{
+          _.unidade_organizacional_id_fake }}"
+        name: usuarios-200-empty
+        meta:
+          id: req_ca707431c7614416bc9cc9c219765fae
+          created: 1776282828073
+          modified: 1776282929619
+          isPrivate: false
+          description: ""
+          sortKey: -1776014935032.7578
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios"
+        name: usuarios-500
+        meta:
+          id: req_b4cae62d9eaa4c3a83e9d70c58c228d3
+          created: 1776283250735
+          modified: 1776283254842
+          isPrivate: false
+          description: ""
+          sortKey: -1776014934932.7578
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-204
+        meta:
+          id: req_d5c17ed5d10a40e0ab796844f5382ecd
+          created: 1776283315235
+          modified: 1776283393391
+          isPrivate: false
+          description: ""
+          sortKey: -1776014934832.7578
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_02 }}"
+        name: usuarios-204
+        meta:
+          id: req_fee58b482a704d8b94ebd83e616ed93f
+          created: 1776283533602
+          modified: 1776283540655
+          isPrivate: false
+          description: ""
+          sortKey: -1776014934782.7578
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_03 }}"
+        name: usuarios-204
+        meta:
+          id: req_8700426a94034bc3a5023508ff798dd2
+          created: 1776283559384
+          modified: 1776283564881
+          isPrivate: false
+          description: ""
+          sortKey: -1776014934732.7578
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-404
+        meta:
+          id: req_a60bdab064234e25b5cc51eef47dd13b
+          created: 1776283702703
+          modified: 1776283711548
+          isPrivate: false
+          description: ""
+          sortKey: -1776014934682.7578
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
+        name: usuarios-500
+        meta:
+          id: req_8fc66f022003403d9482c4cea32d15f3
+          created: 1776283727402
+          modified: 1776283727402
+          isPrivate: false
+          description: ""
+          sortKey: -1776014934632.7578
+        method: DELETE
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -561,19 +763,19 @@ cookieJar:
   meta:
     id: jar_31277e8a01034b3cac59d20ec15b0ff1
     created: 1776017078657
-    modified: 1776188697790
+    modified: 1776281100619
 environments:
   name: Base Environment
   meta:
     id: env_eac2d1596251455db38682ef981039dd
     created: 1776017077271
-    modified: 1776188697795
+    modified: 1776281100624
     isPrivate: false
   data:
     base_url: http://localhost:5120
     unidade_organizacional_id: e286f99e-5075-4b73-96d9-af462c36a5a6
-    usuario_id_mock_01: 5084b27c-d665-4f92-a969-971d42b5309b
-    usuario_id_mock_02: e2efa355-a355-4bad-b75b-4356d507cb53
-    usuario_id_mock_03: a28afbd8-055a-45ef-b558-4f9948c5bc52
+    usuario_id_mock_01: 92c3599e-bf86-4909-9cea-4f3ba854dcd6
+    usuario_id_mock_02: a6f02de1-ddfc-4707-8ace-2f9e581cebbb
+    usuario_id_mock_03: ea516b2f-52e4-4bd5-9428-b3029f662e2c
     usuario_id_fake: f6a30a56-c65c-41ac-ab07-8b0b113bd521
     unidade_organizacional_id_fake: e525e8a8-5424-4a76-af26-c2ab45e1ef07

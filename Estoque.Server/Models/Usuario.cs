@@ -32,7 +32,7 @@ public class Usuario
     public virtual bool Valido { get; set; }
 }
 
-public class UsuarioRecuperado : Usuario
+public class UsuarioGetResponse : Usuario
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     [JsonPropertyOrder(1)]
