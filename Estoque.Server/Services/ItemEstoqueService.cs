@@ -21,7 +21,9 @@ public class ItemEstoqueService : BaseService
         {
             await ValidarItemEstoque(item, Guid.Empty);
 
-            return await _repository.CadastrarItemEstoque(item);
+            Guid itemId = await _repository.CadastrarItemEstoque(item);
+
+            return itemId;
         }
         catch (ValidationException)
         {

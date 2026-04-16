@@ -129,9 +129,11 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades()
+    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades(int skip, int top, string? razaoSocial, string? Cnpj)
     {
-        const string sql = @"
+        var unidades = new List<UnidadeOrganizacionalRecuperado>();
+
+        string sql = @"
             SELECT
                 unidade_organizacional_id,
                 id_matriz,
@@ -149,39 +151,50 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 email
             FROM
                 estoque_certo.unidade_organizacional
-            ORDER BY
-                razao_social;
+            WHERE 1 = 1 
         ";
+
+        if (!string.IsNullOrEmpty(razaoSocial)) sql += " AND razao_social ILIKE @razao_social ";
+
+        if (!string.IsNullOrEmpty(Cnpj)) sql += " AND Cnpj ILIKE @Cnpj ";
+
+        sql += " ORDER BY razao_social LIMIT @top OFFSET @skip";
 
         try
         {
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            await using var reader = await cmd.ExecuteReaderAsync();
 
-            var unidades = new List<UnidadeOrganizacionalRecuperado>();
+            cmd.Parameters.AddWithValue("razao_social", $"%{razaoSocial}%");
+            cmd.Parameters.AddWithValue("Cnpj", $"%{Cnpj}%");
+            cmd.Parameters.AddWithValue("skip", skip);
+            cmd.Parameters.AddWithValue("top", top);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
             {
-                unidades.Add(new UnidadeOrganizacionalRecuperado
-                {
-                    UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                    IdMatriz = reader.GetGuidNullable("id_matriz"),
-                    Cnpj = reader.GetString("cnpj"),
-                    RazaoSocial = reader.GetString("razao_social"),
-                    NomeFantasia = reader.GetString("nome_fantasia"),
-                    Cep = reader.GetString("cep"),
-                    Numero = reader.GetString("numero"),
-                    Complemento = reader.GetString("complemento"),
-                    Bairro = reader.GetString("bairro"),
-                    Cidade = reader.GetString("cidade"),
-                    Uf = reader.GetString("uf"),
-                    Pais = reader.GetString("pais"),
-                    Telefone = reader.GetString("telefone"),
-                    Email = reader.GetString("email")
-                });
+                var unidadeOrganizacionalRecuperada = new UnidadeOrganizacionalRecuperado();
+
+                unidadeOrganizacionalRecuperada.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+                unidadeOrganizacionalRecuperada.IdMatriz = reader.GetGuidNullable("id_matriz");
+                unidadeOrganizacionalRecuperada.Cnpj = reader.GetString("cnpj");
+                unidadeOrganizacionalRecuperada.RazaoSocial = reader.GetString("razao_social");
+                unidadeOrganizacionalRecuperada.NomeFantasia = reader.GetString("nome_fantasia");
+                unidadeOrganizacionalRecuperada.Cep = reader.GetString("cep");
+                unidadeOrganizacionalRecuperada.Numero = reader.GetString("numero");
+                unidadeOrganizacionalRecuperada.Complemento = reader.GetString("complemento");
+                unidadeOrganizacionalRecuperada.Bairro = reader.GetString("bairro");
+                unidadeOrganizacionalRecuperada.Cidade = reader.GetString("cidade");
+                unidadeOrganizacionalRecuperada.Uf = reader.GetString("uf");
+                unidadeOrganizacionalRecuperada.Pais = reader.GetString("pais");
+                unidadeOrganizacionalRecuperada.Telefone = reader.GetString("telefone");
+                unidadeOrganizacionalRecuperada.Email = reader.GetString("email");
+
+                unidades.Add(unidadeOrganizacionalRecuperada);
             }
+
             return unidades;
         }
         catch

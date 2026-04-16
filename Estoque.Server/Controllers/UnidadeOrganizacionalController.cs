@@ -56,9 +56,9 @@ public static class UnidadeOrganizacionalController
         #endregion
 
         #region [ get ]
-        app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service) =>
+        app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service, int skip = 0, int top = 10, string? razaoSocial = null, string? Cnpj = null) =>
         {
-            var result = await service.ObterUnidades();
+            var result = await service.ObterUnidades(skip, top, razaoSocial, Cnpj);
 
             return Results.Ok(result);
         })

@@ -59,11 +59,11 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
-    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades()
+    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades(int skip, int top, string? razaoSocial, string? Cnpj)
     {
         try
         {
-            return await _repository.ObterUnidades();
+            return await _repository.ObterUnidades(skip, top, razaoSocial, Cnpj);
         }
         catch (Exception ex)
         {
