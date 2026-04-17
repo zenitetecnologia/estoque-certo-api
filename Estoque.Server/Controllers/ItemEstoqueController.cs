@@ -57,9 +57,9 @@ public static class ItemEstoqueController
         #endregion
 
         #region [ get ]
-        app.MapGet("v1/itens-estoque", async (ItemEstoqueService service) =>
+        app.MapGet("v1/itens-estoque", async (ItemEstoqueService service, int skip = 0, int top = 10, string? descricao = null, Guid? unidadeOrganizacionalId = null, Guid? espacoId = null) =>
         {
-            var result = await service.ObterItens();
+            var result = await service.ObterItens(skip, top, descricao, unidadeOrganizacionalId, espacoId);
 
             return Results.Ok(result);
         })

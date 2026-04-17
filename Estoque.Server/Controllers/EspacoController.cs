@@ -56,9 +56,9 @@ public static class EspacoController
         #endregion
 
         #region [ get ]
-        app.MapGet("v1/espacos", async (EspacoService service) =>
+        app.MapGet("v1/espacos", async (EspacoService service, int skip = 0, int top = 10, string? nome = null, Guid? unidadeOrganizacionalId = null) =>
         {
-            var result = await service.ObterEspacos();
+            var result = await service.ObterEspacos(skip, top, nome, unidadeOrganizacionalId);
 
             return Results.Ok(result);
         })

@@ -83,11 +83,11 @@ public class ItemEstoqueService : BaseService
         }
     }
 
-    public async Task<List<ItemEstoqueRecuperado>> ObterItens()
+    public async Task<List<ItemEstoqueRecuperado>> ObterItens(int skip, int top, string? descricao, Guid? unidadeOrganizacionalId, Guid? espacoId)
     {
         try
         {
-            return await _repository.ObterItens();
+            return await _repository.ObterItens(skip, top, descricao, unidadeOrganizacionalId, espacoId);
         }
         catch (Exception ex)
         {

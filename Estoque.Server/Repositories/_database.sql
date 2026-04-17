@@ -138,3 +138,20 @@ VALUES
 'e286f99e-5075-4b73-96d9-af462c36a5a6',
 'true'
 );
+
+insert into estoque_certo.item_estoque 
+(
+	unidade_organizacional_id,
+	espaco_id,
+	descricao,
+	tipo_unidade_medida,
+	quantidade
+)
+values 
+(
+	'e286f99e-5075-4b73-96d9-af462c36a5a6',
+	'6ab71fef-cf4e-4dbf-af76-f2058224721a',
+	'bala de caramelo',
+	'1',
+	'10'
+);

@@ -9,9 +9,11 @@ public class ItemEstoqueRepository : BaseRepository
     public ItemEstoqueRepository(IDbConnection connection) : base(connection) { }
 
 
-    public async Task<List<ItemEstoqueRecuperado>> ObterItens()
+    public async Task<List<ItemEstoqueRecuperado>> ObterItens(int skip, int top, string? descricao, Guid? unidadeOrganizacionalId, Guid? espacoId)
     {
-        const string sql = @"
+        var itens = new List<ItemEstoqueRecuperado>();
+
+        string sql = @"
             SELECT
                 item_estoque_id,
                 unidade_organizacional_id,
@@ -21,30 +23,44 @@ public class ItemEstoqueRepository : BaseRepository
                 quantidade
             FROM
                 estoque_certo.item_estoque
-            ORDER BY
-                descricao;
+            WHERE 1 = 1
         ";
+
+        if (!string.IsNullOrEmpty(descricao)) sql += " AND descricao ILIKE @descricao";
+
+        if (unidadeOrganizacionalId != null) sql += " AND unidade_organizacional_id = @unidade_organizacional_id";
+
+        if (espacoId != null) sql += " AND espaco_id = @espaco_id";
+
+        sql += " ORDER BY descricao LIMIT @top OFFSET @skip";
 
         try
         {
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.AddWithValue("descricao", $"%{descricao}%");
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("espaco_id", espacoId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("top", top);
+            cmd.Parameters.AddWithValue("skip", skip);
+
             await using var reader = await cmd.ExecuteReaderAsync();
 
-            var itens = new List<ItemEstoqueRecuperado>();
 
             while (await reader.ReadAsync())
             {
-                itens.Add(new ItemEstoqueRecuperado
-                {
-                    ItemEstoqueId = reader.GetGuid("item_estoque_id"),
-                    UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                    EspacoId = reader.GetGuid("espaco_id"),
-                    Descricao = reader.GetString("descricao"),
-                    TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida"),
-                    Quantidade = reader.GetDecimal("quantidade")
-                });
+                var itemEstoqueRecuperado = new ItemEstoqueRecuperado();
+
+                itemEstoqueRecuperado.ItemEstoqueId = reader.GetGuid("item_estoque_id");
+                itemEstoqueRecuperado.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+                itemEstoqueRecuperado.EspacoId = reader.GetGuid("espaco_id");
+                itemEstoqueRecuperado.Descricao = reader.GetString("descricao");
+                itemEstoqueRecuperado.TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida");
+                itemEstoqueRecuperado.Quantidade = reader.GetDecimal("quantidade");
+
+                itens.Add(itemEstoqueRecuperado);
             }
 
             return itens;

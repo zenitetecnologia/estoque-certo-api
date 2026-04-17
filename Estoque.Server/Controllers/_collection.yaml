@@ -669,11 +669,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
-        name: usuarios-204
+        name: usuarios-200
         meta:
           id: req_d5c17ed5d10a40e0ab796844f5382ecd
           created: 1776283315235
-          modified: 1776283393391
+          modified: 1776451398572
           isPrivate: false
           description: ""
           sortKey: -1776014934832.7578
@@ -687,11 +687,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_02 }}"
-        name: usuarios-204
+        name: usuarios-200
         meta:
           id: req_fee58b482a704d8b94ebd83e616ed93f
           created: 1776283533602
-          modified: 1776283540655
+          modified: 1776451394634
           isPrivate: false
           description: ""
           sortKey: -1776014934782.7578
@@ -705,11 +705,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_03 }}"
-        name: usuarios-204
+        name: usuarios-200
         meta:
           id: req_8700426a94034bc3a5023508ff798dd2
           created: 1776283559384
-          modified: 1776283564881
+          modified: 1776451403926
           isPrivate: false
           description: ""
           sortKey: -1776014934732.7578
@@ -1305,11 +1305,11 @@ collection:
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
           _.unidade_organizacional_mock_01 }}"
-        name: unidades-organizacionais-204
+        name: unidades-organizacionais-200
         meta:
           id: req_619cca3d7b094e659cf4ae8da12fb8e3
           created: 1776367601486
-          modified: 1776367735522
+          modified: 1776451285751
           isPrivate: false
           description: ""
           sortKey: -1776017750201.9385
@@ -1330,11 +1330,11 @@ collection:
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
           _.unidade_organizacional_mock_02 }}"
-        name: unidades-organizacionais-204
+        name: unidades-organizacionais-200
         meta:
           id: req_25f1b25359f3488d993ad12f15416ebd
           created: 1776367751325
-          modified: 1776367755885
+          modified: 1776451281301
           isPrivate: false
           description: ""
           sortKey: -1776017414022.7192
@@ -1403,18 +1403,1104 @@ collection:
             send: true
             store: true
           rebuildPath: true
+  - name: espaços
+    meta:
+      id: fld_ffdfbdfacab14e0fa2d5936ec251164c
+      created: 1776445366121
+      modified: 1776450256430
+      sortKey: -1776445366121
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-201
+        meta:
+          id: req_0572eacdf2fd4ec1bfe9029f9c5a8571
+          created: 1776445371429
+          modified: 1776446372213
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371429
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "nome": "BatCaverna",
+              "descricao": "caverna do Batman"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const espaco = locationHeader.value.split('/').pop();
+              insomnia.environment.set('espaco_mock_01', espaco);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-201
+        meta:
+          id: req_cb7fe1d1b8524182a100e7dbf463705c
+          created: 1776445648208
+          modified: 1776446392578
+          isPrivate: false
+          description: ""
+          sortKey: -1776403409596.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "nome": "Condado",
+              "descricao": "Vila dos Hobbits"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const espaco = locationHeader.value.split('/').pop();
+              insomnia.environment.set('espaco_mock_02', espaco);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-400
+        meta:
+          id: req_717e78f6b31e4959bb2d4d009cb746f0
+          created: 1776445861535
+          modified: 1776446198978
+          isPrivate: false
+          description: ""
+          sortKey: -1776382428680.25
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "",
+              "descricao": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-500
+        meta:
+          id: req_29768537781f4048b3cb15a9efeb6781
+          created: 1776446117539
+          modified: 1776446218193
+          isPrivate: false
+          description: ""
+          sortKey: -1776371938222.125
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
+              "nome": "Valfenda",
+              "descricao": "Cidade dos elfos"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
+        name: espaços-200
+        meta:
+          id: req_c46df8bcd17f4a4a87ac1bb8edbc7abf
+          created: 1776446228520
+          modified: 1776446691570
+          isPrivate: false
+          description: ""
+          sortKey: -1776366692993.0625
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "nome": "Valfenda",
+              "descricao": "Casa dos Elfos"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_fake }}"
+        name: espaços-404
+        meta:
+          id: req_8ceaeff32a704f29b4d0c88d7c902d4d
+          created: 1776446713682
+          modified: 1776446984857
+          isPrivate: false
+          description: ""
+          sortKey: -1776362758971.2656
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "nome": "Valfenda",
+              "descricao": "Casa dos Elfos"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
+        name: espaços-400
+        meta:
+          id: req_1763eb40cd164daabd22d2c607173685
+          created: 1776446878686
+          modified: 1776447056940
+          isPrivate: false
+          description: ""
+          sortKey: -1776362759071.2656
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "",
+              "descricao": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
+        name: espaços-200-by-id
+        meta:
+          id: req_65d77fb5b5b4469293b9bb67fed10c81
+          created: 1776447108974
+          modified: 1776447177445
+          isPrivate: false
+          description: ""
+          sortKey: -1776362758871.2656
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_fake }}"
+        name: espaços-404-by-id
+        meta:
+          id: req_7bd1fe5dc5194b038660fd1790d6de56
+          created: 1776447165404
+          modified: 1776447221554
+          isPrivate: false
+          description: ""
+          sortKey: -1776362103317.6328
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
+        name: espaços-500-by-id
+        meta:
+          id: req_7cc627529c93446bb0ffb2bd13b0fc4e
+          created: 1776447241851
+          modified: 1776447251401
+          isPrivate: false
+          description: ""
+          sortKey: -1776361775540.8164
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-200
+        meta:
+          id: req_f80d7c758fc940528f9c87123cc96654
+          created: 1776447296511
+          modified: 1776447303035
+          isPrivate: false
+          description: ""
+          sortKey: -1776361611652.4082
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-500
+        meta:
+          id: req_cb2efd2988b24f96bedcc334c980c213
+          created: 1776447331915
+          modified: 1776450126918
+          isPrivate: false
+          description: ""
+          sortKey: -1776361529708.204
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url
+          }}/v1/espacos?skip=0&top=5&nome=al&unidadeOrganizacionalId={{
+          _.unidade_organizacional_id }}"
+        name: espaços-200-paged
+        meta:
+          id: req_cfeaecfc679e477fa39fa1084f76bb4a
+          created: 1776448857067
+          modified: 1776450037482
+          isPrivate: false
+          description: ""
+          sortKey: -1776361570680.3062
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url
+          }}/v1/espacos?skip=0&top=5&nome=al&unidadeOrganizacionalId={{
+          _.unidade_organizacional_id_fake }}"
+        name: espaços-200-empty
+        meta:
+          id: req_3228432187e14338b3f543ad17b9c1a9
+          created: 1776449075099
+          modified: 1776450082143
+          isPrivate: false
+          description: ""
+          sortKey: -1776361550194.2551
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
+        name: espaços-200
+        meta:
+          id: req_b9dca203357740ce843d3de55e2b4f61
+          created: 1776450150913
+          modified: 1776450187804
+          isPrivate: false
+          description: ""
+          sortKey: -1776361529608.204
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
+        name: espaços-200
+        meta:
+          id: req_d42526cce2e84d77896d6be96bd773ac
+          created: 1776450194630
+          modified: 1776450220168
+          isPrivate: false
+          description: ""
+          sortKey: -1776361488686.102
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
+        name: espaços-404
+        meta:
+          id: req_ce7e8e28b4204dc29bd3296323d40a60
+          created: 1776450268571
+          modified: 1776450283143
+          isPrivate: false
+          description: ""
+          sortKey: -1776361468225.051
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espacoId }}"
+        name: espaços-400
+        meta:
+          id: req_e67a162407ec42ed9d8c4572be81700c
+          created: 1776450297561
+          modified: 1776450934499
+          isPrivate: false
+          description: ""
+          sortKey: -1776361478455.5767
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
+        name: espaços-500
+        meta:
+          id: req_d646cbc714974598857daab869fe85be
+          created: 1776450957864
+          modified: 1776450961457
+          isPrivate: false
+          description: ""
+          sortKey: -1776361468125.051
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: itens_estoque
+    meta:
+      id: fld_2fb06b8772634af09b0a4bdc75c8d103
+      created: 1776451449616
+      modified: 1776454257133
+      sortKey: -1776451449616
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-201
+        meta:
+          id: req_e8dddd1f2ab24ccc888b3db709b1429f
+          created: 1776451454074
+          modified: 1776453529337
+          isPrivate: false
+          description: ""
+          sortKey: -1776451454074
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "espacoId": "{{ _.espacoId }}",
+              "descricao": "mjolnir",
+              "tipoUnidadeMedida": 5,
+              "quantidade": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const item = locationHeader.value.split('/').pop();
+              insomnia.environment.set('item_mock_01', item);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-201
+        meta:
+          id: req_b810f74068d44bc7881a7c4de42450ac
+          created: 1776451695829
+          modified: 1776453533237
+          isPrivate: false
+          description: ""
+          sortKey: -1776448412751.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "espacoId": "{{ _.espacoId }}",
+              "descricao": "Stormbreaker",
+              "tipoUnidadeMedida": 5,
+              "quantidade": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const item = locationHeader.value.split('/').pop();
+              insomnia.environment.set('item_mock_02', item);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-400
+        meta:
+          id: req_95b7ce796c4b4dd98febce6bf1447cdb
+          created: 1776451925783
+          modified: 1776453563642
+          isPrivate: false
+          description: ""
+          sortKey: -1776446892090.25
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "descricao": "",
+              "tipoUnidadeMedida": 5,
+              "quantidade": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-500
+        meta:
+          id: req_80387fe7e96e4e6a973a931db7cf8083
+          created: 1776453364221
+          modified: 1776453561463
+          isPrivate: false
+          description: ""
+          sortKey: -1776446131759.625
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
+              "espacoId": "{{ _.espaco_fake }}",
+              "descricao": "teste",
+              "tipoUnidadeMedida": null,
+              "quantidade": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-200
+        meta:
+          id: req_acb52c3ddf934fa8b0cfe47164c0f7a9
+          created: 1776453522933
+          modified: 1776453680275
+          isPrivate: false
+          description: ""
+          sortKey: -1776445751594.3125
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "espacoId": "{{ _.espacoId }}",
+              "descricao": "martelo do Thor",
+              "tipoUnidadeMedida": 5,
+              "quantidade": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-400
+        meta:
+          id: req_81a71099bb33493181547b1e7229f0c9
+          created: 1776453701957
+          modified: 1776453779997
+          isPrivate: false
+          description: ""
+          sortKey: -1776445561511.6562
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "descricao": "",
+              "tipoUnidadeMedida": 5,
+              "quantidade": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-500
+        meta:
+          id: req_ec004cb224e44ee0bd11eaba2ffabf1b
+          created: 1776453802487
+          modified: 1776453972430
+          isPrivate: false
+          description: ""
+          sortKey: -1776445466470.3281
+        method: PUT
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
+              "espacoId": "{{ _.espaco_fake }}",
+              "descricao": "teste",
+              "tipoUnidadeMedida": null,
+              "quantidade": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-200
+        meta:
+          id: req_9d57a656da714bee89fdb1a95229ad70
+          created: 1776453988597
+          modified: 1776455389498
+          isPrivate: false
+          description: ""
+          sortKey: -1776445418949.664
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantidade": 1,
+              "tipoMovimentacao": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-400
+        meta:
+          id: req_5fec126f608349f3bfacee63df5769ea
+          created: 1776455398691
+          modified: 1776455419352
+          isPrivate: false
+          description: ""
+          sortKey: -1776445395189.332
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantidade": 0,
+              "tipoMovimentacao": 0
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-400-insufficient
+        meta:
+          id: req_c7139ba390024ba392f60d3de19f6e43
+          created: 1776455529650
+          modified: 1776455544009
+          isPrivate: false
+          description: ""
+          sortKey: -1776445383309.166
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantidade": 3,
+              "tipoMovimentacao": 2
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-404
+        meta:
+          id: req_8207a734776945ec9f8c2f6c70b964af
+          created: 1776455568463
+          modified: 1776455575012
+          isPrivate: false
+          description: ""
+          sortKey: -1776445377369.083
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantidade": 3,
+              "tipoMovimentacao": 3
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-500
+        meta:
+          id: req_9ad38c9e3995415d877b88fd09155864
+          created: 1776455599246
+          modified: 1776455696422
+          isPrivate: false
+          description: ""
+          sortKey: -1776445374399.0415
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantidade": "teste",
+              "tipoMovimentacao": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-200-by-id
+        meta:
+          id: req_59639c60bb584f999b64ce7282bf154a
+          created: 1776455717731
+          modified: 1776455748467
+          isPrivate: false
+          description: ""
+          sortKey: -1776445372914.0208
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_Fake }}"
+        name: itens_estoque-404-by-id
+        meta:
+          id: req_c33e5cbce8a34e619a82d3d7d0a139dc
+          created: 1776455809665
+          modified: 1776455860532
+          isPrivate: false
+          description: ""
+          sortKey: -1776445372171.5103
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_Fake }}"
+        name: itens_estoque-500-by-id
+        meta:
+          id: req_91bb164185094173accb2804de698b07
+          created: 1776455868038
+          modified: 1776455868038
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371800.2551
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-200
+        meta:
+          id: req_2f4f8b8e889042bc94ba97d60048bef6
+          created: 1776455925936
+          modified: 1776455933461
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371700.2551
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
     id: jar_31277e8a01034b3cac59d20ec15b0ff1
     created: 1776017078657
-    modified: 1776364257922
+    modified: 1776454257129
 environments:
   name: Base Environment
   meta:
     id: env_eac2d1596251455db38682ef981039dd
     created: 1776017077271
-    modified: 1776370481456
+    modified: 1776454257131
     isPrivate: false
   data:
     base_url: http://localhost:5120
@@ -1427,3 +2513,9 @@ environments:
     unidade_organizacional_mock_01: 8d8b3f05-65ae-4772-bb4a-0196245716e5
     unidade_organizacional_mock_02: 1d914910-0fa7-4785-91a3-8984dff28370
     espacoId: 6ab71fef-cf4e-4dbf-af76-f2058224721a
+    espaco_mock_01: 2183e8fd-1a35-431f-a1da-96a81a67e865
+    espaco_mock_02: 3b6fb533-3992-46ba-8ef0-a4e9983aeca2
+    espaco_fake: 273e73e3-46ea-4436-a89a-432ba8d6967d
+    item_mock_01: cd7e4bf6-b627-4b7d-9fdc-d7ac659430ac
+    item_mock_02: f8a393c4-c470-4d29-84e5-05cd7ad80253
+    item_Fake: b1909e70-080e-49b4-a197-aa7adf538c17

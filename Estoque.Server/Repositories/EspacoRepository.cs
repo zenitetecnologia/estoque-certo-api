@@ -8,9 +8,11 @@ public class EspacoRepository : BaseRepository
 {
     public EspacoRepository(IDbConnection connection) : base(connection) { }
 
-    public async Task<List<EspacoRecuperado>> ObterEspacos()
+    public async Task<List<EspacoRecuperado>> ObterEspacos(int skip, int top, string? nome, Guid? unidadeOrganizacionalId)
     {
-        const string sql = @"
+        var espacos = new List<EspacoRecuperado>();
+
+        string sql = @"
             SELECT
                 espaco_id,
                 unidade_organizacional_id,
@@ -18,28 +20,39 @@ public class EspacoRepository : BaseRepository
                 descricao
             FROM
                 estoque_certo.espaco
-            ORDER BY
-                nome;
+            WHERE 1 = 1 
         ";
+
+        if (!string.IsNullOrWhiteSpace(nome)) sql += "AND nome ILIKE @nome ";
+
+        if (unidadeOrganizacionalId != null) sql += "AND unidade_organizacional_id = @unidade_organizacional_id ";
+
+        sql += "ORDER BY nome";
 
         try
         {
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.AddWithValue("nome", $"%{nome}%");
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("skip", skip);
+            cmd.Parameters.AddWithValue("top", top);
+
             await using var reader = await cmd.ExecuteReaderAsync();
 
-            var espacos = new List<EspacoRecuperado>();
 
             while (await reader.ReadAsync())
             {
-                espacos.Add(new EspacoRecuperado
-                {
-                    EspacoId = reader.GetGuid(reader.GetOrdinal("espaco_id")),
-                    UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                    Nome = reader.GetString(reader.GetOrdinal("nome")),
-                    Descricao = reader.GetStringSafe("descricao")
-                });
+                var espaco = new EspacoRecuperado();
+
+                espaco.EspacoId = reader.GetGuid(reader.GetOrdinal("espaco_id"));
+                espaco.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+                espaco.Nome = reader.GetString(reader.GetOrdinal("nome"));
+                espaco.Descricao = reader.GetStringSafe("descricao");
+
+                espacos.Add(espaco);
             }
 
             return espacos;

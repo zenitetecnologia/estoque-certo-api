@@ -82,11 +82,11 @@ public class EspacoService : BaseService
         }
     }
 
-    public async Task<List<EspacoRecuperado>> ObterEspacos()
+    public async Task<List<EspacoRecuperado>> ObterEspacos(int skip, int top, string? nome, Guid? unidadeOrganizacionalId)
     {
         try
         {
-            return await _repository.ObterEspacos();
+            return await _repository.ObterEspacos(skip, top, nome, unidadeOrganizacionalId);
         }
         catch (Exception ex)
         {
