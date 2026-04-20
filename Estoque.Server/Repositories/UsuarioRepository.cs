@@ -228,7 +228,7 @@ public class UsuarioRepository : BaseRepository
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", (object)unidadeOrganizacionalId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", (object)unidadeOrganizacionalId! ?? DBNull.Value);
             cmd.Parameters.AddWithValue("ignoreId", ignoreId);
 
             var result = await cmd.ExecuteScalarAsync();
@@ -274,6 +274,56 @@ public class UsuarioRepository : BaseRepository
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
             return await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<Usuario?> ObterIdentificador(string identificador)
+    {
+        const string sql = @"
+            SELECT 
+                usuario_id, 
+                username, 
+                senha, 
+                nome, 
+                telefone, 
+                perfil, 
+                unidade_organizacional_id, 
+                valido
+            FROM estoque_certo.usuario 
+            WHERE username = @identificador OR telefone = @identificador
+            LIMIT 1;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.AddWithValue("identificador", identificador);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                return new Usuario
+                {
+                    UsuarioId = reader.GetGuid("usuario_id"),
+                    Username = reader.GetString("username"),
+                    Senha = reader.GetString("senha"),
+                    Nome = reader.GetString("nome"),
+                    Telefone = reader.IsDBNull("telefone") ? string.Empty : reader.GetString("telefone"),
+                    Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
+                    UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
+                    Valido = reader.GetBoolean("valido")
+                };
+            }
+
+            return null;
         }
         catch
         {

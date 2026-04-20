@@ -24,6 +24,7 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<UnidadeOrganizacionalService>();
 builder.Services.AddScoped<ItemEstoqueService>();
 builder.Services.AddScoped<EspacoService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddCors(x => x.AddPolicy("*", y => y.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
@@ -46,6 +47,7 @@ app.MapUsuarioEndpoints();
 app.MapUnidadeOrganizacionalEndpoints();
 app.MapEspacosEndpoints();
 app.MapItemEstoqueEndpoints();
+app.MapAuthEndpoints();
 
 app.UseExceptionHandler(errorApp =>
 {
@@ -57,6 +59,21 @@ app.UseExceptionHandler(errorApp =>
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsJsonAsync(validationException.Errors);
+            return;
+        }
+
+        if (exception is UnauthorizedAccessException unauthorized)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsJsonAsync(new { mensagem = unauthorized.Message });
+            return;
+        }
+
+        if (exception?.Message.StartsWith("FORBIDDEN:") == true)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            var msg = exception.Message.Replace("FORBIDDEN:", "");
+            await context.Response.WriteAsJsonAsync(new { mensagem = msg });
             return;
         }
 
