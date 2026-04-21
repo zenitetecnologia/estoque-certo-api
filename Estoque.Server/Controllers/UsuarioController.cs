@@ -63,7 +63,7 @@ public static class UsuarioController
         {
             await service.ExcluirUsuario(usuarioId);
 
-            return Results.Ok("Usuário excluído com sucesso.");
+            return Results.NoContent();
         })
         .WithTags("usuarios")
         .WithSummary("Exclui um usuário")

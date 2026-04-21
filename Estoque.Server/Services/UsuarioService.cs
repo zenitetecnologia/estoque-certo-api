@@ -23,9 +23,7 @@ public class UsuarioService : BaseService
 
             usuario.Perfil = PerfilUsuario.Normal;
 
-            Guid usuarioId = await _usuarioRepository.CadastrarUsuario(usuario);
-
-            return usuarioId;
+            return await _usuarioRepository.CadastrarUsuario(usuario);
         }
         catch (ValidationException)
         {
@@ -37,7 +35,7 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<int> AtualizarUsuario(Usuario usuario, Guid usuarioId)
+    public async Task AtualizarUsuario(Usuario usuario, Guid usuarioId)
     {
         try
         {
@@ -46,8 +44,6 @@ public class UsuarioService : BaseService
             var affected = await _usuarioRepository.AtualizarUsuario(usuario, usuarioId);
 
             if (affected <= 0) throw new NotFoundException("Usuário não encontrado com os parâmetros informados.");
-
-            return affected;
         }
         catch (NotFoundException)
         {
@@ -89,15 +85,13 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<int> ExcluirUsuario(Guid usuarioId)
+    public async Task ExcluirUsuario(Guid usuarioId)
     {
         try
         {
             var affected = await _usuarioRepository.ExcluirUsuario(usuarioId);
 
             if (affected <= 0) throw new NotFoundException("Usuário não encontrado para o ID informado.");
-
-            return affected;
         }
         catch (NotFoundException)
         {
@@ -152,7 +146,7 @@ public class UsuarioService : BaseService
             var unidadeOrganizacionalExiste = await _unidadeOrganizacionalRepository.ObterUnidade(usuario.UnidadeOrganizacionalId.Value);
 
             if (unidadeOrganizacionalExiste == null)
-                AddError(nameof(usuario.UnidadeOrganizacionalId), "Unidade organizacional não encontrada para o ID informado.");
+                AddError(nameof(usuario.UnidadeOrganizacionalId), "Unidade organizacional não encontrada.");
         }
 
         if (string.IsNullOrWhiteSpace(usuario.Username))
@@ -161,10 +155,10 @@ public class UsuarioService : BaseService
         }
         else
         {
-            bool usernameExiste = await _usuarioRepository.VerificarUsuarioExiste(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
+            var usernameExiste = await _usuarioRepository.VerificarUsuarioExiste(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
 
             if (usernameExiste)
-                AddError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário.");
+                AddError(nameof(usuario.Username), "Este username já está sendo utilizado por outro usuário.");
         }
 
         if (string.IsNullOrWhiteSpace(usuario.Senha))

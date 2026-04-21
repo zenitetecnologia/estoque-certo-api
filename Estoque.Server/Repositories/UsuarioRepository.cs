@@ -80,8 +80,8 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId!);
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId!);
             cmd.Parameters.AddWithValue("username", usuario.Username);
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
@@ -119,6 +119,7 @@ public class UsuarioRepository : BaseRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
+
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
 
             await using var reader = await cmd.ExecuteReaderAsync();
@@ -228,7 +229,7 @@ public class UsuarioRepository : BaseRepository
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", (object)unidadeOrganizacionalId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", (object?)unidadeOrganizacionalId ?? DBNull.Value);
             cmd.Parameters.AddWithValue("ignoreId", ignoreId);
 
             var result = await cmd.ExecuteScalarAsync();
