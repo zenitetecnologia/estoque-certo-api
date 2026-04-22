@@ -10,6 +10,8 @@ public class HistoricoRepository : BaseRepository
 
     public async Task<List<HistoricoRecuperado>> ObterHistoricoPorItem(Guid itemEstoqueId)
     {
+        var historicos = new List<HistoricoRecuperado>();
+
         const string sql = @"
             SELECT
                 historico_id,
@@ -36,7 +38,6 @@ public class HistoricoRepository : BaseRepository
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
-            var historicos = new List<HistoricoRecuperado>();
 
             while (await reader.ReadAsync())
             {

@@ -2,25 +2,25 @@ type: collection.insomnia.rest/5.0
 schema_version: "5.1"
 name: estoque-certo
 meta:
-  id: wrk_c6976e8100de4aad86ce48d51b370039
-  created: 1776781220000
-  modified: 1776781220000
+  id: wrk_509a6b549b024519979eb154e5247b16
+  created: 1776878233281
+  modified: 1776878233281
   description: ""
 collection:
   - name: usuarios
     meta:
-      id: fld_4ed79f6cbadc49719be1af145cffbcb7
+      id: fld_39abb8c77067409cb5741c3471eed3c8
       created: 1776017077288
-      modified: 1776785621414
+      modified: 1776887310632
       sortKey: -1776451449716
       description: Rotas da entidade usuários.
     children:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_cf27d413730c441abd4006565891a9e2
+          id: req_b40b1d3445ec4b7297fea62373e07337
           created: 1776017545694
-          modified: 1776783771531
+          modified: 1776881920362
           isPrivate: false
           description: ""
           sortKey: -1776017077843.5
@@ -32,8 +32,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "cristiano.ronaldo",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo"
             }
         headers:
           - name: Content-Type
@@ -65,9 +64,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400
         meta:
-          id: req_735354d7a0d84d7ba1ccf275a3c2445d
+          id: req_ffe305a968784ce2b2dd8f5de8a06c8e
           created: 1776017553481
-          modified: 1776783012052
+          modified: 1776881933983
           isPrivate: false
           description: ""
           sortKey: -1776017077543.5
@@ -79,8 +78,7 @@ collection:
             	"unidadeOrganizacionalId": null,
               "username": "",
               "senha": null,
-              "nome": "",
-              "telefone": null
+              "nome": ""
             }
         headers:
           - name: Content-Type
@@ -96,9 +94,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400-duplicated
         meta:
-          id: req_5fdc54e749234cb6aa5d72fefde58d6b
+          id: req_e6540c67072d47469f7f226fb13a09ee
           created: 1776017752676
-          modified: 1776110801256
+          modified: 1776881957102
           isPrivate: false
           description: ""
           sortKey: -1776017077518.5
@@ -110,8 +108,7 @@ collection:
               "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "cristiano.ronaldo",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo"
             }
         headers:
           - name: Content-Type
@@ -127,9 +124,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-500
         meta:
-          id: req_bffb945cd2d7402cbce0c846c9247d52
+          id: req_f9462f75a5d24ab7b760dd5105b988bf
           created: 1776018113743
-          modified: 1776021671619
+          modified: 1776881964687
           isPrivate: false
           description: ""
           sortKey: -1776017077493.5
@@ -141,8 +138,7 @@ collection:
               "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo"
             }
         headers:
           - name: Content-Type
@@ -158,9 +154,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-200
         meta:
-          id: req_d955da8044754bb4b1a6521b793e0610
+          id: req_c67589927faa49d7a00e341e27ac61d0
           created: 1776018251916
-          modified: 1776783778763
+          modified: 1776881971037
           isPrivate: false
           description: ""
           sortKey: -1776016049418.4688
@@ -172,8 +168,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "cr7.omelhor",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo dos Santos Aveiro",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo dos Santos Aveiro"
             }
         headers:
           - name: Content-Type
@@ -189,9 +184,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400
         meta:
-          id: req_e9d5c939fc9b49aaae6155f18c5de195
+          id: req_3362ea22fef64e14a4b7649ecfd349fd
           created: 1776020023293
-          modified: 1776783815748
+          modified: 1776887367880
           isPrivate: false
           description: ""
           sortKey: -1776015535380.9531
@@ -203,8 +198,7 @@ collection:
             	"unidadeOrganizacionalId": null,
             	"username": "",
               "senha": null,
-              "nome": "",
-              "telefone": null
+              "nome": ""
             }
         headers:
           - name: Content-Type
@@ -220,9 +214,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
         name: usuarios-404
         meta:
-          id: req_04de2fd5555842fabd89ddbf5239fd88
+          id: req_57995ae90c244ebca128e86d0c940ce8
           created: 1776020515113
-          modified: 1776189346447
+          modified: 1776881997778
           isPrivate: false
           description: ""
           sortKey: -1776014978513.0977
@@ -234,8 +228,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "cr7.melhordomundo",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo dos Santos Aveiro",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo dos Santos Aveiro"
             }
         headers:
           - name: Content-Type
@@ -251,9 +244,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500
         meta:
-          id: req_6043604a53a045f28793922956d2de65
+          id: req_75cc21d80fb645e9a9f833c0b1883c62
           created: 1776020739660
-          modified: 1776783928261
+          modified: 1776882006490
           isPrivate: false
           description: ""
           sortKey: -1776014935682.7578
@@ -265,8 +258,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo dos Santos Aveiro",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo dos Santos Aveiro"
             }
         headers:
           - name: Content-Type
@@ -282,9 +274,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_bfa2fd8d53e345f69e2a202f29daec64
+          id: req_1b3f83af21be4539bab916905fb0c14b
           created: 1776021559940
-          modified: 1776782981715
+          modified: 1776881918559
           isPrivate: false
           description: ""
           sortKey: -1776017077743.5
@@ -296,8 +288,7 @@ collection:
                 "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
                 "username": "lionel.messi",
                 "senha": "Senha@123",
-                "nome": "Lionel Messi",
-                "telefone": "37999990001"
+                "nome": "Lionel Messi"
             }
         headers:
           - name: Content-Type
@@ -329,9 +320,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_d3fb12c7273446bc9d43eb0b47cdcad2
+          id: req_a17befa58d894f14b2897f35f8caa783
           created: 1776022205862
-          modified: 1776782997544
+          modified: 1776881915387
           isPrivate: false
           description: ""
           sortKey: -1776017077643.5
@@ -343,8 +334,7 @@ collection:
                 "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
                 "username": "kylian.mbappe",
                 "senha": "Senha@123",
-                "nome": "Kylian Mbappé",
-                "telefone": "37999990003"
+                "nome": "Kylian Mbappé"
             }
         headers:
           - name: Content-Type
@@ -376,9 +366,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400-duplicated
         meta:
-          id: req_0f907be8b23d4f379e7bcca71320c8c7
+          id: req_797f928b0791436b912e9a6622612b18
           created: 1776022675661
-          modified: 1776783851053
+          modified: 1776881983514
           isPrivate: false
           description: ""
           sortKey: -1776014999928.2676
@@ -390,8 +380,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "kylian.mbappe",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo dos Santos Aveiro",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo dos Santos Aveiro"
             }
         headers:
           - name: Content-Type
@@ -407,9 +396,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400-uo-notfound
         meta:
-          id: req_8c63cd2467744c3bbbc39c1d4e85873d
+          id: req_de601934a5f44231b29845681cc078e1
           created: 1776110440408
-          modified: 1776188783474
+          modified: 1776881953811
           isPrivate: false
           description: ""
           sortKey: -1776017077506
@@ -421,8 +410,7 @@ collection:
               "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
               "username": "cristiano.ronaldo",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo"
             }
         headers:
           - name: Content-Type
@@ -438,9 +426,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400-uo-notfound
         meta:
-          id: req_1887d52b0527481cb18b65927481df89
+          id: req_a97edcd06c8b40b185fdbbd1f49e0265
           created: 1776189148566
-          modified: 1776783878767
+          modified: 1776881992381
           isPrivate: false
           description: ""
           sortKey: -1776014989220.6826
@@ -452,8 +440,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
               "username": "cr7.omelhor",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo dos Santos Aveiro",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo dos Santos Aveiro"
             }
         headers:
           - name: Content-Type
@@ -469,7 +456,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-200
         meta:
-          id: req_ad4fc5eda337420685044364f4667512
+          id: req_980febab8cb74f269aa5c877f6d8d45b
           created: 1776194617008
           modified: 1776784119379
           isPrivate: false
@@ -487,7 +474,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400
         meta:
-          id: req_8d0f522c4d5f4fa7bb9a392d9df56662
+          id: req_487bed3c3b364922be8dd863f5b0bc4d
           created: 1776194696378
           modified: 1776194736070
           isPrivate: false
@@ -505,7 +492,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
         name: usuarios-404
         meta:
-          id: req_fe66e0043fb842eda3b306ebf5467e40
+          id: req_f6f2c6bf836b454f926338be3e09aa2f
           created: 1776194759352
           modified: 1776784425589
           isPrivate: false
@@ -523,7 +510,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-200-by-id
         meta:
-          id: req_3dc4d37e214d435e999b5fedd83133b9
+          id: req_688fe50f79204019ba5ee74147109323
           created: 1776195028275
           modified: 1776784521172
           isPrivate: false
@@ -541,7 +528,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
         name: usuarios-404-by-id
         meta:
-          id: req_0d17210a025841b3a2dde763289bf847
+          id: req_b597335d66ce4a1a9b950b3982b144c8
           created: 1776195083081
           modified: 1776784565439
           isPrivate: false
@@ -559,7 +546,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500
         meta:
-          id: req_e4aa4c28ef9a4630923b559b4b371429
+          id: req_bbe2bc925be14308a514331682f47002
           created: 1776276413179
           modified: 1776784452813
           isPrivate: false
@@ -577,7 +564,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500-by-id
         meta:
-          id: req_427a794a2f334480aaff6b4321901de8
+          id: req_0d99b8055dd045a5ae7efc900d2db35b
           created: 1776276425643
           modified: 1776784592238
           isPrivate: false
@@ -595,7 +582,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-200
         meta:
-          id: req_95245d20bf5e42eaa8c7aa219da44e85
+          id: req_0fa7a3fb48cf4da3b7970996ba82144f
           created: 1776281229001
           modified: 1776784689801
           isPrivate: false
@@ -615,7 +602,7 @@ collection:
           _.unidade_organizacional_id }}"
         name: usuarios-200-paged
         meta:
-          id: req_69631829875f4d7e9364df5f7b897ab9
+          id: req_0175b10b27c944b38f0fc20d9ad19786
           created: 1776281994283
           modified: 1776784860212
           isPrivate: false
@@ -635,7 +622,7 @@ collection:
           _.unidade_organizacional_id_fake }}"
         name: usuarios-200-empty
         meta:
-          id: req_32395b72d83d4269912f4bc85a924c84
+          id: req_14ce230239c24ae0b48c66fbc15cd805
           created: 1776282828073
           modified: 1776784885241
           isPrivate: false
@@ -653,7 +640,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-500
         meta:
-          id: req_a1523ede24684571873872655c053aa5
+          id: req_abb86df1ee574e10966e93421233c985
           created: 1776283250735
           modified: 1776784902179
           isPrivate: false
@@ -671,7 +658,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-204
         meta:
-          id: req_f0b86b5019964da2ba9c0bb9f9a91971
+          id: req_8a9c4a651b0442bcbc788e12409a6de0
           created: 1776283315235
           modified: 1776785485039
           isPrivate: false
@@ -689,7 +676,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_02 }}"
         name: usuarios-204
         meta:
-          id: req_6e04158182fe4157874cb00d5526bf41
+          id: req_b71ed83198384c269e56fe83cfcd93c8
           created: 1776283533602
           modified: 1776785494224
           isPrivate: false
@@ -707,7 +694,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_03 }}"
         name: usuarios-204
         meta:
-          id: req_37e917c941d24ab58b5aa1afd0528cad
+          id: req_34b68776aed34a7bbb8092825cc8a5c3
           created: 1776283559384
           modified: 1776785503446
           isPrivate: false
@@ -725,7 +712,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-404
         meta:
-          id: req_0fc6c791c045420380aa3fbb8571fb29
+          id: req_014aa58164114cfeb2f85151331bd6c4
           created: 1776283702703
           modified: 1776283711548
           isPrivate: false
@@ -743,7 +730,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500
         meta:
-          id: req_e40263a1492f4ea8ad41a5f71d1058cf
+          id: req_1bbe5aa61c324e5ba5403cb1d0e3414d
           created: 1776283727402
           modified: 1776785554147
           isPrivate: false
@@ -760,18 +747,18 @@ collection:
           rebuildPath: true
   - name: unidades-organizacionais
     meta:
-      id: fld_6dcd0c1ba1064e78a05539bbbc92d051
+      id: fld_9e6f043cd02f4e1a8672d35645974909
       created: 1776360163385
-      modified: 1776364257934
+      modified: 1776890710287
       sortKey: -1776360163385
       description: ""
     children:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-201
         meta:
-          id: req_3884675004a84f0f977cbe2f645c2afc
+          id: req_57a85eb86f0a494eadbd9cf5440eae02
           created: 1776360220199
-          modified: 1776371344431
+          modified: 1776891879136
           isPrivate: false
           description: ""
           sortKey: -1776361447764
@@ -782,7 +769,7 @@ collection:
             {
             	"id_matriz": null,
               "Cnpj": "06549925000172",
-              "razaoSocial": "Casinha torta",
+              "razaoSocial": "Casinha torta.",
               "nomeFantasia": "Casa dos Bobos",
               "cep": "",
               "numero": "0",
@@ -825,9 +812,9 @@ collection:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-201
         meta:
-          id: req_a5bf25cfd24d4f85aaf156a643880fe4
+          id: req_c2dec2a2896544958582a81e1e9e4df8
           created: 1776362655830
-          modified: 1776363296304
+          modified: 1776891978370
           isPrivate: false
           description: ""
           sortKey: -1776189262803.75
@@ -837,8 +824,8 @@ collection:
           text: |-
             {
             	"id_matriz": null,
-              "Cnpj": "04250186000198",
-              "razaoSocial": "Gotham",
+              "Cnpj": "26545494000183",
+              "razaoSocial": "Gotham.",
               "nomeFantasia": "Cidade do Batman",
               "cep": "",
               "numero": "",
@@ -881,7 +868,7 @@ collection:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-400
         meta:
-          id: req_32125bea5ebe4c7da24d3904a0011a5d
+          id: req_867aed41ea4f4786b3196c9e112081bc
           created: 1776362926081
           modified: 1776363063942
           isPrivate: false
@@ -920,7 +907,7 @@ collection:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-500
         meta:
-          id: req_fb02b37496f4413faee40c40ec7b8fee
+          id: req_91aecd654bb24b06a6e544f2d62c9a65
           created: 1776363068401
           modified: 1776363155887
           isPrivate: false
@@ -959,7 +946,7 @@ collection:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-400-duplicated
         meta:
-          id: req_188fc270b4e24944973cbf5117316eb8
+          id: req_4104dcc00738410497d1247cf474b5fa
           created: 1776363169566
           modified: 1776363218894
           isPrivate: false
@@ -999,9 +986,9 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-200
         meta:
-          id: req_e20c60937cb1440092ffa0a8c2bdd13e
+          id: req_8270c1255f5148a99fd15f3b85bf6da7
           created: 1776363256732
-          modified: 1776363470809
+          modified: 1776891886302
           isPrivate: false
           description: ""
           sortKey: -1776060123983.5625
@@ -1012,7 +999,7 @@ collection:
             {
             	"id_matriz": null,
               "Cnpj": "06549925000172",
-              "razaoSocial": "Casinha reta",
+              "razaoSocial": "Casinha reta.",
               "nomeFantasia": "Casa dos espertos",
               "cep": "",
               "numero": "1",
@@ -1039,9 +1026,9 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-400
         meta:
-          id: req_0c2bd95d5ca840edb9d66e7acff4a295
+          id: req_7425eaffbfb1447fb8c0aa1ff9f0012c
           created: 1776363701465
-          modified: 1776363807700
+          modified: 1776891047286
           isPrivate: false
           description: ""
           sortKey: -1776038600913.5312
@@ -1077,49 +1064,9 @@ collection:
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
           _.unidade_organizacional_mock_01 }}"
-        name: unidades-organizacionais-400
-        meta:
-          id: req_6573bf20edf84daf806a88bbed44ce5d
-          created: 1776363930796
-          modified: 1776363930796
-          isPrivate: false
-          description: ""
-          sortKey: -1776027839378.5156
-        method: PUT
-        body:
-          mimeType: application/json
-          text: |-
-            {
-            	"id_matriz": null,
-              "Cnpj": "",
-              "razaoSocial": "",
-              "nomeFantasia": "",
-              "cep": "",
-              "numero": "1",
-              "complemento": "",
-              "bairro": "",
-              "cidade": "",
-              "uf": "MG",
-              "pais": "",
-              "telefone": "",
-              "email": ""
-            }
-        headers:
-          - name: Content-Type
-            value: application/json
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
-          _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-500
         meta:
-          id: req_8a1a2fd100404a95bbc211eb55c05c26
+          id: req_3756e4a4d8574755b9c61c919f5be3d4
           created: 1776364034368
           modified: 1776364195903
           isPrivate: false
@@ -1159,7 +1106,7 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-200-by-id
         meta:
-          id: req_299105c6ebd74579a61db7eef761145a
+          id: req_2f6a9aa77f054ee29cb609783552f265
           created: 1776364273100
           modified: 1776364440304
           isPrivate: false
@@ -1184,7 +1131,7 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-500-by-id
         meta:
-          id: req_2415730a665f4f59b6c05e5815cd2b70
+          id: req_42e7e482a67949a79079c507a07e3175
           created: 1776364398057
           modified: 1776364451379
           isPrivate: false
@@ -1208,7 +1155,7 @@ collection:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-200
         meta:
-          id: req_dc9732f1ddba43ff86768fbf8725b807
+          id: req_584f00ff5ad34d38a5a5c32a5bf39931
           created: 1776366962885
           modified: 1776366970287
           isPrivate: false
@@ -1230,12 +1177,12 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url
-          }}/v1/unidades-organizacionais?skip=0&top=10&razaoSocial=.&Cnpj=65"
+          }}/v1/unidades-organizacionais?skip=0&top=10&razaSocial=.&Cnpj=65"
         name: unidades-organizacionais-200-paged
         meta:
-          id: req_84e665184109402dbb08bdd2bf25f3a9
+          id: req_d5c17b5ccc844befabb7175219a43ba4
           created: 1776366994968
-          modified: 1776367499759
+          modified: 1776892077542
           isPrivate: false
           description: ""
           sortKey: -1776018422960.377
@@ -1257,7 +1204,7 @@ collection:
       - url: '{{ _.base_url }}/v1/unidades-organizacionais?skip=0&top=10&razaoSocial=""'
         name: unidades-organizacionais-200-empty
         meta:
-          id: req_04ad551c391f4d31880e71af79b50842
+          id: req_3f94a987daac4484b7206f720729634f
           created: 1776367294385
           modified: 1776367349374
           isPrivate: false
@@ -1282,7 +1229,7 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-500
         meta:
-          id: req_c1ca07e521a74408a54dd1efe1ff7202
+          id: req_c4f96523f111422da37b03977d2d77b1
           created: 1776367571793
           modified: 1776367574311
           isPrivate: false
@@ -1307,7 +1254,7 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-200
         meta:
-          id: req_b05dfe3e0aef441790ec9e3c5b2144f3
+          id: req_a3e3c3c0f9b74d9f8e868fb546a35041
           created: 1776367601486
           modified: 1776451285751
           isPrivate: false
@@ -1332,7 +1279,7 @@ collection:
           _.unidade_organizacional_mock_02 }}"
         name: unidades-organizacionais-200
         meta:
-          id: req_96f40618b9b347ac9558e5391b80e68e
+          id: req_a501e86cdc3b4f9294a0e0c2c17eda8c
           created: 1776367751325
           modified: 1776451281301
           isPrivate: false
@@ -1357,7 +1304,7 @@ collection:
           _.unidade_organizacional_mock_02 }}"
         name: unidades-organizacionais-500
         meta:
-          id: req_e39a666be47c44dfa2e60df4f64d2a4c
+          id: req_48aafd99d74e46d7949fada474c70295
           created: 1776367776992
           modified: 1776367776992
           isPrivate: false
@@ -1382,7 +1329,7 @@ collection:
           _.unidade_organizacional_mock_02 }}"
         name: unidades-organizacionais-404
         meta:
-          id: req_ef20f5a4d6f948829526c3b4d21f4b76
+          id: req_99de455acf45432e949ceca2cd55dc2b
           created: 1776367890686
           modified: 1776367890686
           isPrivate: false
@@ -1403,18 +1350,98 @@ collection:
             send: true
             store: true
           rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_id_fake }}"
+        name: unidades-organizacionais-400-duplicated-cnpj
+        meta:
+          id: req_32f0d9a5e9b34b0fb42d8bccb3593514
+          created: 1776890999508
+          modified: 1776891168115
+          isPrivate: false
+          description: ""
+          sortKey: -1776034565337.9004
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id_matriz": null,
+              "Cnpj": "06549925000172",
+              "razaoSocial": "Casinha reta",
+              "nomeFantasia": "Casa dos espertos",
+              "cep": "",
+              "numero": "1",
+              "complemento": "Rua dos espertos",
+              "bairro": "",
+              "cidade": "",
+              "uf": "MG",
+              "pais": "",
+              "telefone": "",
+              "email": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_id_fake }}"
+        name: unidades-organizacionais-404
+        meta:
+          id: req_168ecc7d7b034e68961a8875f272b707
+          created: 1776891102348
+          modified: 1776891165740
+          isPrivate: false
+          description: ""
+          sortKey: -1776030529762.2695
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id_matriz": null,
+              "Cnpj": "09932499000140",
+              "razaoSocial": "Casinha reta",
+              "nomeFantasia": "Casa dos espertos",
+              "cep": "",
+              "numero": "1",
+              "complemento": "Rua dos espertos",
+              "bairro": "",
+              "cidade": "",
+              "uf": "MG",
+              "pais": "",
+              "telefone": "",
+              "email": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
   - name: espaços
     meta:
-      id: fld_4080d0c51782408db1ebf2a1d6ac07b9
+      id: fld_3191d7d65eaf49fca8264c30243b224f
       created: 1776445366121
-      modified: 1776450256430
+      modified: 1776890922352
       sortKey: -1776445366121
       description: ""
     children:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-201
         meta:
-          id: req_d9e70eca97094dcc982559cac73ec7b5
+          id: req_653e4ad9d09b46d9bcc1465ebdac16df
           created: 1776445371429
           modified: 1776446372213
           isPrivate: false
@@ -1464,7 +1491,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-201
         meta:
-          id: req_7964084d4fd448db967da7601cb31d96
+          id: req_799e0b3153a24db5a856d62741367e33
           created: 1776445648208
           modified: 1776446392578
           isPrivate: false
@@ -1514,7 +1541,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-400
         meta:
-          id: req_2ccb39dd05da410889027890b33f29e3
+          id: req_d2cea633803c42c7bb6f6f6405c9a09d
           created: 1776445861535
           modified: 1776446198978
           isPrivate: false
@@ -1546,7 +1573,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-500
         meta:
-          id: req_93914f8f3b254d5aba67b5d5622b67b5
+          id: req_ccd010f8836b46a0ab0b0100504cad76
           created: 1776446117539
           modified: 1776446218193
           isPrivate: false
@@ -1579,7 +1606,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
         name: espaços-200
         meta:
-          id: req_ef0b18729c9240f59f8ecc118ceb0cf7
+          id: req_c303deba7aba424897fce8806ba9a967
           created: 1776446228520
           modified: 1776446691570
           isPrivate: false
@@ -1612,7 +1639,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_fake }}"
         name: espaços-404
         meta:
-          id: req_1200eca2774344ce993a3b6b1dbde663
+          id: req_425834e37d774bd69f52f58b5ff3b0d0
           created: 1776446713682
           modified: 1776446984857
           isPrivate: false
@@ -1645,7 +1672,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
         name: espaços-400
         meta:
-          id: req_ef8560cb7f3e42ca8ee339fa4ae84a0d
+          id: req_49c43e33951840f3bdd9097b6a86cb46
           created: 1776446878686
           modified: 1776447056940
           isPrivate: false
@@ -1677,7 +1704,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
         name: espaços-200-by-id
         meta:
-          id: req_32ae8a76a96d41cebcc5a316805925e5
+          id: req_910cc461a1324007a5a0a0795bc7b3c6
           created: 1776447108974
           modified: 1776447177445
           isPrivate: false
@@ -1700,7 +1727,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_fake }}"
         name: espaços-404-by-id
         meta:
-          id: req_abaa7f3337ac4f5bbdca297d5fc6a305
+          id: req_cc0f9a1f56ab42ee8dd61e89215bc35a
           created: 1776447165404
           modified: 1776447221554
           isPrivate: false
@@ -1723,7 +1750,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
         name: espaços-500-by-id
         meta:
-          id: req_c88440b61ae54a63bef481806c76ab1e
+          id: req_1131639cab814bc788dedeb5e8de6c2d
           created: 1776447241851
           modified: 1776447251401
           isPrivate: false
@@ -1746,7 +1773,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-200
         meta:
-          id: req_bce429f2751c42b4a98bad93bd13ff5a
+          id: req_7966cfac28a940eca7cb885e8438531a
           created: 1776447296511
           modified: 1776447303035
           isPrivate: false
@@ -1769,7 +1796,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-500
         meta:
-          id: req_37e02d222c4b475bb5a787b7a9f80c50
+          id: req_7d70ddb94bf04c80be493e411065d655
           created: 1776447331915
           modified: 1776450126918
           isPrivate: false
@@ -1794,7 +1821,7 @@ collection:
           _.unidade_organizacional_id }}"
         name: espaços-200-paged
         meta:
-          id: req_0a2e8ff500754eff83b419a971932716
+          id: req_7dc32a68dddc4f37b7dbe56e2dc31acc
           created: 1776448857067
           modified: 1776450037482
           isPrivate: false
@@ -1819,7 +1846,7 @@ collection:
           _.unidade_organizacional_id_fake }}"
         name: espaços-200-empty
         meta:
-          id: req_725087d41c8c4b7d8718fd64c90181b1
+          id: req_2e31b8bf59b44beeb0ea57d872a8997f
           created: 1776449075099
           modified: 1776450082143
           isPrivate: false
@@ -1842,7 +1869,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
         name: espaços-200
         meta:
-          id: req_821251265f14460e9b0ae9a7e6f492ed
+          id: req_6d58364368454bf185c3c917649243ca
           created: 1776450150913
           modified: 1776450187804
           isPrivate: false
@@ -1865,7 +1892,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
         name: espaços-200
         meta:
-          id: req_cf84198ce8af44d8b8dc97a0e39ae26b
+          id: req_383caa094a524fde90a36d548c99b0bc
           created: 1776450194630
           modified: 1776450220168
           isPrivate: false
@@ -1888,7 +1915,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
         name: espaços-404
         meta:
-          id: req_df042136340c434182996b27c56acad3
+          id: req_964daeb27aa5473094487c38cd52abda
           created: 1776450268571
           modified: 1776450283143
           isPrivate: false
@@ -1911,7 +1938,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espacoId }}"
         name: espaços-400
         meta:
-          id: req_b5db16c3083842058959a8f5e1145e1f
+          id: req_60b85797f0e046c4bac60254e3dd673c
           created: 1776450297561
           modified: 1776450934499
           isPrivate: false
@@ -1934,7 +1961,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
         name: espaços-500
         meta:
-          id: req_439a65e9d0124e6f920b7c568a5d26be
+          id: req_e37aa042ec9e453faa96b9fb14e40dd4
           created: 1776450957864
           modified: 1776450961457
           isPrivate: false
@@ -1956,18 +1983,18 @@ collection:
           rebuildPath: true
   - name: itens_estoque
     meta:
-      id: fld_9f91359021dd4035bdcd0775355f9421
+      id: fld_28c7ef7222f545c09f69b01adf319d72
       created: 1776451449616
-      modified: 1776454257133
+      modified: 1776888878593
       sortKey: -1776451449616
       description: ""
     children:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-201
         meta:
-          id: req_e391db5fe40f4264982588bf49252eab
+          id: req_126f8d6d447e481cabc35745f75db728
           created: 1776451454074
-          modified: 1776453529337
+          modified: 1776889129116
           isPrivate: false
           description: ""
           sortKey: -1776451454074
@@ -1978,7 +2005,7 @@ collection:
             {
               "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "espacoId": "{{ _.espacoId }}",
-              "descricao": "mjolnir",
+              "descricao": "mjolnir.",
               "tipoUnidadeMedida": 5,
               "quantidade": 1
             }
@@ -2017,9 +2044,9 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-201
         meta:
-          id: req_913448c054944151a4d1ac7f2df015ab
+          id: req_bd1ee968279f4ff1bfd52e859f64f1a5
           created: 1776451695829
-          modified: 1776453533237
+          modified: 1776889133583
           isPrivate: false
           description: ""
           sortKey: -1776448412751.5
@@ -2030,7 +2057,7 @@ collection:
             {
               "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "espacoId": "{{ _.espacoId }}",
-              "descricao": "Stormbreaker",
+              "descricao": "Stormbreaker.",
               "tipoUnidadeMedida": 5,
               "quantidade": 1
             }
@@ -2069,7 +2096,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-400
         meta:
-          id: req_583a6950f3b344a29927dbd74253b899
+          id: req_300eb71d15544dbdb127de30c7c7a3dc
           created: 1776451925783
           modified: 1776453563642
           isPrivate: false
@@ -2102,7 +2129,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-500
         meta:
-          id: req_d623aed23dff45e4ada16f3aabd37593
+          id: req_9a732a994049410fb0087b726c54c9a8
           created: 1776453364221
           modified: 1776453561463
           isPrivate: false
@@ -2137,7 +2164,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-200
         meta:
-          id: req_2a7c678593b44586aa3ef18f026aa068
+          id: req_fa9a0de6dcbb4e3b838b2f463e45d3e6
           created: 1776453522933
           modified: 1776453680275
           isPrivate: false
@@ -2172,7 +2199,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-400
         meta:
-          id: req_09358e52a3d84af1ae57f6afbb4e40a2
+          id: req_89e01b904ac6421e9b4404069ff0ab44
           created: 1776453701957
           modified: 1776453779997
           isPrivate: false
@@ -2205,7 +2232,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-500
         meta:
-          id: req_47ba49d0be004ba7afcfa763d50f0e4c
+          id: req_a12f440fcf174922a89901e30be4d860
           created: 1776453802487
           modified: 1776453972430
           isPrivate: false
@@ -2240,7 +2267,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-200
         meta:
-          id: req_1982aeb78f0a45fcacf6bbdc0065fb6f
+          id: req_4ae6cfa00d544f759979a318e9e7efec
           created: 1776453988597
           modified: 1776455389498
           isPrivate: false
@@ -2272,7 +2299,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-400
         meta:
-          id: req_6d2f5ad12b97472d84ec75602de7d73a
+          id: req_3fa4766384c74627b99c47669a3af8db
           created: 1776455398691
           modified: 1776455419352
           isPrivate: false
@@ -2304,7 +2331,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-400-insufficient
         meta:
-          id: req_d6ee46e1ea1e4990812817c3402c2cc9
+          id: req_378fa6098be4491bb3102d423ba3a188
           created: 1776455529650
           modified: 1776455544009
           isPrivate: false
@@ -2336,7 +2363,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-404
         meta:
-          id: req_304073bd7d244b89907d1975c0e4d101
+          id: req_5f2ccbf8637744e18bad952c9b5c3c47
           created: 1776455568463
           modified: 1776455575012
           isPrivate: false
@@ -2368,7 +2395,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-500
         meta:
-          id: req_56919aa8de8e426e89e8fbdddd278b29
+          id: req_c908481d1f5041cfb65f0cf2ee4eddb5
           created: 1776455599246
           modified: 1776455696422
           isPrivate: false
@@ -2400,7 +2427,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-200-by-id
         meta:
-          id: req_e0867c064f0a4ac48bdf9b1800251857
+          id: req_d95edebd0d654751962f47fe237b58f0
           created: 1776455717731
           modified: 1776455748467
           isPrivate: false
@@ -2423,7 +2450,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_Fake }}"
         name: itens_estoque-404-by-id
         meta:
-          id: req_11cd9b34d2b94e82830f877bc04715df
+          id: req_a7bb2de32f31473a9c5deb21afdda6c0
           created: 1776455809665
           modified: 1776455860532
           isPrivate: false
@@ -2446,7 +2473,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_Fake }}"
         name: itens_estoque-500-by-id
         meta:
-          id: req_857cae4dd3834943b6907fed4a910001
+          id: req_795bfed7cf944b16b026a565333b5adf
           created: 1776455868038
           modified: 1776455868038
           isPrivate: false
@@ -2469,7 +2496,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-200
         meta:
-          id: req_5c717e2c73894b66986f2518f178cfa6
+          id: req_f94e817ea1754c03803b2c42c97edf8b
           created: 1776455925936
           modified: 1776455933461
           isPrivate: false
@@ -2489,33 +2516,240 @@ collection:
             send: true
             store: true
           rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque?skip=0&top=5&descricao=."
+        name: itens_estoque-200-paged
+        meta:
+          id: req_14e0dfec0967427688c995ed7b2f369a
+          created: 1776887938583
+          modified: 1776889139748
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371564.6274
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-500
+        meta:
+          id: req_55fa2743dc7e4cbd9e1abf7763f25fa4
+          created: 1776889154967
+          modified: 1776889188659
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371496.8137
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}/historico"
+        name: itens_estoque-200-history
+        meta:
+          id: req_cc1ceceffc5e488aada36384c2ec938f
+          created: 1776889205888
+          modified: 1776890353894
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371462.9067
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}/historico"
+        name: itens_estoque-500-history
+        meta:
+          id: req_3ecea06d96424693910eb3c963456d9a
+          created: 1776890373710
+          modified: 1776890373710
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371445.9534
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-200
+        meta:
+          id: req_d65af54fa14249aa8b19d9d599b151ff
+          created: 1776890406105
+          modified: 1776890499036
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371345.9534
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_02 }}"
+        name: itens_estoque-200
+        meta:
+          id: req_a405e82a862645e7b06dc3b7cd66a245
+          created: 1776890450718
+          modified: 1776890494510
+          isPrivate: false
+          description: ""
+          sortKey: -1776424390471.2266
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_02 }}"
+        name: itens_estoque-404
+        meta:
+          id: req_6bdbd0cc3f5341668092a135630f31c3
+          created: 1776890469452
+          modified: 1776890513869
+          isPrivate: false
+          description: ""
+          sortKey: -1776413900033.8633
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_02 }}"
+        name: itens_estoque-500
+        meta:
+          id: req_042bf450e5e34c0fb6930d2f3eddd9f8
+          created: 1776890520698
+          modified: 1776890520698
+          isPrivate: false
+          description: ""
+          sortKey: -1776408654815.1816
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque?skip=0&top=5&descricao=monkey"
+        name: itens_estoque-200-empty
+        meta:
+          id: req_8c84f4c1c062417a8e51add91a1907c7
+          created: 1776890578102
+          modified: 1776890667706
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371530.7207
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_84d71e0b0b1041c6b651bc9da4ac92a9
+    id: jar_931ad9eadff1423bab7ba74487edb786
     created: 1776017078657
-    modified: 1776783000839
+    modified: 1776890922345
 environments:
   name: Base Environment
   meta:
-    id: env_6c790cc6424044e0994bc2507d60b9ea
+    id: env_cbf326d4522449658672b8fbe5c00395
     created: 1776017077271
-    modified: 1776783000855
+    modified: 1776890922349
     isPrivate: false
   data:
     base_url: http://localhost:5120
     unidade_organizacional_id: e286f99e-5075-4b73-96d9-af462c36a5a6
-    usuario_id_mock_01: 21caef2e-96b9-4dca-b07e-03505f3ed271
-    usuario_id_mock_02: ba30c58a-a544-489f-8cc6-45d2ec75dc1e
-    usuario_id_mock_03: 8af08cfd-66af-4d0e-881b-dcaeaddd83cd
+    usuario_id_mock_01: d957dc5f-5738-474c-9b2b-d051fb4a84c5
+    usuario_id_mock_02: 911e8367-7c22-43f2-9128-2d68e021ed94
+    usuario_id_mock_03: 6af483a7-647c-4d29-86a5-90d7a61d9a4c
     usuario_id_fake: f6a30a56-c65c-41ac-ab07-8b0b113bd521
     unidade_organizacional_id_fake: e525e8a8-5424-4a76-af26-c2ab45e1ef07
-    unidade_organizacional_mock_01: 8d8b3f05-65ae-4772-bb4a-0196245716e5
-    unidade_organizacional_mock_02: 1d914910-0fa7-4785-91a3-8984dff28370
+    unidade_organizacional_mock_01: a467d1d5-dc60-4f9f-a0eb-9f2d67cfd4ce
+    unidade_organizacional_mock_02: 3623c4dd-1665-49e3-aea4-d39cbb6fd2f8
     espacoId: 6ab71fef-cf4e-4dbf-af76-f2058224721a
     espaco_mock_01: 2183e8fd-1a35-431f-a1da-96a81a67e865
-    espaco_mock_02: 3b6fb533-3992-46ba-8ef0-a4e9983aeca2
+    espaco_mock_02: f5081930-0a9f-434b-a1e2-c481b27d8ea0
     espaco_fake: 273e73e3-46ea-4436-a89a-432ba8d6967d
-    item_mock_01: cd7e4bf6-b627-4b7d-9fdc-d7ac659430ac
-    item_mock_02: f8a393c4-c470-4d29-84e5-05cd7ad80253
+    item_mock_01: 97da61a8-350f-48a1-83f5-8fd509f0ec95
+    item_mock_02: edae0cfe-d0d1-4836-b854-b0613ef898be
     item_Fake: b1909e70-080e-49b4-a197-aa7adf538c17

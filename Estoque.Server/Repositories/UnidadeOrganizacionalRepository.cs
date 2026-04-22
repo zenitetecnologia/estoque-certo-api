@@ -24,7 +24,6 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 cidade,
                 uf,
                 pais,
-                telefone,
                 email
             )
             VALUES
@@ -40,7 +39,6 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 @cidade,
                 @uf,
                 @pais,
-                @telefone,
                 @email
             )
             RETURNING unidade_organizacional_id;
@@ -63,7 +61,6 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             cmd.Parameters.AddWithValue("cidade", unidade.Cidade);
             cmd.Parameters.AddWithValue("uf", unidade.Uf);
             cmd.Parameters.AddWithValue("pais", unidade.Pais);
-            cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
             cmd.Parameters.AddWithValue("email", unidade.Email);
 
             var result = await cmd.ExecuteScalarAsync();
@@ -93,7 +90,6 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             cidade = @cidade,
             uf = @uf,
             pais = @pais,
-            telefone = @telefone,
             email = @email
         WHERE
             unidade_organizacional_id = @unidade_organizacional_id;
@@ -118,7 +114,6 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             cmd.Parameters.AddWithValue("cidade", unidade.Cidade);
             cmd.Parameters.AddWithValue("uf", unidade.Uf);
             cmd.Parameters.AddWithValue("pais", unidade.Pais);
-            cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
             cmd.Parameters.AddWithValue("email", unidade.Email);
 
             return await cmd.ExecuteNonQueryAsync();
@@ -147,7 +142,6 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 cidade,
                 uf,
                 pais,
-                telefone,
                 email
             FROM
                 estoque_certo.unidade_organizacional
@@ -181,17 +175,15 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 unidadeOrganizacionalRecuperada.IdMatriz = reader.GetGuidNullable("id_matriz");
                 unidadeOrganizacionalRecuperada.Cnpj = reader.GetString("cnpj");
                 unidadeOrganizacionalRecuperada.RazaoSocial = reader.GetString("razao_social");
-                unidadeOrganizacionalRecuperada.NomeFantasia = reader.GetString("nome_fantasia");
-                unidadeOrganizacionalRecuperada.Cep = reader.GetString("cep");
-                unidadeOrganizacionalRecuperada.Numero = reader.GetString("numero");
-                unidadeOrganizacionalRecuperada.Complemento = reader.GetString("complemento");
-                unidadeOrganizacionalRecuperada.Bairro = reader.GetString("bairro");
-                unidadeOrganizacionalRecuperada.Cidade = reader.GetString("cidade");
-                unidadeOrganizacionalRecuperada.Uf = reader.GetString("uf");
-                unidadeOrganizacionalRecuperada.Pais = reader.GetString("pais");
-                unidadeOrganizacionalRecuperada.Telefone = reader.GetString("telefone");
-                unidadeOrganizacionalRecuperada.Email = reader.GetString("email");
-
+                unidadeOrganizacionalRecuperada.NomeFantasia = reader.GetStringSafe("nome_fantasia");
+                unidadeOrganizacionalRecuperada.Cep = reader.GetStringSafe("cep");
+                unidadeOrganizacionalRecuperada.Numero = reader.GetStringSafe("numero");
+                unidadeOrganizacionalRecuperada.Complemento = reader.GetStringSafe("complemento");
+                unidadeOrganizacionalRecuperada.Bairro = reader.GetStringSafe("bairro");
+                unidadeOrganizacionalRecuperada.Cidade = reader.GetStringSafe("cidade");
+                unidadeOrganizacionalRecuperada.Uf = reader.GetStringSafe("uf");
+                unidadeOrganizacionalRecuperada.Pais = reader.GetStringSafe("pais");
+                unidadeOrganizacionalRecuperada.Email = reader.GetStringSafe("email");
                 unidades.Add(unidadeOrganizacionalRecuperada);
             }
 
@@ -219,7 +211,6 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 cidade,
                 uf,
                 pais,
-                telefone,
                 email
             FROM
                 estoque_certo.unidade_organizacional
@@ -245,16 +236,15 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 IdMatriz = reader.GetGuidNullable("id_matriz"),
                 Cnpj = reader.GetString("cnpj"),
                 RazaoSocial = reader.GetString("razao_social"),
-                NomeFantasia = reader.GetString("nome_fantasia"),
-                Cep = reader.GetString("cep"),
-                Numero = reader.GetString("numero"),
-                Complemento = reader.GetString("complemento"),
-                Bairro = reader.GetString("bairro"),
-                Cidade = reader.GetString("cidade"),
-                Uf = reader.GetString("uf"),
-                Pais = reader.GetString("pais"),
-                Telefone = reader.GetString("telefone"),
-                Email = reader.GetString("email")
+                NomeFantasia = reader.GetStringSafe("nome_fantasia"),
+                Cep = reader.GetStringSafe("cep"),
+                Numero = reader.GetStringSafe("numero"),
+                Complemento = reader.GetStringSafe("complemento"),
+                Bairro = reader.GetStringSafe("bairro"),
+                Cidade = reader.GetStringSafe("cidade"),
+                Uf = reader.GetStringSafe("uf"),
+                Pais = reader.GetStringSafe("pais"),
+                Email = reader.GetStringSafe("email")
             };
         }
         catch

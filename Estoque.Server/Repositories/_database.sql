@@ -9,9 +9,9 @@ CREATE TABLE IF NOT EXISTS estoque_certo.unidade_organizacional (
     unidade_organizacional_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_matriz UUID,
     cnpj VARCHAR(20),
-    razao_social TEXT,
+    razao_social TEXT NOT NULL,
     nome_fantasia TEXT,
-    cep VARCHAR(20),
+    cep VARCHAR(20) NOT NULL,
     numero VARCHAR(50),
     complemento TEXT,
     bairro TEXT,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS estoque_certo.unidade_organizacional (
 -- 3. Tabela de Usuários (Relação 1:N direta com Unidade Organizacional)
 CREATE TABLE IF NOT EXISTS estoque_certo.usuario (
     usuario_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    username VARCHAR(12) NOT NULL,
+    username VARCHAR(32) NOT NULL,
     senha VARCHAR(36) NOT NULL,
     nome VARCHAR(100) NOT NULL,
     perfil INTEGER NOT NULL,
