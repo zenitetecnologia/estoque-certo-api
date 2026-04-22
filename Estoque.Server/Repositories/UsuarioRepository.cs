@@ -330,4 +330,25 @@ public class UsuarioRepository : BaseRepository
             throw;
         }
     }
+
+    public async Task<int> RedefinirSenha(Guid usuarioId, string novaSenha)
+    {
+        const string sql = "UPDATE estoque_certo.usuario SET senha = @senha WHERE usuario_id = @usuario_id";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+            cmd.Parameters.AddWithValue("senha", novaSenha);
+
+            return await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
+    }
 }
