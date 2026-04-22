@@ -16,7 +16,6 @@ public class UsuarioRepository : BaseRepository
                 username,
                 senha,
                 nome,
-                telefone,
                 perfil,
                 unidade_organizacional_id,
                 valido
@@ -26,7 +25,6 @@ public class UsuarioRepository : BaseRepository
                 @username,
                 @senha,
                 @nome,
-                @telefone,
                 @perfil,
                 @unidade_organizacional_id,
                 @valido
@@ -43,7 +41,6 @@ public class UsuarioRepository : BaseRepository
             cmd.Parameters.AddWithValue("username", usuario.Username);
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
-            cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
             cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
             cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId!);
             cmd.Parameters.AddWithValue("valido", usuario.Valido);
@@ -66,8 +63,7 @@ public class UsuarioRepository : BaseRepository
             SET
                 username = @username,
                 senha = @senha,
-                nome = @nome,
-                telefone = @telefone
+                nome = @nome
             WHERE
                 usuario_id = @usuario_id
             AND
@@ -85,7 +81,6 @@ public class UsuarioRepository : BaseRepository
             cmd.Parameters.AddWithValue("username", usuario.Username);
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
-            cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
 
             return await cmd.ExecuteNonQueryAsync();
         }
@@ -103,7 +98,6 @@ public class UsuarioRepository : BaseRepository
                 username,
                 senha,
                 nome,
-                telefone,
                 perfil,
                 unidade_organizacional_id,
                 valido
@@ -132,7 +126,6 @@ public class UsuarioRepository : BaseRepository
                 Username = reader.GetString("username"),
                 Senha = reader.GetString("senha"),
                 Nome = reader.GetString("nome"),
-                Telefone = reader.GetString("telefone"),
                 Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
                 UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id"),
                 Valido = reader.GetBoolean("valido")
@@ -154,7 +147,6 @@ public class UsuarioRepository : BaseRepository
                 username,
                 senha,
                 nome,
-                telefone,
                 perfil,
                 unidade_organizacional_id,
                 valido
@@ -190,7 +182,6 @@ public class UsuarioRepository : BaseRepository
                 usuarioGetResponse.Username = reader.GetString("username");
                 usuarioGetResponse.Senha = reader.GetString("senha");
                 usuarioGetResponse.Nome = reader.GetString("nome");
-                usuarioGetResponse.Telefone = reader.GetString("telefone");
                 usuarioGetResponse.Perfil = (PerfilUsuario)reader.GetInt32("perfil");
                 usuarioGetResponse.UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id");
                 usuarioGetResponse.Valido = reader.GetBoolean("valido");

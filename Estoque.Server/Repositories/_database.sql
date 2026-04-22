@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS estoque_certo.unidade_organizacional (
     cidade TEXT,
     uf VARCHAR(2),
     pais VARCHAR(50),
-    telefone VARCHAR(50),
     email VARCHAR(150)
 );
 
@@ -28,7 +27,6 @@ CREATE TABLE IF NOT EXISTS estoque_certo.usuario (
     username VARCHAR(12) NOT NULL,
     senha VARCHAR(36) NOT NULL,
     nome VARCHAR(100) NOT NULL,
-    telefone VARCHAR(12) NOT NULL,
     perfil INTEGER NOT NULL,
     unidade_organizacional_id UUID NOT NULL,
     valido BOOLEAN NOT NULL DEFAULT FALSE,
@@ -122,7 +120,6 @@ usuario_id,
 username,
 senha,
 nome,
-telefone,
 perfil,
 unidade_organizacional_id,
 valido
@@ -133,7 +130,6 @@ VALUES
 'teste_de_username_duplicado',
 'insomnia',
 'teste',
-'99966mole60',
 '1',
 'e286f99e-5075-4b73-96d9-af462c36a5a6',
 'true'

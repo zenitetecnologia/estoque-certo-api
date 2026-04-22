@@ -20,15 +20,12 @@ public class Usuario
     [JsonPropertyOrder(5)]
     public string Nome { get; set; } = string.Empty;
 
-    [JsonPropertyOrder(6)]
-    public string Telefone { get; set; } = string.Empty;
-
     [JsonIgnore]
-    [JsonPropertyOrder(7)]
+    [JsonPropertyOrder(6)]
     public virtual PerfilUsuario Perfil { get; set; }
 
     [JsonIgnore]
-    [JsonPropertyOrder(8)]
+    [JsonPropertyOrder(7)]
     public virtual bool Valido { get; set; }
 }
 
@@ -39,10 +36,10 @@ public class UsuarioGetResponse : Usuario
     public override Guid UsuarioId { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    [JsonPropertyOrder(7)]
+    [JsonPropertyOrder(6)]
     public override PerfilUsuario Perfil { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    [JsonPropertyOrder(8)]
+    [JsonPropertyOrder(7)]
     public override bool Valido { get; set; }
 }

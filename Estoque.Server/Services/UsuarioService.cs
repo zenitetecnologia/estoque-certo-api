@@ -167,9 +167,6 @@ public class UsuarioService : BaseService
         if (string.IsNullOrWhiteSpace(usuario.Nome))
             AddError(nameof(usuario.Nome), "Informe o nome.");
 
-        if (string.IsNullOrWhiteSpace(usuario.Telefone))
-            AddError(nameof(usuario.Telefone), "Informe o telefone.");
-
         if (Errors.Any())
             throw new ValidationException(Errors);
     }
