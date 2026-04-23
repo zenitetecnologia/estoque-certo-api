@@ -11,13 +11,16 @@ public static class UnidadeOrganizacionalController
         #region [ post ]
         app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacionalService service, UnidadeOrganizacional unidade) =>
         {
-            Guid unidadeOrganizacionalId = await service.CriarUnidade(unidade);
+            Guid unidadeOrganizacionalId = await service.CadastrarUnidade(unidade);
 
-            return Results.Created($"/v1/unidades-organizacionais/{unidadeOrganizacionalId}", "Unidade Organizacional criada com sucesso.");
+            return TypedResults.CreatedAtRoute(
+                routeName: "get",
+                routeValues: new { unidadeOrganizacionalId },
+                value: "Unidade organizacional cadastrada com sucesso.");
         })
         .WithTags("unidades-organizacionais")
-        .WithSummary("Cria uma nova unidade")
-        .WithDescription("Cria uma nova unidade organizacional no sistema.")
+        .WithSummary("Cadastra uma nova unidade organizacional")
+        .WithDescription("Cadastra uma nova unidade organizacional.")
         .Produces(StatusCodes.Status201Created)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
@@ -65,7 +68,7 @@ public static class UnidadeOrganizacionalController
         .WithTags("unidades-organizacionais")
         .WithSummary("Obtém as unidades")
         .WithDescription("Obtém todas as unidades organizacionais.")
-        .Produces<List<UnidadeOrganizacionalRecuperado>>(StatusCodes.Status200OK)
+        .Produces<List<UnidadeOrganizacionalGetResponse>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
 
@@ -79,7 +82,7 @@ public static class UnidadeOrganizacionalController
         .WithTags("unidades-organizacionais")
         .WithSummary("Obtém unidade por ID")
         .WithDescription("Obtém uma unidade específica.")
-        .Produces<UnidadeOrganizacionalRecuperado>(StatusCodes.Status200OK)
+        .Produces<UnidadeOrganizacionalGetResponse>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion

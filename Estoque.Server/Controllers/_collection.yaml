@@ -749,8 +749,8 @@ collection:
     meta:
       id: fld_9e6f043cd02f4e1a8672d35645974909
       created: 1776360163385
-      modified: 1776890710287
-      sortKey: -1776360163385
+      modified: 1776971294253
+      sortKey: -1776451449816
       description: ""
     children:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
@@ -758,7 +758,7 @@ collection:
         meta:
           id: req_57a85eb86f0a494eadbd9cf5440eae02
           created: 1776360220199
-          modified: 1776891879136
+          modified: 1776972002532
           isPrivate: false
           description: ""
           sortKey: -1776361447764
@@ -767,19 +767,19 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"id_matriz": null,
-              "Cnpj": "06549925000172",
-              "razaoSocial": "Casinha torta.",
-              "nomeFantasia": "Casa dos Bobos",
-              "cep": "",
-              "numero": "0",
-              "complemento": "Rua dos Bobos",
-              "bairro": "",
-              "cidade": "",
-              "uf": "MG",
-              "pais": "",
-              "telefone": "",
-              "email": ""
+            	"matrizId": null,
+              "cnpj": "06549925000172",
+              "razaoSocial": "Sebastião e Isis Entregas Expressas Ltda.",
+              "nomeFantasia": null,
+              "cep": null,
+            	"endereço": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null
             }
         headers:
           - name: Content-Type
@@ -814,7 +814,7 @@ collection:
         meta:
           id: req_c2dec2a2896544958582a81e1e9e4df8
           created: 1776362655830
-          modified: 1776891978370
+          modified: 1776972115352
           isPrivate: false
           description: ""
           sortKey: -1776189262803.75
@@ -823,19 +823,19 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"id_matriz": null,
-              "Cnpj": "26545494000183",
-              "razaoSocial": "Gotham.",
-              "nomeFantasia": "Cidade do Batman",
-              "cep": "",
-              "numero": "",
-              "complemento": "mansão Wayne",
-              "bairro": "",
-              "cidade": "",
-              "uf": "",
-              "pais": "",
-              "telefone": "",
-              "email": ""
+            	"matrizId": null,
+              "cnpj": "04427262000198",
+              "razaoSocial": "Laís e Amanda Gráfica ME",
+              "nomeFantasia": null,
+              "cep": null,
+            	"endereço": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null
             }
         headers:
           - name: Content-Type

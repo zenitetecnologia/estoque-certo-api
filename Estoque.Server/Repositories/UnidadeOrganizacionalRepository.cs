@@ -8,16 +8,17 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 {
     public UnidadeOrganizacionalRepository(IDbConnection connection) : base(connection) { }
 
-    public async Task<Guid> CriarUnidade(UnidadeOrganizacional unidade)
+    public async Task<Guid> CadastrarUnidade(UnidadeOrganizacional unidade)
     {
         const string sql = @"
             INSERT INTO estoque_certo.unidade_organizacional 
             (
-                id_matriz,
-                Cnpj,
+                matriz_id,
+                cnpj,
                 razao_social,
                 nome_fantasia,
                 cep,
+                endereco,
                 numero,
                 complemento,
                 bairro,
@@ -28,11 +29,12 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             )
             VALUES
             (
-                @id_matriz,
-                @Cnpj,
+                @matriz_id,
+                @cnpj,
                 @razao_social,
                 @nome_fantasia,
                 @cep,
+                @endereco,
                 @numero,
                 @complemento,
                 @bairro,
@@ -50,11 +52,12 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz.HasValue ? (object)unidade.IdMatriz.Value : DBNull.Value);
-            cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
+            cmd.Parameters.AddWithValue("matriz_id", unidade.MatrizId.HasValue ? (object)unidade.MatrizId.Value : DBNull.Value);
+            cmd.Parameters.AddWithValue("cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
             cmd.Parameters.AddWithValue("cep", unidade.Cep);
+            cmd.Parameters.AddWithValue("endereco", unidade.Endereco);
             cmd.Parameters.AddWithValue("numero", unidade.Numero);
             cmd.Parameters.AddWithValue("complemento", unidade.Complemento);
             cmd.Parameters.AddWithValue("bairro", unidade.Bairro);
@@ -103,7 +106,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
 
-            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz.HasValue ? (object)unidade.IdMatriz.Value : DBNull.Value);
+            cmd.Parameters.AddWithValue("id_matriz", unidade.MatrizId.HasValue ? (object)unidade.MatrizId.Value : DBNull.Value);
             cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
@@ -124,9 +127,9 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades(int skip, int top, string? razaoSocial, string? Cnpj)
+    public async Task<List<UnidadeOrganizacionalGetResponse>> ObterUnidades(int skip, int top, string? razaoSocial, string? Cnpj)
     {
-        var unidades = new List<UnidadeOrganizacionalRecuperado>();
+        var unidades = new List<UnidadeOrganizacionalGetResponse>();
 
         string sql = @"
             SELECT
@@ -169,10 +172,10 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             while (await reader.ReadAsync())
             {
-                var unidadeOrganizacionalRecuperada = new UnidadeOrganizacionalRecuperado();
+                var unidadeOrganizacionalRecuperada = new UnidadeOrganizacionalGetResponse();
 
                 unidadeOrganizacionalRecuperada.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
-                unidadeOrganizacionalRecuperada.IdMatriz = reader.GetGuidNullable("id_matriz");
+                unidadeOrganizacionalRecuperada.MatrizId = reader.GetGuidNullable("id_matriz");
                 unidadeOrganizacionalRecuperada.Cnpj = reader.GetString("cnpj");
                 unidadeOrganizacionalRecuperada.RazaoSocial = reader.GetString("razao_social");
                 unidadeOrganizacionalRecuperada.NomeFantasia = reader.GetStringSafe("nome_fantasia");
@@ -195,7 +198,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<UnidadeOrganizacionalRecuperado?> ObterUnidade(Guid unidadeOrganizacionald)
+    public async Task<UnidadeOrganizacionalGetResponse?> ObterUnidade(Guid unidadeOrganizacionald)
     {
         const string sql = @"
             SELECT
@@ -230,10 +233,10 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             if (!await reader.ReadAsync()) return null;
 
-            return new UnidadeOrganizacionalRecuperado
+            return new UnidadeOrganizacionalGetResponse
             {
                 UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                IdMatriz = reader.GetGuidNullable("id_matriz"),
+                MatrizId = reader.GetGuidNullable("id_matriz"),
                 Cnpj = reader.GetString("cnpj"),
                 RazaoSocial = reader.GetString("razao_social"),
                 NomeFantasia = reader.GetStringSafe("nome_fantasia"),

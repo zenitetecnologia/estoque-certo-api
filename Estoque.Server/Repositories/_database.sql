@@ -7,19 +7,32 @@ CREATE SCHEMA IF NOT EXISTS estoque_certo;
 -- 2. Tabela de Unidades Organizacionais (Matriz e Filiais)
 CREATE TABLE IF NOT EXISTS estoque_certo.unidade_organizacional (
     unidade_organizacional_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    id_matriz UUID,
-    cnpj VARCHAR(20),
-    razao_social TEXT NOT NULL,
-    nome_fantasia TEXT,
-    cep VARCHAR(20) NOT NULL,
+    matriz_id UUID,
+    cnpj VARCHAR(14) NOT NULL,
+    razao_social VARCHAR(100) NOT NULL,
+    nome_fantasia VARCHAR(100),
+    cep VARCHAR(8),
+    endereco VARCHAR(200),
     numero VARCHAR(50),
-    complemento TEXT,
-    bairro TEXT,
-    cidade TEXT,
+    complemento VARCHAR(50),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
     uf VARCHAR(2),
-    pais VARCHAR(50),
-    email VARCHAR(150)
+    pais VARCHAR(100),
+    email VARCHAR(100)
 );
+
+-- 4. Tabela de Espaços (Locais físicos de armazenamento)
+CREATE TABLE IF NOT EXISTS estoque_certo.espaco (
+    espaco_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    unidade_organizacional_id UUID NOT NULL,
+    nome VARCHAR(150) NOT NULL,
+    descricao TEXT,
+    
+    CONSTRAINT fk_espaco_unidade FOREIGN KEY (unidade_organizacional_id) 
+        REFERENCES estoque_certo.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
+);
+
 
 -- 3. Tabela de Usuários (Relação 1:N direta com Unidade Organizacional)
 CREATE TABLE IF NOT EXISTS estoque_certo.usuario (
@@ -36,17 +49,6 @@ CREATE TABLE IF NOT EXISTS estoque_certo.usuario (
     
     -- Chave estrangeira para garantir a integridade referencial
     CONSTRAINT fk_usuario_unidade FOREIGN KEY (unidade_organizacional_id) 
-        REFERENCES estoque_certo.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
-);
-
--- 4. Tabela de Espaços (Locais físicos de armazenamento)
-CREATE TABLE IF NOT EXISTS estoque_certo.espaco (
-    espaco_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    unidade_organizacional_id UUID NOT NULL,
-    nome VARCHAR(150) NOT NULL,
-    descricao TEXT,
-    
-    CONSTRAINT fk_espaco_unidade FOREIGN KEY (unidade_organizacional_id) 
         REFERENCES estoque_certo.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
 );
 
