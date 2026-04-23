@@ -20,6 +20,7 @@ public class UnidadeOrganizacional
     public string Uf { get; set; } = string.Empty;
     public string Pais { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+    public string Telefone { get; set; } = string.Empty;
 }
 
 public class UnidadeOrganizacionalGetResponse : UnidadeOrganizacional

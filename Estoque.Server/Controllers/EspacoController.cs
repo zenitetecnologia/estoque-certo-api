@@ -17,7 +17,7 @@ public static class EspacoController
         })
         .WithTags("espacos")
         .WithSummary("Cadastra um novo espaço")
-        .WithDescription("Cadastra um novo espaço de armazenamento.")
+        .WithDescription("Cadastra um novo espaço.")
         .Produces(StatusCodes.Status201Created)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
@@ -32,7 +32,7 @@ public static class EspacoController
         })
         .WithTags("espacos")
         .WithSummary("Atualiza um espaço")
-        .WithDescription("Atualiza as informações de um espaço de armazenamento existente.")
+        .WithDescription("Atualiza as informações de um espaço existente.")
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
@@ -48,7 +48,7 @@ public static class EspacoController
         })
         .WithTags("espacos")
         .WithSummary("Exclui um espaço")
-        .WithDescription("Remove um espaço do sistema permanentemente.")
+        .WithDescription("Exclui um espaço do sistema.")
         .Produces(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
@@ -63,8 +63,8 @@ public static class EspacoController
             return Results.Ok(result);
         })
         .WithTags("espacos")
-        .WithSummary("Lista os espaços")
-        .WithDescription("Retorna a lista completa de espaços de armazenamento.")
+        .WithSummary("Retorna a lista de espaços")
+        .WithDescription("Retorna a lista de espaços de acordo com os parâmetros informados.")
         .Produces<List<EspacoRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
@@ -77,8 +77,8 @@ public static class EspacoController
             return Results.Ok(result);
         })
         .WithTags("espacos")
-        .WithSummary("Busca um espaço por ID")
-        .WithDescription("Retorna um espaço específico pelo seu ID.")
+        .WithSummary("Retorna um espaço por ID")
+        .WithDescription("Retorna um espaço específico por ID.")
         .Produces<EspacoRecuperado>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);

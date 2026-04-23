@@ -8,6 +8,83 @@ public class ItemEstoqueRepository : BaseRepository
 {
     public ItemEstoqueRepository(IDbConnection connection) : base(connection) { }
 
+    public async Task<Guid> CadastrarItemEstoque(ItemEstoque item)
+    {
+        const string sql = @"
+            INSERT INTO estoque_certo.item_estoque
+            (
+                unidade_organizacional_id,
+                espaco_id,
+                descricao,
+                tipo_unidade_medida,
+                quantidade
+            )
+            VALUES
+            (
+                @unidade_organizacional_id,
+                @espaco_id,
+                @descricao,
+                @tipo_unidade_medida,
+                @quantidade
+            )
+            RETURNING item_estoque_id;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", item.UnidadeOrganizacionalId);
+            cmd.Parameters.AddWithValue("espaco_id", item.EspacoId);
+            cmd.Parameters.AddWithValue("descricao", item.Descricao);
+            cmd.Parameters.AddWithValue("tipo_unidade_medida", (int)item.TipoUnidadeMedida);
+            cmd.Parameters.AddWithValue("quantidade", item.Quantidade);
+
+            var result = await cmd.ExecuteScalarAsync();
+
+            return (Guid)result!;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<int> AtualizarItemEstoque(ItemEstoque item, Guid itemEstoqueId)
+    {
+        const string sql = @"
+            UPDATE
+                estoque_certo.item_estoque
+            SET
+                espaco_id = @espaco_id,
+                descricao = @descricao,
+                tipo_unidade_medida = @tipo_unidade_medida,
+                quantidade = @quantidade
+            WHERE
+                item_estoque_id = @id;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.AddWithValue("id", itemEstoqueId);
+            cmd.Parameters.AddWithValue("espaco_id", item.EspacoId);
+            cmd.Parameters.AddWithValue("descricao", item.Descricao);
+            cmd.Parameters.AddWithValue("tipo_unidade_medida", (int)item.TipoUnidadeMedida);
+            cmd.Parameters.AddWithValue("quantidade", item.Quantidade);
+
+            return await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
+    }
 
     public async Task<List<ItemEstoqueRecuperado>> ObterItens(int skip, int top, string? descricao, Guid? unidadeOrganizacionalId, Guid? espacoId)
     {
@@ -108,84 +185,6 @@ public class ItemEstoqueRepository : BaseRepository
                 TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida"),
                 Quantidade = reader.GetDecimal("quantidade")
             };
-        }
-        catch
-        {
-            throw;
-        }
-    }
-
-    public async Task<Guid> CadastrarItemEstoque(ItemEstoque item)
-    {
-        const string sql = @"
-            INSERT INTO estoque_certo.item_estoque
-            (
-                unidade_organizacional_id,
-                espaco_id,
-                descricao,
-                tipo_unidade_medida,
-                quantidade
-            )
-            VALUES
-            (
-                @unidade_organizacional_id,
-                @espaco_id,
-                @descricao,
-                @tipo_unidade_medida,
-                @quantidade
-            )
-            RETURNING item_estoque_id;
-        ";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, Connection);
-
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", item.UnidadeOrganizacionalId);
-            cmd.Parameters.AddWithValue("espaco_id", item.EspacoId);
-            cmd.Parameters.AddWithValue("descricao", item.Descricao);
-            cmd.Parameters.AddWithValue("tipo_unidade_medida", (int)item.TipoUnidadeMedida);
-            cmd.Parameters.AddWithValue("quantidade", item.Quantidade);
-
-            var result = await cmd.ExecuteScalarAsync();
-
-            return (Guid)result!;
-        }
-        catch
-        {
-            throw;
-        }
-    }
-
-    public async Task<int> AtualizarItemEstoque(ItemEstoque item, Guid itemEstoqueId)
-    {
-        const string sql = @"
-            UPDATE
-                estoque_certo.item_estoque
-            SET
-                espaco_id = @espaco_id,
-                descricao = @descricao,
-                tipo_unidade_medida = @tipo_unidade_medida,
-                quantidade = @quantidade
-            WHERE
-                item_estoque_id = @id;
-        ";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, Connection);
-
-            cmd.Parameters.AddWithValue("id", itemEstoqueId);
-            cmd.Parameters.AddWithValue("espaco_id", item.EspacoId);
-            cmd.Parameters.AddWithValue("descricao", item.Descricao);
-            cmd.Parameters.AddWithValue("tipo_unidade_medida", (int)item.TipoUnidadeMedida);
-            cmd.Parameters.AddWithValue("quantidade", item.Quantidade);
-
-            return await cmd.ExecuteNonQueryAsync();
         }
         catch
         {

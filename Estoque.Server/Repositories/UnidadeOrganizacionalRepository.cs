@@ -25,7 +25,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 cidade,
                 uf,
                 pais,
-                email
+                email,
+                telefone
             )
             VALUES
             (
@@ -41,7 +42,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 @cidade,
                 @uf,
                 @pais,
-                @email
+                @email,
+                @telefone
             )
             RETURNING unidade_organizacional_id;
         ";
@@ -65,6 +67,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             cmd.Parameters.AddWithValue("uf", unidade.Uf);
             cmd.Parameters.AddWithValue("pais", unidade.Pais);
             cmd.Parameters.AddWithValue("email", unidade.Email);
+            cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
 
             var result = await cmd.ExecuteScalarAsync();
 
@@ -82,8 +85,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         UPDATE
             estoque_certo.unidade_organizacional
         SET
-            id_matriz = @id_matriz,
-            Cnpj = @Cnpj,
+            matriz_id = @matriz_id,
+            cnpj = @cnpj,
             razao_social = @razao_social,
             nome_fantasia = @nome_fantasia,
             cep = @cep,
@@ -93,7 +96,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             cidade = @cidade,
             uf = @uf,
             pais = @pais,
-            email = @email
+            email = @email,
+            telefone = @telefone
         WHERE
             unidade_organizacional_id = @unidade_organizacional_id;
     ";
@@ -105,9 +109,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
-
-            cmd.Parameters.AddWithValue("id_matriz", unidade.MatrizId.HasValue ? (object)unidade.MatrizId.Value : DBNull.Value);
-            cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
+            cmd.Parameters.AddWithValue("matriz_id", unidade.MatrizId.HasValue ? (object)unidade.MatrizId.Value : DBNull.Value);
+            cmd.Parameters.AddWithValue("cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
             cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
             cmd.Parameters.AddWithValue("cep", unidade.Cep);
@@ -118,6 +121,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             cmd.Parameters.AddWithValue("uf", unidade.Uf);
             cmd.Parameters.AddWithValue("pais", unidade.Pais);
             cmd.Parameters.AddWithValue("email", unidade.Email);
+            cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
 
             return await cmd.ExecuteNonQueryAsync();
         }
@@ -134,8 +138,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         string sql = @"
             SELECT
                 unidade_organizacional_id,
-                id_matriz,
-                Cnpj,
+                matriz_id,
+                cnpj,
                 razao_social,
                 nome_fantasia,
                 cep,
@@ -145,7 +149,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 cidade,
                 uf,
                 pais,
-                email
+                email,
+                telefone
             FROM
                 estoque_certo.unidade_organizacional
             WHERE 1 = 1 
@@ -153,7 +158,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
         if (!string.IsNullOrEmpty(razaoSocial)) sql += " AND razao_social ILIKE @razao_social ";
 
-        if (!string.IsNullOrEmpty(Cnpj)) sql += " AND Cnpj ILIKE @Cnpj ";
+        if (!string.IsNullOrEmpty(Cnpj)) sql += " AND cnpj ILIKE @cnpj ";
 
         sql += " ORDER BY razao_social LIMIT @top OFFSET @skip";
 
@@ -164,7 +169,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.AddWithValue("razao_social", $"%{razaoSocial}%");
-            cmd.Parameters.AddWithValue("Cnpj", $"%{Cnpj}%");
+            cmd.Parameters.AddWithValue("cnpj", $"%{Cnpj}%");
             cmd.Parameters.AddWithValue("skip", skip);
             cmd.Parameters.AddWithValue("top", top);
 
@@ -175,7 +180,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 var unidadeOrganizacionalRecuperada = new UnidadeOrganizacionalGetResponse();
 
                 unidadeOrganizacionalRecuperada.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
-                unidadeOrganizacionalRecuperada.MatrizId = reader.GetGuidNullable("id_matriz");
+                unidadeOrganizacionalRecuperada.MatrizId = reader.GetGuidNullable("matriz_id");
                 unidadeOrganizacionalRecuperada.Cnpj = reader.GetString("cnpj");
                 unidadeOrganizacionalRecuperada.RazaoSocial = reader.GetString("razao_social");
                 unidadeOrganizacionalRecuperada.NomeFantasia = reader.GetStringSafe("nome_fantasia");
@@ -203,8 +208,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         const string sql = @"
             SELECT
                 unidade_organizacional_id,
-                id_matriz,
-                Cnpj,
+                matriz_id,
+                cnpj,
                 razao_social,
                 nome_fantasia,
                 cep,
@@ -214,7 +219,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 cidade,
                 uf,
                 pais,
-                email
+                email,
+                telefone
             FROM
                 estoque_certo.unidade_organizacional
             WHERE
@@ -236,7 +242,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             return new UnidadeOrganizacionalGetResponse
             {
                 UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                MatrizId = reader.GetGuidNullable("id_matriz"),
+                MatrizId = reader.GetGuidNullable("matriz_id"),
                 Cnpj = reader.GetString("cnpj"),
                 RazaoSocial = reader.GetString("razao_social"),
                 NomeFantasia = reader.GetStringSafe("nome_fantasia"),
@@ -247,7 +253,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 Cidade = reader.GetStringSafe("cidade"),
                 Uf = reader.GetStringSafe("uf"),
                 Pais = reader.GetStringSafe("pais"),
-                Email = reader.GetStringSafe("email")
+                Email = reader.GetStringSafe("email"),
+                Telefone = reader.GetStringSafe("telefone")
             };
         }
         catch
@@ -275,7 +282,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<bool> VerificaExisteUnidade(string Cnpj, Guid ignoreId)
+    public async Task<bool> VerificaUnidadeExiste(string Cnpj, Guid ignoreId)
     {
         const string sql = @"
             SELECT
@@ -283,7 +290,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             FROM
                 estoque_certo.unidade_organizacional
             WHERE
-                Cnpj = @Cnpj
+                cnpj = @cnpj
             AND
                 unidade_organizacional_id <> @ignoreunidade_organizacional_id
             LIMIT 1;
@@ -294,7 +301,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("Cnpj", Cnpj);
+            cmd.Parameters.AddWithValue("cnpj", Cnpj);
             cmd.Parameters.AddWithValue("ignoreunidade_organizacional_id", ignoreId);
 
             var result = await cmd.ExecuteScalarAsync();
