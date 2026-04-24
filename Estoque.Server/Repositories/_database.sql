@@ -92,7 +92,9 @@ CREATE TABLE estoque_certo.codigo_acesso (
     codigo VARCHAR(6) NOT NULL,
     data_solicitacao TIMESTAMP NOT NULL DEFAULT NOW(),
     data_validacao TIMESTAMP NULL,
-    validado BOOLEAN NOT NULL DEFAULT FALSE,
+    utilizado BOOLEAN NOT NULL DEFAULT FALSE,
     codigo_acesso_id VARCHAR(100) NULL,
-    PRIMARY KEY (usuario_id, codigo)
+    data_acesso_id TIMESTAMP NULL,       
+    reset_efetuado BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY (usuario_id, codigo, data_solicitacao)
 );

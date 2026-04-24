@@ -2,25 +2,25 @@ type: collection.insomnia.rest/5.0
 schema_version: "5.1"
 name: estoque-certo
 meta:
-  id: wrk_72db9a58b2d94b2096b4103086b2800f
-  created: 1776100246549
-  modified: 1776100246549
+  id: wrk_33e3f08c20ba47a598fa1a9426463aee
+  created: 1777042841984
+  modified: 1777042841984
   description: ""
 collection:
   - name: usuarios
     meta:
-      id: fld_90783140b2cb49a5968159892e2a1d5b
+      id: fld_8587c22bf1244709a01a60c05473e473
       created: 1776017077288
-      modified: 1776281100626
-      sortKey: -1776017077288
+      modified: 1777049449303
+      sortKey: -1776451449716
       description: Rotas da entidade usuários.
     children:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_5fbe9a1c757845aaac8c25f0f63d2a7d
+          id: req_7ec511803d144e3fb09fd77abe593a0d
           created: 1776017545694
-          modified: 1776110754467
+          modified: 1776881920362
           isPrivate: false
           description: ""
           sortKey: -1776017077843.5
@@ -32,8 +32,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "cristiano.ronaldo",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo"
             }
         headers:
           - name: Content-Type
@@ -65,9 +64,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400
         meta:
-          id: req_6747fb009100401fa2c5f6327d5ea3fc
+          id: req_ead6c38d8942445db52a6416c5973184
           created: 1776017553481
-          modified: 1776188864139
+          modified: 1776881933983
           isPrivate: false
           description: ""
           sortKey: -1776017077543.5
@@ -79,8 +78,7 @@ collection:
             	"unidadeOrganizacionalId": null,
               "username": "",
               "senha": null,
-              "nome": "",
-              "telefone": null
+              "nome": ""
             }
         headers:
           - name: Content-Type
@@ -96,9 +94,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400-duplicated
         meta:
-          id: req_d004799075cd4147b6e542712c560c05
+          id: req_c1cb241fefed455a8bb46ad4b583c94b
           created: 1776017752676
-          modified: 1776110801256
+          modified: 1776881957102
           isPrivate: false
           description: ""
           sortKey: -1776017077518.5
@@ -110,8 +108,7 @@ collection:
               "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "cristiano.ronaldo",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo"
             }
         headers:
           - name: Content-Type
@@ -127,9 +124,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-500
         meta:
-          id: req_ef9afb529ffd4765a37c5ebbfc96804a
+          id: req_184bf4320c934fd8875b05147a034d45
           created: 1776018113743
-          modified: 1776021671619
+          modified: 1776881964687
           isPrivate: false
           description: ""
           sortKey: -1776017077493.5
@@ -141,8 +138,7 @@ collection:
               "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo"
             }
         headers:
           - name: Content-Type
@@ -158,9 +154,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-200
         meta:
-          id: req_f9362f1c4ee647ea89b84ed7bf41571a
+          id: req_099b2f23a3864acc884d5686f4c5e338
           created: 1776018251916
-          modified: 1776187583972
+          modified: 1776881971037
           isPrivate: false
           description: ""
           sortKey: -1776016049418.4688
@@ -172,8 +168,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "cr7.omelhor",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo dos Santos Aveiro",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo dos Santos Aveiro"
             }
         headers:
           - name: Content-Type
@@ -189,12 +184,12 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400
         meta:
-          id: req_c9298495025e4dbba370c0b04469db73
+          id: req_bd3bebbfeeee49f798aa4a41847d73a9
           created: 1776020023293
-          modified: 1776189071572
+          modified: 1776887367880
           isPrivate: false
           description: ""
-          sortKey: -1776015021343.4375
+          sortKey: -1776015535380.9531
         method: PUT
         body:
           mimeType: application/json
@@ -203,8 +198,7 @@ collection:
             	"unidadeOrganizacionalId": null,
             	"username": "",
               "senha": null,
-              "nome": "",
-              "telefone": null
+              "nome": ""
             }
         headers:
           - name: Content-Type
@@ -220,9 +214,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
         name: usuarios-404
         meta:
-          id: req_79e1b72f474d4c0fa731755efa11cd10
+          id: req_a23ca11b11ee4fd5a2afd75fef5e0e1c
           created: 1776020515113
-          modified: 1776189346447
+          modified: 1776881997778
           isPrivate: false
           description: ""
           sortKey: -1776014978513.0977
@@ -234,8 +228,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "cr7.melhordomundo",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo dos Santos Aveiro",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo dos Santos Aveiro"
             }
         headers:
           - name: Content-Type
@@ -251,9 +244,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500
         meta:
-          id: req_0d3bf6633ad94be9a9632584af93baad
+          id: req_0cedbe95d54e4b9186319c3ba9097e02
           created: 1776020739660
-          modified: 1776189414506
+          modified: 1776882006490
           isPrivate: false
           description: ""
           sortKey: -1776014935682.7578
@@ -265,8 +258,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo dos Santos Aveiro",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo dos Santos Aveiro"
             }
         headers:
           - name: Content-Type
@@ -282,9 +274,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_1e949f672dbd418eabb64d9299f06a61
+          id: req_6fd7fc77b55440fa96bb5310bbdb51ee
           created: 1776021559940
-          modified: 1776110743529
+          modified: 1776881918559
           isPrivate: false
           description: ""
           sortKey: -1776017077743.5
@@ -296,8 +288,7 @@ collection:
                 "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
                 "username": "lionel.messi",
                 "senha": "Senha@123",
-                "nome": "Lionel Messi",
-                "telefone": "37999990001"
+                "nome": "Lionel Messi"
             }
         headers:
           - name: Content-Type
@@ -329,9 +320,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_f732c46fa79a4ee4ba4fde4a70a6066a
+          id: req_7ab7247df55340f3b81aea42fe528bf1
           created: 1776022205862
-          modified: 1776105800533
+          modified: 1776881915387
           isPrivate: false
           description: ""
           sortKey: -1776017077643.5
@@ -343,8 +334,7 @@ collection:
                 "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
                 "username": "kylian.mbappe",
                 "senha": "Senha@123",
-                "nome": "Kylian Mbappé",
-                "telefone": "37999990003"
+                "nome": "Kylian Mbappé"
             }
         headers:
           - name: Content-Type
@@ -376,9 +366,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400-duplicated
         meta:
-          id: req_cb676374570646c0a092c5584e9c1812
+          id: req_83f8818b7fed4124b481baa1c6a8d3f5
           created: 1776022675661
-          modified: 1776189116313
+          modified: 1776881983514
           isPrivate: false
           description: ""
           sortKey: -1776014999928.2676
@@ -390,8 +380,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
               "username": "kylian.mbappe",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo dos Santos Aveiro",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo dos Santos Aveiro"
             }
         headers:
           - name: Content-Type
@@ -407,9 +396,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400-uo-notfound
         meta:
-          id: req_db99a82117474702ad41e6ed98823ff8
+          id: req_b9c5146e6c0148b69102a2ba74c29d80
           created: 1776110440408
-          modified: 1776188783474
+          modified: 1776881953811
           isPrivate: false
           description: ""
           sortKey: -1776017077506
@@ -421,8 +410,7 @@ collection:
               "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
               "username": "cristiano.ronaldo",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo"
             }
         headers:
           - name: Content-Type
@@ -438,9 +426,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400-uo-notfound
         meta:
-          id: req_393c1fe3284648b7bca52ca31872cc41
+          id: req_ad0b7c04352040feae6f10b840ba754b
           created: 1776189148566
-          modified: 1776194723289
+          modified: 1776881992381
           isPrivate: false
           description: ""
           sortKey: -1776014989220.6826
@@ -452,8 +440,7 @@ collection:
             	"unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
               "username": "cr7.omelhor",
               "senha": "Senha@123",
-              "nome": "Cristiano Ronaldo dos Santos Aveiro",
-              "telefone": "37999990000"
+              "nome": "Cristiano Ronaldo dos Santos Aveiro"
             }
         headers:
           - name: Content-Type
@@ -469,9 +456,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-200
         meta:
-          id: req_99bed690388643c3a865d3bc22dbc9c1
+          id: req_2fccacaaf4be4663b0d4d973333e95eb
           created: 1776194617008
-          modified: 1776194644736
+          modified: 1776784119379
           isPrivate: false
           description: ""
           sortKey: -1776014935582.7578
@@ -487,7 +474,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400
         meta:
-          id: req_03c68c08d8e844a8a0dc585836b5d9ae
+          id: req_6b9704f5335840838b7891c0bd31b03a
           created: 1776194696378
           modified: 1776194736070
           isPrivate: false
@@ -505,9 +492,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
         name: usuarios-404
         meta:
-          id: req_ce66bc208f85488b943a70795c813c94
+          id: req_044c8316fd704c769ff4f5ed75326b31
           created: 1776194759352
-          modified: 1776194768870
+          modified: 1776784425589
           isPrivate: false
           description: ""
           sortKey: -1776014935482.7578
@@ -523,9 +510,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-200-by-id
         meta:
-          id: req_5a2f2aa494ae433488723163fdc47179
+          id: req_02353f36bd7547d6ab69ced2b89eb954
           created: 1776195028275
-          modified: 1776281190854
+          modified: 1776784521172
           isPrivate: false
           description: ""
           sortKey: -1776014935382.7578
@@ -541,9 +528,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
         name: usuarios-404-by-id
         meta:
-          id: req_169f03e9735a42e2bf3486c9908a6673
+          id: req_7c7087aba91248a48c350c402aa728b4
           created: 1776195083081
-          modified: 1776281204291
+          modified: 1776784565439
           isPrivate: false
           description: ""
           sortKey: -1776014935332.7578
@@ -559,9 +546,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500
         meta:
-          id: req_2f5d8afccdf54d639d2bcb107cac0ad5
+          id: req_dcfe65136a8743199de355bd2864b0a1
           created: 1776276413179
-          modified: 1776276415911
+          modified: 1776784452813
           isPrivate: false
           description: ""
           sortKey: -1776014935432.7578
@@ -577,9 +564,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500-by-id
         meta:
-          id: req_65e806f9dece40858cdbc4150f40d2ec
+          id: req_77faa54486fb4cc0b114af82d34414db
           created: 1776276425643
-          modified: 1776281210770
+          modified: 1776784592238
           isPrivate: false
           description: ""
           sortKey: -1776014935232.7578
@@ -595,9 +582,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-200
         meta:
-          id: req_aed887edf8c648dcbbbaab4817b80f86
+          id: req_b7a5768a859248cf9ea3ca2d1efe547b
           created: 1776281229001
-          modified: 1776281243454
+          modified: 1776784689801
           isPrivate: false
           description: ""
           sortKey: -1776014935132.7578
@@ -611,13 +598,13 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url
-          }}/v1/usuarios?skip=0&top=10&username=li&unidadeOrganizacionalId={{
+          }}/v1/usuarios?skip=1&top=2&username=li&unidadeOrganizacionalId={{
           _.unidade_organizacional_id }}"
         name: usuarios-200-paged
         meta:
-          id: req_356ee65ccdf94cdc8580f9a4af8e86b9
+          id: req_680b063293e2430da965778a7d5bd1d8
           created: 1776281994283
-          modified: 1776282936291
+          modified: 1776784860212
           isPrivate: false
           description: ""
           sortKey: -1776014935082.7578
@@ -635,9 +622,9 @@ collection:
           _.unidade_organizacional_id_fake }}"
         name: usuarios-200-empty
         meta:
-          id: req_ca707431c7614416bc9cc9c219765fae
+          id: req_659a1259a97544c3a4870bd0a32144d6
           created: 1776282828073
-          modified: 1776282929619
+          modified: 1776784885241
           isPrivate: false
           description: ""
           sortKey: -1776014935032.7578
@@ -653,9 +640,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-500
         meta:
-          id: req_b4cae62d9eaa4c3a83e9d70c58c228d3
+          id: req_7dbddcefbac549a48c9a2dea5d7b2b19
           created: 1776283250735
-          modified: 1776283254842
+          modified: 1776784902179
           isPrivate: false
           description: ""
           sortKey: -1776014934932.7578
@@ -671,9 +658,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-204
         meta:
-          id: req_d5c17ed5d10a40e0ab796844f5382ecd
+          id: req_a8a2cf29c0264fabac3969e406b97e9a
           created: 1776283315235
-          modified: 1776283393391
+          modified: 1776785485039
           isPrivate: false
           description: ""
           sortKey: -1776014934832.7578
@@ -689,9 +676,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_02 }}"
         name: usuarios-204
         meta:
-          id: req_fee58b482a704d8b94ebd83e616ed93f
+          id: req_18dcfff8d43843e8855299d4587cf551
           created: 1776283533602
-          modified: 1776283540655
+          modified: 1776785494224
           isPrivate: false
           description: ""
           sortKey: -1776014934782.7578
@@ -707,9 +694,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_03 }}"
         name: usuarios-204
         meta:
-          id: req_8700426a94034bc3a5023508ff798dd2
+          id: req_e84fafb0c88b465587a6756d018c70b6
           created: 1776283559384
-          modified: 1776283564881
+          modified: 1776785503446
           isPrivate: false
           description: ""
           sortKey: -1776014934732.7578
@@ -725,7 +712,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-404
         meta:
-          id: req_a60bdab064234e25b5cc51eef47dd13b
+          id: req_70bc07da022442b68fde0878797b6870
           created: 1776283702703
           modified: 1776283711548
           isPrivate: false
@@ -743,9 +730,9 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500
         meta:
-          id: req_8fc66f022003403d9482c4cea32d15f3
+          id: req_306d9ff620144f06870e0f4283a1b17e
           created: 1776283727402
-          modified: 1776283727402
+          modified: 1776785554147
           isPrivate: false
           description: ""
           sortKey: -1776014934632.7578
@@ -758,24 +745,2109 @@ collection:
             send: true
             store: true
           rebuildPath: true
+  - name: unidades-organizacionais
+    meta:
+      id: fld_70482757643a42e9b1219c1db008fbd1
+      created: 1776360163385
+      modified: 1776971294253
+      sortKey: -1776451449816
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais"
+        name: unidades-organizacionais-201
+        meta:
+          id: req_f7e2423a01834fbbbc7983b1234121b9
+          created: 1776360220199
+          modified: 1776972002532
+          isPrivate: false
+          description: ""
+          sortKey: -1776361447764
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"matrizId": null,
+              "cnpj": "06549925000172",
+              "razaoSocial": "Sebastião e Isis Entregas Expressas Ltda.",
+              "nomeFantasia": null,
+              "cep": null,
+            	"endereço": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const uo = locationHeader.value.split('/').pop();
+              insomnia.environment.set('unidade_organizacional_mock_01', uo);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais"
+        name: unidades-organizacionais-201
+        meta:
+          id: req_7964e6e9faca4687936f0e7995eff377
+          created: 1776362655830
+          modified: 1776972115352
+          isPrivate: false
+          description: ""
+          sortKey: -1776189262803.75
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"matrizId": null,
+              "cnpj": "04427262000198",
+              "razaoSocial": "Laís e Amanda Gráfica ME",
+              "nomeFantasia": null,
+              "cep": null,
+            	"endereço": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const uo = locationHeader.value.split('/').pop();
+              insomnia.environment.set('unidade_organizacional_mock_02', uo);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais"
+        name: unidades-organizacionais-400
+        meta:
+          id: req_6591bc28264c48c19d98040ebf62b0b2
+          created: 1776362926081
+          modified: 1776363063942
+          isPrivate: false
+          description: ""
+          sortKey: -1776103170323.625
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id_matriz": null,
+              "Cnpj": "123456789",
+              "razaoSocial": "",
+              "nomeFantasia": "",
+              "cep": "",
+              "numero": "",
+              "complemento": "",
+              "bairro": "",
+              "cidade": "",
+              "uf": "",
+              "pais": "",
+              "telefone": "",
+              "email": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais"
+        name: unidades-organizacionais-500
+        meta:
+          id: req_3d45411f733740d4b43948292d962dc7
+          created: 1776363068401
+          modified: 1776363155887
+          isPrivate: false
+          description: ""
+          sortKey: -1776060124083.5625
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id_matriz": null,
+              "Cnpj": "",
+              "razaoSocial": "500-response",
+              "nomeFantasia": "",
+              "cep": "",
+              "numero": "",
+              "complemento": "",
+              "bairro": "",
+              "cidade": "",
+              "uf": "txt",
+              "pais": "",
+              "telefone": "",
+              "email": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais"
+        name: unidades-organizacionais-400-duplicated
+        meta:
+          id: req_d27b399249d34b908fb80b0e4b7e1cb4
+          created: 1776363169566
+          modified: 1776363218894
+          isPrivate: false
+          description: ""
+          sortKey: -1776081647203.5938
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id_matriz": null,
+              "Cnpj": "04250186000198",
+              "razaoSocial": "400-duplicated",
+              "nomeFantasia": "",
+              "cep": "",
+              "numero": "",
+              "complemento": "",
+              "bairro": "",
+              "cidade": "",
+              "uf": "",
+              "pais": "",
+              "telefone": "",
+              "email": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_01 }}"
+        name: unidades-organizacionais-200
+        meta:
+          id: req_4e1edb8b51144d628583a7d0c7e2dc0c
+          created: 1776363256732
+          modified: 1776891886302
+          isPrivate: false
+          description: ""
+          sortKey: -1776060123983.5625
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id_matriz": null,
+              "Cnpj": "06549925000172",
+              "razaoSocial": "Casinha reta.",
+              "nomeFantasia": "Casa dos espertos",
+              "cep": "",
+              "numero": "1",
+              "complemento": "Rua dos espertos",
+              "bairro": "",
+              "cidade": "",
+              "uf": "MG",
+              "pais": "",
+              "telefone": "",
+              "email": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_01 }}"
+        name: unidades-organizacionais-400
+        meta:
+          id: req_67bc9dc97a6a4ae1a58652d5a843ea5d
+          created: 1776363701465
+          modified: 1776891047286
+          isPrivate: false
+          description: ""
+          sortKey: -1776038600913.5312
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id_matriz": null,
+              "Cnpj": "",
+              "razaoSocial": "",
+              "nomeFantasia": "",
+              "cep": "",
+              "numero": "1",
+              "complemento": "",
+              "bairro": "",
+              "cidade": "",
+              "uf": "MG",
+              "pais": "",
+              "telefone": "",
+              "email": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_01 }}"
+        name: unidades-organizacionais-500
+        meta:
+          id: req_b8aaa6113cde4795a6b90a944453f37f
+          created: 1776364034368
+          modified: 1776364195903
+          isPrivate: false
+          description: ""
+          sortKey: -1776022458611.0078
+        method: PUT
+        body:
+          mimeType: application/json
+          text: >-
+            {
+            	"id_matriz": null,
+              "Cnpj": "",
+              "razaoSocial": "500-response",
+              "nomeFantasia": "",
+              "cep": "",
+              "numero": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+              "complemento": "",
+              "bairro": "",
+              "cidade": "",
+              "uf": "MG",
+              "pais": "",
+              "telefone": "",
+              "email": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_01 }}"
+        name: unidades-organizacionais-200-by-id
+        meta:
+          id: req_9cddc7aed5ad42368f6f18facad3a170
+          created: 1776364273100
+          modified: 1776364440304
+          isPrivate: false
+          description: ""
+          sortKey: -1776022458511.0078
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_01 }}"
+        name: unidades-organizacionais-500-by-id
+        meta:
+          id: req_66bfb5b1d1d249bdb3cbab59cd380e81
+          created: 1776364398057
+          modified: 1776364451379
+          isPrivate: false
+          description: ""
+          sortKey: -1776019768177.254
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais"
+        name: unidades-organizacionais-200
+        meta:
+          id: req_bd30dd27d1a04d8aa6cebbd17468afce
+          created: 1776366962885
+          modified: 1776366970287
+          isPrivate: false
+          description: ""
+          sortKey: -1776019768077.254
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url
+          }}/v1/unidades-organizacionais?skip=0&top=10&razaSocial=.&Cnpj=65"
+        name: unidades-organizacionais-200-paged
+        meta:
+          id: req_193f2f84702b45468354af710daf2892
+          created: 1776366994968
+          modified: 1776892077542
+          isPrivate: false
+          description: ""
+          sortKey: -1776018422960.377
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: '{{ _.base_url }}/v1/unidades-organizacionais?skip=0&top=10&razaoSocial=""'
+        name: unidades-organizacionais-200-empty
+        meta:
+          id: req_bf0b325c563c4a30b00cd8874f032016
+          created: 1776367294385
+          modified: 1776367349374
+          isPrivate: false
+          description: ""
+          sortKey: -1776017750401.9385
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_01 }}"
+        name: unidades-organizacionais-500
+        meta:
+          id: req_b7115b0c6d5848b3b57b31e3b353cb41
+          created: 1776367571793
+          modified: 1776367574311
+          isPrivate: false
+          description: ""
+          sortKey: -1776017750301.9385
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_01 }}"
+        name: unidades-organizacionais-200
+        meta:
+          id: req_89f14fb7e42f415b909c7d711e46fb23
+          created: 1776367601486
+          modified: 1776451285751
+          isPrivate: false
+          description: ""
+          sortKey: -1776017750201.9385
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_02 }}"
+        name: unidades-organizacionais-200
+        meta:
+          id: req_74cf570f68c946a695e4180decb545cf
+          created: 1776367751325
+          modified: 1776451281301
+          isPrivate: false
+          description: ""
+          sortKey: -1776017414022.7192
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_02 }}"
+        name: unidades-organizacionais-500
+        meta:
+          id: req_ee3fc72e4c9943189cea945624249c7e
+          created: 1776367776992
+          modified: 1776367776992
+          isPrivate: false
+          description: ""
+          sortKey: -1776017245933.1096
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_02 }}"
+        name: unidades-organizacionais-404
+        meta:
+          id: req_31d7ab71d7ed49a48476de08d6ef66e0
+          created: 1776367890686
+          modified: 1776367890686
+          isPrivate: false
+          description: ""
+          sortKey: -1776017329977.9146
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_id_fake }}"
+        name: unidades-organizacionais-400-duplicated-cnpj
+        meta:
+          id: req_b49b0185b67745ce97d2d92dee0273f1
+          created: 1776890999508
+          modified: 1776891168115
+          isPrivate: false
+          description: ""
+          sortKey: -1776034565337.9004
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id_matriz": null,
+              "Cnpj": "06549925000172",
+              "razaoSocial": "Casinha reta",
+              "nomeFantasia": "Casa dos espertos",
+              "cep": "",
+              "numero": "1",
+              "complemento": "Rua dos espertos",
+              "bairro": "",
+              "cidade": "",
+              "uf": "MG",
+              "pais": "",
+              "telefone": "",
+              "email": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_id_fake }}"
+        name: unidades-organizacionais-404
+        meta:
+          id: req_49fa1323d25745f3a0d8ba3618394e38
+          created: 1776891102348
+          modified: 1776891165740
+          isPrivate: false
+          description: ""
+          sortKey: -1776030529762.2695
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id_matriz": null,
+              "Cnpj": "09932499000140",
+              "razaoSocial": "Casinha reta",
+              "nomeFantasia": "Casa dos espertos",
+              "cep": "",
+              "numero": "1",
+              "complemento": "Rua dos espertos",
+              "bairro": "",
+              "cidade": "",
+              "uf": "MG",
+              "pais": "",
+              "telefone": "",
+              "email": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: espaços
+    meta:
+      id: fld_0333e90d2d0344e19725e228663c3dd2
+      created: 1776445366121
+      modified: 1777049450016
+      sortKey: -1776451449766
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-201
+        meta:
+          id: req_9c7ec953dff14ade9420cf3c3b911574
+          created: 1776445371429
+          modified: 1776446372213
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371429
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "nome": "BatCaverna",
+              "descricao": "caverna do Batman"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const espaco = locationHeader.value.split('/').pop();
+              insomnia.environment.set('espaco_mock_01', espaco);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-201
+        meta:
+          id: req_dbcb72234e80413a8a9c31a4d07d2121
+          created: 1776445648208
+          modified: 1776446392578
+          isPrivate: false
+          description: ""
+          sortKey: -1776403409596.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "nome": "Condado",
+              "descricao": "Vila dos Hobbits"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const espaco = locationHeader.value.split('/').pop();
+              insomnia.environment.set('espaco_mock_02', espaco);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-400
+        meta:
+          id: req_3f452727cb3d400b94cfd972b9dbb281
+          created: 1776445861535
+          modified: 1776446198978
+          isPrivate: false
+          description: ""
+          sortKey: -1776382428680.25
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "",
+              "descricao": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-500
+        meta:
+          id: req_1b4e6ad63e604b59a90df04799bdb10e
+          created: 1776446117539
+          modified: 1776446218193
+          isPrivate: false
+          description: ""
+          sortKey: -1776371938222.125
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
+              "nome": "Valfenda",
+              "descricao": "Cidade dos elfos"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
+        name: espaços-200
+        meta:
+          id: req_9fb2179e5cf24939871f37ee90666bf8
+          created: 1776446228520
+          modified: 1776446691570
+          isPrivate: false
+          description: ""
+          sortKey: -1776366692993.0625
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "nome": "Valfenda",
+              "descricao": "Casa dos Elfos"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_fake }}"
+        name: espaços-404
+        meta:
+          id: req_c88d8919afdb4f2dab8a0b5cd30e0ebc
+          created: 1776446713682
+          modified: 1776446984857
+          isPrivate: false
+          description: ""
+          sortKey: -1776362758971.2656
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "nome": "Valfenda",
+              "descricao": "Casa dos Elfos"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
+        name: espaços-400
+        meta:
+          id: req_baccc5a13e57431e8d5c5f2eafbaa2c8
+          created: 1776446878686
+          modified: 1776447056940
+          isPrivate: false
+          description: ""
+          sortKey: -1776362759071.2656
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "",
+              "descricao": ""
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
+        name: espaços-200-by-id
+        meta:
+          id: req_d1d778f1a2eb472eb32b108f77f8c6bc
+          created: 1776447108974
+          modified: 1776447177445
+          isPrivate: false
+          description: ""
+          sortKey: -1776362758871.2656
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_fake }}"
+        name: espaços-404-by-id
+        meta:
+          id: req_0119041360e649bd991546841cb75f5f
+          created: 1776447165404
+          modified: 1776447221554
+          isPrivate: false
+          description: ""
+          sortKey: -1776362103317.6328
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
+        name: espaços-500-by-id
+        meta:
+          id: req_4f3a22d1ea8d4a3cb591a6d736ab7ec0
+          created: 1776447241851
+          modified: 1776447251401
+          isPrivate: false
+          description: ""
+          sortKey: -1776361775540.8164
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-200
+        meta:
+          id: req_2bd2a7a19f324b35947b3df27bae122f
+          created: 1776447296511
+          modified: 1776447303035
+          isPrivate: false
+          description: ""
+          sortKey: -1776361611652.4082
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-500
+        meta:
+          id: req_d08de007fc384c31a9ee5ab4a3213ac9
+          created: 1776447331915
+          modified: 1776450126918
+          isPrivate: false
+          description: ""
+          sortKey: -1776361529708.204
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url
+          }}/v1/espacos?skip=0&top=5&nome=al&unidadeOrganizacionalId={{
+          _.unidade_organizacional_id }}"
+        name: espaços-200-paged
+        meta:
+          id: req_4497806af1dc45afbbc0b5441b2f94ea
+          created: 1776448857067
+          modified: 1776450037482
+          isPrivate: false
+          description: ""
+          sortKey: -1776361570680.3062
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url
+          }}/v1/espacos?skip=0&top=5&nome=al&unidadeOrganizacionalId={{
+          _.unidade_organizacional_id_fake }}"
+        name: espaços-200-empty
+        meta:
+          id: req_8c6769b65e2e404e9c45372ebbfc9861
+          created: 1776449075099
+          modified: 1776450082143
+          isPrivate: false
+          description: ""
+          sortKey: -1776361550194.2551
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
+        name: espaços-200
+        meta:
+          id: req_405f5ab2b21348e29226ebbf563be611
+          created: 1776450150913
+          modified: 1776450187804
+          isPrivate: false
+          description: ""
+          sortKey: -1776361529608.204
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
+        name: espaços-200
+        meta:
+          id: req_8e312602f94244219dedf8129537fb7b
+          created: 1776450194630
+          modified: 1776450220168
+          isPrivate: false
+          description: ""
+          sortKey: -1776361488686.102
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
+        name: espaços-404
+        meta:
+          id: req_6a8d4776e18a46ceb0d0762a4bc56266
+          created: 1776450268571
+          modified: 1776450283143
+          isPrivate: false
+          description: ""
+          sortKey: -1776361468225.051
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espacoId }}"
+        name: espaços-400
+        meta:
+          id: req_17655766aee14bcab822e4ea284d6389
+          created: 1776450297561
+          modified: 1776450934499
+          isPrivate: false
+          description: ""
+          sortKey: -1776361478455.5767
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
+        name: espaços-500
+        meta:
+          id: req_6e38f7ef333f45e985d5142381dace1e
+          created: 1776450957864
+          modified: 1776450961457
+          isPrivate: false
+          description: ""
+          sortKey: -1776361468125.051
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: itens_estoque
+    meta:
+      id: fld_e1645df29eda4427b2519912b62c69fd
+      created: 1776451449616
+      modified: 1777042887484
+      sortKey: -1776451449691
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-201
+        meta:
+          id: req_b4dc70bf7dba4b1ea86e4633f4141e1e
+          created: 1776451454074
+          modified: 1776889129116
+          isPrivate: false
+          description: ""
+          sortKey: -1776451454074
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "espacoId": "{{ _.espacoId }}",
+              "descricao": "mjolnir.",
+              "tipoUnidadeMedida": 5,
+              "quantidade": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const item = locationHeader.value.split('/').pop();
+              insomnia.environment.set('item_mock_01', item);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-201
+        meta:
+          id: req_32789051f06c4ebb8035b9161f53bca3
+          created: 1776451695829
+          modified: 1776889133583
+          isPrivate: false
+          description: ""
+          sortKey: -1776448412751.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "espacoId": "{{ _.espacoId }}",
+              "descricao": "Stormbreaker.",
+              "tipoUnidadeMedida": 5,
+              "quantidade": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const item = locationHeader.value.split('/').pop();
+              insomnia.environment.set('item_mock_02', item);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-400
+        meta:
+          id: req_f332ecedccc647b992156a11fe8cb7bf
+          created: 1776451925783
+          modified: 1776453563642
+          isPrivate: false
+          description: ""
+          sortKey: -1776446892090.25
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "descricao": "",
+              "tipoUnidadeMedida": 5,
+              "quantidade": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-500
+        meta:
+          id: req_3ffb63208af7424cb79bc0abce5bdc8d
+          created: 1776453364221
+          modified: 1776453561463
+          isPrivate: false
+          description: ""
+          sortKey: -1776446131759.625
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
+              "espacoId": "{{ _.espaco_fake }}",
+              "descricao": "teste",
+              "tipoUnidadeMedida": null,
+              "quantidade": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-200
+        meta:
+          id: req_1e9314d1c0cf43d5bf5c682abe8bf378
+          created: 1776453522933
+          modified: 1776453680275
+          isPrivate: false
+          description: ""
+          sortKey: -1776445751594.3125
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id }}",
+              "espacoId": "{{ _.espacoId }}",
+              "descricao": "martelo do Thor",
+              "tipoUnidadeMedida": 5,
+              "quantidade": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-400
+        meta:
+          id: req_0f88dcd8bff34c9f893679b0558ec34f
+          created: 1776453701957
+          modified: 1776453779997
+          isPrivate: false
+          description: ""
+          sortKey: -1776445561511.6562
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "descricao": "",
+              "tipoUnidadeMedida": 5,
+              "quantidade": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-500
+        meta:
+          id: req_cfdc394d3dd44f189231f17ebb682e47
+          created: 1776453802487
+          modified: 1776453972430
+          isPrivate: false
+          description: ""
+          sortKey: -1776445466470.3281
+        method: PUT
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_fake }}",
+              "espacoId": "{{ _.espaco_fake }}",
+              "descricao": "teste",
+              "tipoUnidadeMedida": null,
+              "quantidade": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-200
+        meta:
+          id: req_2635c011aa7e42f88dc70a38be9661bf
+          created: 1776453988597
+          modified: 1776455389498
+          isPrivate: false
+          description: ""
+          sortKey: -1776445418949.664
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantidade": 1,
+              "tipoMovimentacao": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-400
+        meta:
+          id: req_aa31db37d2424c56883027b6ebd363a3
+          created: 1776455398691
+          modified: 1776455419352
+          isPrivate: false
+          description: ""
+          sortKey: -1776445395189.332
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantidade": 0,
+              "tipoMovimentacao": 0
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-400-insufficient
+        meta:
+          id: req_de625d297365421db005898a99ec3375
+          created: 1776455529650
+          modified: 1776455544009
+          isPrivate: false
+          description: ""
+          sortKey: -1776445383309.166
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantidade": 3,
+              "tipoMovimentacao": 2
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-404
+        meta:
+          id: req_993e208bdc034b648df3bbe7ac70c81e
+          created: 1776455568463
+          modified: 1776455575012
+          isPrivate: false
+          description: ""
+          sortKey: -1776445377369.083
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantidade": 3,
+              "tipoMovimentacao": 3
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-500
+        meta:
+          id: req_c226a4635bd34a70a392d176e4967424
+          created: 1776455599246
+          modified: 1776455696422
+          isPrivate: false
+          description: ""
+          sortKey: -1776445374399.0415
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "quantidade": "teste",
+              "tipoMovimentacao": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-200-by-id
+        meta:
+          id: req_229ce47ab4f946b29b5bb9fcb3049a1c
+          created: 1776455717731
+          modified: 1776455748467
+          isPrivate: false
+          description: ""
+          sortKey: -1776445372914.0208
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_Fake }}"
+        name: itens_estoque-404-by-id
+        meta:
+          id: req_9ff14050eec54e6dbec19b62f2f592ee
+          created: 1776455809665
+          modified: 1776455860532
+          isPrivate: false
+          description: ""
+          sortKey: -1776445372171.5103
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_Fake }}"
+        name: itens_estoque-500-by-id
+        meta:
+          id: req_86b010c542124b4192e59868985b7f38
+          created: 1776455868038
+          modified: 1776455868038
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371800.2551
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-200
+        meta:
+          id: req_3e20fbd8bdc04f85bf0f59280d70230e
+          created: 1776455925936
+          modified: 1776455933461
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371700.2551
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque?skip=0&top=5&descricao=."
+        name: itens_estoque-200-paged
+        meta:
+          id: req_ec10b1f348fc4927ba81fe27a1396a6a
+          created: 1776887938583
+          modified: 1776889139748
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371564.6274
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque"
+        name: itens_estoque-500
+        meta:
+          id: req_7cce3bfe824747ac97c41e96f81a0daa
+          created: 1776889154967
+          modified: 1776889188659
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371496.8137
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}/historico"
+        name: itens_estoque-200-history
+        meta:
+          id: req_e51c51f7fdb743bca2b3dc5ae7b797be
+          created: 1776889205888
+          modified: 1776890353894
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371462.9067
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}/historico"
+        name: itens_estoque-500-history
+        meta:
+          id: req_5ca4f3c8e2414391ac90ee04215610c6
+          created: 1776890373710
+          modified: 1776890373710
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371445.9534
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
+        name: itens_estoque-200
+        meta:
+          id: req_e719138779694d76b6363dc501a1da27
+          created: 1776890406105
+          modified: 1776890499036
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371345.9534
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_02 }}"
+        name: itens_estoque-200
+        meta:
+          id: req_6e7c6086dcf24a68a7e35783a4ec43ab
+          created: 1776890450718
+          modified: 1776890494510
+          isPrivate: false
+          description: ""
+          sortKey: -1776424390471.2266
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_02 }}"
+        name: itens_estoque-404
+        meta:
+          id: req_3c175e929a0d4f5e83e92745c0ce8290
+          created: 1776890469452
+          modified: 1776890513869
+          isPrivate: false
+          description: ""
+          sortKey: -1776413900033.8633
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_02 }}"
+        name: itens_estoque-500
+        meta:
+          id: req_8262b323f8774bde85f21148349b6db0
+          created: 1776890520698
+          modified: 1776890520698
+          isPrivate: false
+          description: ""
+          sortKey: -1776408654815.1816
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/itens-estoque?skip=0&top=5&descricao=monkey"
+        name: itens_estoque-200-empty
+        meta:
+          id: req_0d4336010c5c4ed9a1043984de67e5c3
+          created: 1776890578102
+          modified: 1776890667706
+          isPrivate: false
+          description: ""
+          sortKey: -1776445371530.7207
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: carga-inicial
+    meta:
+      id: fld_5c96b8784a5c49f6a2d7589b82a8f218
+      created: 1777042874416
+      modified: 1777050971867
+      sortKey: -1776451449666
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais"
+        name: unidades-organizacionais-zenite
+        meta:
+          id: req_2b782590d83b4307a22dc87099ea58ff
+          created: 1777043088633
+          modified: 1777050688352
+          isPrivate: false
+          description: ""
+          sortKey: -1777042948885
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"matrizId": null,
+              "cnpj": "60935686000134",
+              "razaoSocial": "Zênite Tecnologia LTDA.",
+              "nomeFantasia": "Zênite Tecnologia",
+              "cep": null,
+            	"endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const uo = locationHeader.value.split('/').pop();
+              insomnia.environment.set('unidade_organizacional_id_oficial', uo);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/espacos"
+        name: espaços-sede
+        meta:
+          id: req_55c260c8e04048edadfa36e4a3973b47
+          created: 1777043172277
+          modified: 1777051039398
+          isPrivate: false
+          description: ""
+          sortKey: -1777042948785
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "unidadeOrganizacionalId": "{{ _.unidade_organizacional_id_oficial }}",
+              "nome": "Sala 329",
+              "descricao": "Sede Moema/MG - Rua Tamóios, 329, Centro"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_31277e8a01034b3cac59d20ec15b0ff1
+    id: jar_aedc93b43add4c0a9d370a9bae16dae9
     created: 1776017078657
-    modified: 1776281100619
+    modified: 1777050971856
 environments:
   name: Base Environment
   meta:
-    id: env_eac2d1596251455db38682ef981039dd
+    id: env_8580fdf0781f4caf8d14d23d1644bd03
     created: 1776017077271
-    modified: 1776281100624
+    modified: 1777050971862
     isPrivate: false
   data:
     base_url: http://localhost:5120
     unidade_organizacional_id: e286f99e-5075-4b73-96d9-af462c36a5a6
-    usuario_id_mock_01: 92c3599e-bf86-4909-9cea-4f3ba854dcd6
-    usuario_id_mock_02: a6f02de1-ddfc-4707-8ace-2f9e581cebbb
-    usuario_id_mock_03: ea516b2f-52e4-4bd5-9428-b3029f662e2c
+    usuario_id_mock_01: d957dc5f-5738-474c-9b2b-d051fb4a84c5
+    usuario_id_mock_02: 911e8367-7c22-43f2-9128-2d68e021ed94
+    usuario_id_mock_03: 6af483a7-647c-4d29-86a5-90d7a61d9a4c
     usuario_id_fake: f6a30a56-c65c-41ac-ab07-8b0b113bd521
     unidade_organizacional_id_fake: e525e8a8-5424-4a76-af26-c2ab45e1ef07
+    unidade_organizacional_mock_01: a467d1d5-dc60-4f9f-a0eb-9f2d67cfd4ce
+    unidade_organizacional_mock_02: 3623c4dd-1665-49e3-aea4-d39cbb6fd2f8
+    espacoId: 6ab71fef-cf4e-4dbf-af76-f2058224721a
+    espaco_mock_01: 2183e8fd-1a35-431f-a1da-96a81a67e865
+    espaco_mock_02: f5081930-0a9f-434b-a1e2-c481b27d8ea0
+    espaco_fake: 273e73e3-46ea-4436-a89a-432ba8d6967d
+    item_mock_01: 97da61a8-350f-48a1-83f5-8fd509f0ec95
+    item_mock_02: edae0cfe-d0d1-4836-b854-b0613ef898be
+    item_Fake: b1909e70-080e-49b4-a197-aa7adf538c17
+    unidade_organizacional_id_oficial: b5d7c237-d4b0-4aa9-995f-0fed5e7da65c

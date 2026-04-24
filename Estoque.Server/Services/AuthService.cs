@@ -25,7 +25,7 @@ public class AuthService : BaseService
         {
             ValidarAuth(auth);
 
-            var usuario = await _usuarioRepository.ObterIdentificador(auth.Username);
+            var usuario = await _usuarioRepository.ObterUsername(auth.Username);
 
             if (usuario == null)
                 throw new UnauthorizedAccessException("Usuário não encontrado.");
@@ -68,7 +68,7 @@ public class AuthService : BaseService
         {
             ValidarAuth(auth);
 
-            var usuario = await _usuarioRepository.ObterIdentificador(auth.Username);
+            var usuario = await _usuarioRepository.ObterUsername(auth.Username);
 
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
@@ -106,8 +106,8 @@ public class AuthService : BaseService
             if (codigoAcesso == null)
                 throw new NotFoundException("Código inválido ou não encontrado.");
 
-            if (codigoAcesso.Validado)
-                throw new InvalidOperationException("Este código já foi validado anteriormente.");
+            if (codigoAcesso.Utilizado)
+                throw new InvalidOperationException("Este código já foi utilizado anteriormente.");
 
             if (DateTime.UtcNow > codigoAcesso.DataSolicitacao.AddMinutes(5))
                 throw new InvalidOperationException("O tempo de validação deste código expirou.");
@@ -158,17 +158,22 @@ public class AuthService : BaseService
             if (codigoAcesso == null)
                 throw new NotFoundException("Código de acesso inválido ou não encontrado.");
 
-            if (!codigoAcesso.Validado)
+            if (!codigoAcesso.Utilizado)
                 throw new InvalidOperationException("Este código não foi validado. Volte e informe os 6 dígitos primeiro.");
 
-            if (DateTime.UtcNow > codigoAcesso.DataSolicitacao.AddMinutes(15))
-                throw new InvalidOperationException("O tempo limite para redefinir a senha expirou.");
+            if (codigoAcesso.ResetEfetuado)
+                throw new InvalidOperationException("Este código de acesso já foi utilizado.");
+
+            if (codigoAcesso.DataAcessoId.HasValue && DateTime.UtcNow > codigoAcesso.DataAcessoId.Value.AddMinutes(5))
+                throw new InvalidOperationException("O tempo limite para utilizar este código expirou. Solicite um novo código.");
 
             bool existeMaisRecente = await _usuarioRepository.BuscarUltimoCodigo(codigoAcesso.UsuarioId, codigoAcesso.DataSolicitacao);
             if (existeMaisRecente)
                 throw new InvalidOperationException("Esta sessão expirou porque um novo código foi solicitado recentemente.");
 
             await _usuarioRepository.RedefinirSenha(codigoAcesso.UsuarioId, auth.Senha);
+
+            await _usuarioRepository.MarcarResetEfetuado(codigoAcesso.CodigoAcessoId!);
         }
         catch (ValidationException)
         {
