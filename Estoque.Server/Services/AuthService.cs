@@ -129,10 +129,10 @@ public class AuthService : BaseService
             var codigoAcesso = await _authRepository.ObterCodigoPorSms(auth.Code);
 
             if (codigoAcesso == null)
-                throw new NotFoundException("Código inválido ou não encontrado.");
+                throw new NotFoundException("Código não encontrado.");
 
             if (codigoAcesso.Utilizado)
-                throw new InvalidOperationException("Este código já foi utilizado anteriormente.");
+                throw new InvalidOperationException("Este código já foi utilizado.");
 
             if (DateTime.UtcNow > codigoAcesso.DataSolicitacao.AddMinutes(5))
                 throw new InvalidOperationException("O tempo de validação deste código expirou.");
