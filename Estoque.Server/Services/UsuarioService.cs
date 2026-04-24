@@ -89,26 +89,6 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<int> ExcluirUsuario(Guid usuarioId)
-    {
-        try
-        {
-            var affected = await _usuarioRepository.ExcluirUsuario(usuarioId);
-
-            if (affected <= 0) throw new NotFoundException("Usuário não encontrado para o ID informado.");
-
-            return affected;
-        }
-        catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao excluir usuário: {ex.Message}");
-        }
-    }
-
     public async Task<List<UsuarioGetResponse>> ObterUsuarios(int skip, int top, string? username, Guid? unidadeOrganizacionalId)
     {
         try
@@ -138,6 +118,26 @@ public class UsuarioService : BaseService
         catch (Exception ex)
         {
             throw new Exception($"Erro ao recuperar usuário por ID: {ex.Message}");
+        }
+    }
+
+    public async Task<int> ExcluirUsuario(Guid usuarioId)
+    {
+        try
+        {
+            var affected = await _usuarioRepository.ExcluirUsuario(usuarioId);
+
+            if (affected <= 0) throw new NotFoundException("Usuário não encontrado para o ID informado.");
+
+            return affected;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao excluir usuário: {ex.Message}");
         }
     }
 

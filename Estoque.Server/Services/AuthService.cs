@@ -72,6 +72,10 @@ public class AuthService : BaseService
 
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
+
+            string codigoGerado = new Random().Next(100000, 999999).ToString();
+
+            await _usuarioRepository.InserirCodigoAcesso(usuario.UsuarioId, codigoGerado);
         }
         catch (ValidationException)
         {
@@ -87,20 +91,32 @@ public class AuthService : BaseService
         }
     }
 
-    public async Task VerificarCodigo(Auth auth)
+    public async Task<string> VerificarCodigo(AuthVerify auth)
     {
         try
         {
-            ValidarAuth(auth);
+            if (string.IsNullOrWhiteSpace(auth.Code))
+            {
+                AddError("Code", "Informe o código.");
+                throw new ValidationException(Errors);
+            }
 
-            bool codigoNaoEncontrado = false;
-            bool tempoExpirado = false;
+            var codigoAcesso = await _usuarioRepository.ObterCodigoPorSms(auth.Code);
 
-            if (codigoNaoEncontrado)
-                throw new NotFoundException("Código não encontrado ou inválido.");
+            if (codigoAcesso == null)
+                throw new NotFoundException("Código inválido ou não encontrado.");
 
-            if (tempoExpirado)
+            if (codigoAcesso.Validado)
+                throw new InvalidOperationException("Este código já foi validado anteriormente.");
+
+            if (DateTime.UtcNow > codigoAcesso.DataSolicitacao.AddMinutes(5))
                 throw new InvalidOperationException("O tempo de validação deste código expirou.");
+
+            string codigoGigante = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)).ToLower();
+
+            await _usuarioRepository.AtualizarCodigoValidado(codigoAcesso.UsuarioId, codigoAcesso.Codigo, codigoGigante);
+
+            return codigoGigante;
         }
         catch (ValidationException)
         {
@@ -120,34 +136,64 @@ public class AuthService : BaseService
         }
     }
 
+    public async Task RedefinirSenha(AuthReset auth)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(auth.CodigoAcessoId))
+                AddError("CodigoAcessoId", "Código de acesso não informado.");
+
+            if (string.IsNullOrWhiteSpace(auth.Senha))
+                AddError("Senha", "Informe a nova senha.");
+
+            if (Errors.Any())
+                throw new ValidationException(Errors);
+
+            var codigoAcesso = await _usuarioRepository.ObterCodigoPorId(auth.CodigoAcessoId);
+
+            if (codigoAcesso == null)
+                throw new NotFoundException("Código de acesso inválido ou não encontrado.");
+
+            if (!codigoAcesso.Validado)
+                throw new InvalidOperationException("Este código não foi validado. Volte e informe os 6 dígitos primeiro.");
+
+            if (DateTime.UtcNow > codigoAcesso.DataSolicitacao.AddMinutes(15))
+                throw new InvalidOperationException("O tempo limite para redefinir a senha expirou.");
+
+            await _usuarioRepository.RedefinirSenha(codigoAcesso.UsuarioId, auth.Senha);
+
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (InvalidOperationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao redefinir senha: {ex.Message}");
+        }
+    }
+
     private void ValidarAuth(Auth auth)
     {
         if (string.IsNullOrWhiteSpace(auth.Login))
-        {
             AddError(nameof(auth.Login), "Informe o username ou telefone.");
-        }
-
-        if (auth is not AuthForgot && auth is not AuthVerify)
-        {
-            if (string.IsNullOrWhiteSpace(auth.Senha))
-            {
-                AddError(nameof(auth.Senha), "Informe a senha.");
-            }
-        }
 
         if (auth.GetType() == typeof(Auth))
         {
-            if (auth.UnidadeOrganizacionalId == null || auth.UnidadeOrganizacionalId == Guid.Empty)
-                AddError(nameof(auth.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
+            if (string.IsNullOrWhiteSpace(auth.Senha))
+                AddError(nameof(auth.Senha), "Informe a senha.");
         }
 
-        if (auth is AuthVerify)
-        {
-            if (string.IsNullOrWhiteSpace(auth.Code))
-            {
-                AddError(nameof(auth.Code), "Informe o código.");
-            }
-        }
+        if (auth.UnidadeOrganizacionalId == null || auth.UnidadeOrganizacionalId == Guid.Empty)
+            AddError(nameof(auth.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
 
         if (Errors.Any())
             throw new ValidationException(Errors);
@@ -176,34 +222,5 @@ public class AuthService : BaseService
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
-    }
-
-    public async Task RedefinirSenha(Auth auth)
-    {
-        try
-        {
-            ValidarAuth(auth);
-
-            var usuario = await _usuarioRepository.ObterIdentificador(auth.Login);
-
-            if (usuario == null)
-            {
-                throw new NotFoundException("Usuário não encontrado.");
-            }
-
-            await _usuarioRepository.RedefinirSenha(usuario.UsuarioId, auth.Senha);
-        }
-        catch (ValidationException)
-        {
-            throw;
-        }
-        catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao redefinir senha: {ex.Message}");
-        }
     }
 }

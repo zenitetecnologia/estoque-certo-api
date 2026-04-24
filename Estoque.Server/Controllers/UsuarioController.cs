@@ -34,7 +34,7 @@ public static class UsuarioController
             return Results.Ok("Usuário atualizado com sucesso.");
         })
         .WithTags("usuarios")
-        .WithSummary("Atualiza registro de usuário")
+        .WithSummary("Atualiza um registro de usuário")
         .WithDescription("Atualiza os dados de um usuário existente.")
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)

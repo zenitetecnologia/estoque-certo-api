@@ -12,43 +12,23 @@ public class Auth
 
     [JsonPropertyOrder(3)]
     public virtual Guid? UnidadeOrganizacionalId { get; set; }
-
-    [JsonIgnore]
-    [JsonPropertyOrder(4)]
-    public virtual string Code { get; set; } = string.Empty;
 }
 
 public class AuthForgot : Auth
 {
     [JsonIgnore]
-    [JsonPropertyOrder(2)]
     public override string Senha { get; set; } = string.Empty;
-
-    [JsonIgnore]
-    [JsonPropertyOrder(3)]
-    public override Guid? UnidadeOrganizacionalId { get; set; }
 }
 
-public class AuthVerify : Auth
+public class AuthVerify
 {
-    [JsonIgnore]
-    [JsonPropertyOrder(2)]
-    public override string Senha { get; set; } = string.Empty;
-
-    [JsonIgnore]
-    [JsonPropertyOrder(3)]
-    public override Guid? UnidadeOrganizacionalId { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    [JsonPropertyOrder(4)]
-    public override string Code { get; set; } = string.Empty;
+    public string Code { get; set; } = string.Empty;
 }
 
-public class AuthReset : Auth
+public class AuthReset
 {
-    [JsonIgnore]
-    [JsonPropertyOrder(3)]
-    public override Guid? UnidadeOrganizacionalId { get; set; }
+    public string CodigoAcessoId { get; set; } = string.Empty;
+    public string Senha { get; set; } = string.Empty;
 }
 
 public class AuthToken

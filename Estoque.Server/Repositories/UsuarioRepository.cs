@@ -351,4 +351,163 @@ public class UsuarioRepository : BaseRepository
             throw;
         }
     }
+
+    public async Task InserirCodigoAcesso(Guid usuarioId, string codigo)
+    {
+        const string sql = @"
+            INSERT INTO estoque_certo.codigo_acesso 
+            (
+                usuario_id,
+                codigo,
+                data_solicitacao,
+                validado
+                -- O codigo_acesso_id não entra aqui pois só é gerado no verify
+            ) 
+            VALUES 
+            (
+                @usuario_id,
+                @codigo,
+                @data_solicitacao,
+                false
+            );
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+            cmd.Parameters.AddWithValue("codigo", codigo);
+            cmd.Parameters.AddWithValue("data_solicitacao", DateTime.UtcNow);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+
+    public async Task AtualizarCodigoValidado(Guid usuarioId, string codigoSms, string codigoAcessoId)
+    {
+        const string sql = @"
+            UPDATE 
+                estoque_certo.codigo_acesso 
+            SET 
+                validado = true, 
+                data_validacao = @data_validacao,
+                codigo_acesso_id = @codigo_acesso_id
+            WHERE 
+                usuario_id = @usuario_id 
+                AND codigo = @codigo;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.AddWithValue("data_validacao", DateTime.UtcNow);
+            cmd.Parameters.AddWithValue("codigo_acesso_id", codigoAcessoId);
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+            cmd.Parameters.AddWithValue("codigo", codigoSms);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<CodigoAcesso?> ObterCodigoPorSms(string codigoSms)
+    {
+        const string sql = @"
+            SELECT 
+                usuario_id,
+                codigo,
+                data_solicitacao,
+                data_validacao,
+                validado,
+                codigo_acesso_id
+            FROM 
+                estoque_certo.codigo_acesso
+            WHERE 
+                codigo = @codigo
+            ORDER BY 
+                data_solicitacao DESC
+            LIMIT 1;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+            cmd.Parameters.AddWithValue("codigo", codigoSms);
+            await using var reader = await cmd.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                return new CodigoAcesso
+                {
+                    UsuarioId = reader.GetGuid(0),
+                    Codigo = reader.GetString(1),
+                    DataSolicitacao = reader.GetDateTime(2),
+                    DataValidacao = reader.IsDBNull(3) ? null : reader.GetDateTime(3),
+                    Validado = reader.GetBoolean(4),
+                    CodigoAcessoId = reader.IsDBNull(5) ? null : reader.GetString(5)
+                };
+            }
+            return null;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<CodigoAcesso?> ObterCodigoPorId(string codigoAcessoId)
+    {
+        const string sql = @"
+            SELECT 
+                usuario_id,
+                codigo,
+                data_solicitacao,
+                data_validacao,
+                validado,
+                codigo_acesso_id
+            FROM 
+                estoque_certo.codigo_acesso
+            WHERE 
+                codigo_acesso_id = @codigo_acesso_id;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+            cmd.Parameters.AddWithValue("codigo_acesso_id", codigoAcessoId);
+            await using var reader = await cmd.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                return new CodigoAcesso
+                {
+                    UsuarioId = reader.GetGuid(0),
+                    Codigo = reader.GetString(1),
+                    DataSolicitacao = reader.GetDateTime(2),
+                    DataValidacao = reader.IsDBNull(3) ? null : reader.GetDateTime(3),
+                    Validado = reader.GetBoolean(4),
+                    CodigoAcessoId = reader.IsDBNull(5) ? null : reader.GetString(5)
+                };
+            }
+            return null;
+        }
+        catch
+        {
+            throw;
+        }
+    }
 }

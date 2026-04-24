@@ -27,9 +27,9 @@ public static class AuthController
         #endregion
 
         #region [ forgot ]
-        app.MapPost("v1/auth/forgot", async (AuthService service, Auth auth) =>
+        app.MapPost("v1/auth/forgot", async (AuthService service, AuthForgot request) =>
         {
-            await service.EsquecerSenha(auth);
+            await service.EsquecerSenha(request);
 
             return Results.Ok(new { mensagem = "Se as informações estiverem corretas, você receberá um código de recuperação." });
         })
@@ -44,33 +44,36 @@ public static class AuthController
         #endregion
 
         #region [ verify ]
-        app.MapPost("v1/auth/verify", async (AuthService service, Auth auth) =>
+        app.MapPost("v1/auth/verify", async (AuthService service, AuthVerify request) =>
         {
-            await service.VerificarCodigo(auth);
+            string codigoGigante = await service.VerificarCodigo(request);
 
-            return Results.Ok(new { mensagem = "Código validado com sucesso." });
+            return Results.Ok(new
+            {
+                mensagem = "Código validado com sucesso.",
+                codigoAcessoId = codigoGigante
+            });
         })
         .WithTags("auth")
         .WithSummary("Verifica o código SMS")
-        .WithDescription("Valida o código recebido para recuperação ou ativação de conta.")
+        .WithDescription("Valida o código de 6 dígitos e retorna o CodigoAcessoId para redefinição.")
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
-        .Produces<string>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError)
         .AllowAnonymous();
         #endregion
 
         #region [ reset ]
-        app.MapPost("v1/auth/reset", async (AuthService service, AuthReset auth) =>
+        app.MapPost("v1/auth/reset", async (AuthService service, AuthReset request) =>
         {
-            await service.RedefinirSenha(auth);
+            await service.RedefinirSenha(request);
 
             return Results.Ok(new { mensagem = "Senha redefinida com sucesso." });
         })
         .WithTags("auth")
         .WithSummary("Redefine a senha do usuário")
-        .WithDescription("Altera a senha de acesso informando o username ou telefone e a nova senha.")
+        .WithDescription("Altera a senha utilizando o CodigoAcessoId e a nova senha.")
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
