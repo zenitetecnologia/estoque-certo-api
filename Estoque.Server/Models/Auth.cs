@@ -5,7 +5,7 @@ namespace Estoque.Server.Models;
 public class Auth
 {
     [JsonPropertyOrder(1)]
-    public string Login { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
 
     [JsonPropertyOrder(2)]
     public virtual string Senha { get; set; } = string.Empty;

@@ -14,13 +14,13 @@ public class UnidadeOrganizacionalService : BaseService
         _repository = repository;
     }
 
-    public async Task<Guid> CriarUnidade(UnidadeOrganizacional unidade)
+    public async Task<Guid> CadastrarUnidade(UnidadeOrganizacional unidade)
     {
         try
         {
             await ValidarUnidadeOrganizacional(unidade, Guid.Empty);
 
-            return await _repository.CriarUnidade(unidade);
+            return await _repository.CadastrarUnidade(unidade);
         }
         catch (ValidationException)
         {
@@ -28,7 +28,7 @@ public class UnidadeOrganizacionalService : BaseService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao cadastrar unidade: {ex.Message}");
+            throw new Exception($"Erro ao cadastrar unidade organizacional: {ex.Message}");
         }
     }
 
@@ -40,7 +40,7 @@ public class UnidadeOrganizacionalService : BaseService
 
             var affected = await _repository.AtualizarUnidade(unidade, unidadeOrganizacionalId);
 
-            if (affected <= 0) throw new NotFoundException("Unidade organizacional não encontrada para o ID informado.");
+            if (affected <= 0) throw new NotFoundException("Unidade organizacional não encontrada com os parâmetros informados.");
 
             return affected;
 
@@ -56,41 +56,6 @@ public class UnidadeOrganizacionalService : BaseService
         catch (Exception ex)
         {
             throw new Exception($"Erro ao atualizar unidade organizacional: {ex.Message}");
-        }
-    }
-
-    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades()
-    {
-        try
-        {
-            return await _repository.ObterUnidades();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao listar todas as unidades organizacionais: {ex.Message}");
-        }
-    }
-
-    public async Task<UnidadeOrganizacionalRecuperado> ObterUnidadePorId(Guid unidadeOrganizacionalId)
-    {
-        try
-        {
-            var unidade = await _repository.ObterUnidade(unidadeOrganizacionalId);
-
-            if (unidade == null)
-            {
-                throw new NotFoundException("Unidade organizacional não encontrada para o id informado.");
-            }
-
-            return unidade;
-        }
-        catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao buscar unidade organizacional por ID: {ex.Message}");
         }
     }
 
@@ -114,25 +79,60 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
+    public async Task<List<UnidadeOrganizacionalGetResponse>> ObterUnidades(int skip, int top, string? razaoSocial, string? Cnpj)
+    {
+        try
+        {
+            return await _repository.ObterUnidades(skip, top, razaoSocial, Cnpj);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao recuperar unidades organizacionais: {ex.Message}");
+        }
+    }
+
+    public async Task<UnidadeOrganizacionalGetResponse> ObterUnidade(Guid unidadeOrganizacionalId)
+    {
+        try
+        {
+            var unidade = await _repository.ObterUnidade(unidadeOrganizacionalId);
+
+            if (unidade == null) throw new NotFoundException("Unidade organizacional não encontrada para o id informado.");
+
+            return unidade;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao recuperar unidade organizacional por ID: {ex.Message}");
+        }
+    }
+
     private async Task ValidarUnidadeOrganizacional(UnidadeOrganizacional unidade, Guid unidadeOrganizacionalId)
     {
 
         if (string.IsNullOrWhiteSpace(unidade.RazaoSocial))
             AddError(nameof(unidade.RazaoSocial), "Informe a razão social.");
 
-        if (!string.IsNullOrWhiteSpace(unidade.Cnpj))
+        if (string.IsNullOrWhiteSpace(unidade.Cnpj))
+        {
+            AddError(nameof(unidade.Cnpj), "Informe o CNPJ.");
+        }
+        else
         {
             if (!RuleValidation.CnpjValido(unidade.Cnpj))
             {
-                AddError(nameof(unidade.Cnpj), "o cnpj informado não é válido.");
+                AddError(nameof(unidade.Cnpj), "CNPJ inválido.");
             }
             else
             {
-                bool cnpjexiste = await _repository.VerificaExisteUnidade(unidade.Cnpj, unidadeOrganizacionalId);
-                if (cnpjexiste)
-                {
-                    AddError(nameof(unidade.Cnpj), "este cnpj já está cadastrado em outra unidade.");
-                }
+                bool cnpjExiste = await _repository.VerificaUnidadeExiste(unidade.Cnpj, unidadeOrganizacionalId);
+
+                if (cnpjExiste)
+                    AddError(nameof(unidade.Cnpj), "Este CNPJ já está cadastrado em outra unidade organizacional.");
             }
         }
 

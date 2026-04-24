@@ -34,7 +34,7 @@ public static class ItemEstoqueController
         })
         .WithTags("itens-estoque")
         .WithSummary("Atualiza um item de estoque")
-        .WithDescription("Atualiza as informações de um item de estoque existente.")
+        .WithDescription("Atualiza os dados um item de estoque existente.")
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
@@ -50,22 +50,22 @@ public static class ItemEstoqueController
         })
         .WithTags("itens-estoque")
         .WithSummary("Exclui um item de estoque")
-        .WithDescription("Exclui um item do estoque permanentemente.")
+        .WithDescription("Exclui um item de estoque do sistema.")
         .Produces(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
 
         #region [ get ]
-        app.MapGet("v1/itens-estoque", async (ItemEstoqueService service) =>
+        app.MapGet("v1/itens-estoque", async (ItemEstoqueService service, int skip = 0, int top = 10, string? descricao = null, Guid? unidadeOrganizacionalId = null, Guid? espacoId = null) =>
         {
-            var result = await service.ObterItens();
+            var result = await service.ObterItens(skip, top, descricao, unidadeOrganizacionalId, espacoId);
 
             return Results.Ok(result);
         })
         .WithTags("itens-estoque")
-        .WithSummary("Lista os itens de estoque")
-        .WithDescription("Lista todos os itens presentes no estoque.")
+        .WithSummary("Retorna lista de itens de estoque")
+        .WithDescription("Retorna uma lista de itens de estoque com os parâmetros informados.")
         .Produces<List<ItemEstoqueRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
@@ -78,8 +78,8 @@ public static class ItemEstoqueController
             return Results.Ok(result);
         })
         .WithTags("itens-estoque")
-        .WithSummary("Busca um item de estoque por ID")
-        .WithDescription("Obtém os detalhes de um item pelo seu ID.")
+        .WithSummary("Retorna um item de estoque por ID")
+        .WithDescription("Retorna um item de estoque específico por ID.")
         .Produces<ItemEstoqueRecuperado>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
@@ -116,8 +116,8 @@ public static class ItemEstoqueController
             return Results.Ok(result);
         })
         .WithTags("itens-estoque")
-        .WithSummary("Obtém o histórico de movimentações do item")
-        .WithDescription("Lista todas as entradas e saídas que ocorreram para este item de estoque específico.")
+        .WithSummary("Retorna o histórico de movimentações do item")
+        .WithDescription("Retorna todas as entradas e saídas que ocorreram para este item de estoque específico.")
         .Produces<List<HistoricoRecuperado>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion

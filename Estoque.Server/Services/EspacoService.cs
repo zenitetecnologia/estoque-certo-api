@@ -57,6 +57,38 @@ public class EspacoService : BaseService
         }
     }
 
+    public async Task<List<EspacoRecuperado>> ObterEspacos(int skip, int top, string? nome, Guid? unidadeOrganizacionalId)
+    {
+        try
+        {
+            return await _repository.ObterEspacos(skip, top, nome, unidadeOrganizacionalId);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao recuperar espaços: {ex.Message}");
+        }
+    }
+
+    public async Task<EspacoRecuperado> ObterEspaco(Guid espacoId)
+    {
+        try
+        {
+            var espaco = await _repository.ObterEspaco(espacoId);
+
+            if (espaco == null) throw new NotFoundException("Espaço não encontrado para o ID informado.");
+
+            return espaco;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao recuperar espaço por ID: {ex.Message}");
+        }
+    }
+
     public async Task<int> ExcluirEspaco(Guid espacoId)
     {
         try
@@ -79,38 +111,6 @@ public class EspacoService : BaseService
                 throw new ValidationException(Errors);
             }
             throw new Exception($"Erro ao excluir espaço: {ex.Message}");
-        }
-    }
-
-    public async Task<List<EspacoRecuperado>> ObterEspacos()
-    {
-        try
-        {
-            return await _repository.ObterEspacos();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao listar espaços: {ex.Message}");
-        }
-    }
-
-    public async Task<EspacoRecuperado> ObterEspaco(Guid espacoId)
-    {
-        try
-        {
-            var espaco = await _repository.ObterEspaco(espacoId);
-
-            if (espaco == null) throw new NotFoundException("Espaço não encontrado para o ID informado.");
-
-            return espaco;
-        }
-        catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao buscar espaço por ID: {ex.Message}");
         }
     }
 

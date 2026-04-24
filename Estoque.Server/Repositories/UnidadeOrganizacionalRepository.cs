@@ -8,40 +8,42 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 {
     public UnidadeOrganizacionalRepository(IDbConnection connection) : base(connection) { }
 
-    public async Task<Guid> CriarUnidade(UnidadeOrganizacional unidade)
+    public async Task<Guid> CadastrarUnidade(UnidadeOrganizacional unidade)
     {
         const string sql = @"
             INSERT INTO estoque_certo.unidade_organizacional 
             (
-                id_matriz,
-                Cnpj,
+                matriz_id,
+                cnpj,
                 razao_social,
                 nome_fantasia,
                 cep,
+                endereco,
                 numero,
                 complemento,
                 bairro,
                 cidade,
                 uf,
                 pais,
-                telefone,
-                email
+                email,
+                telefone
             )
             VALUES
             (
-                @id_matriz,
-                @Cnpj,
+                @matriz_id,
+                @cnpj,
                 @razao_social,
                 @nome_fantasia,
                 @cep,
+                @endereco,
                 @numero,
                 @complemento,
                 @bairro,
                 @cidade,
                 @uf,
                 @pais,
-                @telefone,
-                @email
+                @email,
+                @telefone
             )
             RETURNING unidade_organizacional_id;
         ";
@@ -52,19 +54,20 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz.HasValue ? (object)unidade.IdMatriz.Value : DBNull.Value);
-            cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
+            cmd.Parameters.AddWithValue("matriz_id", unidade.MatrizId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
-            cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
-            cmd.Parameters.AddWithValue("cep", unidade.Cep);
-            cmd.Parameters.AddWithValue("numero", unidade.Numero);
-            cmd.Parameters.AddWithValue("complemento", unidade.Complemento);
-            cmd.Parameters.AddWithValue("bairro", unidade.Bairro);
-            cmd.Parameters.AddWithValue("cidade", unidade.Cidade);
-            cmd.Parameters.AddWithValue("uf", unidade.Uf);
-            cmd.Parameters.AddWithValue("pais", unidade.Pais);
-            cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
-            cmd.Parameters.AddWithValue("email", unidade.Email);
+            cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("cep", unidade.Cep ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("endereco", unidade.Endereco ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("numero", unidade.Numero ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("complemento", unidade.Complemento ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("bairro", unidade.Bairro ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("cidade", unidade.Cidade ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("uf", unidade.Uf ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("pais", unidade.Pais ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("email", unidade.Email ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("telefone", unidade.Telefone ?? (object)DBNull.Value);
 
             var result = await cmd.ExecuteScalarAsync();
 
@@ -82,8 +85,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         UPDATE
             estoque_certo.unidade_organizacional
         SET
-            id_matriz = @id_matriz,
-            Cnpj = @Cnpj,
+            matriz_id = @matriz_id,
+            cnpj = @cnpj,
             razao_social = @razao_social,
             nome_fantasia = @nome_fantasia,
             cep = @cep,
@@ -93,8 +96,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             cidade = @cidade,
             uf = @uf,
             pais = @pais,
-            telefone = @telefone,
-            email = @email
+            email = @email,
+            telefone = @telefone
         WHERE
             unidade_organizacional_id = @unidade_organizacional_id;
     ";
@@ -105,21 +108,20 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
-
-            cmd.Parameters.AddWithValue("id_matriz", unidade.IdMatriz.HasValue ? (object)unidade.IdMatriz.Value : DBNull.Value);
-            cmd.Parameters.AddWithValue("Cnpj", unidade.Cnpj);
+            cmd.Parameters.AddWithValue("matriz_id", unidade.MatrizId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("cnpj", unidade.Cnpj);
             cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
-            cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
-            cmd.Parameters.AddWithValue("cep", unidade.Cep);
-            cmd.Parameters.AddWithValue("numero", unidade.Numero);
-            cmd.Parameters.AddWithValue("complemento", unidade.Complemento);
-            cmd.Parameters.AddWithValue("bairro", unidade.Bairro);
-            cmd.Parameters.AddWithValue("cidade", unidade.Cidade);
-            cmd.Parameters.AddWithValue("uf", unidade.Uf);
-            cmd.Parameters.AddWithValue("pais", unidade.Pais);
-            cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
-            cmd.Parameters.AddWithValue("email", unidade.Email);
+            cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("cep", unidade.Cep ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("endereco", unidade.Endereco ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("numero", unidade.Numero ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("complemento", unidade.Complemento ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("bairro", unidade.Bairro ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("cidade", unidade.Cidade ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("uf", unidade.Uf ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("pais", unidade.Pais ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("email", unidade.Email ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("telefone", unidade.Telefone ?? (object)DBNull.Value);
 
             return await cmd.ExecuteNonQueryAsync();
         }
@@ -129,13 +131,15 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<List<UnidadeOrganizacionalRecuperado>> ObterUnidades()
+    public async Task<List<UnidadeOrganizacionalGetResponse>> ObterUnidades(int skip, int top, string? razaoSocial, string? Cnpj)
     {
-        const string sql = @"
+        var unidades = new List<UnidadeOrganizacionalGetResponse>();
+
+        string sql = @"
             SELECT
                 unidade_organizacional_id,
-                id_matriz,
-                Cnpj,
+                matriz_id,
+                cnpj,
                 razao_social,
                 nome_fantasia,
                 cep,
@@ -145,43 +149,52 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 cidade,
                 uf,
                 pais,
-                telefone,
-                email
+                email,
+                telefone
             FROM
                 estoque_certo.unidade_organizacional
-            ORDER BY
-                razao_social;
+            WHERE 1 = 1 
         ";
+
+        if (!string.IsNullOrEmpty(razaoSocial)) sql += " AND razao_social ILIKE @razao_social ";
+
+        if (!string.IsNullOrEmpty(Cnpj)) sql += " AND cnpj ILIKE @cnpj ";
+
+        sql += " ORDER BY razao_social LIMIT @top OFFSET @skip";
 
         try
         {
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            await using var reader = await cmd.ExecuteReaderAsync();
 
-            var unidades = new List<UnidadeOrganizacionalRecuperado>();
+            cmd.Parameters.AddWithValue("razao_social", $"%{razaoSocial}%");
+            cmd.Parameters.AddWithValue("cnpj", $"%{Cnpj}%");
+            cmd.Parameters.AddWithValue("skip", skip);
+            cmd.Parameters.AddWithValue("top", top);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
             {
-                unidades.Add(new UnidadeOrganizacionalRecuperado
-                {
-                    UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                    IdMatriz = reader.GetGuidNullable("id_matriz"),
-                    Cnpj = reader.GetString("cnpj"),
-                    RazaoSocial = reader.GetString("razao_social"),
-                    NomeFantasia = reader.GetString("nome_fantasia"),
-                    Cep = reader.GetString("cep"),
-                    Numero = reader.GetString("numero"),
-                    Complemento = reader.GetString("complemento"),
-                    Bairro = reader.GetString("bairro"),
-                    Cidade = reader.GetString("cidade"),
-                    Uf = reader.GetString("uf"),
-                    Pais = reader.GetString("pais"),
-                    Telefone = reader.GetString("telefone"),
-                    Email = reader.GetString("email")
-                });
+                var unidadeOrganizacionalRecuperada = new UnidadeOrganizacionalGetResponse();
+
+                unidadeOrganizacionalRecuperada.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+                unidadeOrganizacionalRecuperada.MatrizId = reader.GetGuidNullable("matriz_id");
+                unidadeOrganizacionalRecuperada.Cnpj = reader.GetString("cnpj");
+                unidadeOrganizacionalRecuperada.RazaoSocial = reader.GetString("razao_social");
+                unidadeOrganizacionalRecuperada.NomeFantasia = reader.GetStringSafe("nome_fantasia");
+                unidadeOrganizacionalRecuperada.Cep = reader.GetStringSafe("cep");
+                unidadeOrganizacionalRecuperada.Numero = reader.GetStringSafe("numero");
+                unidadeOrganizacionalRecuperada.Complemento = reader.GetStringSafe("complemento");
+                unidadeOrganizacionalRecuperada.Bairro = reader.GetStringSafe("bairro");
+                unidadeOrganizacionalRecuperada.Cidade = reader.GetStringSafe("cidade");
+                unidadeOrganizacionalRecuperada.Uf = reader.GetStringSafe("uf");
+                unidadeOrganizacionalRecuperada.Pais = reader.GetStringSafe("pais");
+                unidadeOrganizacionalRecuperada.Email = reader.GetStringSafe("email");
+                unidades.Add(unidadeOrganizacionalRecuperada);
             }
+
             return unidades;
         }
         catch
@@ -190,13 +203,13 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<UnidadeOrganizacionalRecuperado?> ObterUnidade(Guid unidadeOrganizacionald)
+    public async Task<UnidadeOrganizacionalGetResponse?> ObterUnidade(Guid unidadeOrganizacionald)
     {
         const string sql = @"
             SELECT
                 unidade_organizacional_id,
-                id_matriz,
-                Cnpj,
+                matriz_id,
+                cnpj,
                 razao_social,
                 nome_fantasia,
                 cep,
@@ -206,8 +219,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 cidade,
                 uf,
                 pais,
-                telefone,
-                email
+                email,
+                telefone
             FROM
                 estoque_certo.unidade_organizacional
             WHERE
@@ -226,22 +239,22 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             if (!await reader.ReadAsync()) return null;
 
-            return new UnidadeOrganizacionalRecuperado
+            return new UnidadeOrganizacionalGetResponse
             {
                 UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                IdMatriz = reader.GetGuidNullable("id_matriz"),
+                MatrizId = reader.GetGuidNullable("matriz_id"),
                 Cnpj = reader.GetString("cnpj"),
                 RazaoSocial = reader.GetString("razao_social"),
-                NomeFantasia = reader.GetString("nome_fantasia"),
-                Cep = reader.GetString("cep"),
-                Numero = reader.GetString("numero"),
-                Complemento = reader.GetString("complemento"),
-                Bairro = reader.GetString("bairro"),
-                Cidade = reader.GetString("cidade"),
-                Uf = reader.GetString("uf"),
-                Pais = reader.GetString("pais"),
-                Telefone = reader.GetString("telefone"),
-                Email = reader.GetString("email")
+                NomeFantasia = reader.GetStringSafe("nome_fantasia"),
+                Cep = reader.GetStringSafe("cep"),
+                Numero = reader.GetStringSafe("numero"),
+                Complemento = reader.GetStringSafe("complemento"),
+                Bairro = reader.GetStringSafe("bairro"),
+                Cidade = reader.GetStringSafe("cidade"),
+                Uf = reader.GetStringSafe("uf"),
+                Pais = reader.GetStringSafe("pais"),
+                Email = reader.GetStringSafe("email"),
+                Telefone = reader.GetStringSafe("telefone")
             };
         }
         catch
@@ -269,7 +282,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<bool> VerificaExisteUnidade(string Cnpj, Guid ignoreId)
+    public async Task<bool> VerificaUnidadeExiste(string Cnpj, Guid ignoreId)
     {
         const string sql = @"
             SELECT
@@ -277,7 +290,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             FROM
                 estoque_certo.unidade_organizacional
             WHERE
-                Cnpj = @Cnpj
+                cnpj = @cnpj
             AND
                 unidade_organizacional_id <> @ignoreunidade_organizacional_id
             LIMIT 1;
@@ -288,7 +301,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("Cnpj", Cnpj);
+            cmd.Parameters.AddWithValue("cnpj", Cnpj);
             cmd.Parameters.AddWithValue("ignoreunidade_organizacional_id", ignoreId);
 
             var result = await cmd.ExecuteScalarAsync();

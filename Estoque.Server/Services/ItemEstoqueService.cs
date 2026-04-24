@@ -21,7 +21,9 @@ public class ItemEstoqueService : BaseService
         {
             await ValidarItemEstoque(item, Guid.Empty);
 
-            return await _repository.CadastrarItemEstoque(item);
+            Guid itemId = await _repository.CadastrarItemEstoque(item);
+
+            return itemId;
         }
         catch (ValidationException)
         {
@@ -39,7 +41,7 @@ public class ItemEstoqueService : BaseService
         {
             var itemExistente = await _repository.ObterItem(itemEstoqueId);
 
-            if (itemExistente == null) throw new NotFoundException("Item de estoque não encontrado para o ID informado.");
+            if (itemExistente == null) throw new NotFoundException("Item de estoque não encontrado com os parâmetros informados.");
 
             item.UnidadeOrganizacionalId = itemExistente.UnidadeOrganizacionalId;
 
@@ -61,35 +63,16 @@ public class ItemEstoqueService : BaseService
         }
     }
 
-    public async Task<int> ExcluirItemEstoque(Guid itemEstoqueId)
+
+    public async Task<List<ItemEstoqueRecuperado>> ObterItens(int skip, int top, string? descricao, Guid? unidadeOrganizacionalId, Guid? espacoId)
     {
         try
         {
-            var affected = await _repository.ExcluirItemEstoque(itemEstoqueId);
-
-            if (affected <= 0) throw new NotFoundException("Item não encontrado para o ID informado.");
-
-            return affected;
-        }
-        catch (NotFoundException)
-        {
-            throw;
+            return await _repository.ObterItens(skip, top, descricao, unidadeOrganizacionalId, espacoId);
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao excluir item: {ex.Message}");
-        }
-    }
-
-    public async Task<List<ItemEstoqueRecuperado>> ObterItens()
-    {
-        try
-        {
-            return await _repository.ObterItens();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao listar todos os itens: {ex.Message}");
+            throw new Exception($"Erro ao recuperar os itens: {ex.Message}");
         }
     }
 
@@ -109,7 +92,7 @@ public class ItemEstoqueService : BaseService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao listar item por ID: {ex.Message}");
+            throw new Exception($"Erro ao recuperar item por ID: {ex.Message}");
         }
     }
 
@@ -121,7 +104,7 @@ public class ItemEstoqueService : BaseService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao buscar histórico do item: {ex.Message}");
+            throw new Exception($"Erro ao recuperar  histórico do item: {ex.Message}");
         }
     }
 
@@ -162,6 +145,26 @@ public class ItemEstoqueService : BaseService
         catch (Exception ex)
         {
             throw new Exception($"Erro ao movimentar estoque: {ex.Message}");
+        }
+    }
+
+    public async Task<int> ExcluirItemEstoque(Guid itemEstoqueId)
+    {
+        try
+        {
+            var affected = await _repository.ExcluirItemEstoque(itemEstoqueId);
+
+            if (affected <= 0) throw new NotFoundException("Item não encontrado para o ID informado.");
+
+            return affected;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao excluir item: {ex.Message}");
         }
     }
 

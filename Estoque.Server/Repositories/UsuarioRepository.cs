@@ -16,7 +16,6 @@ public class UsuarioRepository : BaseRepository
                 username,
                 senha,
                 nome,
-                telefone,
                 perfil,
                 unidade_organizacional_id,
                 valido
@@ -26,7 +25,6 @@ public class UsuarioRepository : BaseRepository
                 @username,
                 @senha,
                 @nome,
-                @telefone,
                 @perfil,
                 @unidade_organizacional_id,
                 @valido
@@ -43,7 +41,6 @@ public class UsuarioRepository : BaseRepository
             cmd.Parameters.AddWithValue("username", usuario.Username);
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
-            cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
             cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
             cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId!);
             cmd.Parameters.AddWithValue("valido", usuario.Valido);
@@ -66,8 +63,7 @@ public class UsuarioRepository : BaseRepository
             SET
                 username = @username,
                 senha = @senha,
-                nome = @nome,
-                telefone = @telefone
+                nome = @nome
             WHERE
                 usuario_id = @usuario_id
             AND
@@ -80,62 +76,13 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId!);
             cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId!);
             cmd.Parameters.AddWithValue("username", usuario.Username);
             cmd.Parameters.AddWithValue("senha", usuario.Senha);
             cmd.Parameters.AddWithValue("nome", usuario.Nome);
-            cmd.Parameters.AddWithValue("telefone", usuario.Telefone);
 
             return await cmd.ExecuteNonQueryAsync();
-        }
-        catch
-        {
-            throw;
-        }
-    }
-
-    public async Task<UsuarioGetResponse?> ObterUsuario(Guid usuarioId)
-    {
-        const string sql = @"
-            SELECT
-                usuario_id,
-                username,
-                senha,
-                nome,
-                telefone,
-                perfil,
-                unidade_organizacional_id,
-                valido
-            FROM
-                estoque_certo.usuario
-            WHERE
-                usuario_id = @usuario_id
-            LIMIT 1;
-        ";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
-
-            await using var reader = await cmd.ExecuteReaderAsync();
-
-            if (!await reader.ReadAsync()) return null;
-
-            return new UsuarioGetResponse
-            {
-                UsuarioId = reader.GetGuid("usuario_id"),
-                Username = reader.GetString("username"),
-                Senha = reader.GetString("senha"),
-                Nome = reader.GetString("nome"),
-                Telefone = reader.GetString("telefone"),
-                Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
-                UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id"),
-                Valido = reader.GetBoolean("valido")
-            };
         }
         catch
         {
@@ -153,7 +100,6 @@ public class UsuarioRepository : BaseRepository
                 username,
                 senha,
                 nome,
-                telefone,
                 perfil,
                 unidade_organizacional_id,
                 valido
@@ -189,7 +135,6 @@ public class UsuarioRepository : BaseRepository
                 usuarioGetResponse.Username = reader.GetString("username");
                 usuarioGetResponse.Senha = reader.GetString("senha");
                 usuarioGetResponse.Nome = reader.GetString("nome");
-                usuarioGetResponse.Telefone = reader.GetString("telefone");
                 usuarioGetResponse.Perfil = (PerfilUsuario)reader.GetInt32("perfil");
                 usuarioGetResponse.UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id");
                 usuarioGetResponse.Valido = reader.GetBoolean("valido");
@@ -198,6 +143,53 @@ public class UsuarioRepository : BaseRepository
             }
 
             return usuarios;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<UsuarioGetResponse?> ObterUsuario(Guid usuarioId)
+    {
+        const string sql = @"
+            SELECT
+                usuario_id,
+                username,
+                senha,
+                nome,
+                perfil,
+                unidade_organizacional_id,
+                valido
+            FROM
+                estoque_certo.usuario
+            WHERE
+                usuario_id = @usuario_id
+            LIMIT 1;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+
+            if (!await reader.ReadAsync()) return null;
+
+            return new UsuarioGetResponse
+            {
+                UsuarioId = reader.GetGuid("usuario_id"),
+                Username = reader.GetString("username"),
+                Senha = reader.GetString("senha"),
+                Nome = reader.GetString("nome"),
+                Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
+                UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id"),
+                Valido = reader.GetBoolean("valido")
+            };
         }
         catch
         {
@@ -285,16 +277,15 @@ public class UsuarioRepository : BaseRepository
     {
         const string sql = @"
             SELECT 
-                usuario_id, 
-                username, 
-                senha, 
-                nome, 
-                telefone, 
-                perfil, 
-                unidade_organizacional_id, 
+                usuario_id,
+                username,
+                senha,
+                nome,
+                perfil,
+                unidade_organizacional_id,
                 valido
-            FROM estoque_certo.usuario 
-            WHERE username = @identificador OR telefone = @identificador
+            FROM estoque_certo.usuario
+            WHERE username = @identificador
             LIMIT 1;
         ";
 
@@ -316,7 +307,6 @@ public class UsuarioRepository : BaseRepository
                     Username = reader.GetString("username"),
                     Senha = reader.GetString("senha"),
                     Nome = reader.GetString("nome"),
-                    Telefone = reader.IsDBNull("telefone") ? string.Empty : reader.GetString("telefone"),
                     Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
                     UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
                     Valido = reader.GetBoolean("valido")
@@ -361,7 +351,6 @@ public class UsuarioRepository : BaseRepository
                 codigo,
                 data_solicitacao,
                 validado
-                -- O codigo_acesso_id não entra aqui pois só é gerado no verify
             ) 
             VALUES 
             (
@@ -382,6 +371,33 @@ public class UsuarioRepository : BaseRepository
             cmd.Parameters.AddWithValue("data_solicitacao", DateTime.UtcNow);
 
             await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<bool> BuscarUltimoCodigo(Guid usuarioId, DateTime dataSolicitacao)
+    {
+        const string sql = @"
+            SELECT EXISTS (
+                SELECT 1 
+                FROM estoque_certo.codigo_acesso 
+                WHERE usuario_id = @usuario_id 
+                  AND data_solicitacao > @data_solicitacao
+            );
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+            cmd.Parameters.AddWithValue("data_solicitacao", dataSolicitacao);
+
+            return (bool)(await cmd.ExecuteScalarAsync())!;
         }
         catch
         {

@@ -25,7 +25,7 @@ public class AuthService : BaseService
         {
             ValidarAuth(auth);
 
-            var usuario = await _usuarioRepository.ObterIdentificador(auth.Login);
+            var usuario = await _usuarioRepository.ObterIdentificador(auth.Username);
 
             if (usuario == null)
                 throw new UnauthorizedAccessException("Usuário não encontrado.");
@@ -68,7 +68,7 @@ public class AuthService : BaseService
         {
             ValidarAuth(auth);
 
-            var usuario = await _usuarioRepository.ObterIdentificador(auth.Login);
+            var usuario = await _usuarioRepository.ObterIdentificador(auth.Username);
 
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
@@ -111,6 +111,10 @@ public class AuthService : BaseService
 
             if (DateTime.UtcNow > codigoAcesso.DataSolicitacao.AddMinutes(5))
                 throw new InvalidOperationException("O tempo de validação deste código expirou.");
+
+            bool existeMaisRecente = await _usuarioRepository.BuscarUltimoCodigo(codigoAcesso.UsuarioId, codigoAcesso.DataSolicitacao);
+            if (existeMaisRecente)
+                throw new InvalidOperationException("Este código foi invalidado porque uma nova solicitação foi feita.");
 
             string codigoGigante = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)).ToLower();
 
@@ -160,8 +164,11 @@ public class AuthService : BaseService
             if (DateTime.UtcNow > codigoAcesso.DataSolicitacao.AddMinutes(15))
                 throw new InvalidOperationException("O tempo limite para redefinir a senha expirou.");
 
-            await _usuarioRepository.RedefinirSenha(codigoAcesso.UsuarioId, auth.Senha);
+            bool existeMaisRecente = await _usuarioRepository.BuscarUltimoCodigo(codigoAcesso.UsuarioId, codigoAcesso.DataSolicitacao);
+            if (existeMaisRecente)
+                throw new InvalidOperationException("Esta sessão expirou porque um novo código foi solicitado recentemente.");
 
+            await _usuarioRepository.RedefinirSenha(codigoAcesso.UsuarioId, auth.Senha);
         }
         catch (ValidationException)
         {
@@ -183,8 +190,8 @@ public class AuthService : BaseService
 
     private void ValidarAuth(Auth auth)
     {
-        if (string.IsNullOrWhiteSpace(auth.Login))
-            AddError(nameof(auth.Login), "Informe o username ou telefone.");
+        if (string.IsNullOrWhiteSpace(auth.Username))
+            AddError(nameof(auth.Username), "Informe o username ou telefone.");
 
         if (auth.GetType() == typeof(Auth))
         {

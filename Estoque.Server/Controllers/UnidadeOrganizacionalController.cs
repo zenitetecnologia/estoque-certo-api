@@ -11,13 +11,16 @@ public static class UnidadeOrganizacionalController
         #region [ post ]
         app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacionalService service, UnidadeOrganizacional unidade) =>
         {
-            Guid unidadeOrganizacionalId = await service.CriarUnidade(unidade);
+            Guid unidadeOrganizacionalId = await service.CadastrarUnidade(unidade);
 
-            return Results.Created($"/v1/unidades-organizacionais/{unidadeOrganizacionalId}", "Unidade Organizacional criada com sucesso.");
+            return TypedResults.CreatedAtRoute(
+                routeName: "Get",
+                routeValues: new { unidadeOrganizacionalId },
+                value: "Unidade organizacional cadastrada com sucesso.");
         })
         .WithTags("unidades-organizacionais")
-        .WithSummary("Cria uma nova unidade")
-        .WithDescription("Cria uma nova unidade organizacional no sistema.")
+        .WithSummary("Cadastra uma nova unidade organizacional")
+        .WithDescription("Cadastra uma nova unidade organizacional.")
         .Produces(StatusCodes.Status201Created)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status500InternalServerError);
@@ -28,11 +31,11 @@ public static class UnidadeOrganizacionalController
         {
             await service.AtualizarUnidade(unidade, unidadeOrganizacionalId);
 
-            return Results.Ok("Unidade atualizada com sucesso.");
+            return Results.Ok("Unidade organizacional atualizada com sucesso.");
         })
         .WithTags("unidades-organizacionais")
-        .WithSummary("Atualiza uma unidade")
-        .WithDescription("Atualiza as informações de uma unidade.")
+        .WithSummary("Atualiza um registro de unidade organizacional")
+        .WithDescription("Atualiza os dados de uma unidade organizacional existente.")
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
@@ -44,7 +47,7 @@ public static class UnidadeOrganizacionalController
         {
             await service.ExcluirUnidade(unidadeOrganizacionalId);
 
-            return Results.Ok("Unidade excluída com sucesso.");
+            return Results.Ok("Unidade organizacional excluída com sucesso.");
         })
         .WithTags("unidades-organizacionais")
         .WithSummary("Exclui uma unidade")
@@ -56,30 +59,31 @@ public static class UnidadeOrganizacionalController
         #endregion
 
         #region [ get ]
-        app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service) =>
+        app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service, int skip = 0, int top = 10, string? razaoSocial = null, string? Cnpj = null) =>
         {
-            var result = await service.ObterUnidades();
+            var result = await service.ObterUnidades(skip, top, razaoSocial, Cnpj);
 
             return Results.Ok(result);
         })
         .WithTags("unidades-organizacionais")
-        .WithSummary("Obtém as unidades")
-        .WithDescription("Obtém todas as unidades organizacionais.")
-        .Produces<List<UnidadeOrganizacionalRecuperado>>(StatusCodes.Status200OK)
+        .WithSummary("Retorna a lista de unidades organizacionais")
+        .WithDescription("Retorna a lista de unidades organizacionais de acordo com os parâmetros informados.")
+        .Produces<List<UnidadeOrganizacionalGetResponse>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
 
         #region [ get by id ]
         app.MapGet("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId) =>
         {
-            var result = await service.ObterUnidadePorId(unidadeOrganizacionalId);
+            var result = await service.ObterUnidade(unidadeOrganizacionalId);
 
             return Results.Ok(result);
         })
+        .WithName("Get")
         .WithTags("unidades-organizacionais")
-        .WithSummary("Obtém unidade por ID")
-        .WithDescription("Obtém uma unidade específica.")
-        .Produces<UnidadeOrganizacionalRecuperado>(StatusCodes.Status200OK)
+        .WithSummary("Retorna uma unidade organizacional por ID")
+        .WithDescription("Retorna uma unidade organizacional específica por ID.")
+        .Produces<UnidadeOrganizacionalGetResponse>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
