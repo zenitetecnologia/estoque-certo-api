@@ -15,7 +15,10 @@ public static class ItemEstoqueController
         {
             Guid itemEstoqueId = await service.CadastrarItemEstoque(item);
 
-            return Results.Created($"/v1/itens-estoque/{itemEstoqueId}", "Item cadastrado com sucesso.");
+            return TypedResults.CreatedAtRoute(
+                routeName: "getItemEstoque",
+                routeValues: new { itemEstoqueId },
+                value: "Item cadastrado com sucesso.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Cadastra um novo item de estoque")
@@ -77,6 +80,7 @@ public static class ItemEstoqueController
 
             return Results.Ok(result);
         })
+        .WithName("getItemEstoque")
         .WithTags("itens-estoque")
         .WithSummary("Retorna um item de estoque por ID")
         .WithDescription("Retorna um item de estoque específico por ID.")

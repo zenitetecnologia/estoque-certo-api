@@ -122,6 +122,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             cmd.Parameters.AddWithValue("pais", unidade.Pais ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("email", unidade.Email ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("telefone", unidade.Telefone ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
 
             return await cmd.ExecuteNonQueryAsync();
         }

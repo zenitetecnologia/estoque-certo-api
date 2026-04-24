@@ -14,7 +14,7 @@ public static class UnidadeOrganizacionalController
             Guid unidadeOrganizacionalId = await service.CadastrarUnidade(unidade);
 
             return TypedResults.CreatedAtRoute(
-                routeName: "Get",
+                routeName: "getUnidade",
                 routeValues: new { unidadeOrganizacionalId },
                 value: "Unidade organizacional cadastrada com sucesso.");
         })
@@ -79,7 +79,7 @@ public static class UnidadeOrganizacionalController
 
             return Results.Ok(result);
         })
-        .WithName("Get")
+        .WithName("getUnidade")
         .WithTags("unidades-organizacionais")
         .WithSummary("Retorna uma unidade organizacional por ID")
         .WithDescription("Retorna uma unidade organizacional específica por ID.")

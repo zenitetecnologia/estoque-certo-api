@@ -13,7 +13,10 @@ public static class EspacoController
         {
             Guid espacoId = await service.CadastrarEspaco(espaco);
 
-            return Results.Created($"/v1/espacos/{espacoId}", "Espaço cadastrado com sucesso.");
+            return TypedResults.CreatedAtRoute(
+                routeName: "getEspaco",
+                routeValues: new { espacoId },
+                value: "Espaço cadastrado com sucesso.");
         })
         .WithTags("espacos")
         .WithSummary("Cadastra um novo espaço")
@@ -76,6 +79,7 @@ public static class EspacoController
 
             return Results.Ok(result);
         })
+        .WithName("getEspaco")
         .WithTags("espacos")
         .WithSummary("Retorna um espaço por ID")
         .WithDescription("Retorna um espaço específico por ID.")
