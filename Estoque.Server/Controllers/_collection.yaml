@@ -2,14 +2,14 @@ type: collection.insomnia.rest/5.0
 schema_version: "5.1"
 name: estoque-certo
 meta:
-  id: wrk_509a6b549b024519979eb154e5247b16
-  created: 1776878233281
-  modified: 1776878233281
+  id: wrk_f8ce64d9df134dda8775b023a707443a
+  created: 1777127317115
+  modified: 1777127317115
   description: ""
 collection:
   - name: usuarios
     meta:
-      id: fld_39abb8c77067409cb5741c3471eed3c8
+      id: fld_f52590671def486c83d5bd453a651ac7
       created: 1776017077288
       modified: 1776887310632
       sortKey: -1776451449716
@@ -18,7 +18,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_b40b1d3445ec4b7297fea62373e07337
+          id: req_671a3d4019344c4395839f81f0685998
           created: 1776017545694
           modified: 1776881920362
           isPrivate: false
@@ -64,7 +64,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400
         meta:
-          id: req_ffe305a968784ce2b2dd8f5de8a06c8e
+          id: req_42c0747f9a834cdda7dc6066a6e881dd
           created: 1776017553481
           modified: 1776881933983
           isPrivate: false
@@ -94,7 +94,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400-duplicated
         meta:
-          id: req_e6540c67072d47469f7f226fb13a09ee
+          id: req_3a0efac10c89496bbadde16112fae94e
           created: 1776017752676
           modified: 1776881957102
           isPrivate: false
@@ -124,7 +124,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-500
         meta:
-          id: req_f9462f75a5d24ab7b760dd5105b988bf
+          id: req_b6b9990f6e6b4407a568e02dd1a79966
           created: 1776018113743
           modified: 1776881964687
           isPrivate: false
@@ -154,7 +154,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-200
         meta:
-          id: req_c67589927faa49d7a00e341e27ac61d0
+          id: req_ef77954fd2d545c98a0df0b6561885a9
           created: 1776018251916
           modified: 1776881971037
           isPrivate: false
@@ -184,7 +184,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400
         meta:
-          id: req_3362ea22fef64e14a4b7649ecfd349fd
+          id: req_7aac7f7a77ab4c8d92a82f3f3f57fe0d
           created: 1776020023293
           modified: 1776887367880
           isPrivate: false
@@ -214,7 +214,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
         name: usuarios-404
         meta:
-          id: req_57995ae90c244ebca128e86d0c940ce8
+          id: req_f818b49fa30e4d49bcc3bb2740396a82
           created: 1776020515113
           modified: 1776881997778
           isPrivate: false
@@ -244,7 +244,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500
         meta:
-          id: req_75cc21d80fb645e9a9f833c0b1883c62
+          id: req_479b34edde4046689f8da21b074c7257
           created: 1776020739660
           modified: 1776882006490
           isPrivate: false
@@ -274,7 +274,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_1b3f83af21be4539bab916905fb0c14b
+          id: req_fcb3eb6478b444b596c78dea99f94ad0
           created: 1776021559940
           modified: 1776881918559
           isPrivate: false
@@ -320,7 +320,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-201
         meta:
-          id: req_a17befa58d894f14b2897f35f8caa783
+          id: req_c261dd6d16144787a30241903b5ab96d
           created: 1776022205862
           modified: 1776881915387
           isPrivate: false
@@ -366,7 +366,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400-duplicated
         meta:
-          id: req_797f928b0791436b912e9a6622612b18
+          id: req_daa2892f9a2b4cd98671ab3bd51a96c5
           created: 1776022675661
           modified: 1776881983514
           isPrivate: false
@@ -396,7 +396,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-400-uo-notfound
         meta:
-          id: req_de601934a5f44231b29845681cc078e1
+          id: req_52e0b6cc42bc4d529d9daf8879a8b4fb
           created: 1776110440408
           modified: 1776881953811
           isPrivate: false
@@ -426,7 +426,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400-uo-notfound
         meta:
-          id: req_a97edcd06c8b40b185fdbbd1f49e0265
+          id: req_a8c826b1cd1046d7a1ee5f4cc0f9465c
           created: 1776189148566
           modified: 1776881992381
           isPrivate: false
@@ -456,7 +456,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-200
         meta:
-          id: req_980febab8cb74f269aa5c877f6d8d45b
+          id: req_60df854147f74709ad6e59027bd0b1fa
           created: 1776194617008
           modified: 1776784119379
           isPrivate: false
@@ -474,7 +474,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-400
         meta:
-          id: req_487bed3c3b364922be8dd863f5b0bc4d
+          id: req_7eb6f71e9c2b4de28ec7f600292e1c05
           created: 1776194696378
           modified: 1776194736070
           isPrivate: false
@@ -492,7 +492,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
         name: usuarios-404
         meta:
-          id: req_f6f2c6bf836b454f926338be3e09aa2f
+          id: req_4db995f025414da7bd9bca4d92894f03
           created: 1776194759352
           modified: 1776784425589
           isPrivate: false
@@ -510,7 +510,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-200-by-id
         meta:
-          id: req_688fe50f79204019ba5ee74147109323
+          id: req_4e1cbba358834577871232604cc8b834
           created: 1776195028275
           modified: 1776784521172
           isPrivate: false
@@ -528,7 +528,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_fake }}"
         name: usuarios-404-by-id
         meta:
-          id: req_b597335d66ce4a1a9b950b3982b144c8
+          id: req_d25bc212d8eb44fca37b96095af4a08b
           created: 1776195083081
           modified: 1776784565439
           isPrivate: false
@@ -546,7 +546,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500
         meta:
-          id: req_bbe2bc925be14308a514331682f47002
+          id: req_4c3f82986d9343cabaca3c5efcb6e752
           created: 1776276413179
           modified: 1776784452813
           isPrivate: false
@@ -564,7 +564,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500-by-id
         meta:
-          id: req_0d99b8055dd045a5ae7efc900d2db35b
+          id: req_80c7c75c7b0e446d91aa272dd280895f
           created: 1776276425643
           modified: 1776784592238
           isPrivate: false
@@ -582,7 +582,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-200
         meta:
-          id: req_0fa7a3fb48cf4da3b7970996ba82144f
+          id: req_72b5b0fd30b1437ca917ddbbfb9e84dc
           created: 1776281229001
           modified: 1776784689801
           isPrivate: false
@@ -602,7 +602,7 @@ collection:
           _.unidade_organizacional_id }}"
         name: usuarios-200-paged
         meta:
-          id: req_0175b10b27c944b38f0fc20d9ad19786
+          id: req_62fe7b33dc124a3d9638f3071e90a1ae
           created: 1776281994283
           modified: 1776784860212
           isPrivate: false
@@ -622,7 +622,7 @@ collection:
           _.unidade_organizacional_id_fake }}"
         name: usuarios-200-empty
         meta:
-          id: req_14ce230239c24ae0b48c66fbc15cd805
+          id: req_9eaf0e45ad5543a19f584956e018c4dd
           created: 1776282828073
           modified: 1776784885241
           isPrivate: false
@@ -640,7 +640,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios"
         name: usuarios-500
         meta:
-          id: req_abb86df1ee574e10966e93421233c985
+          id: req_40769876f74042fe9113184b33e82519
           created: 1776283250735
           modified: 1776784902179
           isPrivate: false
@@ -658,7 +658,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-204
         meta:
-          id: req_8a9c4a651b0442bcbc788e12409a6de0
+          id: req_7a05c18507a34eb6be41c00540fec9b5
           created: 1776283315235
           modified: 1776785485039
           isPrivate: false
@@ -676,7 +676,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_02 }}"
         name: usuarios-204
         meta:
-          id: req_b71ed83198384c269e56fe83cfcd93c8
+          id: req_b1486034cdc04660a642795a6462b3f4
           created: 1776283533602
           modified: 1776785494224
           isPrivate: false
@@ -694,7 +694,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_03 }}"
         name: usuarios-204
         meta:
-          id: req_34b68776aed34a7bbb8092825cc8a5c3
+          id: req_8f4325c2ec32470e899634c166c6b47c
           created: 1776283559384
           modified: 1776785503446
           isPrivate: false
@@ -712,7 +712,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-404
         meta:
-          id: req_014aa58164114cfeb2f85151331bd6c4
+          id: req_b7e5a78c3106467fabe950ff09da2d7c
           created: 1776283702703
           modified: 1776283711548
           isPrivate: false
@@ -730,7 +730,7 @@ collection:
       - url: "{{ _.base_url }}/v1/usuarios/{{ _.usuario_id_mock_01 }}"
         name: usuarios-500
         meta:
-          id: req_1bbe5aa61c324e5ba5403cb1d0e3414d
+          id: req_0228e4f0b04a47ff819b137340057091
           created: 1776283727402
           modified: 1776785554147
           isPrivate: false
@@ -747,18 +747,18 @@ collection:
           rebuildPath: true
   - name: unidades-organizacionais
     meta:
-      id: fld_9e6f043cd02f4e1a8672d35645974909
+      id: fld_cb7a0f2f3a914e39abbe02fd15d868ee
       created: 1776360163385
-      modified: 1776971294253
+      modified: 1777129982448
       sortKey: -1776451449816
       description: ""
     children:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-201
         meta:
-          id: req_57a85eb86f0a494eadbd9cf5440eae02
+          id: req_4d869f0fae0147ca98b9cea95ba030a1
           created: 1776360220199
-          modified: 1776972002532
+          modified: 1777131351571
           isPrivate: false
           description: ""
           sortKey: -1776361447764
@@ -767,19 +767,20 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"matrizId": null,
+              "matrizId": null,
               "cnpj": "06549925000172",
               "razaoSocial": "Sebastião e Isis Entregas Expressas Ltda.",
               "nomeFantasia": null,
               "cep": null,
-            	"endereço": null,
+              "endereco": null,
               "numero": null,
               "complemento": null,
               "bairro": null,
               "cidade": null,
               "uf": null,
               "pais": null,
-              "email": null
+              "email": null,
+              "telefone": null
             }
         headers:
           - name: Content-Type
@@ -812,9 +813,9 @@ collection:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-201
         meta:
-          id: req_c2dec2a2896544958582a81e1e9e4df8
+          id: req_7d6e3d2e282c4be48745105bfcd685c7
           created: 1776362655830
-          modified: 1776972115352
+          modified: 1777129967409
           isPrivate: false
           description: ""
           sortKey: -1776189262803.75
@@ -823,19 +824,20 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"matrizId": null,
+              "matrizId": null,
               "cnpj": "04427262000198",
               "razaoSocial": "Laís e Amanda Gráfica ME",
               "nomeFantasia": null,
               "cep": null,
-            	"endereço": null,
+              "endereco": null,
               "numero": null,
               "complemento": null,
               "bairro": null,
               "cidade": null,
               "uf": null,
               "pais": null,
-              "email": null
+              "email": null,
+              "telefone": null
             }
         headers:
           - name: Content-Type
@@ -868,9 +870,9 @@ collection:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-400
         meta:
-          id: req_867aed41ea4f4786b3196c9e112081bc
+          id: req_86ae9d08565449b5aab93a36da120254
           created: 1776362926081
-          modified: 1776363063942
+          modified: 1777130039649
           isPrivate: false
           description: ""
           sortKey: -1776103170323.625
@@ -879,19 +881,20 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"id_matriz": null,
-              "Cnpj": "123456789",
-              "razaoSocial": "",
-              "nomeFantasia": "",
-              "cep": "",
-              "numero": "",
-              "complemento": "",
-              "bairro": "",
-              "cidade": "",
-              "uf": "",
-              "pais": "",
-              "telefone": "",
-              "email": ""
+              "matrizId": null,
+              "cnpj": "",
+              "razaoSocial": null,
+              "nomeFantasia": null,
+              "cep": null,
+              "endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null,
+              "telefone": null
             }
         headers:
           - name: Content-Type
@@ -907,9 +910,9 @@ collection:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-500
         meta:
-          id: req_91aecd654bb24b06a6e544f2d62c9a65
+          id: req_8dcc3cfc7782487fad4c0bd792960aed
           created: 1776363068401
-          modified: 1776363155887
+          modified: 1777130425747
           isPrivate: false
           description: ""
           sortKey: -1776060124083.5625
@@ -918,19 +921,20 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"id_matriz": null,
-              "Cnpj": "",
-              "razaoSocial": "500-response",
-              "nomeFantasia": "",
-              "cep": "",
-              "numero": "",
-              "complemento": "",
-              "bairro": "",
-              "cidade": "",
-              "uf": "txt",
-              "pais": "",
-              "telefone": "",
-              "email": ""
+              "matrizId": null,
+              "cnpj": "91251152000112",
+              "razaoSocial": "internal server error",
+              "nomeFantasia": null,
+              "cep": null,
+              "endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": "Minas Gerais",
+              "pais": null,
+              "email": null,
+              "telefone": null
             }
         headers:
           - name: Content-Type
@@ -946,9 +950,9 @@ collection:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-400-duplicated
         meta:
-          id: req_4104dcc00738410497d1247cf474b5fa
+          id: req_34137fa2a74446eb9b95c277c089dee6
           created: 1776363169566
-          modified: 1776363218894
+          modified: 1777131976484
           isPrivate: false
           description: ""
           sortKey: -1776081647203.5938
@@ -957,19 +961,20 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"id_matriz": null,
-              "Cnpj": "04250186000198",
-              "razaoSocial": "400-duplicated",
-              "nomeFantasia": "",
-              "cep": "",
-              "numero": "",
-              "complemento": "",
-              "bairro": "",
-              "cidade": "",
-              "uf": "",
-              "pais": "",
-              "telefone": "",
-              "email": ""
+              "matrizId": null,
+              "cnpj": "04427262000198",
+              "razaoSocial": "duplicated",
+              "nomeFantasia": null,
+              "cep": null,
+              "endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null,
+              "telefone": null
             }
         headers:
           - name: Content-Type
@@ -986,9 +991,9 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-200
         meta:
-          id: req_8270c1255f5148a99fd15f3b85bf6da7
+          id: req_3643858a73aa4c86bf0cc1837aa484ec
           created: 1776363256732
-          modified: 1776891886302
+          modified: 1777131582691
           isPrivate: false
           description: ""
           sortKey: -1776060123983.5625
@@ -997,19 +1002,20 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"id_matriz": null,
-              "Cnpj": "06549925000172",
-              "razaoSocial": "Casinha reta.",
-              "nomeFantasia": "Casa dos espertos",
-              "cep": "",
-              "numero": "1",
-              "complemento": "Rua dos espertos",
-              "bairro": "",
-              "cidade": "",
-              "uf": "MG",
-              "pais": "",
-              "telefone": "",
-              "email": ""
+              "matrizId": null,
+              "cnpj": "06549925000172",
+              "razaoSocial": "Sebastião Express Ltda.",
+              "nomeFantasia": null,
+              "cep": null,
+              "endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null,
+              "telefone": null
             }
         headers:
           - name: Content-Type
@@ -1026,9 +1032,9 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-400
         meta:
-          id: req_7425eaffbfb1447fb8c0aa1ff9f0012c
+          id: req_6d129cea1d38494cb87816a927cfdf6e
           created: 1776363701465
-          modified: 1776891047286
+          modified: 1777131677090
           isPrivate: false
           description: ""
           sortKey: -1776038600913.5312
@@ -1037,19 +1043,20 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"id_matriz": null,
-              "Cnpj": "",
+              "matrizId": null,
+              "cnpj": null,
               "razaoSocial": "",
-              "nomeFantasia": "",
-              "cep": "",
-              "numero": "1",
-              "complemento": "",
-              "bairro": "",
-              "cidade": "",
-              "uf": "MG",
-              "pais": "",
-              "telefone": "",
-              "email": ""
+              "nomeFantasia": null,
+              "cep": null,
+              "endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null,
+              "telefone": null
             }
         headers:
           - name: Content-Type
@@ -1066,30 +1073,31 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-500
         meta:
-          id: req_3756e4a4d8574755b9c61c919f5be3d4
+          id: req_0dafbc8d35cd4dad99e1bdd8875e7065
           created: 1776364034368
-          modified: 1776364195903
+          modified: 1777132210243
           isPrivate: false
           description: ""
           sortKey: -1776022458611.0078
         method: PUT
         body:
           mimeType: application/json
-          text: >-
+          text: |-
             {
-            	"id_matriz": null,
-              "Cnpj": "",
-              "razaoSocial": "500-response",
-              "nomeFantasia": "",
-              "cep": "",
-              "numero": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-              "complemento": "",
-              "bairro": "",
-              "cidade": "",
-              "uf": "MG",
-              "pais": "",
-              "telefone": "",
-              "email": ""
+              "matrizId": null,
+              "cnpj": "06549925000172",
+              "razaoSocial": "Sebastião Express Ltda.",
+              "nomeFantasia": null,
+              "cep": null,
+              "endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": "Minas Gerais",
+              "pais": null,
+              "email": null,
+              "telefone": null
             }
         headers:
           - name: Content-Type
@@ -1106,7 +1114,7 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-200-by-id
         meta:
-          id: req_2f6a9aa77f054ee29cb609783552f265
+          id: req_8c5565ac61a9487ca8e673bc945ab3e5
           created: 1776364273100
           modified: 1776364440304
           isPrivate: false
@@ -1131,7 +1139,7 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-500-by-id
         meta:
-          id: req_42e7e482a67949a79079c507a07e3175
+          id: req_41d262a6e4b04339bc29246cafec9f34
           created: 1776364398057
           modified: 1776364451379
           isPrivate: false
@@ -1155,7 +1163,7 @@ collection:
       - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-200
         meta:
-          id: req_584f00ff5ad34d38a5a5c32a5bf39931
+          id: req_c7eb3cd6856a4199bc6895d6ea2e0e53
           created: 1776366962885
           modified: 1776366970287
           isPrivate: false
@@ -1180,7 +1188,7 @@ collection:
           }}/v1/unidades-organizacionais?skip=0&top=10&razaSocial=.&Cnpj=65"
         name: unidades-organizacionais-200-paged
         meta:
-          id: req_d5c17b5ccc844befabb7175219a43ba4
+          id: req_a2e7bf0b59ef412a8fb996135377d695
           created: 1776366994968
           modified: 1776892077542
           isPrivate: false
@@ -1204,7 +1212,7 @@ collection:
       - url: '{{ _.base_url }}/v1/unidades-organizacionais?skip=0&top=10&razaoSocial=""'
         name: unidades-organizacionais-200-empty
         meta:
-          id: req_3f94a987daac4484b7206f720729634f
+          id: req_0bb84ef6fbbb43d6b443ae67abf85038
           created: 1776367294385
           modified: 1776367349374
           isPrivate: false
@@ -1229,7 +1237,7 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-500
         meta:
-          id: req_c4f96523f111422da37b03977d2d77b1
+          id: req_3369ea0c02bb43729e8de4bf49cde4dd
           created: 1776367571793
           modified: 1776367574311
           isPrivate: false
@@ -1254,7 +1262,7 @@ collection:
           _.unidade_organizacional_mock_01 }}"
         name: unidades-organizacionais-200
         meta:
-          id: req_a3e3c3c0f9b74d9f8e868fb546a35041
+          id: req_d81ec0bde06140f597eb06f52561ecec
           created: 1776367601486
           modified: 1776451285751
           isPrivate: false
@@ -1279,7 +1287,7 @@ collection:
           _.unidade_organizacional_mock_02 }}"
         name: unidades-organizacionais-200
         meta:
-          id: req_a501e86cdc3b4f9294a0e0c2c17eda8c
+          id: req_4882f91053ff4b96b6829df681034cad
           created: 1776367751325
           modified: 1776451281301
           isPrivate: false
@@ -1304,7 +1312,7 @@ collection:
           _.unidade_organizacional_mock_02 }}"
         name: unidades-organizacionais-500
         meta:
-          id: req_48aafd99d74e46d7949fada474c70295
+          id: req_61bad73929894f288fe90bfd85389592
           created: 1776367776992
           modified: 1776367776992
           isPrivate: false
@@ -1329,7 +1337,7 @@ collection:
           _.unidade_organizacional_mock_02 }}"
         name: unidades-organizacionais-404
         meta:
-          id: req_99de455acf45432e949ceca2cd55dc2b
+          id: req_cd511c30855f40dfb686b00af20920de
           created: 1776367890686
           modified: 1776367890686
           isPrivate: false
@@ -1354,9 +1362,9 @@ collection:
           _.unidade_organizacional_id_fake }}"
         name: unidades-organizacionais-400-duplicated-cnpj
         meta:
-          id: req_32f0d9a5e9b34b0fb42d8bccb3593514
+          id: req_4477e5023daa4b3e9941c8a30969c1fc
           created: 1776890999508
-          modified: 1776891168115
+          modified: 1777132091850
           isPrivate: false
           description: ""
           sortKey: -1776034565337.9004
@@ -1365,19 +1373,20 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"id_matriz": null,
-              "Cnpj": "06549925000172",
-              "razaoSocial": "Casinha reta",
-              "nomeFantasia": "Casa dos espertos",
-              "cep": "",
-              "numero": "1",
-              "complemento": "Rua dos espertos",
-              "bairro": "",
-              "cidade": "",
-              "uf": "MG",
-              "pais": "",
-              "telefone": "",
-              "email": ""
+              "matrizId": null,
+              "cnpj": "06549925000172",
+              "razaoSocial": "Sebastião Express Ltda.",
+              "nomeFantasia": null,
+              "cep": null,
+              "endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null,
+              "telefone": null
             }
         headers:
           - name: Content-Type
@@ -1394,9 +1403,9 @@ collection:
           _.unidade_organizacional_id_fake }}"
         name: unidades-organizacionais-404
         meta:
-          id: req_168ecc7d7b034e68961a8875f272b707
+          id: req_e9cecd8e1b6e42bfb226a9e3b5a28692
           created: 1776891102348
-          modified: 1776891165740
+          modified: 1777132158654
           isPrivate: false
           description: ""
           sortKey: -1776030529762.2695
@@ -1405,19 +1414,101 @@ collection:
           mimeType: application/json
           text: |-
             {
-            	"id_matriz": null,
-              "Cnpj": "09932499000140",
-              "razaoSocial": "Casinha reta",
-              "nomeFantasia": "Casa dos espertos",
-              "cep": "",
-              "numero": "1",
-              "complemento": "Rua dos espertos",
-              "bairro": "",
-              "cidade": "",
-              "uf": "MG",
-              "pais": "",
-              "telefone": "",
-              "email": ""
+              "matrizId": null,
+              "cnpj": "00217748000140",
+              "razaoSocial": "Débora e Vicente Construções ME",
+              "nomeFantasia": null,
+              "cep": null,
+              "endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null,
+              "telefone": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais"
+        name: unidades-organizacionais-400-invalid-cnpj
+        meta:
+          id: req_134b7e4ff0324cfbada1c27ae29149ab
+          created: 1777130098399
+          modified: 1777130151661
+          isPrivate: false
+          description: ""
+          sortKey: -1776092408763.6094
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "matrizId": null,
+              "cnpj": "0442726200019B",
+              "razaoSocial": "",
+              "nomeFantasia": null,
+              "cep": null,
+              "endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null,
+              "telefone": null
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_mock_01 }}"
+        name: unidades-organizacionais-400-invalid-cnpj
+        meta:
+          id: req_f09dd2baf4cf484d8ddc2337d98e6220
+          created: 1777131714835
+          modified: 1777131785819
+          isPrivate: false
+          description: ""
+          sortKey: -1776036583125.7158
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "matrizId": null,
+              "cnpj": "0654992500017B",
+              "razaoSocial": null,
+              "nomeFantasia": null,
+              "cep": null,
+              "endereco": null,
+              "numero": null,
+              "complemento": null,
+              "bairro": null,
+              "cidade": null,
+              "uf": null,
+              "pais": null,
+              "email": null,
+              "telefone": null
             }
         headers:
           - name: Content-Type
@@ -1432,7 +1523,7 @@ collection:
           rebuildPath: true
   - name: espaços
     meta:
-      id: fld_3191d7d65eaf49fca8264c30243b224f
+      id: fld_07437387285b48acb04237cbc0bd1189
       created: 1776445366121
       modified: 1776890922352
       sortKey: -1776445366121
@@ -1441,7 +1532,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-201
         meta:
-          id: req_653e4ad9d09b46d9bcc1465ebdac16df
+          id: req_92cac176ec7f457baf1fc9fab255451e
           created: 1776445371429
           modified: 1776446372213
           isPrivate: false
@@ -1491,7 +1582,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-201
         meta:
-          id: req_799e0b3153a24db5a856d62741367e33
+          id: req_882d7cd86a2440baaee685222aae924c
           created: 1776445648208
           modified: 1776446392578
           isPrivate: false
@@ -1541,7 +1632,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-400
         meta:
-          id: req_d2cea633803c42c7bb6f6f6405c9a09d
+          id: req_a3832d3085164203a30fc7f0f8d94fd5
           created: 1776445861535
           modified: 1776446198978
           isPrivate: false
@@ -1573,7 +1664,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-500
         meta:
-          id: req_ccd010f8836b46a0ab0b0100504cad76
+          id: req_acd983c83b1e4230a03d23434c225804
           created: 1776446117539
           modified: 1776446218193
           isPrivate: false
@@ -1606,7 +1697,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
         name: espaços-200
         meta:
-          id: req_c303deba7aba424897fce8806ba9a967
+          id: req_df3700354cd9411b91208c26bf3aec7f
           created: 1776446228520
           modified: 1776446691570
           isPrivate: false
@@ -1639,7 +1730,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_fake }}"
         name: espaços-404
         meta:
-          id: req_425834e37d774bd69f52f58b5ff3b0d0
+          id: req_1efe4a1a8c8642e89782333012209e68
           created: 1776446713682
           modified: 1776446984857
           isPrivate: false
@@ -1672,7 +1763,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
         name: espaços-400
         meta:
-          id: req_49c43e33951840f3bdd9097b6a86cb46
+          id: req_71f4e47bcab24a8c98653a108cd47a41
           created: 1776446878686
           modified: 1776447056940
           isPrivate: false
@@ -1704,7 +1795,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
         name: espaços-200-by-id
         meta:
-          id: req_910cc461a1324007a5a0a0795bc7b3c6
+          id: req_258e43ec6ab1499391710a4b70600860
           created: 1776447108974
           modified: 1776447177445
           isPrivate: false
@@ -1727,7 +1818,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_fake }}"
         name: espaços-404-by-id
         meta:
-          id: req_cc0f9a1f56ab42ee8dd61e89215bc35a
+          id: req_14b169717da6450c86129a414f81957c
           created: 1776447165404
           modified: 1776447221554
           isPrivate: false
@@ -1750,7 +1841,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
         name: espaços-500-by-id
         meta:
-          id: req_1131639cab814bc788dedeb5e8de6c2d
+          id: req_277c5b09008c45aaab64f960d64f0150
           created: 1776447241851
           modified: 1776447251401
           isPrivate: false
@@ -1773,7 +1864,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-200
         meta:
-          id: req_7966cfac28a940eca7cb885e8438531a
+          id: req_f015a672080b4d889a9e7c4e90d60b23
           created: 1776447296511
           modified: 1776447303035
           isPrivate: false
@@ -1796,7 +1887,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos"
         name: espaços-500
         meta:
-          id: req_7d70ddb94bf04c80be493e411065d655
+          id: req_ce602328e3e148428ca2742274e7d2f1
           created: 1776447331915
           modified: 1776450126918
           isPrivate: false
@@ -1821,7 +1912,7 @@ collection:
           _.unidade_organizacional_id }}"
         name: espaços-200-paged
         meta:
-          id: req_7dc32a68dddc4f37b7dbe56e2dc31acc
+          id: req_b77715e6f22b4d31b68f3a247bc3c645
           created: 1776448857067
           modified: 1776450037482
           isPrivate: false
@@ -1846,7 +1937,7 @@ collection:
           _.unidade_organizacional_id_fake }}"
         name: espaços-200-empty
         meta:
-          id: req_2e31b8bf59b44beeb0ea57d872a8997f
+          id: req_16ba7f134f384cc8add16a458d434eb3
           created: 1776449075099
           modified: 1776450082143
           isPrivate: false
@@ -1869,7 +1960,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
         name: espaços-200
         meta:
-          id: req_6d58364368454bf185c3c917649243ca
+          id: req_d2bec75cc8a542dbbfaa67db4d714300
           created: 1776450150913
           modified: 1776450187804
           isPrivate: false
@@ -1892,7 +1983,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
         name: espaços-200
         meta:
-          id: req_383caa094a524fde90a36d548c99b0bc
+          id: req_692999a0c1954d61a4a854fce8a95d65
           created: 1776450194630
           modified: 1776450220168
           isPrivate: false
@@ -1915,7 +2006,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
         name: espaços-404
         meta:
-          id: req_964daeb27aa5473094487c38cd52abda
+          id: req_bc10d7257f564dfebc62725bd0586ceb
           created: 1776450268571
           modified: 1776450283143
           isPrivate: false
@@ -1938,7 +2029,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espacoId }}"
         name: espaços-400
         meta:
-          id: req_60b85797f0e046c4bac60254e3dd673c
+          id: req_26f5610d04bb47d688b15e24eb69eba1
           created: 1776450297561
           modified: 1776450934499
           isPrivate: false
@@ -1961,7 +2052,7 @@ collection:
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
         name: espaços-500
         meta:
-          id: req_e37aa042ec9e453faa96b9fb14e40dd4
+          id: req_a5609725c18e40c5bf8192e027b813f6
           created: 1776450957864
           modified: 1776450961457
           isPrivate: false
@@ -1983,7 +2074,7 @@ collection:
           rebuildPath: true
   - name: itens_estoque
     meta:
-      id: fld_28c7ef7222f545c09f69b01adf319d72
+      id: fld_7e167d8e46054ad99d48b4d2df49e14f
       created: 1776451449616
       modified: 1776888878593
       sortKey: -1776451449616
@@ -1992,7 +2083,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-201
         meta:
-          id: req_126f8d6d447e481cabc35745f75db728
+          id: req_c4a19668a7f34c6d9dec53b66c4cb4a8
           created: 1776451454074
           modified: 1776889129116
           isPrivate: false
@@ -2044,7 +2135,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-201
         meta:
-          id: req_bd1ee968279f4ff1bfd52e859f64f1a5
+          id: req_5d6f085298114740972883bca9f000d5
           created: 1776451695829
           modified: 1776889133583
           isPrivate: false
@@ -2096,7 +2187,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-400
         meta:
-          id: req_300eb71d15544dbdb127de30c7c7a3dc
+          id: req_3a823543b62f4694962840ebd7dcf867
           created: 1776451925783
           modified: 1776453563642
           isPrivate: false
@@ -2129,7 +2220,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-500
         meta:
-          id: req_9a732a994049410fb0087b726c54c9a8
+          id: req_b8926c1041384d0b81c8e15b5f742648
           created: 1776453364221
           modified: 1776453561463
           isPrivate: false
@@ -2164,7 +2255,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-200
         meta:
-          id: req_fa9a0de6dcbb4e3b838b2f463e45d3e6
+          id: req_9ede0232e04b46689070a49a6964d807
           created: 1776453522933
           modified: 1776453680275
           isPrivate: false
@@ -2199,7 +2290,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-400
         meta:
-          id: req_89e01b904ac6421e9b4404069ff0ab44
+          id: req_343de7b33ac14c8ba16a8fc9cafedf46
           created: 1776453701957
           modified: 1776453779997
           isPrivate: false
@@ -2232,7 +2323,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-500
         meta:
-          id: req_a12f440fcf174922a89901e30be4d860
+          id: req_078b7857f5dd4d8fb977c2d4e1027541
           created: 1776453802487
           modified: 1776453972430
           isPrivate: false
@@ -2267,7 +2358,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-200
         meta:
-          id: req_4ae6cfa00d544f759979a318e9e7efec
+          id: req_4ac989ba344e4d95a992c914f15f1092
           created: 1776453988597
           modified: 1776455389498
           isPrivate: false
@@ -2299,7 +2390,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-400
         meta:
-          id: req_3fa4766384c74627b99c47669a3af8db
+          id: req_608e19a88afa420d8f04fe750765f496
           created: 1776455398691
           modified: 1776455419352
           isPrivate: false
@@ -2331,7 +2422,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-400-insufficient
         meta:
-          id: req_378fa6098be4491bb3102d423ba3a188
+          id: req_6ba961dcd57b4ad298a8f94890095547
           created: 1776455529650
           modified: 1776455544009
           isPrivate: false
@@ -2363,7 +2454,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-404
         meta:
-          id: req_5f2ccbf8637744e18bad952c9b5c3c47
+          id: req_59f03d29294a49379c18ae7f74aadf8a
           created: 1776455568463
           modified: 1776455575012
           isPrivate: false
@@ -2395,7 +2486,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-500
         meta:
-          id: req_c908481d1f5041cfb65f0cf2ee4eddb5
+          id: req_c530d71667194f57a48d2d46aa92846f
           created: 1776455599246
           modified: 1776455696422
           isPrivate: false
@@ -2427,7 +2518,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-200-by-id
         meta:
-          id: req_d95edebd0d654751962f47fe237b58f0
+          id: req_e2de0a63577f4f71a042973c008fa30f
           created: 1776455717731
           modified: 1776455748467
           isPrivate: false
@@ -2450,7 +2541,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_Fake }}"
         name: itens_estoque-404-by-id
         meta:
-          id: req_a7bb2de32f31473a9c5deb21afdda6c0
+          id: req_04e02d21cca748cdba3abaa1768d12a9
           created: 1776455809665
           modified: 1776455860532
           isPrivate: false
@@ -2473,7 +2564,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_Fake }}"
         name: itens_estoque-500-by-id
         meta:
-          id: req_795bfed7cf944b16b026a565333b5adf
+          id: req_a2147d1cef3b45cc83e141e53f3667d5
           created: 1776455868038
           modified: 1776455868038
           isPrivate: false
@@ -2496,7 +2587,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-200
         meta:
-          id: req_f94e817ea1754c03803b2c42c97edf8b
+          id: req_0b299273278942a28d1f6b7bc0e135d2
           created: 1776455925936
           modified: 1776455933461
           isPrivate: false
@@ -2519,7 +2610,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque?skip=0&top=5&descricao=."
         name: itens_estoque-200-paged
         meta:
-          id: req_14e0dfec0967427688c995ed7b2f369a
+          id: req_4dc85f702a854735932a69843207c734
           created: 1776887938583
           modified: 1776889139748
           isPrivate: false
@@ -2542,7 +2633,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque"
         name: itens_estoque-500
         meta:
-          id: req_55fa2743dc7e4cbd9e1abf7763f25fa4
+          id: req_7fb6323bdd3f4e6589d9f8f4a4877148
           created: 1776889154967
           modified: 1776889188659
           isPrivate: false
@@ -2565,7 +2656,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}/historico"
         name: itens_estoque-200-history
         meta:
-          id: req_cc1ceceffc5e488aada36384c2ec938f
+          id: req_4780fc9bc998473cb67edb91adaee49b
           created: 1776889205888
           modified: 1776890353894
           isPrivate: false
@@ -2588,7 +2679,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}/historico"
         name: itens_estoque-500-history
         meta:
-          id: req_3ecea06d96424693910eb3c963456d9a
+          id: req_0f787b6e05b2409c9c74f6349aa292ea
           created: 1776890373710
           modified: 1776890373710
           isPrivate: false
@@ -2611,7 +2702,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_01 }}"
         name: itens_estoque-200
         meta:
-          id: req_d65af54fa14249aa8b19d9d599b151ff
+          id: req_449b8deff2674f3f94730cb93406c5fc
           created: 1776890406105
           modified: 1776890499036
           isPrivate: false
@@ -2634,7 +2725,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_02 }}"
         name: itens_estoque-200
         meta:
-          id: req_a405e82a862645e7b06dc3b7cd66a245
+          id: req_3a2c4299f43346fe93b17d8b667dd5e5
           created: 1776890450718
           modified: 1776890494510
           isPrivate: false
@@ -2657,7 +2748,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_02 }}"
         name: itens_estoque-404
         meta:
-          id: req_6bdbd0cc3f5341668092a135630f31c3
+          id: req_e9302197bdf24dbbbd178a6ebc471fac
           created: 1776890469452
           modified: 1776890513869
           isPrivate: false
@@ -2680,7 +2771,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque/{{ _.item_mock_02 }}"
         name: itens_estoque-500
         meta:
-          id: req_042bf450e5e34c0fb6930d2f3eddd9f8
+          id: req_e4eab9df25294a4899ff3b89db2d9ba7
           created: 1776890520698
           modified: 1776890520698
           isPrivate: false
@@ -2703,7 +2794,7 @@ collection:
       - url: "{{ _.base_url }}/v1/itens-estoque?skip=0&top=5&descricao=monkey"
         name: itens_estoque-200-empty
         meta:
-          id: req_8c84f4c1c062417a8e51add91a1907c7
+          id: req_be5cb60055e2463abbe8151c68464a1d
           created: 1776890578102
           modified: 1776890667706
           isPrivate: false
@@ -2726,15 +2817,15 @@ collection:
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_931ad9eadff1423bab7ba74487edb786
+    id: jar_c81c45164dc54c32a4c6a263ca99ef62
     created: 1776017078657
-    modified: 1776890922345
+    modified: 1777129982419
 environments:
   name: Base Environment
   meta:
-    id: env_cbf326d4522449658672b8fbe5c00395
+    id: env_730d79657e5048748169d4887befa80d
     created: 1776017077271
-    modified: 1776890922349
+    modified: 1777129982438
     isPrivate: false
   data:
     base_url: http://localhost:5120
@@ -2744,8 +2835,8 @@ environments:
     usuario_id_mock_03: 6af483a7-647c-4d29-86a5-90d7a61d9a4c
     usuario_id_fake: f6a30a56-c65c-41ac-ab07-8b0b113bd521
     unidade_organizacional_id_fake: e525e8a8-5424-4a76-af26-c2ab45e1ef07
-    unidade_organizacional_mock_01: a467d1d5-dc60-4f9f-a0eb-9f2d67cfd4ce
-    unidade_organizacional_mock_02: 3623c4dd-1665-49e3-aea4-d39cbb6fd2f8
+    unidade_organizacional_mock_01: 1bb9fe58-ccc9-4ff2-920c-e8af7a9ce445
+    unidade_organizacional_mock_02: c158149c-a610-4b23-926b-e42bd5ba877c
     espacoId: 6ab71fef-cf4e-4dbf-af76-f2058224721a
     espaco_mock_01: 2183e8fd-1a35-431f-a1da-96a81a67e865
     espaco_mock_02: f5081930-0a9f-434b-a1e2-c481b27d8ea0

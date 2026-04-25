@@ -14,16 +14,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<UnidadeOrganizacionalRepository>();
 builder.Services.AddScoped<EspacoRepository>();
+builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<ItemEstoqueRepository>();
 builder.Services.AddScoped<HistoricoRepository>();
 
-builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<UnidadeOrganizacionalService>();
-builder.Services.AddScoped<ItemEstoqueService>();
 builder.Services.AddScoped<EspacoService>();
+builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<ItemEstoqueService>();
 
 builder.Services.AddCors(x => x.AddPolicy("*", y => y.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
@@ -42,9 +42,9 @@ app.UseCors("*");
 app.UseAuthorization();
 app.MapFallbackToFile("/index.html");
 
-app.MapUsuarioEndpoints();
 app.MapUnidadeOrganizacionalEndpoints();
 app.MapEspacosEndpoints();
+app.MapUsuarioEndpoints();
 app.MapItemEstoqueEndpoints();
 
 app.UseExceptionHandler(errorApp =>

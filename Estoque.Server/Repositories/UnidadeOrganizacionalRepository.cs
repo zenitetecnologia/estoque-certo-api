@@ -1,5 +1,6 @@
 ﻿using Estoque.Server.Models;
 using Npgsql;
+using NpgsqlTypes;
 using System.Data;
 
 namespace Estoque.Server.Repositories;
@@ -8,10 +9,10 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 {
     public UnidadeOrganizacionalRepository(IDbConnection connection) : base(connection) { }
 
-    public async Task<Guid> CadastrarUnidade(UnidadeOrganizacional unidade)
+    public async Task<Guid> Cadastrar(UnidadeOrganizacional unidadeOrganizacional)
     {
         const string sql = @"
-            INSERT INTO estoque_certo.unidade_organizacional 
+            INSERT INTO estoque_certo.unidade_organizacional
             (
                 matriz_id,
                 cnpj,
@@ -54,20 +55,20 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("matriz_id", unidade.MatrizId.HasValue ? (object)unidade.MatrizId.Value : DBNull.Value);
-            cmd.Parameters.AddWithValue("cnpj", unidade.Cnpj);
-            cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
-            cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
-            cmd.Parameters.AddWithValue("cep", unidade.Cep);
-            cmd.Parameters.AddWithValue("endereco", unidade.Endereco);
-            cmd.Parameters.AddWithValue("numero", unidade.Numero);
-            cmd.Parameters.AddWithValue("complemento", unidade.Complemento);
-            cmd.Parameters.AddWithValue("bairro", unidade.Bairro);
-            cmd.Parameters.AddWithValue("cidade", unidade.Cidade);
-            cmd.Parameters.AddWithValue("uf", unidade.Uf);
-            cmd.Parameters.AddWithValue("pais", unidade.Pais);
-            cmd.Parameters.AddWithValue("email", unidade.Email);
-            cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
+            cmd.Parameters.Add("matriz_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacional.MatrizId.ToDbValue();
+            cmd.Parameters.Add("cnpj", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Cnpj;
+            cmd.Parameters.Add("razao_social", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.RazaoSocial;
+            cmd.Parameters.Add("nome_fantasia", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.NomeFantasia.ToDbValue();
+            cmd.Parameters.Add("cep", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Cep.ToDbValue();
+            cmd.Parameters.Add("endereco", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Endereco.ToDbValue();
+            cmd.Parameters.Add("numero", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Numero.ToDbValue();
+            cmd.Parameters.Add("complemento", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Complemento.ToDbValue();
+            cmd.Parameters.Add("bairro", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Bairro.ToDbValue();
+            cmd.Parameters.Add("cidade", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Cidade.ToDbValue();
+            cmd.Parameters.Add("uf", NpgsqlDbType.Char).Value = unidadeOrganizacional.Uf.ToDbValue();
+            cmd.Parameters.Add("pais", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Pais.ToDbValue();
+            cmd.Parameters.Add("email", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Email.ToDbValue();
+            cmd.Parameters.Add("telefone", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Telefone.ToDbValue();
 
             var result = await cmd.ExecuteScalarAsync();
 
@@ -79,28 +80,29 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<int> AtualizarUnidade(UnidadeOrganizacional unidade, Guid unidadeOrganizacionalId)
+    public async Task Atualizar(UnidadeOrganizacional unidadeOrganizacional, Guid unidadeOrganizacionalId)
     {
         const string sql = @"
-        UPDATE
-            estoque_certo.unidade_organizacional
-        SET
-            matriz_id = @matriz_id,
-            cnpj = @cnpj,
-            razao_social = @razao_social,
-            nome_fantasia = @nome_fantasia,
-            cep = @cep,
-            numero = @numero,
-            complemento = @complemento,
-            bairro = @bairro,
-            cidade = @cidade,
-            uf = @uf,
-            pais = @pais,
-            email = @email,
-            telefone = @telefone
-        WHERE
-            unidade_organizacional_id = @unidade_organizacional_id;
-    ";
+            UPDATE
+                estoque_certo.unidade_organizacional
+            SET
+                matriz_id = @matriz_id,
+                cnpj = @cnpj,
+                razao_social = @razao_social,
+                nome_fantasia = @nome_fantasia,
+                cep = @cep,
+                endereco = @endereco,
+                numero = @numero,
+                complemento = @complemento,
+                bairro = @bairro,
+                cidade = @cidade,
+                uf = @uf,
+                pais = @pais,
+                email = @email,
+                telefone = @telefone
+            WHERE
+                unidade_organizacional_id = @unidade_organizacional_id;
+        ";
 
         try
         {
@@ -108,22 +110,24 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
-            cmd.Parameters.AddWithValue("matriz_id", unidade.MatrizId.HasValue ? (object)unidade.MatrizId.Value : DBNull.Value);
-            cmd.Parameters.AddWithValue("cnpj", unidade.Cnpj);
-            cmd.Parameters.AddWithValue("razao_social", unidade.RazaoSocial);
-            cmd.Parameters.AddWithValue("nome_fantasia", unidade.NomeFantasia);
-            cmd.Parameters.AddWithValue("cep", unidade.Cep);
-            cmd.Parameters.AddWithValue("numero", unidade.Numero);
-            cmd.Parameters.AddWithValue("complemento", unidade.Complemento);
-            cmd.Parameters.AddWithValue("bairro", unidade.Bairro);
-            cmd.Parameters.AddWithValue("cidade", unidade.Cidade);
-            cmd.Parameters.AddWithValue("uf", unidade.Uf);
-            cmd.Parameters.AddWithValue("pais", unidade.Pais);
-            cmd.Parameters.AddWithValue("email", unidade.Email);
-            cmd.Parameters.AddWithValue("telefone", unidade.Telefone);
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId;
 
-            return await cmd.ExecuteNonQueryAsync();
+            cmd.Parameters.Add("matriz_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacional.MatrizId.ToDbValue();
+            cmd.Parameters.Add("cnpj", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Cnpj;
+            cmd.Parameters.Add("razao_social", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.RazaoSocial;
+            cmd.Parameters.Add("nome_fantasia", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.NomeFantasia.ToDbValue();
+            cmd.Parameters.Add("cep", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Cep.ToDbValue();
+            cmd.Parameters.Add("endereco", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Endereco.ToDbValue();
+            cmd.Parameters.Add("numero", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Numero.ToDbValue();
+            cmd.Parameters.Add("complemento", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Complemento.ToDbValue();
+            cmd.Parameters.Add("bairro", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Bairro.ToDbValue();
+            cmd.Parameters.Add("cidade", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Cidade.ToDbValue();
+            cmd.Parameters.Add("uf", NpgsqlDbType.Char).Value = unidadeOrganizacional.Uf.ToDbValue();
+            cmd.Parameters.Add("pais", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Pais.ToDbValue();
+            cmd.Parameters.Add("email", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Email.ToDbValue();
+            cmd.Parameters.Add("telefone", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Telefone.ToDbValue();
+
+            await cmd.ExecuteNonQueryAsync();
         }
         catch
         {
@@ -282,7 +286,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<bool> VerificaUnidadeExiste(string Cnpj, Guid ignoreId)
+    public async Task<bool> VerificarDuplicidade(string Cnpj, Guid ignoreId)
     {
         const string sql = @"
             SELECT

@@ -4,6 +4,9 @@ namespace Estoque.Server.Repositories;
 
 public static class DbExtentions
 {
+    public static object ToDbValue(this object? value) =>
+        value ?? DBNull.Value;
+
     public static int GetInt32(this IDataReader reader, string column) =>
         reader.GetInt32(reader.GetOrdinal(column));
 

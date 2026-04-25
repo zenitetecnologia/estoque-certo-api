@@ -1,10 +1,8 @@
 -- docker run --name pg-estoque -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=estoque_certo -p 5432:5432 -d postgres:latest
 
 
--- 1. Criar o Esquema Principal
 CREATE SCHEMA IF NOT EXISTS estoque_certo;
 
--- 2. Tabela de Unidades Organizacionais (Matriz e Filiais)
 CREATE TABLE IF NOT EXISTS estoque_certo.unidade_organizacional (
     unidade_organizacional_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     matriz_id UUID,
@@ -13,8 +11,8 @@ CREATE TABLE IF NOT EXISTS estoque_certo.unidade_organizacional (
     nome_fantasia VARCHAR(100),
     cep VARCHAR(8),
     endereco VARCHAR(100),
-    numero VARCHAR(50),
-    complemento VARCHAR(50),
+    numero VARCHAR(20),
+    complemento VARCHAR(100),
     bairro VARCHAR(100),
     cidade VARCHAR(100),
     uf VARCHAR(2),
@@ -23,7 +21,6 @@ CREATE TABLE IF NOT EXISTS estoque_certo.unidade_organizacional (
     telefone VARCHAR(12)
 );
 
--- 3. Tabela de Espaços (Locais físicos de armazenamento)
 CREATE TABLE IF NOT EXISTS estoque_certo.espaco (
     espaco_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     unidade_organizacional_id UUID NOT NULL,
@@ -35,7 +32,6 @@ CREATE TABLE IF NOT EXISTS estoque_certo.espaco (
 );
 
 
--- 4. Tabela de Usuários (Relação 1:N direta com Unidade Organizacional)
 CREATE TABLE IF NOT EXISTS estoque_certo.usuario (
     usuario_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     unidade_organizacional_id UUID NOT NULL,
@@ -45,15 +41,12 @@ CREATE TABLE IF NOT EXISTS estoque_certo.usuario (
     perfil INTEGER NOT NULL,
     valido BOOLEAN NOT NULL DEFAULT FALSE,
     
-    -- Restrição que permite o mesmo username apenas se for em unidades diferentes
     CONSTRAINT uk_usuario_username_unidade UNIQUE (username, unidade_organizacional_id),
     
-    -- Chave estrangeira para garantir a integridade referencial
     CONSTRAINT fk_usuario_unidade FOREIGN KEY (unidade_organizacional_id) 
         REFERENCES estoque_certo.unidade_organizacional (unidade_organizacional_id) ON DELETE CASCADE
 );
 
--- 5. Tabela de Itens de Estoque (Produtos)
 CREATE TABLE IF NOT EXISTS estoque_certo.item_estoque (
     item_estoque_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     unidade_organizacional_id UUID NOT NULL,
@@ -69,11 +62,10 @@ CREATE TABLE IF NOT EXISTS estoque_certo.item_estoque (
         REFERENCES estoque_certo.espaco (espaco_id) ON DELETE RESTRICT
 );
 
--- 6. Tabela de Histórico (Auditoria de Movimentações)
 CREATE TABLE IF NOT EXISTS estoque_certo.historico (
     historico_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     item_estoque_id UUID NOT NULL,
-    usuario_id UUID,
+    usuario_id UUID NOT NULL,
     tipo_movimentacao INTEGER NOT NULL,
     data_hora TIMESTAMP NOT NULL DEFAULT NOW(),
     quantidade_anterior NUMERIC(18,3) NOT NULL,
@@ -86,13 +78,12 @@ CREATE TABLE IF NOT EXISTS estoque_certo.historico (
         REFERENCES estoque_certo.usuario (usuario_id) ON DELETE SET NULL
 );
 
--- 7. Tabela de Auth (Autenticação e Autorização)
 CREATE TABLE estoque_certo.codigo_acesso (
     usuario_id UUID NOT NULL REFERENCES estoque_certo.usuario(usuario_id),
     codigo VARCHAR(6) NOT NULL,
     data_solicitacao TIMESTAMP NOT NULL DEFAULT NOW(),
     data_validacao TIMESTAMP NULL,
-    validado BOOLEAN NOT NULL DEFAULT FALSE,
+    utilizado BOOLEAN NOT NULL DEFAULT FALSE,
     codigo_acesso_id VARCHAR(100) NULL,
     PRIMARY KEY (usuario_id, codigo)
 );

@@ -9,12 +9,12 @@ public static class UnidadeOrganizacionalController
     public static void MapUnidadeOrganizacionalEndpoints(this WebApplication app)
     {
         #region [ post ]
-        app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacionalService service, UnidadeOrganizacional unidade) =>
+        app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacionalService service, UnidadeOrganizacional unidadeOrganizacional) =>
         {
-            Guid unidadeOrganizacionalId = await service.CadastrarUnidade(unidade);
+            Guid unidadeOrganizacionalId = await service.Cadastrar(unidadeOrganizacional);
 
             return TypedResults.CreatedAtRoute(
-                routeName: "get",
+                routeName: "unidades-organizacionais-get-by-id",
                 routeValues: new { unidadeOrganizacionalId },
                 value: "Unidade organizacional cadastrada com sucesso.");
         })
@@ -27,9 +27,9 @@ public static class UnidadeOrganizacionalController
         #endregion
 
         #region [ put ]
-        app.MapPut("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId, UnidadeOrganizacional unidade) =>
+        app.MapPut("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId, UnidadeOrganizacional unidadeOrganizacional) =>
         {
-            await service.AtualizarUnidade(unidade, unidadeOrganizacionalId);
+            await service.Atualizar(unidadeOrganizacional, unidadeOrganizacionalId);
 
             return Results.Ok("Unidade organizacional atualizada com sucesso.");
         })
@@ -79,6 +79,7 @@ public static class UnidadeOrganizacionalController
 
             return Results.Ok(result);
         })
+        .WithName("unidades-organizacionais-get-by-id")
         .WithTags("unidades-organizacionais")
         .WithSummary("Retorna uma unidade organizacional por ID")
         .WithDescription("Retorna uma unidade organizacional específica por ID.")
