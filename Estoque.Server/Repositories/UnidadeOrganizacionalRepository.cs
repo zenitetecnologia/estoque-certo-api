@@ -80,7 +80,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task Atualizar(UnidadeOrganizacional unidadeOrganizacional, Guid unidadeOrganizacionalId)
+    public async Task<int> Atualizar(UnidadeOrganizacional unidadeOrganizacional, Guid unidadeOrganizacionalId)
     {
         const string sql = @"
             UPDATE
@@ -127,7 +127,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             cmd.Parameters.Add("email", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Email.ToDbValue();
             cmd.Parameters.Add("telefone", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Telefone.ToDbValue();
 
-            await cmd.ExecuteNonQueryAsync();
+            return await cmd.ExecuteNonQueryAsync();
         }
         catch
         {
@@ -135,9 +135,9 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<List<UnidadeOrganizacionalGetResponse>> ObterUnidades(int skip, int top, string? razaoSocial, string? Cnpj)
+    public async Task<List<UnidadeOrganizacionalGetResponse>> Obter(int skip, int top, string? razaoSocial, string? cnpj)
     {
-        var unidades = new List<UnidadeOrganizacionalGetResponse>();
+        var unidadesOrganizacionais = new List<UnidadeOrganizacionalGetResponse>();
 
         string sql = @"
             SELECT
@@ -147,6 +147,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 razao_social,
                 nome_fantasia,
                 cep,
+                endereco,
                 numero,
                 complemento,
                 bairro,
@@ -157,12 +158,12 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 telefone
             FROM
                 estoque_certo.unidade_organizacional
-            WHERE 1 = 1 
+            WHERE 1 = 1
         ";
 
-        if (!string.IsNullOrEmpty(razaoSocial)) sql += " AND razao_social ILIKE @razao_social ";
+        if (!string.IsNullOrWhiteSpace(razaoSocial)) sql += " AND razao_social ILIKE @razao_social ";
 
-        if (!string.IsNullOrEmpty(Cnpj)) sql += " AND cnpj ILIKE @cnpj ";
+        if (!string.IsNullOrWhiteSpace(cnpj)) sql += " AND cnpj ILIKE @cnpj ";
 
         sql += " ORDER BY razao_social LIMIT @top OFFSET @skip";
 
@@ -172,34 +173,37 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("razao_social", $"%{razaoSocial}%");
-            cmd.Parameters.AddWithValue("cnpj", $"%{Cnpj}%");
-            cmd.Parameters.AddWithValue("skip", skip);
-            cmd.Parameters.AddWithValue("top", top);
+            cmd.Parameters.Add("razao_social", NpgsqlDbType.Varchar).Value = $"%{razaoSocial?.Trim()}%";
+            cmd.Parameters.Add("cnpj", NpgsqlDbType.Varchar).Value = $"%{cnpj?.Trim()}%";
+            cmd.Parameters.Add("top", NpgsqlDbType.Integer).Value = top;
+            cmd.Parameters.Add("skip", NpgsqlDbType.Integer).Value = skip;
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
             {
-                var unidadeOrganizacionalRecuperada = new UnidadeOrganizacionalGetResponse();
+                var unidadeOrganizacionalGetResponse = new UnidadeOrganizacionalGetResponse();
 
-                unidadeOrganizacionalRecuperada.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
-                unidadeOrganizacionalRecuperada.MatrizId = reader.GetGuidNullable("matriz_id");
-                unidadeOrganizacionalRecuperada.Cnpj = reader.GetString("cnpj");
-                unidadeOrganizacionalRecuperada.RazaoSocial = reader.GetString("razao_social");
-                unidadeOrganizacionalRecuperada.NomeFantasia = reader.GetStringSafe("nome_fantasia");
-                unidadeOrganizacionalRecuperada.Cep = reader.GetStringSafe("cep");
-                unidadeOrganizacionalRecuperada.Numero = reader.GetStringSafe("numero");
-                unidadeOrganizacionalRecuperada.Complemento = reader.GetStringSafe("complemento");
-                unidadeOrganizacionalRecuperada.Bairro = reader.GetStringSafe("bairro");
-                unidadeOrganizacionalRecuperada.Cidade = reader.GetStringSafe("cidade");
-                unidadeOrganizacionalRecuperada.Uf = reader.GetStringSafe("uf");
-                unidadeOrganizacionalRecuperada.Pais = reader.GetStringSafe("pais");
-                unidadeOrganizacionalRecuperada.Email = reader.GetStringSafe("email");
-                unidades.Add(unidadeOrganizacionalRecuperada);
+                unidadeOrganizacionalGetResponse.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+                unidadeOrganizacionalGetResponse.MatrizId = reader.GetGuidNullable("matriz_id");
+                unidadeOrganizacionalGetResponse.Cnpj = reader.GetString("cnpj");
+                unidadeOrganizacionalGetResponse.RazaoSocial = reader.GetString("razao_social");
+                unidadeOrganizacionalGetResponse.NomeFantasia = reader.GetStringNullable("nome_fantasia");
+                unidadeOrganizacionalGetResponse.Cep = reader.GetStringNullable("cep");
+                unidadeOrganizacionalGetResponse.Endereco = reader.GetStringNullable("endereco");
+                unidadeOrganizacionalGetResponse.Numero = reader.GetStringNullable("numero");
+                unidadeOrganizacionalGetResponse.Complemento = reader.GetStringNullable("complemento");
+                unidadeOrganizacionalGetResponse.Bairro = reader.GetStringNullable("bairro");
+                unidadeOrganizacionalGetResponse.Cidade = reader.GetStringNullable("cidade");
+                unidadeOrganizacionalGetResponse.Uf = reader.GetStringNullable("uf");
+                unidadeOrganizacionalGetResponse.Pais = reader.GetStringNullable("pais");
+                unidadeOrganizacionalGetResponse.Email = reader.GetStringNullable("email");
+                unidadeOrganizacionalGetResponse.Telefone = reader.GetStringNullable("telefone");
+
+                unidadesOrganizacionais.Add(unidadeOrganizacionalGetResponse);
             }
 
-            return unidades;
+            return unidadesOrganizacionais;
         }
         catch
         {
@@ -207,7 +211,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<UnidadeOrganizacionalGetResponse?> ObterUnidade(Guid unidadeOrganizacionald)
+    public async Task<UnidadeOrganizacionalGetResponse?> Obter(Guid unidadeOrganizacionalId)
     {
         const string sql = @"
             SELECT
@@ -217,6 +221,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 razao_social,
                 nome_fantasia,
                 cep,
+                endereco,
                 numero,
                 complemento,
                 bairro,
@@ -237,29 +242,32 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionald);
+
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId;
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
             if (!await reader.ReadAsync()) return null;
 
-            return new UnidadeOrganizacionalGetResponse
-            {
-                UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                MatrizId = reader.GetGuidNullable("matriz_id"),
-                Cnpj = reader.GetString("cnpj"),
-                RazaoSocial = reader.GetString("razao_social"),
-                NomeFantasia = reader.GetStringSafe("nome_fantasia"),
-                Cep = reader.GetStringSafe("cep"),
-                Numero = reader.GetStringSafe("numero"),
-                Complemento = reader.GetStringSafe("complemento"),
-                Bairro = reader.GetStringSafe("bairro"),
-                Cidade = reader.GetStringSafe("cidade"),
-                Uf = reader.GetStringSafe("uf"),
-                Pais = reader.GetStringSafe("pais"),
-                Email = reader.GetStringSafe("email"),
-                Telefone = reader.GetStringSafe("telefone")
-            };
+            var unidadeOrganizacionalGetResponse = new UnidadeOrganizacionalGetResponse();
+
+            unidadeOrganizacionalGetResponse.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+            unidadeOrganizacionalGetResponse.MatrizId = reader.GetGuidNullable("matriz_id");
+            unidadeOrganizacionalGetResponse.Cnpj = reader.GetString("cnpj");
+            unidadeOrganizacionalGetResponse.RazaoSocial = reader.GetString("razao_social");
+            unidadeOrganizacionalGetResponse.NomeFantasia = reader.GetStringNullable("nome_fantasia");
+            unidadeOrganizacionalGetResponse.Cep = reader.GetStringNullable("cep");
+            unidadeOrganizacionalGetResponse.Endereco = reader.GetStringNullable("endereco");
+            unidadeOrganizacionalGetResponse.Numero = reader.GetStringNullable("numero");
+            unidadeOrganizacionalGetResponse.Complemento = reader.GetStringNullable("complemento");
+            unidadeOrganizacionalGetResponse.Bairro = reader.GetStringNullable("bairro");
+            unidadeOrganizacionalGetResponse.Cidade = reader.GetStringNullable("cidade");
+            unidadeOrganizacionalGetResponse.Uf = reader.GetStringNullable("uf");
+            unidadeOrganizacionalGetResponse.Pais = reader.GetStringNullable("pais");
+            unidadeOrganizacionalGetResponse.Email = reader.GetStringNullable("email");
+            unidadeOrganizacionalGetResponse.Telefone = reader.GetStringNullable("telefone");
+
+            return unidadeOrganizacionalGetResponse;
         }
         catch
         {
@@ -267,7 +275,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<int> ExcluirUnidade(Guid unidadeOrganizacionalId)
+    public async Task<int> Excluir(Guid unidadeOrganizacionalId)
     {
         const string sql = "DELETE FROM estoque_certo.unidade_organizacional WHERE unidade_organizacional_id = @unidade_organizacional_id";
 
@@ -276,7 +284,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
+
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId;
 
             return await cmd.ExecuteNonQueryAsync();
         }
@@ -286,7 +295,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<bool> VerificarDuplicidade(string Cnpj, Guid ignoreId)
+    public async Task<bool> ValidarDuplicidade(string cnpj, Guid ignoreId)
     {
         const string sql = @"
             SELECT
@@ -296,7 +305,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             WHERE
                 cnpj = @cnpj
             AND
-                unidade_organizacional_id <> @ignoreunidade_organizacional_id
+                unidade_organizacional_id <> @unidade_organizacional_id
             LIMIT 1;
         ";
 
@@ -305,10 +314,12 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("cnpj", Cnpj);
-            cmd.Parameters.AddWithValue("ignoreunidade_organizacional_id", ignoreId);
+
+            cmd.Parameters.Add("cnpj", NpgsqlDbType.Varchar).Value = cnpj;
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = ignoreId;
 
             var result = await cmd.ExecuteScalarAsync();
+
             return result != null;
         }
         catch

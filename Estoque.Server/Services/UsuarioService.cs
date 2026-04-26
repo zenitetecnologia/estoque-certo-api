@@ -143,7 +143,7 @@ public class UsuarioService : BaseService
         }
         else
         {
-            var unidadeOrganizacionalExiste = await _unidadeOrganizacionalRepository.ObterUnidade(usuario.UnidadeOrganizacionalId.Value);
+            var unidadeOrganizacionalExiste = await _unidadeOrganizacionalRepository.Obter(usuario.UnidadeOrganizacionalId.Value);
 
             if (unidadeOrganizacionalExiste == null)
                 AddError(nameof(usuario.UnidadeOrganizacionalId), "Unidade organizacional não encontrada.");

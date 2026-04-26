@@ -118,7 +118,7 @@ public class EspacoRepository : BaseRepository
                 espaco.EspacoId = reader.GetGuid(reader.GetOrdinal("espaco_id"));
                 espaco.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
                 espaco.Nome = reader.GetString(reader.GetOrdinal("nome"));
-                espaco.Descricao = reader.GetStringSafe("descricao");
+                espaco.Descricao = reader.GetStringNullable("descricao");
 
                 espacos.Add(espaco);
             }
@@ -162,7 +162,7 @@ public class EspacoRepository : BaseRepository
                 EspacoId = reader.GetGuid(reader.GetOrdinal("espaco_id")),
                 UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
                 Nome = reader.GetString(reader.GetOrdinal("nome")),
-                Descricao = reader.GetStringSafe("descricao")
+                Descricao = reader.GetStringNullable("descricao")
             };
         }
         catch

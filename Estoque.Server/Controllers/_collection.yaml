@@ -749,7 +749,7 @@ collection:
     meta:
       id: fld_cb7a0f2f3a914e39abbe02fd15d868ee
       created: 1776360163385
-      modified: 1777129982448
+      modified: 1777219325386
       sortKey: -1776451449816
       description: ""
     children:
@@ -1034,7 +1034,7 @@ collection:
         meta:
           id: req_6d129cea1d38494cb87816a927cfdf6e
           created: 1776363701465
-          modified: 1777131677090
+          modified: 1777215430987
           isPrivate: false
           description: ""
           sortKey: -1776038600913.5312
@@ -1075,7 +1075,7 @@ collection:
         meta:
           id: req_0dafbc8d35cd4dad99e1bdd8875e7065
           created: 1776364034368
-          modified: 1777132210243
+          modified: 1777215527429
           isPrivate: false
           description: ""
           sortKey: -1776022458611.0078
@@ -1116,7 +1116,7 @@ collection:
         meta:
           id: req_8c5565ac61a9487ca8e673bc945ab3e5
           created: 1776364273100
-          modified: 1776364440304
+          modified: 1777217255520
           isPrivate: false
           description: ""
           sortKey: -1776022458511.0078
@@ -1141,7 +1141,7 @@ collection:
         meta:
           id: req_41d262a6e4b04339bc29246cafec9f34
           created: 1776364398057
-          modified: 1776364451379
+          modified: 1777217361671
           isPrivate: false
           description: ""
           sortKey: -1776019768177.254
@@ -1165,7 +1165,7 @@ collection:
         meta:
           id: req_c7eb3cd6856a4199bc6895d6ea2e0e53
           created: 1776366962885
-          modified: 1776366970287
+          modified: 1777217151976
           isPrivate: false
           description: ""
           sortKey: -1776019768077.254
@@ -1185,12 +1185,12 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url
-          }}/v1/unidades-organizacionais?skip=0&top=10&razaSocial=.&Cnpj=65"
+          }}/v1/unidades-organizacionais?skip=0&top=1&razaSocial=ME&cnpj=0001"
         name: unidades-organizacionais-200-paged
         meta:
           id: req_a2e7bf0b59ef412a8fb996135377d695
           created: 1776366994968
-          modified: 1776892077542
+          modified: 1777217172394
           isPrivate: false
           description: ""
           sortKey: -1776018422960.377
@@ -1209,12 +1209,13 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: '{{ _.base_url }}/v1/unidades-organizacionais?skip=0&top=10&razaoSocial=""'
+      - url: "{{ _.base_url
+          }}/v1/unidades-organizacionais?skip=0&top=10&razaoSocial=empty"
         name: unidades-organizacionais-200-empty
         meta:
           id: req_0bb84ef6fbbb43d6b443ae67abf85038
           created: 1776367294385
-          modified: 1776367349374
+          modified: 1777217181992
           isPrivate: false
           description: ""
           sortKey: -1776017750401.9385
@@ -1233,13 +1234,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
-          _.unidade_organizacional_mock_01 }}"
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais"
         name: unidades-organizacionais-500
         meta:
           id: req_3369ea0c02bb43729e8de4bf49cde4dd
           created: 1776367571793
-          modified: 1776367574311
+          modified: 1777216392385
           isPrivate: false
           description: ""
           sortKey: -1776017750301.9385
@@ -1264,7 +1264,7 @@ collection:
         meta:
           id: req_d81ec0bde06140f597eb06f52561ecec
           created: 1776367601486
-          modified: 1776451285751
+          modified: 1777218202098
           isPrivate: false
           description: ""
           sortKey: -1776017750201.9385
@@ -1289,7 +1289,7 @@ collection:
         meta:
           id: req_4882f91053ff4b96b6829df681034cad
           created: 1776367751325
-          modified: 1776451281301
+          modified: 1777218206214
           isPrivate: false
           description: ""
           sortKey: -1776017414022.7192
@@ -1314,7 +1314,7 @@ collection:
         meta:
           id: req_61bad73929894f288fe90bfd85389592
           created: 1776367776992
-          modified: 1776367776992
+          modified: 1777218625288
           isPrivate: false
           description: ""
           sortKey: -1776017245933.1096
@@ -1339,7 +1339,7 @@ collection:
         meta:
           id: req_cd511c30855f40dfb686b00af20920de
           created: 1776367890686
-          modified: 1776367890686
+          modified: 1777218217091
           isPrivate: false
           description: ""
           sortKey: -1776017329977.9146
@@ -1364,7 +1364,7 @@ collection:
         meta:
           id: req_4477e5023daa4b3e9941c8a30969c1fc
           created: 1776890999508
-          modified: 1777132091850
+          modified: 1777215498676
           isPrivate: false
           description: ""
           sortKey: -1776034565337.9004
@@ -1405,7 +1405,7 @@ collection:
         meta:
           id: req_e9cecd8e1b6e42bfb226a9e3b5a28692
           created: 1776891102348
-          modified: 1777132158654
+          modified: 1777215514489
           isPrivate: false
           description: ""
           sortKey: -1776030529762.2695
@@ -1486,7 +1486,7 @@ collection:
         meta:
           id: req_f09dd2baf4cf484d8ddc2337d98e6220
           created: 1777131714835
-          modified: 1777131785819
+          modified: 1777215480710
           isPrivate: false
           description: ""
           sortKey: -1776036583125.7158
@@ -1497,7 +1497,7 @@ collection:
             {
               "matrizId": null,
               "cnpj": "0654992500017B",
-              "razaoSocial": null,
+              "razaoSocial": "Sebastião Express Ltda.",
               "nomeFantasia": null,
               "cep": null,
               "endereco": null,
@@ -1513,6 +1513,88 @@ collection:
         headers:
           - name: Content-Type
             value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais/{{
+          _.unidade_organizacional_id_fake }}"
+        name: unidades-organizacionais-200-by-id-not-found
+        meta:
+          id: req_0004bd2ffc5c494290079b3858cece51
+          created: 1777217238476
+          modified: 1777217343656
+          isPrivate: false
+          description: ""
+          sortKey: -1776021113344.1309
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/v1/unidades-organizacionais"
+        name: unidades-organizacionais-201-official
+        meta:
+          id: req_9f912459cdc54805a4c798721d083a48
+          created: 1777218333554
+          modified: 1777219313803
+          isPrivate: false
+          description: ""
+          sortKey: -1776361447864
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "matrizId": null,
+              "cnpj": "60935686000134",
+              "razaoSocial": "Zênite Tecnologia Ltda.",
+              "nomeFantasia": null,
+              "cep": "35604000",
+              "endereco": "Rua Tamoios",
+              "numero": "329",
+              "complemento": null,
+              "bairro": "Centro",
+              "cidade": "Moema",
+              "uf": "MG",
+              "pais": "Brasil",
+              "email": "zenitetecnologias@gmail.com.br",
+              "telefone": "37999654512"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          afterResponse: >-
+            insomnia.test('Salvar unidade_organizacional_id do Location', () =>
+            {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+
+              const locationHeader = insomnia.response.headers.find(
+                h => h.key && h.key.toLowerCase() === 'location'
+              );
+
+              if (!locationHeader) {
+                throw new Error('Header Location não encontrado.');
+              }
+
+              const uo = locationHeader.value.split('/').pop();
+              insomnia.environment.set('unidade_organizacional_id', uo);
+            });
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -2819,17 +2901,17 @@ cookieJar:
   meta:
     id: jar_c81c45164dc54c32a4c6a263ca99ef62
     created: 1776017078657
-    modified: 1777129982419
+    modified: 1777219325253
 environments:
   name: Base Environment
   meta:
     id: env_730d79657e5048748169d4887befa80d
     created: 1776017077271
-    modified: 1777129982438
+    modified: 1777219325359
     isPrivate: false
   data:
     base_url: http://localhost:5120
-    unidade_organizacional_id: e286f99e-5075-4b73-96d9-af462c36a5a6
+    unidade_organizacional_id: 65def64d-568b-4014-8be1-84fa00ab3e2c
     usuario_id_mock_01: d957dc5f-5738-474c-9b2b-d051fb4a84c5
     usuario_id_mock_02: 911e8367-7c22-43f2-9128-2d68e021ed94
     usuario_id_mock_03: 6af483a7-647c-4d29-86a5-90d7a61d9a4c
