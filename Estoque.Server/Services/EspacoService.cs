@@ -31,13 +31,13 @@ public class EspacoService : BaseService
         }
     }
 
-    public async Task Atualizar(EspacoPutRequest espacoPutRequest, Guid espacoId)
+    public async Task Atualizar(Espaco espaco, Guid espacoId)
     {
         try
         {
-            await ValidarCampos(espacoPutRequest, espacoId);
+            await ValidarCampos(espaco, espacoId);
 
-            var affected = await _repository.Atualizar(espacoPutRequest, espacoId);
+            var affected = await _repository.Atualizar(espaco, espacoId);
 
             if (affected <= 0) throw new NotFoundException("Espaço não encontrado com o ID informado.");
         }
@@ -107,7 +107,7 @@ public class EspacoService : BaseService
 
     private async Task ValidarCampos(Espaco espaco, Guid espacoId)
     {
-        if (espaco.UnidadeOrganizacionalId == Guid.Empty)
+        if (espaco.UnidadeOrganizacionalId == null || espaco.UnidadeOrganizacionalId == Guid.Empty)
             AddError(nameof(espaco.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
 
         if (string.IsNullOrWhiteSpace(espaco.Nome))
@@ -116,7 +116,7 @@ public class EspacoService : BaseService
         }
         else
         {
-            bool espacoExiste = await _repository.ValidarDuplicidade(espaco.Nome, espaco.UnidadeOrganizacionalId, espacoId);
+            bool espacoExiste = await _repository.ValidarDuplicidade(espaco.Nome, espaco.UnidadeOrganizacionalId!.Value, espacoId);
 
             if (espacoExiste)
                 AddError(nameof(espaco.Nome), "Espaço já cadastrado com o nome informado.");

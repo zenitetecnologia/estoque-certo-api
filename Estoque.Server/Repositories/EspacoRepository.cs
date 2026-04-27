@@ -40,7 +40,7 @@ public class EspacoRepository : BaseRepository
         return (Guid)result!;
     }
 
-    public async Task<int> Atualizar(EspacoPutRequest espacoPutRequest, Guid espacoId)
+    public async Task<int> Atualizar(Espaco espaco, Guid espacoId)
     {
         const string sql = @"
             UPDATE
@@ -58,8 +58,8 @@ public class EspacoRepository : BaseRepository
 
         cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
 
-        cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = espacoPutRequest.Nome;
-        cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = espacoPutRequest.Descricao.ToDbValue();
+        cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = espaco.Nome;
+        cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = espaco.Descricao.ToDbValue();
 
         return await cmd.ExecuteNonQueryAsync();
     }

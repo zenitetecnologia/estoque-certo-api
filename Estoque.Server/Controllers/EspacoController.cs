@@ -27,9 +27,9 @@ public static class EspacoController
         #endregion
 
         #region [ put ]
-        app.MapPut("v1/espacos/{espacoId:Guid}", async (EspacoService service, Guid espacoId, EspacoPutRequest espacoPutRequest) =>
+        app.MapPut("v1/espacos/{espacoId:Guid}", async (EspacoService service, Guid espacoId, Espaco espaco) =>
         {
-            await service.Atualizar(espacoPutRequest, espacoId);
+            await service.Atualizar(espaco, espacoId);
 
             return Results.Ok("Espaço atualizado com sucesso.");
         })
