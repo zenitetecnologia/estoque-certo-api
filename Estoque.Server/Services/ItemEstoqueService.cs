@@ -15,13 +15,13 @@ public class ItemEstoqueService : BaseService
         _historicoRepository = historicoRepository;
     }
 
-    public async Task<Guid> CadastrarItemEstoque(ItemEstoque item)
+    public async Task<Guid> Cadastrar(ItemEstoque item)
     {
         try
         {
-            await ValidarItemEstoque(item, Guid.Empty);
+            await ValidarCampos(item, Guid.Empty);
 
-            Guid itemId = await _repository.CadastrarItemEstoque(item);
+            Guid itemId = await _repository.Cadastrar(item);
 
             return itemId;
         }
@@ -35,17 +35,17 @@ public class ItemEstoqueService : BaseService
         }
     }
 
-    public async Task<int> AtualizarItemEstoque(ItemEstoque item, Guid itemEstoqueId)
+    public async Task<int> Atualizar(ItemEstoque item, Guid itemEstoqueId)
     {
         try
         {
-            var itemExistente = await _repository.ObterItem(itemEstoqueId);
+            var itemExistente = await _repository.Obter(itemEstoqueId);
 
             if (itemExistente == null) throw new NotFoundException("Item de estoque não encontrado com os parâmetros informados.");
 
             item.UnidadeOrganizacionalId = itemExistente.UnidadeOrganizacionalId;
 
-            await ValidarItemEstoque(item, itemEstoqueId);
+            await ValidarCampos(item, itemEstoqueId);
 
             return await _repository.AtualizarItemEstoque(item, itemEstoqueId);
         }
@@ -64,25 +64,25 @@ public class ItemEstoqueService : BaseService
     }
 
 
-    public async Task<List<ItemEstoqueRecuperado>> ObterItens(int skip, int top, string? descricao, Guid? unidadeOrganizacionalId, Guid? espacoId)
+    public async Task<List<ItemEstoqueRecuperado>> Obter(int skip, int top, string? descricao, Guid? unidadeOrganizacionalId, Guid? espacoId)
     {
         try
         {
-            return await _repository.ObterItens(skip, top, descricao, unidadeOrganizacionalId, espacoId);
+            return await _repository.Obter(skip, top, descricao, unidadeOrganizacionalId, espacoId);
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao recuperar os itens: {ex.Message}");
+            throw new Exception($"Erro ao Obter itens: {ex.Message}");
         }
     }
 
-    public async Task<ItemEstoqueRecuperado> ObterItem(Guid itemEstoqueId)
+    public async Task<ItemEstoqueRecuperado> Obter(Guid itemEstoqueId)
     {
         try
         {
-            var item = await _repository.ObterItem(itemEstoqueId);
+            var item = await _repository.Obter(itemEstoqueId);
 
-            if (item == null) throw new NotFoundException("Item não encontrado para o ID informado.");
+            if (item == null) throw new NotFoundException("Item não encontrado com o ID informado.");
 
             return item;
         }
@@ -92,7 +92,7 @@ public class ItemEstoqueService : BaseService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao recuperar item por ID: {ex.Message}");
+            throw new Exception($"Erro ao obter item por ID: {ex.Message}");
         }
     }
 
@@ -108,7 +108,7 @@ public class ItemEstoqueService : BaseService
         }
     }
 
-    public async Task<bool> MovimentarEstoque(Guid itemEstoqueId, decimal quantidade, TipoMovimentacao tipo, Guid? usuarioId)
+    public async Task<bool> Movimentar(Guid itemEstoqueId, decimal quantidade, TipoMovimentacao tipo, Guid? usuarioId)
     {
         try
         {
@@ -118,12 +118,12 @@ public class ItemEstoqueService : BaseService
                 throw new ValidationException(Errors);
             }
 
-            var sucesso = await _repository.MovimentarEstoque(itemEstoqueId, quantidade, tipo, usuarioId);
+            var sucesso = await _repository.Movimentar(itemEstoqueId, quantidade, tipo, usuarioId);
 
             if (!sucesso)
             {
                 if (tipo == TipoMovimentacao.Subtracao)
-                    throw new InvalidOperationException("Estoque insuficiente para realizar esta saída ou item não encontrado.");
+                    throw new InvalidOperationException("Estoque insuficiente para realizar esta saída, ou item não encontrado.");
                 else
                     throw new NotFoundException("Item não encontrado.");
             }
@@ -148,13 +148,13 @@ public class ItemEstoqueService : BaseService
         }
     }
 
-    public async Task<int> ExcluirItemEstoque(Guid itemEstoqueId)
+    public async Task<int> Excluir(Guid itemEstoqueId)
     {
         try
         {
-            var affected = await _repository.ExcluirItemEstoque(itemEstoqueId);
+            var affected = await _repository.Excluir(itemEstoqueId);
 
-            if (affected <= 0) throw new NotFoundException("Item não encontrado para o ID informado.");
+            if (affected <= 0) throw new NotFoundException("Item não encontrado com o ID informado.");
 
             return affected;
         }
@@ -168,7 +168,7 @@ public class ItemEstoqueService : BaseService
         }
     }
 
-    private async Task ValidarItemEstoque(ItemEstoque item, Guid itemEstoqueId)
+    private async Task ValidarCampos(ItemEstoque item, Guid itemEstoqueId)
     {
         if (itemEstoqueId == Guid.Empty && item.UnidadeOrganizacionalId == Guid.Empty)
             AddError(nameof(item.UnidadeOrganizacionalId), "Informe a unidade organizacional.");

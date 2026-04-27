@@ -15,17 +15,15 @@ public class UsuarioService : BaseService
         _unidadeOrganizacionalRepository = unidadeOrganizacionalRepository;
     }
 
-    public async Task<Guid> CadastrarUsuario(Usuario usuario)
+    public async Task<Guid> Cadastrar(Usuario usuario)
     {
         try
         {
-            await ValidarUsuario(usuario, Guid.Empty);
+            await ValidarCampos(usuario, Guid.Empty);
 
             usuario.Perfil = PerfilUsuario.Normal;
 
-            Guid usuarioId = await _usuarioRepository.CadastrarUsuario(usuario);
-
-            return usuarioId;
+            return await _usuarioRepository.Cadastrar(usuario);
         }
         catch (ValidationException)
         {
@@ -37,17 +35,15 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<int> AtualizarUsuario(Usuario usuario, Guid usuarioId)
+    public async Task Atualizar(Usuario usuario, Guid usuarioId)
     {
         try
         {
-            await ValidarUsuario(usuario, usuarioId);
+            await ValidarCampos(usuario, usuarioId);
 
-            var affected = await _usuarioRepository.AtualizarUsuario(usuario, usuarioId);
+            var affected = await _usuarioRepository.Atualizar(usuario, usuarioId);
 
             if (affected <= 0) throw new NotFoundException("Usuário não encontrado com os parâmetros informados.");
-
-            return affected;
         }
         catch (NotFoundException)
         {
@@ -67,9 +63,9 @@ public class UsuarioService : BaseService
     {
         try
         {
-            var usuario = await _usuarioRepository.ObterUsuario(usuarioId);
+            var usuario = await _usuarioRepository.Obter(usuarioId);
 
-            if (usuario == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
+            if (usuario == null) throw new NotFoundException("Usuário não encontrado com o ID informado.");
 
             if (usuario.Valido) throw new InvalidOperationException("O acesso do usuário já está validado.");
 
@@ -89,47 +85,13 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<List<UsuarioGetResponse>> ObterUsuarios(int skip, int top, string? username, Guid? unidadeOrganizacionalId)
+    public async Task Excluir(Guid usuarioId)
     {
         try
         {
-            return await _usuarioRepository.ObterUsuarios(skip, top, username, unidadeOrganizacionalId);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao recuperar usuários: {ex.Message}");
-        }
-    }
+            var affected = await _usuarioRepository.Excluir(usuarioId);
 
-    public async Task<UsuarioGetResponse> ObterUsuario(Guid usuarioId)
-    {
-        try
-        {
-            var usuario = await _usuarioRepository.ObterUsuario(usuarioId);
-
-            if (usuario == null) throw new NotFoundException("Usuário não encontrado para o ID informado.");
-
-            return usuario;
-        }
-        catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao recuperar usuário por ID: {ex.Message}");
-        }
-    }
-
-    public async Task<int> ExcluirUsuario(Guid usuarioId)
-    {
-        try
-        {
-            var affected = await _usuarioRepository.ExcluirUsuario(usuarioId);
-
-            if (affected <= 0) throw new NotFoundException("Usuário não encontrado para o ID informado.");
-
-            return affected;
+            if (affected <= 0) throw new NotFoundException("Usuário não encontrado com o ID informado.");
         }
         catch (NotFoundException)
         {
@@ -141,7 +103,39 @@ public class UsuarioService : BaseService
         }
     }
 
-    private async Task ValidarUsuario(Usuario usuario, Guid usuarioId)
+    public async Task<List<UsuarioGetResponse>> Obter(int skip, int top, string? username, Guid? unidadeOrganizacionalId)
+    {
+        try
+        {
+            return await _usuarioRepository.Obter(skip, top, username, unidadeOrganizacionalId);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao obter usuários: {ex.Message}");
+        }
+    }
+
+    public async Task<UsuarioGetResponse> Obter(Guid usuarioId)
+    {
+        try
+        {
+            var usuario = await _usuarioRepository.Obter(usuarioId);
+
+            if (usuario == null) throw new NotFoundException("Usuário não encontrado com o ID informado.");
+
+            return usuario;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao obter usuário por ID: {ex.Message}");
+        }
+    }
+
+    private async Task ValidarCampos(Usuario usuario, Guid usuarioId)
     {
         if (usuario.UnidadeOrganizacionalId == null || usuario.UnidadeOrganizacionalId == Guid.Empty)
         {
@@ -149,10 +143,10 @@ public class UsuarioService : BaseService
         }
         else
         {
-            var unidadeOrganizacionalExiste = await _unidadeOrganizacionalRepository.ObterUnidade(usuario.UnidadeOrganizacionalId.Value);
+            var unidadeOrganizacionalExiste = await _unidadeOrganizacionalRepository.Obter(usuario.UnidadeOrganizacionalId.Value);
 
             if (unidadeOrganizacionalExiste == null)
-                AddError(nameof(usuario.UnidadeOrganizacionalId), "Unidade organizacional não encontrada para o ID informado.");
+                AddError(nameof(usuario.UnidadeOrganizacionalId), "Unidade organizacional não encontrada.");
         }
 
         if (string.IsNullOrWhiteSpace(usuario.Username))
@@ -161,10 +155,10 @@ public class UsuarioService : BaseService
         }
         else
         {
-            bool usernameExiste = await _usuarioRepository.VerificarUsuarioExiste(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
+            var usernameExiste = await _usuarioRepository.VerificarUsuarioExiste(usuario.Username, usuario.UnidadeOrganizacionalId, usuarioId);
 
             if (usernameExiste)
-                AddError(nameof(usuario.Username), "Este username já está sendo usado por outro usuário.");
+                AddError(nameof(usuario.Username), "Este username já está sendo utilizado.");
         }
 
         if (string.IsNullOrWhiteSpace(usuario.Senha))

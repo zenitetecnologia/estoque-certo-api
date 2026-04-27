@@ -9,23 +9,16 @@ public class Espaco
     public virtual Guid EspacoId { get; set; }
 
     [JsonPropertyOrder(2)]
-    public virtual Guid UnidadeOrganizacionalId { get; set; }
+    public virtual Guid? UnidadeOrganizacionalId { get; set; }
 
     [JsonPropertyOrder(3)]
     public string Nome { get; set; } = string.Empty;
 
     [JsonPropertyOrder(4)]
-    public string Descricao { get; set; } = string.Empty;
+    public string? Descricao { get; set; } = string.Empty;
 }
 
-public class EspacoAtualizado : Espaco
-{
-    [JsonIgnore]
-    [JsonPropertyOrder(2)]
-    public override Guid UnidadeOrganizacionalId { get; set; }
-}
-
-public class EspacoRecuperado : Espaco
+public class EspacoGetResponse : Espaco
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     [JsonPropertyOrder(1)]

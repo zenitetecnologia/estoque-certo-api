@@ -9,12 +9,12 @@ public static class UnidadeOrganizacionalController
     public static void MapUnidadeOrganizacionalEndpoints(this WebApplication app)
     {
         #region [ post ]
-        app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacionalService service, UnidadeOrganizacional unidade) =>
+        app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacionalService service, UnidadeOrganizacional unidadeOrganizacional) =>
         {
-            Guid unidadeOrganizacionalId = await service.CadastrarUnidade(unidade);
+            Guid unidadeOrganizacionalId = await service.Cadastrar(unidadeOrganizacional);
 
             return TypedResults.CreatedAtRoute(
-                routeName: "getUnidade",
+                routeName: "unidades-organizacionais-get-by-id",
                 routeValues: new { unidadeOrganizacionalId },
                 value: "Unidade organizacional cadastrada com sucesso.");
         })
@@ -27,9 +27,9 @@ public static class UnidadeOrganizacionalController
         #endregion
 
         #region [ put ]
-        app.MapPut("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId, UnidadeOrganizacional unidade) =>
+        app.MapPut("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId, UnidadeOrganizacional unidadeOrganizacional) =>
         {
-            await service.AtualizarUnidade(unidade, unidadeOrganizacionalId);
+            await service.Atualizar(unidadeOrganizacional, unidadeOrganizacionalId);
 
             return Results.Ok("Unidade organizacional atualizada com sucesso.");
         })
@@ -45,29 +45,28 @@ public static class UnidadeOrganizacionalController
         #region [ delete ]
         app.MapDelete("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId) =>
         {
-            await service.ExcluirUnidade(unidadeOrganizacionalId);
+            await service.Excluir(unidadeOrganizacionalId);
 
-            return Results.Ok("Unidade organizacional excluída com sucesso.");
+            return Results.NoContent();
         })
         .WithTags("unidades-organizacionais")
         .WithSummary("Exclui uma unidade")
-        .WithDescription("Exclui uma unidade organizacional do sistema.")
+        .WithDescription("Exclui uma unidade organizacional do banco de dados.")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<string>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
 
         #region [ get ]
-        app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service, int skip = 0, int top = 10, string? razaoSocial = null, string? Cnpj = null) =>
+        app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service, int skip = 0, int top = 10, string? razaoSocial = null, string? cnpj = null) =>
         {
-            var result = await service.ObterUnidades(skip, top, razaoSocial, Cnpj);
+            var result = await service.Obter(skip, top, razaoSocial, cnpj);
 
             return Results.Ok(result);
         })
         .WithTags("unidades-organizacionais")
-        .WithSummary("Retorna a lista de unidades organizacionais")
-        .WithDescription("Retorna a lista de unidades organizacionais de acordo com os parâmetros informados.")
+        .WithSummary("Retorna uma lista de unidades organizacionais")
+        .WithDescription("Retorna uma lista de unidades organizacionais de acordo com os parâmetros informados.")
         .Produces<List<UnidadeOrganizacionalGetResponse>>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
@@ -75,11 +74,11 @@ public static class UnidadeOrganizacionalController
         #region [ get by id ]
         app.MapGet("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId) =>
         {
-            var result = await service.ObterUnidade(unidadeOrganizacionalId);
+            var result = await service.Obter(unidadeOrganizacionalId);
 
             return Results.Ok(result);
         })
-        .WithName("getUnidade")
+        .WithName("unidades-organizacionais-get-by-id")
         .WithTags("unidades-organizacionais")
         .WithSummary("Retorna uma unidade organizacional por ID")
         .WithDescription("Retorna uma unidade organizacional específica por ID.")
