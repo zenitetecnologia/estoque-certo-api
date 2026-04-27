@@ -15,17 +15,16 @@ public class Espaco
     public string Nome { get; set; } = string.Empty;
 
     [JsonPropertyOrder(4)]
-    public string Descricao { get; set; } = string.Empty;
+    public string? Descricao { get; set; } = string.Empty;
 }
 
-public class EspacoAtualizado : Espaco
+public class EspacoPutRequest : Espaco
 {
     [JsonIgnore]
-    [JsonPropertyOrder(2)]
     public override Guid UnidadeOrganizacionalId { get; set; }
 }
 
-public class EspacoRecuperado : Espaco
+public class EspacoGetResponse : Espaco
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     [JsonPropertyOrder(1)]

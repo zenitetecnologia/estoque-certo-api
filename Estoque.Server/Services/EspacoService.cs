@@ -13,13 +13,13 @@ public class EspacoService : BaseService
         _repository = repository;
     }
 
-    public async Task<Guid> CadastrarEspaco(Espaco espaco)
+    public async Task<Guid> Cadastrar(Espaco espaco)
     {
         try
         {
-            await ValidarEspaco(espaco, Guid.Empty);
+            await ValidarCampos(espaco, Guid.Empty);
 
-            return await _repository.CadastrarEspaco(espaco);
+            return await _repository.Cadastrar(espaco);
         }
         catch (ValidationException)
         {
@@ -31,23 +31,21 @@ public class EspacoService : BaseService
         }
     }
 
-    public async Task<int> AtualizarEspaco(Espaco espaco, Guid espacoId)
+    public async Task Atualizar(EspacoPutRequest espacoPutRequest, Guid espacoId)
     {
         try
         {
-            await ValidarEspaco(espaco, espacoId);
+            await ValidarCampos(espacoPutRequest, espacoId);
 
-            var affected = await _repository.AtualizarEspaco(espaco, espacoId);
+            var affected = await _repository.Atualizar(espacoPutRequest, espacoId);
 
-            if (affected <= 0) throw new NotFoundException("Espaço não encontrado para o ID informado.");
-
-            return affected;
+            if (affected <= 0) throw new NotFoundException("Espaço não encontrado com o ID informado.");
         }
-        catch (NotFoundException)
+        catch (ValidationException)
         {
             throw;
         }
-        catch (ValidationException)
+        catch (NotFoundException)
         {
             throw;
         }
@@ -57,25 +55,43 @@ public class EspacoService : BaseService
         }
     }
 
-    public async Task<List<EspacoRecuperado>> ObterEspacos(int skip, int top, string? nome, Guid? unidadeOrganizacionalId)
+    public async Task Excluir(Guid espacoId)
     {
         try
         {
-            return await _repository.ObterEspacos(skip, top, nome, unidadeOrganizacionalId);
+            var affected = await _repository.Excluir(espacoId);
+
+            if (affected <= 0) throw new NotFoundException("Espaço não encontrado com o ID informado.");
+        }
+        catch (NotFoundException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao recuperar espaços: {ex.Message}");
+            throw new Exception($"Erro ao excluir espaço: {ex.Message}");
         }
     }
 
-    public async Task<EspacoRecuperado> ObterEspaco(Guid espacoId)
+    public async Task<List<EspacoGetResponse>> Obter(int skip, int top, string? nome, Guid? unidadeOrganizacionalId)
     {
         try
         {
-            var espaco = await _repository.ObterEspaco(espacoId);
+            return await _repository.Obter(skip, top, nome, unidadeOrganizacionalId);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao obter espaços: {ex.Message}");
+        }
+    }
 
-            if (espaco == null) throw new NotFoundException("Espaço não encontrado para o ID informado.");
+    public async Task<EspacoGetResponse> Obter(Guid espacoId)
+    {
+        try
+        {
+            var espaco = await _repository.Obter(espacoId);
+
+            if (espaco == null) throw new NotFoundException("Espaço não encontrado com o ID informado.");
 
             return espaco;
         }
@@ -85,42 +101,26 @@ public class EspacoService : BaseService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao recuperar espaço por ID: {ex.Message}");
+            throw new Exception($"Erro ao obter espaço por ID: {ex.Message}");
         }
     }
 
-    public async Task<int> ExcluirEspaco(Guid espacoId)
+    private async Task ValidarCampos(Espaco espaco, Guid espacoId)
     {
-        try
-        {
-            var affected = await _repository.ExcluirEspaco(espacoId);
-
-            if (affected <= 0) throw new NotFoundException("Espaço não encontrado para o ID informado.");
-
-            return affected;
-        }
-        catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            if (ex.Message.Contains("fk_item_espaco") || ex.InnerException?.Message.Contains("fk_item_espaco") == true)
-            {
-                AddError("EspacoId", "Não é possível excluir este espaço porque ainda existem itens de estoque armazenados nele. Mova ou exclua os itens primeiro.");
-                throw new ValidationException(Errors);
-            }
-            throw new Exception($"Erro ao excluir espaço: {ex.Message}");
-        }
-    }
-
-    private async Task ValidarEspaco(Espaco espaco, Guid espacoId)
-    {
-        if (espacoId == Guid.Empty && espaco.UnidadeOrganizacionalId == Guid.Empty)
-            AddError(nameof(espaco.UnidadeOrganizacionalId), "A Unidade Organizacional é obrigatória.");
+        if (espaco.UnidadeOrganizacionalId == Guid.Empty)
+            AddError(nameof(espaco.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
 
         if (string.IsNullOrWhiteSpace(espaco.Nome))
-            AddError(nameof(espaco.Nome), "Informe o nome do espaço");
+        {
+            AddError(nameof(espaco.Nome), "Informe o nome.");
+        }
+        else
+        {
+            bool espacoExiste = await _repository.ValidarDuplicidade(espaco.Nome, espaco.UnidadeOrganizacionalId, espacoId);
+
+            if (espacoExiste)
+                AddError(nameof(espaco.Nome), "Espaço já cadastrado com o nome informado.");
+        }
 
         if (Errors.Any())
             throw new ValidationException(Errors);

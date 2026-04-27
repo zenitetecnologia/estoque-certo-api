@@ -137,7 +137,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
     public async Task<List<UnidadeOrganizacionalGetResponse>> Obter(int skip, int top, string? razaoSocial, string? cnpj)
     {
-        var unidadesOrganizacionais = new List<UnidadeOrganizacionalGetResponse>();
+        var unidadesOrganizacionaisGetResponse = new List<UnidadeOrganizacionalGetResponse>();
 
         string sql = @"
             SELECT
@@ -200,10 +200,10 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 unidadeOrganizacionalGetResponse.Email = reader.GetStringNullable("email");
                 unidadeOrganizacionalGetResponse.Telefone = reader.GetStringNullable("telefone");
 
-                unidadesOrganizacionais.Add(unidadeOrganizacionalGetResponse);
+                unidadesOrganizacionaisGetResponse.Add(unidadeOrganizacionalGetResponse);
             }
 
-            return unidadesOrganizacionais;
+            return unidadesOrganizacionaisGetResponse;
         }
         catch
         {

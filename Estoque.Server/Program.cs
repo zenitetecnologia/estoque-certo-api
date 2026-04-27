@@ -43,7 +43,7 @@ app.UseAuthorization();
 app.MapFallbackToFile("/index.html");
 
 app.MapUnidadeOrganizacionalEndpoints();
-app.MapEspacosEndpoints();
+app.MapEspacoEndpoints();
 app.MapUsuarioEndpoints();
 app.MapItemEstoqueEndpoints();
 

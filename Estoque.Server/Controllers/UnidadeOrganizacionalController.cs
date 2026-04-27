@@ -53,7 +53,6 @@ public static class UnidadeOrganizacionalController
         .WithSummary("Exclui uma unidade")
         .WithDescription("Exclui uma unidade organizacional do banco de dados.")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<string>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
