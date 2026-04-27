@@ -1,5 +1,6 @@
 ﻿using Estoque.Server.Models;
 using Npgsql;
+using NpgsqlTypes;
 using System.Data;
 
 namespace Estoque.Server.Repositories;
@@ -8,7 +9,7 @@ public class UsuarioRepository : BaseRepository
 {
     public UsuarioRepository(IDbConnection connection) : base(connection) { }
 
-    public async Task<Guid> CadastrarUsuario(Usuario usuario)
+    public async Task<Guid> Cadastrar(Usuario usuario)
     {
         const string sql = @"
             INSERT INTO estoque_certo.usuario
@@ -38,12 +39,12 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("username", usuario.Username);
-            cmd.Parameters.AddWithValue("senha", usuario.Senha);
-            cmd.Parameters.AddWithValue("nome", usuario.Nome);
-            cmd.Parameters.AddWithValue("perfil", (int)usuario.Perfil);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId!);
-            cmd.Parameters.AddWithValue("valido", usuario.Valido);
+            cmd.Parameters.Add("username", NpgsqlDbType.Varchar).Value = usuario.Username;
+            cmd.Parameters.Add("senha", NpgsqlDbType.Varchar).Value = usuario.Senha;
+            cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = usuario.Nome;
+            cmd.Parameters.Add("perfil", NpgsqlDbType.Integer).Value = (int)usuario.Perfil;
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = usuario.UnidadeOrganizacionalId!;
+            cmd.Parameters.Add("valido", NpgsqlDbType.Boolean).Value = usuario.Valido;
 
             var result = await cmd.ExecuteScalarAsync();
 
@@ -55,7 +56,7 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<int> AtualizarUsuario(Usuario usuario, Guid usuarioId)
+    public async Task<int> Atualizar(Usuario usuario, Guid usuarioId)
     {
         const string sql = @"
             UPDATE
@@ -76,12 +77,11 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", usuario.UnidadeOrganizacionalId!);
-            cmd.Parameters.AddWithValue("username", usuario.Username);
-            cmd.Parameters.AddWithValue("senha", usuario.Senha);
-            cmd.Parameters.AddWithValue("nome", usuario.Nome);
-
+            cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId;
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = usuario.UnidadeOrganizacionalId!;
+            cmd.Parameters.Add("username", NpgsqlDbType.Varchar).Value = usuario.Username;
+            cmd.Parameters.Add("senha", NpgsqlDbType.Varchar).Value = usuario.Senha;
+            cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = usuario.Nome;
             return await cmd.ExecuteNonQueryAsync();
         }
         catch
@@ -90,7 +90,7 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<UsuarioGetResponse?> ObterUsuario(Guid usuarioId)
+    public async Task<UsuarioGetResponse?> Obter(Guid usuarioId)
     {
         const string sql = @"
             SELECT
@@ -114,22 +114,23 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+            cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId;
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
             if (!await reader.ReadAsync()) return null;
 
-            return new UsuarioGetResponse
-            {
-                UsuarioId = reader.GetGuid("usuario_id"),
-                Username = reader.GetString("username"),
-                Senha = reader.GetString("senha"),
-                Nome = reader.GetString("nome"),
-                Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
-                UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id"),
-                Valido = reader.GetBoolean("valido")
-            };
+            var usuarioGetResponse = new UsuarioGetResponse();
+
+            usuarioGetResponse.UsuarioId = reader.GetGuid("usuario_id");
+            usuarioGetResponse.Username = reader.GetString("username");
+            usuarioGetResponse.Senha = reader.GetString("senha");
+            usuarioGetResponse.Nome = reader.GetString("nome");
+            usuarioGetResponse.Perfil = (PerfilUsuario)reader.GetInt32("perfil");
+            usuarioGetResponse.UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id");
+            usuarioGetResponse.Valido = reader.GetBoolean("valido");
+
+            return usuarioGetResponse;
         }
         catch
         {
@@ -137,7 +138,7 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<List<UsuarioGetResponse>> ObterUsuarios(int skip, int top, string? username, Guid? unidadeOrganizacionalId)
+    public async Task<List<UsuarioGetResponse>> Obter(int skip, int top, string? username, Guid? unidadeOrganizacionalId)
     {
         var usuarios = new List<UsuarioGetResponse>();
 
@@ -167,10 +168,10 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("username", $"%{username}%");
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("top", top);
-            cmd.Parameters.AddWithValue("skip", skip);
+            cmd.Parameters.Add("username", NpgsqlDbType.Varchar).Value = $"%{username}%";
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId ?? (object)DBNull.Value;
+            cmd.Parameters.Add("top", NpgsqlDbType.Integer).Value = top;
+            cmd.Parameters.Add("skip", NpgsqlDbType.Integer).Value = skip;
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
@@ -243,7 +244,7 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+            cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId;
 
             return await cmd.ExecuteNonQueryAsync();
         }
@@ -253,7 +254,7 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<int> ExcluirUsuario(Guid usuarioId)
+    public async Task<int> Excluir(Guid usuarioId)
     {
         const string sql = "DELETE FROM estoque_certo.usuario WHERE usuario_id = @usuario_id";
 
@@ -263,7 +264,7 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
+            cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId;
 
             return await cmd.ExecuteNonQueryAsync();
         }

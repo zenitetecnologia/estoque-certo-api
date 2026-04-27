@@ -11,10 +11,10 @@ public static class UsuarioController
         #region [ post ]
         app.MapPost("v1/usuarios/", async (UsuarioService service, Usuario usuario) =>
         {
-            Guid usuarioId = await service.CadastrarUsuario(usuario);
+            Guid usuarioId = await service.Cadastrar(usuario);
 
             return TypedResults.CreatedAtRoute(
-                routeName: "get",
+                routeName: "usuario_get_by_id",
                 routeValues: new { usuarioId },
                 value: "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
         })
@@ -29,7 +29,7 @@ public static class UsuarioController
         #region [ put ]
         app.MapPut("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId, Usuario usuario) =>
         {
-            await service.AtualizarUsuario(usuario, usuarioId);
+            await service.Atualizar(usuario, usuarioId);
 
             return Results.Ok("Usuário atualizado com sucesso.");
         })
@@ -61,7 +61,7 @@ public static class UsuarioController
         #region [ delete ]
         app.MapDelete("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId) =>
         {
-            await service.ExcluirUsuario(usuarioId);
+            await service.Excluir(usuarioId);
 
             return Results.NoContent();
         })
@@ -76,7 +76,7 @@ public static class UsuarioController
         #region [ get ]
         app.MapGet("v1/usuarios", async (UsuarioService service, int skip = 0, int top = 10, string? username = null, Guid? unidadeOrganizacionalId = null) =>
         {
-            var result = await service.ObterUsuarios(skip, top, username, unidadeOrganizacionalId);
+            var result = await service.Obter(skip, top, username, unidadeOrganizacionalId);
 
             return Results.Ok(result);
         })
@@ -90,11 +90,11 @@ public static class UsuarioController
         #region [ get by id ]
         app.MapGet("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId) =>
         {
-            var result = await service.ObterUsuario(usuarioId);
+            var result = await service.Obter(usuarioId);
 
             return Results.Ok(result);
         })
-        .WithName("get")
+        .WithName("usuario_get_by_id")
         .WithTags("usuarios")
         .WithSummary("Retorna um usuário por ID")
         .WithDescription("Retorna um usuário específico por ID.")

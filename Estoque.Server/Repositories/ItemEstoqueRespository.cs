@@ -1,5 +1,6 @@
 ﻿using Estoque.Server.Models;
 using Npgsql;
+using NpgsqlTypes;
 using System.Data;
 
 namespace Estoque.Server.Repositories;
@@ -8,7 +9,7 @@ public class ItemEstoqueRepository : BaseRepository
 {
     public ItemEstoqueRepository(IDbConnection connection) : base(connection) { }
 
-    public async Task<Guid> CadastrarItemEstoque(ItemEstoque item)
+    public async Task<Guid> Cadastrar(ItemEstoque item)
     {
         const string sql = @"
             INSERT INTO estoque_certo.item_estoque
@@ -36,11 +37,11 @@ public class ItemEstoqueRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", item.UnidadeOrganizacionalId);
-            cmd.Parameters.AddWithValue("espaco_id", item.EspacoId);
-            cmd.Parameters.AddWithValue("descricao", item.Descricao);
-            cmd.Parameters.AddWithValue("tipo_unidade_medida", (int)item.TipoUnidadeMedida);
-            cmd.Parameters.AddWithValue("quantidade", item.Quantidade);
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = item.UnidadeOrganizacionalId;
+            cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = item.EspacoId;
+            cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = item.Descricao;
+            cmd.Parameters.Add("tipo_unidade_medida", NpgsqlDbType.Integer).Value = (int)item.TipoUnidadeMedida;
+            cmd.Parameters.Add("quantidade", NpgsqlDbType.Numeric).Value = item.Quantidade;
 
             var result = await cmd.ExecuteScalarAsync();
 
@@ -86,7 +87,7 @@ public class ItemEstoqueRepository : BaseRepository
         }
     }
 
-    public async Task<List<ItemEstoqueRecuperado>> ObterItens(int skip, int top, string? descricao, Guid? unidadeOrganizacionalId, Guid? espacoId)
+    public async Task<List<ItemEstoqueRecuperado>> Obter(int skip, int top, string? descricao, Guid? unidadeOrganizacionalId, Guid? espacoId)
     {
         var itens = new List<ItemEstoqueRecuperado>();
 
@@ -117,11 +118,11 @@ public class ItemEstoqueRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("descricao", $"%{descricao}%");
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("espaco_id", espacoId ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("top", top);
-            cmd.Parameters.AddWithValue("skip", skip);
+            cmd.Parameters.Add("descricao", NpgsqlTypes.NpgsqlDbType.Varchar).Value = $"%{descricao}%";
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId ?? (object)DBNull.Value;
+            cmd.Parameters.Add("espaco_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = espacoId ?? (object)DBNull.Value;
+            cmd.Parameters.Add("top", NpgsqlTypes.NpgsqlDbType.Integer).Value = top;
+            cmd.Parameters.Add("skip", NpgsqlTypes.NpgsqlDbType.Integer).Value = skip;
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
@@ -148,7 +149,7 @@ public class ItemEstoqueRepository : BaseRepository
         }
     }
 
-    public async Task<ItemEstoqueRecuperado?> ObterItem(Guid itemEstoqueId)
+    public async Task<ItemEstoqueRecuperado?> Obter(Guid itemEstoqueId)
     {
         const string sql = @"
             SELECT
@@ -170,21 +171,22 @@ public class ItemEstoqueRepository : BaseRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("id", itemEstoqueId);
+            cmd.Parameters.Add("id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
             if (!await reader.ReadAsync()) return null;
 
-            return new ItemEstoqueRecuperado
-            {
-                ItemEstoqueId = reader.GetGuid("item_estoque_id"),
-                UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id"),
-                EspacoId = reader.GetGuid("espaco_id"),
-                Descricao = reader.GetString("descricao"),
-                TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida"),
-                Quantidade = reader.GetDecimal("quantidade")
-            };
+            var itemEstoqueRecuperado = new ItemEstoqueRecuperado();
+
+            itemEstoqueRecuperado.ItemEstoqueId = reader.GetGuid("item_estoque_id");
+            itemEstoqueRecuperado.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+            itemEstoqueRecuperado.EspacoId = reader.GetGuid("espaco_id");
+            itemEstoqueRecuperado.Descricao = reader.GetString("descricao");
+            itemEstoqueRecuperado.TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida");
+            itemEstoqueRecuperado.Quantidade = reader.GetDecimal("quantidade");
+
+            return itemEstoqueRecuperado;
         }
         catch
         {
@@ -192,7 +194,7 @@ public class ItemEstoqueRepository : BaseRepository
         }
     }
 
-    public async Task<int> ExcluirItemEstoque(Guid itemEstoqueId)
+    public async Task<int> Excluir(Guid itemEstoqueId)
     {
         const string sql = "DELETE FROM estoque_certo.item_estoque WHERE item_estoque_id = @id";
 
@@ -201,7 +203,7 @@ public class ItemEstoqueRepository : BaseRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("id", itemEstoqueId);
+            cmd.Parameters.Add("id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
 
             return await cmd.ExecuteNonQueryAsync();
         }
@@ -211,7 +213,7 @@ public class ItemEstoqueRepository : BaseRepository
         }
     }
 
-    public async Task<bool> MovimentarEstoque(Guid itemEstoqueId, decimal quantidadeMovimento, TipoMovimentacao tipoMovimentacao, Guid? usuarioId)
+    public async Task<bool> Movimentar(Guid itemEstoqueId, decimal quantidadeMovimento, TipoMovimentacao tipoMovimentacao, Guid? usuarioId)
     {
         string operacao = tipoMovimentacao == TipoMovimentacao.Acrescimo ? "+" : "-";
 
@@ -255,10 +257,10 @@ public class ItemEstoqueRepository : BaseRepository
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("item_estoque_id", itemEstoqueId);
-            cmd.Parameters.AddWithValue("quantidade_movimento", quantidadeMovimento);
-            cmd.Parameters.AddWithValue("tipo_movimentacao", (int)tipoMovimentacao);
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId.HasValue ? (object)usuarioId.Value : DBNull.Value);
+            cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
+            cmd.Parameters.Add("quantidade_movimento", NpgsqlDbType.Numeric).Value = quantidadeMovimento;
+            cmd.Parameters.Add("tipo_movimentacao", NpgsqlDbType.Integer).Value = (int)tipoMovimentacao;
+            cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId.HasValue ? (object)usuarioId.Value : DBNull.Value;
 
             var result = await cmd.ExecuteScalarAsync();
             return result != null;

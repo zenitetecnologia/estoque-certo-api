@@ -13,9 +13,12 @@ public static class ItemEstoqueController
         #region [ post ]
         app.MapPost("v1/itens-estoque", async (ItemEstoqueService service, ItemEstoque item) =>
         {
-            Guid itemEstoqueId = await service.CadastrarItemEstoque(item);
+            Guid itemEstoqueId = await service.Cadastrar(item);
 
-            return Results.Created($"/v1/itens-estoque/{itemEstoqueId}", "Item cadastrado com sucesso.");
+            return TypedResults.CreatedAtRoute(
+                routeName: "itens-estoque-get-by-id",
+                routeValues: new { itemEstoqueId },
+                value: "Item de estoque cadastrado com sucesso.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Cadastra um novo item de estoque")
@@ -28,12 +31,12 @@ public static class ItemEstoqueController
         #region [ put ]
         app.MapPut("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, Guid itemEstoqueId, ItemEstoqueAtualizado item) =>
         {
-            await service.AtualizarItemEstoque(item, itemEstoqueId);
+            await service.Atualizar(item, itemEstoqueId);
 
             return Results.Ok("Item de estoque atualizado com sucesso.");
         })
         .WithTags("itens-estoque")
-        .WithSummary("Atualiza um item de estoque")
+        .WithSummary("Atualiza um registro de item do estoque")
         .WithDescription("Atualiza os dados um item de estoque existente.")
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
@@ -44,13 +47,13 @@ public static class ItemEstoqueController
         #region [ delete ]
         app.MapDelete("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, Guid itemEstoqueId) =>
         {
-            await service.ExcluirItemEstoque(itemEstoqueId);
+            await service.Excluir(itemEstoqueId);
 
             return Results.Ok("Item de estoque excluído com sucesso.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Exclui um item de estoque")
-        .WithDescription("Exclui um item de estoque do sistema.")
+        .WithDescription("Exclui um item de estoque do banco de dados.")
         .Produces(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
@@ -59,7 +62,7 @@ public static class ItemEstoqueController
         #region [ get ]
         app.MapGet("v1/itens-estoque", async (ItemEstoqueService service, int skip = 0, int top = 10, string? descricao = null, Guid? unidadeOrganizacionalId = null, Guid? espacoId = null) =>
         {
-            var result = await service.ObterItens(skip, top, descricao, unidadeOrganizacionalId, espacoId);
+            var result = await service.Obter(skip, top, descricao, unidadeOrganizacionalId, espacoId);
 
             return Results.Ok(result);
         })
@@ -73,10 +76,11 @@ public static class ItemEstoqueController
         #region [ get by id ]
         app.MapGet("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, Guid itemEstoqueId) =>
         {
-            var result = await service.ObterItem(itemEstoqueId);
+            var result = await service.Obter(itemEstoqueId);
 
             return Results.Ok(result);
         })
+        .WithName("itens-estoque-get-by-id")
         .WithTags("itens-estoque")
         .WithSummary("Retorna um item de estoque por ID")
         .WithDescription("Retorna um item de estoque específico por ID.")
@@ -90,7 +94,7 @@ public static class ItemEstoqueController
         {
             try
             {
-                await service.MovimentarEstoque(itemEstoqueId, req.Quantidade, req.TipoMovimentacao, null);
+                await service.Movimentar(itemEstoqueId, req.Quantidade, req.TipoMovimentacao, null);
 
                 return Results.Ok(new { mensagem = "Movimentação registada e estoque atualizado com sucesso." });
             }

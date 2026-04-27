@@ -1,5 +1,6 @@
 ﻿using Estoque.Server.Models;
 using Npgsql;
+using NpgsqlTypes;
 using System.Data;
 
 namespace Estoque.Server.Repositories;
@@ -34,23 +35,24 @@ public class HistoricoRepository : BaseRepository
             await EnsureOpenAsync();
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("item_estoque_id", itemEstoqueId);
+            cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
 
             while (await reader.ReadAsync())
             {
-                historicos.Add(new HistoricoRecuperado
-                {
-                    HistoricoId = reader.GetGuid("historico_id"),
-                    ItemEstoqueId = reader.GetGuid("item_estoque_id"),
-                    TipoMovimentacao = (TipoMovimentacao)reader.GetInt32("tipo_movimentacao"),
-                    UsuarioId = reader.GetGuidNullable("usuario_id"),
-                    DataHora = reader.GetDateTime(reader.GetOrdinal("data_hora")),
-                    QuantidadeAnterior = reader.GetDecimal("quantidade_anterior"),
-                    QuantidadeResultante = reader.GetDecimal("quantidade_resultante")
-                });
+                var historico = new HistoricoRecuperado();
+
+                historico.HistoricoId = reader.GetGuid("historico_id");
+                historico.ItemEstoqueId = reader.GetGuid("item_estoque_id");
+                historico.TipoMovimentacao = (TipoMovimentacao)reader.GetInt32("tipo_movimentacao");
+                historico.UsuarioId = reader.GetGuidNullable("usuario_id");
+                historico.DataHora = reader.GetDateTime(reader.GetOrdinal("data_hora"));
+                historico.QuantidadeAnterior = reader.GetDecimal("quantidade_anterior");
+                historico.QuantidadeResultante = reader.GetDecimal("quantidade_resultante");
+
+                historicos.Add(historico);
             }
 
             return historicos;
