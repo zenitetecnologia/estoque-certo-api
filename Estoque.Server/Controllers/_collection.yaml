@@ -749,7 +749,7 @@ collection:
     meta:
       id: fld_db24223c76c3471b827d8799e7b09976
       created: 1776360163385
-      modified: 1777296102421
+      modified: 1777385395777
       sortKey: -1776451449816
       description: ""
     children:
@@ -758,7 +758,7 @@ collection:
         meta:
           id: req_265b85a8222d4115af1e973e2f286163
           created: 1776360220199
-          modified: 1777131351571
+          modified: 1777385383578
           isPrivate: false
           description: ""
           sortKey: -1776361447764
@@ -815,7 +815,7 @@ collection:
         meta:
           id: req_30af749dc797444793a71fa8f557cf29
           created: 1776362655830
-          modified: 1777129967409
+          modified: 1777385395060
           isPrivate: false
           description: ""
           sortKey: -1776189262803.75
@@ -872,7 +872,7 @@ collection:
         meta:
           id: req_3422001fe25147879c0e39f0269da50d
           created: 1776362926081
-          modified: 1777130039649
+          modified: 1777385433514
           isPrivate: false
           description: ""
           sortKey: -1776103170323.625
@@ -912,7 +912,7 @@ collection:
         meta:
           id: req_dddd93b8f0c64477aa782e1bfd418a47
           created: 1776363068401
-          modified: 1777130425747
+          modified: 1777385546010
           isPrivate: false
           description: ""
           sortKey: -1776060124083.5625
@@ -952,7 +952,7 @@ collection:
         meta:
           id: req_b6ed6ac40dfe40e8a63282ba4f92b412
           created: 1776363169566
-          modified: 1777131976484
+          modified: 1777385485996
           isPrivate: false
           description: ""
           sortKey: -1776081647203.5938
@@ -993,7 +993,7 @@ collection:
         meta:
           id: req_d30b7828850c4abf8d10dab75885a152
           created: 1776363256732
-          modified: 1777296431488
+          modified: 1777385616089
           isPrivate: false
           description: ""
           sortKey: -1776060123983.5625
@@ -1034,7 +1034,7 @@ collection:
         meta:
           id: req_506f31cbbe1243bda7dca16aa4bea006
           created: 1776363701465
-          modified: 1777296482217
+          modified: 1777385667268
           isPrivate: false
           description: ""
           sortKey: -1776038600913.5312
@@ -1075,7 +1075,7 @@ collection:
         meta:
           id: req_c971df88fc9f4c1580866f95ac8abea2
           created: 1776364034368
-          modified: 1777296656182
+          modified: 1777385857196
           isPrivate: false
           description: ""
           sortKey: -1776022458611.0078
@@ -1116,7 +1116,7 @@ collection:
         meta:
           id: req_eda19bf1267a4a289dd2ef0c538d5203
           created: 1776364273100
-          modified: 1777297093671
+          modified: 1777385878465
           isPrivate: false
           description: ""
           sortKey: -1776022458511.0078
@@ -1141,7 +1141,7 @@ collection:
         meta:
           id: req_81c1958a92f14095920d1d4c8b045d87
           created: 1776364398057
-          modified: 1777297101190
+          modified: 1777385921875
           isPrivate: false
           description: ""
           sortKey: -1776019768177.254
@@ -1165,7 +1165,7 @@ collection:
         meta:
           id: req_2c4f6d62da804a7585783a5820cb0a39
           created: 1776366962885
-          modified: 1777297126936
+          modified: 1777385924914
           isPrivate: false
           description: ""
           sortKey: -1776019768077.254
@@ -1190,7 +1190,7 @@ collection:
         meta:
           id: req_1ed091e745d54c42aaab63aac63ad7e8
           created: 1776366994968
-          modified: 1777297131074
+          modified: 1777385939430
           isPrivate: false
           description: ""
           sortKey: -1776018422960.377
@@ -1215,7 +1215,7 @@ collection:
         meta:
           id: req_3a897e3a5ec34516ab2cdfea1a199142
           created: 1776367294385
-          modified: 1777297133610
+          modified: 1777385962647
           isPrivate: false
           description: ""
           sortKey: -1776017750401.9385
@@ -1264,7 +1264,7 @@ collection:
         meta:
           id: req_11ee7eba873a4299a8986cf28632cd58
           created: 1776367601486
-          modified: 1777297238390
+          modified: 1777385987250
           isPrivate: false
           description: ""
           sortKey: -1776017750201.9385
@@ -1289,7 +1289,7 @@ collection:
         meta:
           id: req_71fbd5965a6e453b806ea98343e26296
           created: 1776367751325
-          modified: 1777298458755
+          modified: 1777386025141
           isPrivate: false
           description: ""
           sortKey: -1776017414022.7192
@@ -1314,7 +1314,7 @@ collection:
         meta:
           id: req_58246cd46bc84c0a9c7f415585fecbf0
           created: 1776367776992
-          modified: 1777298510937
+          modified: 1777386056940
           isPrivate: false
           description: ""
           sortKey: -1776017245933.1096
@@ -1339,7 +1339,7 @@ collection:
         meta:
           id: req_87d9b8a20bad4948a1c40904ceb368e0
           created: 1776367890686
-          modified: 1777298485851
+          modified: 1777386040526
           isPrivate: false
           description: ""
           sortKey: -1776017329977.9146
@@ -1364,7 +1364,7 @@ collection:
         meta:
           id: req_3cdd2ceae7a5470dbbe364cd9ebacbda
           created: 1776890999508
-          modified: 1777296579904
+          modified: 1777385710979
           isPrivate: false
           description: ""
           sortKey: -1776034565337.9004
@@ -1405,7 +1405,7 @@ collection:
         meta:
           id: req_5e57c6e98d06470a9e2ad83d7f930369
           created: 1776891102348
-          modified: 1777296640489
+          modified: 1777385786173
           isPrivate: false
           description: ""
           sortKey: -1776030529762.2695
@@ -1445,7 +1445,7 @@ collection:
         meta:
           id: req_91df76aafdb64107af3a41288ea88d44
           created: 1777130098399
-          modified: 1777296273813
+          modified: 1777385461602
           isPrivate: false
           description: ""
           sortKey: -1776092408763.6094
@@ -1486,7 +1486,7 @@ collection:
         meta:
           id: req_2798b93dce9e4f2aabb9f693d217944b
           created: 1777131714835
-          modified: 1777296518147
+          modified: 1777385690767
           isPrivate: false
           description: ""
           sortKey: -1776036583125.7158
@@ -1527,7 +1527,7 @@ collection:
         meta:
           id: req_015f808ae62a42b8961a0a323f80bd49
           created: 1777217238476
-          modified: 1777297096682
+          modified: 1777385892563
           isPrivate: false
           description: ""
           sortKey: -1776021113344.1309
@@ -1607,7 +1607,7 @@ collection:
     meta:
       id: fld_2e6aff0151d7401e970c187242c614c9
       created: 1776445366121
-      modified: 1777299683876
+      modified: 1777387361573
       sortKey: -1776451449766
       description: ""
     children:
@@ -1616,7 +1616,7 @@ collection:
         meta:
           id: req_9fe594fd64934bc89f7bc53c326dea75
           created: 1776445371429
-          modified: 1777299615647
+          modified: 1777387327565
           isPrivate: false
           description: ""
           sortKey: -1776445371429
@@ -1666,7 +1666,7 @@ collection:
         meta:
           id: req_c78624e359f243c396e335b86feb299b
           created: 1776445648208
-          modified: 1777299677964
+          modified: 1777387360548
           isPrivate: false
           description: ""
           sortKey: -1776403409596.5
@@ -1716,7 +1716,7 @@ collection:
         meta:
           id: req_83207289bfd742479255a4b1e51f1b6d
           created: 1776445861535
-          modified: 1777301145593
+          modified: 1777387397240
           isPrivate: false
           description: ""
           sortKey: -1776382428680.25
@@ -1749,7 +1749,7 @@ collection:
         meta:
           id: req_6086ea68804f4b709ab6ebae35c7b618
           created: 1776446117539
-          modified: 1777301244102
+          modified: 1777387414175
           isPrivate: false
           description: ""
           sortKey: -1776371938222.125
@@ -1782,7 +1782,7 @@ collection:
         meta:
           id: req_99cdccf4ff1f47808ffffdb702792601
           created: 1776446228520
-          modified: 1777301882557
+          modified: 1777387430168
           isPrivate: false
           description: ""
           sortKey: -1776366692993.0625
@@ -1815,7 +1815,7 @@ collection:
         meta:
           id: req_de4d73170b4942d8a11ff4ea2195f87d
           created: 1776446713682
-          modified: 1777302083072
+          modified: 1777387484360
           isPrivate: false
           description: ""
           sortKey: -1776362758971.2656
@@ -1848,7 +1848,7 @@ collection:
         meta:
           id: req_5f733c20466b416dbf4a0f2aea27d22f
           created: 1776446878686
-          modified: 1777302012228
+          modified: 1777387466260
           isPrivate: false
           description: ""
           sortKey: -1776362759071.2656
@@ -1877,11 +1877,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
-        name: espaços-200-by-id
+        name: espacos-200-by-id
         meta:
           id: req_c28b004892724ee8b8d2eef7b1bf9f19
           created: 1776447108974
-          modified: 1776447177445
+          modified: 1777387535840
           isPrivate: false
           description: ""
           sortKey: -1776362758871.2656
@@ -1900,11 +1900,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_fake }}"
-        name: espaços-404-by-id
+        name: espacos-404-by-id
         meta:
           id: req_7b721f89f1ac43e0a5b3058bf1e86314
           created: 1776447165404
-          modified: 1776447221554
+          modified: 1777387556320
           isPrivate: false
           description: ""
           sortKey: -1776362103317.6328
@@ -1923,11 +1923,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
-        name: espaços-500-by-id
+        name: espacos-500-by-id
         meta:
           id: req_12e376ef1691422fb7d7a3676704fb60
           created: 1776447241851
-          modified: 1776447251401
+          modified: 1777387612421
           isPrivate: false
           description: ""
           sortKey: -1776361775540.8164
@@ -1946,11 +1946,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/espacos"
-        name: espaços-200
+        name: espacos-200
         meta:
           id: req_172b4138ebb94ee9b844ffdb5792162d
           created: 1776447296511
-          modified: 1776447303035
+          modified: 1777387665884
           isPrivate: false
           description: ""
           sortKey: -1776361611652.4082
@@ -1969,11 +1969,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/espacos"
-        name: espaços-500
+        name: espacos-500
         meta:
           id: req_2cf465f8b12148c3ac12af4527a9eda6
           created: 1776447331915
-          modified: 1776450126918
+          modified: 1777388167696
           isPrivate: false
           description: ""
           sortKey: -1776361529708.204
@@ -1992,13 +1992,13 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url
-          }}/v1/espacos?skip=0&top=5&nome=al&unidadeOrganizacionalId={{
+          }}/v1/espacos?skip=0&top=2&nome=ck&unidadeOrganizacionalId={{
           _.unidade_organizacional_id }}"
-        name: espaços-200-paged
+        name: espacos-200-paged
         meta:
           id: req_88389eab66554293a9568988edab7b09
           created: 1776448857067
-          modified: 1776450037482
+          modified: 1777387715606
           isPrivate: false
           description: ""
           sortKey: -1776361570680.3062
@@ -2017,13 +2017,13 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url
-          }}/v1/espacos?skip=0&top=5&nome=al&unidadeOrganizacionalId={{
-          _.unidade_organizacional_id_fake }}"
-        name: espaços-200-empty
+          }}/v1/espacos?skip=0&top=2&nome=ck&unidadeOrganizacionalId={{
+          _.unidade_organizacional_fake }}"
+        name: espacos-200-empty
         meta:
           id: req_1c9d1d814ce3433ea9bf98cc995c6d59
           created: 1776449075099
-          modified: 1776450082143
+          modified: 1777387785056
           isPrivate: false
           description: ""
           sortKey: -1776361550194.2551
@@ -2042,11 +2042,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
-        name: espaços-200
+        name: espacos-204
         meta:
           id: req_7878f6f8b0bf42cfa80fc681c15eaa32
           created: 1776450150913
-          modified: 1776450187804
+          modified: 1777388216653
           isPrivate: false
           description: ""
           sortKey: -1776361529608.204
@@ -2065,11 +2065,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
-        name: espaços-200
+        name: espacos-204
         meta:
           id: req_b8d14b23139449a6898e51f48f51f05b
           created: 1776450194630
-          modified: 1776450220168
+          modified: 1777388504544
           isPrivate: false
           description: ""
           sortKey: -1776361488686.102
@@ -2087,35 +2087,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_02 }}"
-        name: espaços-404
-        meta:
-          id: req_59bc1cab1f074ecdbf81f5dbe3ecb391
-          created: 1776450268571
-          modified: 1776450283143
-          isPrivate: false
-          description: ""
-          sortKey: -1776361468225.051
-        method: DELETE
-        headers:
-          - name: User-Agent
-            value: insomnia/12.5.0
-            description: ""
-            disabled: false
-        settings:
-          renderRequestBody: true
-          encodeUrl: true
-          followRedirects: global
-          cookies:
-            send: true
-            store: true
-          rebuildPath: true
-      - url: "{{ _.base_url }}/v1/espacos/{{ _.espacoId }}"
-        name: espaços-400
+      - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_fake }}"
+        name: espacos-404
         meta:
           id: req_51598314eb984a2e84c59dc9428df180
           created: 1776450297561
-          modified: 1776450934499
+          modified: 1777388879111
           isPrivate: false
           description: ""
           sortKey: -1776361478455.5767
@@ -2134,11 +2111,11 @@ collection:
             store: true
           rebuildPath: true
       - url: "{{ _.base_url }}/v1/espacos/{{ _.espaco_mock_01 }}"
-        name: espaços-500
+        name: espacos-500
         meta:
           id: req_cec8c72a5aa2415eba8b02fb246ef17e
           created: 1776450957864
-          modified: 1776450961457
+          modified: 1777388975977
           isPrivate: false
           description: ""
           sortKey: -1776361468125.051
@@ -2161,7 +2138,7 @@ collection:
         meta:
           id: req_4f269eb51c564171b8a0717c31ca8a8c
           created: 1777299151091
-          modified: 1777299514011
+          modified: 1777387289193
           isPrivate: false
           description: ""
           sortKey: -1776445371529
@@ -2211,7 +2188,7 @@ collection:
         meta:
           id: req_a14fbba4dd674f07a7549f386ec1213a
           created: 1777302136358
-          modified: 1777302239214
+          modified: 1777387496736
           isPrivate: false
           description: ""
           sortKey: -1776362758921.2656
@@ -2986,24 +2963,24 @@ cookieJar:
   meta:
     id: jar_a122a1926cce4ef896ad54bf34662896
     created: 1776017078657
-    modified: 1777299683867
+    modified: 1777387361545
 environments:
   name: Base Environment
   meta:
     id: env_67e5a285a0484003ab5fe347b8a3d5e3
     created: 1776017077271
-    modified: 1777299683872
+    modified: 1777387361561
     isPrivate: false
   data:
     base_url: http://localhost:5120
-    unidade_organizacional_id: b2c44faf-a856-4da2-abe2-67c7832ebb51
+    unidade_organizacional_id: 72ea4da8-232d-4ab5-9966-07e670f97322
     unidade_organizacional_fake: b1909e70-080e-49b4-a197-aa7adf538c17
-    unidade_organizacional_mock_01: 8351cb3e-1060-44b5-8c23-1d3532ae8669
-    unidade_organizacional_mock_02: e7cd9a1f-7a97-4e99-91fc-f322fd59eb17
-    espaco_id: 585556db-22e4-43c6-b140-8b581c0a2ca8
+    unidade_organizacional_mock_01: 5ca2397b-a29d-4c85-897e-b1c5664ab386
+    unidade_organizacional_mock_02: 2724d661-cfe0-45e5-a1f5-28202b78a9f4
+    espaco_id: 3fa90685-1089-40e0-87de-5b113d4c5706
     espaco_fake: 273e73e3-46ea-4436-a89a-432ba8d6967d
-    espaco_mock_01: 8b691f9d-34c9-4f06-8aec-490656dbaec7
-    espaco_mock_02: d48ad51a-784c-4465-99c2-059d82f897f5
+    espaco_mock_01: 1e36e04a-8f1b-4182-9e0d-705f7fd2b415
+    espaco_mock_02: 4387d769-4481-4e91-b778-c03fad5a0b6b
     usuario_id_mock_01: d957dc5f-5738-474c-9b2b-d051fb4a84c5
     usuario_id_mock_02: 911e8367-7c22-43f2-9128-2d68e021ed94
     usuario_id_mock_03: 6af483a7-647c-4d29-86a5-90d7a61d9a4c

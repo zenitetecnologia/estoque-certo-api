@@ -116,9 +116,9 @@ public class EspacoService : BaseService
         }
         else
         {
-            bool espacoExiste = await _repository.ValidarDuplicidade(espaco.Nome, espaco.UnidadeOrganizacionalId!.Value, espacoId);
+            bool existe = await _repository.ValidarDuplicidade(espaco.Nome, espaco.UnidadeOrganizacionalId!.Value, espacoId);
 
-            if (espacoExiste)
+            if (existe)
                 AddError(nameof(espaco.Nome), "Espaço já cadastrado com o nome informado.");
         }
 

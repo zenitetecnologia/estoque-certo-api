@@ -122,9 +122,9 @@ public class UnidadeOrganizacionalService : BaseService
         }
         else
         {
-            bool unidadeOrganizacionalExiste = await _repository.ValidarDuplicidade(unidadeOrganizacional.Cnpj, unidadeOrganizacionalId);
+            bool existe = await _repository.ValidarDuplicidade(unidadeOrganizacional.Cnpj, unidadeOrganizacionalId);
 
-            if (unidadeOrganizacionalExiste)
+            if (existe)
                 AddError(nameof(unidadeOrganizacional.Cnpj), "Unidade organizacional já cadastrada para o CNPJ informado.");
         }
 
