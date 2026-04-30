@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS estoque_certo.item_estoque (
 CREATE TABLE IF NOT EXISTS estoque_certo.historico (
     historico_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     item_estoque_id UUID NOT NULL,
-    usuario_id UUID NOT NULL,
+    usuario_id UUID ,
     tipo_movimentacao INTEGER NOT NULL,
     data_hora TIMESTAMP NOT NULL DEFAULT NOW(),
     quantidade_anterior NUMERIC(18,3) NOT NULL,

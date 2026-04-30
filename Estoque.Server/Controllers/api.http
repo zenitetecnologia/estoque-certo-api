@@ -1,0 +1,827 @@
+@base_url = http://localhost:5120
+@ID_fake = 273e73e3-46ea-4436-a89a-432ba8d6967d
+@unidade_organizacional_id = {{unidadeOrganizacionalOfficial.response.body.$.unidadeOrganizacionalId}}
+@espaco_id = {{EspacoOficial.response.body.$.espacoId}}
+@usuario_id = {{CadastrarUsuarioOficial.response.body.$.usuarioId}}
+
+# ==========================================
+# UNIDADES ORGANIZACIONAIS
+# ==========================================
+
+###
+# @name unidadesOrganizacionais201Official
+POST {{base_url}}/v1/unidades-organizacionais
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "60935686000134",
+  "razaoSocial": "Zênite Tecnologia Ltda.",
+  "nomeFantasia": "Zênite Tech",
+  "cep": "35604000",
+  "endereco": "Rua Tamoios",
+  "numero": "329",
+  "bairro": "Centro",
+  "cidade": "Moema",
+  "uf": "MG",
+  "pais": "Brasil",
+  "email": "zenitetecnologias@gmail.com.br",
+  "telefone": "37999654512"
+}
+
+###
+# @name UnidadeOrganizacionalCadastrar201Mock01
+POST {{base_url}}/v1/unidades-organizacionais
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "06549925000172",
+  "razaoSocial": "Sebastião e Isis Entregas Expressas Ltda.",
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": null,
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+###
+
+###
+# @name UnidadeOrganizacionalCadastrar201Mock02
+POST {{base_url}}/v1/unidades-organizacionais
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "04427262000198",
+  "razaoSocial": "Laís e Amanda Gráfica ME",
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": null,
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+###
+
+### UnidadesOrganizacionalCadastrar400
+POST {{base_url}}/v1/unidades-organizacionais
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "",
+  "razaoSocial": null,
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": null,
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+### UnidadeOrganizacionalCadastrar400InvalidCnpj
+POST {{base_url}}/v1/unidades-organizacionais
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "0442726200019B",
+  "razaoSocial": "Laís e Amanda Gráfica ME",
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": null,
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+### UnidadeOrganizacionalCadastrar400Duplicated
+POST {{base_url}}/v1/unidades-organizacionais
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "04427262000198",
+  "razaoSocial": "Laís e Amanda Gráfica ME",
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": null,
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+### UnidadeOrganizacionalCadastrar500
+POST {{base_url}}/v1/unidades-organizacionais
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "91251152000112",
+  "razaoSocial": "internal server error",
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": "Minas Gerais",
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+### UnidadeOrganizacionalAtualizar200
+PUT {{UnidadeOrganizacionalCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "06549925000172",
+  "razaoSocial": "Sebastião Express Ltda.",
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": null,
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+### UnidadeORganizacionalAtualizar400
+PUT {{UnidadeOrganizacionalCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": null,
+  "razaoSocial": null,
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": null,
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+### UnidadeORganizacionalAtualizar400InvalidCnpj
+PUT {{UnidadeOrganizacionalCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "0654992500017B",
+  "razaoSocial": "Sebastião Express Ltda.",
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": null,
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+### UnidadeOrganizacionalAtualizar400DuplicatedCnpj
+PUT {{base_url}}/v1/unidades-organizacionais/{{ID_fake}}
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "06549925000172",
+  "razaoSocial": "Sebastião Express Ltda.",
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": null,
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+### UnidadeORganizacionalAtualizar404
+PUT {{base_url}}/v1/unidades-organizacionais/{{ID_fake}}
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "00217748000140",
+  "razaoSocial": "Débora e Vicente Construções ME",
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": null,
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+### UnidadeORganizacionalAtualizar500
+PUT {{UnidadeOrganizacionalCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "matrizId": null,
+  "cnpj": "06549925000172",
+  "razaoSocial": "Sebastião Express Ltda.",
+  "nomeFantasia": null,
+  "cep": null,
+  "endereco": null,
+  "numero": null,
+  "complemento": null,
+  "bairro": null,
+  "cidade": null,
+  "uf": "Minas Gerais",
+  "pais": null,
+  "email": null,
+  "telefone": null
+}
+
+### UnidadeOrganizacionalBuscarPorId200
+# @name unidadeOrganizacionalOfficial
+GET {{unidadesOrganizacionais201Official.response.headers.Location}}
+
+### UnidadeOrganizacionalBuscarPorId404
+GET {{base_url}}/v1/unidades-organizacionais/{{ID_fake}}
+
+### UnidadeOrganizacionalBuscarPorId500
+### GET {{UnidadeOrganizacionalCadastrar201Mock01.response.headers.Location}}
+
+### UnidadeOrganizacionalBuscar200
+GET {{base_url}}/v1/unidades-organizacionais
+
+### UnidadeOrganizacionalBuscar200Paged
+GET {{base_url}}/v1/unidades-organizacionais?skip=0&top=2&razaSocial=ME&cnpj=0001
+
+### UnidadeOrganizacionalBuscar200Empty
+GET {{base_url}}/v1/unidades-organizacionais?skip=0&top=2&razaSocial=ME&cnpj=empty
+
+### UnidadeOrganizacionalBuscar500
+### GET {{base_url}}/v1/unidades-organizacionais
+
+### UnidadeOrganizacionalDeletar204Mock1
+DELETE {{UnidadeOrganizacionalCadastrar201Mock01.response.headers.Location}}
+
+### UnidadeORganizacionalDeletar204Mock2
+DELETE {{UnidadeOrganizacionalCadastrar201Mock02.response.headers.Location}}
+
+### UnidadeOrganizacionalDeletar404
+DELETE {{base_url}}/v1/unidades-organizacionais/{{ID_fake}}
+
+### UnidadeOrganizacionalDeletar500
+### DELETE {{UnidadeOrganizacionalCadastrar201Mock01.response.headers.Location}}
+
+# ====================================================================================
+# ESPAÇOS
+# ====================================================================================
+
+### 
+# @name EspacoCadastrar201Oficial
+POST {{base_url}}/v1/espacos
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "nome": "Sede",
+  "descricao": "Sala 329"
+}
+
+###
+# @name EspacoCadastrar201Mock01
+POST {{base_url}}/v1/espacos
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "nome": "Mock 01",
+  "descricao": null
+}
+
+###
+# @name EspacoCadastrar201Mock02
+POST {{base_url}}/v1/espacos
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "nome": "Mock 02",
+  "descricao": null
+}
+
+### EspacoCadastrar400
+POST {{base_url}}/v1/espacos
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": null,
+  "nome": null,
+  "descricao": null
+}
+
+### EspacoCadastrar500
+POST {{base_url}}/v1/espacos
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "nome": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore e",
+  "descricao": null
+}
+
+### EspacoAtualizar200
+PUT {{EspacoCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+	"unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "nome": "Mock 01",
+  "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+}
+
+### EspacoAtualizar400
+PUT {{EspacoCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+	"unidadeOrganizacionalId": null,
+  "nome": null,
+  "descricao": null
+}
+
+### EspacoAtualizar404
+PUT {{base_url}}/v1/espacos/{{ID_fake}}
+Content-Type: application/json
+
+{
+	"unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "nome": "Mock 001",
+  "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+}
+
+### EspacoAtualizar500
+PUT {{EspacoCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+	"unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "nome": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore e",
+  "descricao": null
+}
+
+###EspacoBuscarPorID200
+# @name EspacoOficial
+GET {{EspacoCadastrar201Oficial.response.headers.Location}} 
+
+###EspacoBuscarPorID404
+GET {{base_url}}/v1/espacos/{{ID_fake}}
+
+###EspacoBuscarPorID500
+#GET {{EspacoCadastrar201Mock01.response.headers.Location}}
+
+###EspacoBuscar200
+GET {{base_url}}/v1/espacos
+
+###EspacoBuscar200Paged
+GET {{base_url}}/v1/espacos?skip=0&top=2&nome=ck&unidadeOrganizacionalId={{unidade_organizacional_id}}
+
+###EspacoBuscar200Empty
+GET {{base_url}}/v1/espacos?skip=0&top=2&nome=oo&unidadeOrganizacionalId={{unidade_organizacional_id}}
+
+###EspacoBuscar500
+#GET {{base_url}}/v1/espacos
+
+###EspacoDeletar204Mock01
+DELETE {{EspacoCadastrar201Mock01.response.headers.Location}}
+
+###EspacoDeletar204Mock02
+DELETE {{EspacoCadastrar201Mock02.response.headers.Location}}
+
+###EspacoDeletar404
+DELETE {{base_url}}/v1/espacos/{{ID_fake}}
+
+###EspacoDeletar500
+#DELETE {{EspacoCadastrar201Mock01.response.headers.Location}}
+
+
+
+
+# ====================================================================================
+# USUARIOS
+# ====================================================================================
+
+###
+# @name UsuarioCadastrar201Oficial
+POST {{base_url}}/v1/usuarios
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "username": "48 23871354",
+  "senha": "Senha@123",
+  "nome": "Bruce Baner"
+}
+
+###
+# @name UsuarioCadastrar201Mock01
+POST {{base_url}}/v1/usuarios
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "username": "92 21076466",
+  "senha": "Senha@123",
+  "nome": "Cristiano Ronaldo"
+}
+
+
+###
+# @name UsuarioCadastrar201Mock02
+POST {{base_url}}/v1/usuarios
+Content-Type: application/json
+
+{
+    "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+    "username": "43 34970516",
+    "senha": "Senha@123",
+    "nome": "Lionel Messi"
+}
+
+###
+# @name UsuarioCadastrar201Mock03
+POST {{base_url}}/v1/usuarios
+Content-Type: application/json
+
+{
+    "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+    "username": "37 33729843",
+    "senha": "Senha@123",
+    "nome": "Kylian Mbappé"
+}
+
+###UsuarioCadastrar400
+POST {{base_url}}/v1/usuarios
+Content-Type: application/json
+
+{
+    "unidadeOrganizacionalId": null,
+    "username": null,
+    "senha": null,
+    "nome": null
+}
+
+###UsuarioCadastrar400Duplicated
+POST {{base_url}}/v1/usuarios
+Content-Type: application/json
+
+{
+    "unidadeOrganizacionalId": "{{unidade_organizacional_id}},
+    "username": "37 33729843",
+    "senha": "Senha@123",
+    "nome": "Kylian Mbappé"
+}
+
+###UsuarioCadastrar400NotFound
+POST {{base_url}}/v1/usuarios
+Content-Type: application/json
+
+{
+    "unidadeOrganizacionalId": "{{ID_fake}}",
+    "username": "37 33729843",
+    "senha": "Senha@123",
+    "nome": "Kylian Mbappé"
+}
+
+###UsuarioCadastrar500
+POST {{base_url}}/v1/usuarios
+Content-Type: application/json
+
+{
+    "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+    "username": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    "senha": "Senha@123",
+    "nome": "Cristiano Ronaldo"
+}
+
+###UsuarioAtualizar200
+PUT {{UsuarioCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+	"unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "username": "92 21076466",
+  "senha": "Senha@123",
+  "nome": "Cristiano Ronaldo dos Santos Aveiro"
+}
+
+###UsuarioAtualizar400
+PUT {{UsuarioCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+    "unidadeOrganizacionalId": null,
+    "username": null,
+    "senha": null,
+    "nome": null
+}
+
+###UsuarioAtualizar400Duplicated
+PUT {{UsuarioCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+    "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+    "username": "37 33729843",
+    "senha": "Senha@123",
+    "nome": "Cristiano Ronaldo dos Santos Aveiro"
+}
+
+###UsuarioAtualizar404
+PUT {{base_url}}/v1/usuarios/{{ID_fake}}
+Content-Type: application/json
+
+{
+    "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+    "username": "35 27694560",
+    "senha": "Senha@123",
+    "nome": "Cristiano Ronaldo dos Santos Aveiro"
+}
+
+###UsuarioAtualizar500
+PUT {{UsuarioCadastrar201Mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+    "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+    "username": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    "senha": "Senha@123",
+    "nome": "Cristiano Ronaldo dos Santos Aveiro"
+}
+
+###UsuarioValidarAcesso200
+PATCH {{UsuarioCadastrar201Mock01.response.headers.Location}}
+
+###UsuarioValidarAcesso400
+PATCH {{UsuarioCadastrar201Mock01.response.headers.Location}}
+
+###UsuarioValidarAcesso404
+PATCH {{base_url}}/v1/usuarios/{{ID_fake}}
+
+###UsuarioValidarAcesso500
+#PATCH {{UsuarioCadastrar201Mock01.response.headers.Location}}
+
+###UsuarioBuscarPorID200
+# @name CadastrarUsuarioOficial
+GET {{UsuarioCadastrar201Oficial.response.headers.Location}}
+
+###UsuarioBuscarPorID404
+GET {{base_url}}/v1/usuarios/{{ID_fake}}
+
+###UsuarioBuscarPorID500
+#GET {{UsuarioCadastrar201Mock01.response.headers.Location}}
+
+###UsuarioBuscar200
+GET {{base_url}}/v1/usuarios
+
+###usuarioBuscar200Paged
+GET {{base_url}}/v1/usuarios?skip=1&top=2&username=6&unidadeOrganizacionalId={{unidade_organizacional_id}}
+
+###UsuarioBuscar200Empty
+GET {{base_url}}/v1/usuarios?skip=1&top=2&username=000&unidadeOrganizacionalId={{unidade_organizacional_id}}
+
+###UsuarioBuscar500
+#GET {{base_url}}/v1/usuarios
+
+###UsuarioDeletar204
+DELETE {{UsuarioCadastrar201Mock01.response.headers.Location}}
+
+###UsuarioDeletar204
+DELETE {{UsuarioCadastrar201Mock02.response.headers.Location}}
+
+###UsuarioDeletar204
+DELETE {{UsuarioCadastrar201Mock03.response.headers.Location}}
+
+###UsuarioDeletar404
+DELETE {{UsuarioCadastrar201Mock01.response.headers.Location}}
+
+###UsuarioDeletar500
+#DELETE {{UsuarioCadastrar201Mock01.response.headers.Location}}
+
+# ====================================================================================
+# ITEM_ESTOQUE
+# ====================================================================================
+
+###
+# @name ItemEstoqueCadastrar201mock01
+POST {{base_url}}/v1/itens-estoque
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "espacoId": "{{espaco_id}}",
+  "descricao": "mjolnir.",
+  "tipoUnidadeMedida": 5,
+  "quantidade": 1
+}
+
+###
+# @name ItemEstoqueCadastrar201mock02
+POST {{base_url}}/v1/itens-estoque
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "espacoId": "{{espaco_id}}",
+  "descricao": "Stormbreaker.",
+  "tipoUnidadeMedida": 5,
+  "quantidade": 1
+}
+
+###ItemEstoqueCadastrar400
+POST {{base_url}}/v1/itens-estoque
+Content-Type: application/json
+
+{
+  "descricao": "",
+  "tipoUnidadeMedida": 5,
+  "quantidade": 1
+}
+
+###ItemEstoqueCadastrar500
+POST {{base_url}}/v1/itens-estoque
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{ID_fake}}",
+  "espacoId": "{{ID_fake}}",
+  "descricao": "teste",
+  "tipoUnidadeMedida": null,
+  "quantidade": null
+}
+
+###ItemEstoqueAtualizar200
+PUT {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{unidade_organizacional_id}}",
+  "espacoId": "{{espaco_id}}",
+  "descricao": "Martelo do Thor.",
+  "tipoUnidadeMedida": 5,
+  "quantidade": 1
+}
+
+###ItemEstoqueAtualizar400
+PUT {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "descricao": "Martelo do Thor.",
+  "tipoUnidadeMedida": 5,
+  "quantidade": 1
+}
+
+###ItemEstoqueAtualizar500
+PUT {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "unidadeOrganizacionalId": "{{ID_fake}}",
+  "espacoId": "{{ID_fake}}",
+  "descricao": "teste",
+  "tipoUnidadeMedida": null,
+  "quantidade": null
+}
+
+###ItemEstoqueMovimentar200
+PATCH {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "quantidade": 1,
+  "tipoMovimentacao": 1
+}
+
+###ItemEstoqueMovimentar400
+PATCH {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "quantidade": 0,
+  "tipoMovimentacao": 0
+}
+
+###ItemEstoqueMovimentar400Insufficient
+PATCH {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "quantidade": 20,
+  "tipoMovimentacao": 2
+}
+
+###ItemEstoqueMovimentar404
+PATCH {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "quantidade": 20,
+  "tipoMovimentacao": 3
+}
+
+###ItemEstoqueMovimentar500
+PATCH {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+Content-Type: application/json
+
+{
+  "quantidade": "teste",
+  "tipoMovimentacao": 2
+}
+
+###ItemEstoqueBuscarPorID200
+GET {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+
+###ItemEstoqueBuscarPorID404
+GET {{base_url}}/v1/itens-estoque/{{ID_fake}}
+
+###ItemEstoqueBuscarPorId500
+#GET {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+
+###ItemEstoqueBuscar200
+GET {{base_url}}/v1/itens-estoque
+
+###ItemEstoqueBuscar200paged
+GET {{base_url}}/v1/itens-estoque?skip=0&top=5&descricao=.
+
+###ItemEstoqueBuscar200Empty
+GET {{base_url}}/v1/itens-estoque?skip=0&top=5&descricao=monkey
+
+###ItemEstoqueBuscar200
+#GET {{base_url}}/v1/itens-estoque
+
+###ItemEstoqueBuscarHistorico200
+GET {{base_url}}/v1/itens-estoque/{{usuario_id}}/historico
+
+###ItemEstoqueBuscarHistorico500
+#GET {{base_url}}/v1/itens-estoque/{{usuario_id}}/historico
+
+###ItemEstoqueDeletar200Mock01
+DELETE {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+
+###ItemEstoqueDeletar200Mock02
+DELETE {{ItemEstoqueCadastrar201mock02.response.headers.Location}}
+
+###ItemEstoqueDeletar404
+DELETE {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
+
+###ItemEstoqueDeletar500
+#DELETE {{ItemEstoqueCadastrar201mock01.response.headers.Location}}
