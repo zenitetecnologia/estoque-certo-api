@@ -19,11 +19,13 @@ builder.Services.AddScoped<EspacoRepository>();
 builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<ItemEstoqueRepository>();
 builder.Services.AddScoped<HistoricoRepository>();
+builder.Services.AddScoped<AuthRepository>();
 
 builder.Services.AddScoped<UnidadeOrganizacionalService>();
 builder.Services.AddScoped<EspacoService>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ItemEstoqueService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddCors(x => x.AddPolicy("*", y => y.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
@@ -46,6 +48,7 @@ app.MapUnidadeOrganizacionalEndpoints();
 app.MapEspacoEndpoints();
 app.MapUsuarioEndpoints();
 app.MapItemEstoqueEndpoints();
+app.MapAuthEndpoints();
 
 app.UseExceptionHandler(errorApp =>
 {

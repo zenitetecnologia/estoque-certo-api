@@ -1,0 +1,235 @@
+﻿using Estoque.Server.Exceptions;
+using Estoque.Server.Models;
+using Estoque.Server.Repositories;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+namespace Estoque.Server.Services;
+
+public class AuthService : BaseService
+{
+    private readonly AuthRepository _authRepository;
+    private readonly IConfiguration _configuration;
+
+    public AuthService(AuthRepository authRepository, IConfiguration configuration)
+    {
+        _authRepository = authRepository;
+        _configuration = configuration;
+    }
+
+    public async Task<AuthToken> Login(Auth auth)
+    {
+        try
+        {
+            ValidarAuth(auth);
+
+            var usuario = await _authRepository.ObterUsername(auth.Username, auth.UnidadeOrganizacionalId!.Value);
+
+            if (usuario == null)
+                throw new UnauthorizedAccessException("Usuário não encontrado para a unidade organizacional informada.");
+
+            if (usuario.Senha != auth.Senha)
+                throw new UnauthorizedAccessException("Usuário ou senha incorreta.");
+
+            if (!usuario.Valido)
+                throw new Exception("FORBIDDEN:Usuário não validado.");
+
+            return new AuthToken
+            {
+                Token = GerarTokenJwt(usuario)
+            };
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            throw;
+        }
+        catch (Exception ex) when (ex.Message.StartsWith("FORBIDDEN:"))
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao realizar login: {ex.Message}");
+        }
+    }
+
+    private string GerarTokenJwt(Usuario usuario)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        var keyString = _configuration["Jwt:Key"] ?? "yuri_lucas_zenite_tecnologia_2026_auth";
+        var key = Encoding.ASCII.GetBytes(keyString);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, usuario.UsuarioId.ToString()),
+                new Claim(ClaimTypes.Name, usuario.Username),
+                new Claim("UnidadeOrganizacionalId", usuario.UnidadeOrganizacionalId.ToString()!),
+                new Claim(ClaimTypes.Role, usuario.Perfil.ToString()),
+                new Claim("Valido", usuario.Valido.ToString())
+            }),
+            Expires = DateTime.UtcNow.AddHours(8),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+    }
+
+    public async Task EsquecerSenha(Auth auth)
+    {
+        try
+        {
+            ValidarAuth(auth);
+
+            var usuario = await _authRepository.ObterUsername(auth.Username, auth.UnidadeOrganizacionalId!.Value);
+
+            if (usuario == null)
+                throw new NotFoundException("Usuário não encontrado.");
+
+            string codigoGerado = new Random().Next(100000, 999999).ToString();
+
+            await _authRepository.InserirCodigoAcesso(usuario.UsuarioId, codigoGerado);
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao solicitar recuperação: {ex.Message}");
+        }
+    }
+
+    public async Task<string> VerificarCodigo(AuthVerify auth)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(auth.Code))
+            {
+                AddError("Code", "Informe o código.");
+                throw new ValidationException(Errors);
+            }
+
+            var codigoAcesso = await _authRepository.ObterCodigoPorSms(auth.Code);
+
+            if (codigoAcesso == null)
+                throw new NotFoundException("Código não encontrado.");
+
+            if (codigoAcesso.Utilizado)
+                throw new InvalidOperationException("Este código já foi utilizado.");
+
+            if (DateTime.UtcNow > codigoAcesso.DataSolicitacao.AddMinutes(5))
+                throw new InvalidOperationException("O tempo de validação deste código expirou.");
+
+            bool existeMaisRecente = await _authRepository.BuscarUltimoCodigo(codigoAcesso.UsuarioId, codigoAcesso.DataSolicitacao);
+            if (existeMaisRecente)
+                throw new InvalidOperationException("Este código foi invalidado porque uma nova solicitação foi feita.");
+
+            string codigoGigante = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)).ToLower();
+
+            await _authRepository.AtualizarCodigoValidado(codigoAcesso.UsuarioId, codigoAcesso.Codigo, codigoGigante);
+
+            return codigoGigante;
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (InvalidOperationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao verificar código: {ex.Message}");
+        }
+    }
+
+    public async Task RedefinirSenha(AuthReset auth)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(auth.CodigoAcessoId))
+                AddError("CodigoAcessoId", "Código de acesso não informado.");
+
+            if (string.IsNullOrWhiteSpace(auth.Senha))
+                AddError("Senha", "Informe a nova senha.");
+
+            if (Errors.Any())
+                throw new ValidationException(Errors);
+
+            var codigoAcesso = await _authRepository.ObterCodigoPorId(auth.CodigoAcessoId);
+
+            if (codigoAcesso == null)
+                throw new NotFoundException("Código de acesso inválido ou não encontrado.");
+
+            if (!codigoAcesso.Utilizado)
+                throw new InvalidOperationException("Este código não foi validado. Volte e informe os 6 dígitos primeiro.");
+
+            if (codigoAcesso.ResetEfetuado)
+                throw new InvalidOperationException("Este código de acesso já foi utilizado.");
+
+            if (codigoAcesso.DataAcessoId.HasValue && DateTime.UtcNow > codigoAcesso.DataAcessoId.Value.AddMinutes(5))
+                throw new InvalidOperationException("O tempo limite para utilizar este código expirou. Solicite um novo código.");
+
+            bool existeMaisRecente = await _authRepository.BuscarUltimoCodigo(codigoAcesso.UsuarioId, codigoAcesso.DataSolicitacao);
+            if (existeMaisRecente)
+                throw new InvalidOperationException("Esta sessão expirou porque um novo código foi solicitado recentemente.");
+
+            await _authRepository.RedefinirSenha(codigoAcesso.UsuarioId, auth.Senha);
+
+            await _authRepository.MarcarResetEfetuado(codigoAcesso.CodigoAcessoId!);
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (InvalidOperationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao redefinir senha: {ex.Message}");
+        }
+    }
+
+    private void ValidarAuth(Auth auth)
+    {
+        if (string.IsNullOrWhiteSpace(auth.Username))
+            AddError(nameof(auth.Username), "Informe o username.");
+
+        if (auth.GetType() == typeof(Auth))
+        {
+            if (string.IsNullOrWhiteSpace(auth.Senha))
+                AddError(nameof(auth.Senha), "Informe a senha.");
+        }
+
+        if (auth.UnidadeOrganizacionalId == null || auth.UnidadeOrganizacionalId == Guid.Empty)
+            AddError(nameof(auth.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
+
+        if (Errors.Any())
+            throw new ValidationException(Errors);
+    }
+}
