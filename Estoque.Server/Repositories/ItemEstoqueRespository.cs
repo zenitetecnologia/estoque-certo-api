@@ -73,12 +73,11 @@ public class ItemEstoqueRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("id", itemEstoqueId);
-            cmd.Parameters.AddWithValue("espaco_id", item.EspacoId);
-            cmd.Parameters.AddWithValue("descricao", item.Descricao);
-            cmd.Parameters.AddWithValue("tipo_unidade_medida", (int)item.TipoUnidadeMedida);
-            cmd.Parameters.AddWithValue("quantidade", item.Quantidade);
-
+            cmd.Parameters.Add("id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
+            cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = item.EspacoId;
+            cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = item.Descricao;
+            cmd.Parameters.Add("tipo_unidade_medida", NpgsqlDbType.Integer).Value = (int)item.TipoUnidadeMedida;
+            cmd.Parameters.Add("quantidade", NpgsqlDbType.Numeric).Value = item.Quantidade;
             return await cmd.ExecuteNonQueryAsync();
         }
         catch

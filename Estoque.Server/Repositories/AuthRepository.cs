@@ -31,8 +31,8 @@ public class AuthRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", unidadeOrganizacionalId);
+            cmd.Parameters.Add("username", NpgsqlTypes.NpgsqlDbType.Varchar).Value = username;
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId;
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
@@ -83,7 +83,8 @@ public class AuthRepository : BaseRepository
         {
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("codigo", codigoSms);
+            cmd.Parameters.Add("codigo", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoSms;
+
             await using var reader = await cmd.ExecuteReaderAsync();
 
             if (await reader.ReadAsync())
@@ -128,12 +129,14 @@ public class AuthRepository : BaseRepository
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            var agora = DateTime.UtcNow;
-            cmd.Parameters.AddWithValue("data_validacao", agora);
-            cmd.Parameters.AddWithValue("codigo_acesso_id", codigoAcessoId);
-            cmd.Parameters.AddWithValue("data_acesso_id", agora);
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
-            cmd.Parameters.AddWithValue("codigo", codigoSms);
+            var agoraUtc = DateTime.UtcNow;
+            var agora = DateTime.SpecifyKind(agoraUtc, DateTimeKind.Unspecified);
+
+            cmd.Parameters.Add("data_validacao", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = agora;
+            cmd.Parameters.Add("codigo_acesso_id", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoAcessoId;
+            cmd.Parameters.Add("data_acesso_id", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = agora;
+            cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId;
+            cmd.Parameters.Add("codigo", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoSms;
 
             await cmd.ExecuteNonQueryAsync();
         }
@@ -159,8 +162,8 @@ public class AuthRepository : BaseRepository
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
-            cmd.Parameters.AddWithValue("data_solicitacao", dataSolicitacao);
+            cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId;
+            cmd.Parameters.Add("data_solicitacao", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = dataSolicitacao;
 
             return (bool)(await cmd.ExecuteScalarAsync())!;
         }
@@ -192,7 +195,8 @@ public class AuthRepository : BaseRepository
         {
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("codigo_acesso_id", codigoAcessoId);
+            cmd.Parameters.Add("codigo_acesso_id", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoAcessoId;
+
             await using var reader = await cmd.ExecuteReaderAsync();
 
             if (await reader.ReadAsync())
@@ -241,9 +245,12 @@ public class AuthRepository : BaseRepository
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
-            cmd.Parameters.AddWithValue("codigo", codigo);
-            cmd.Parameters.AddWithValue("data_solicitacao", DateTime.UtcNow);
+            var agoraUtc = DateTime.UtcNow;
+            var agora = DateTime.SpecifyKind(agoraUtc, DateTimeKind.Unspecified);
+
+            cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId;
+            cmd.Parameters.Add("codigo", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigo;
+            cmd.Parameters.Add("data_solicitacao", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = agora;
 
             await cmd.ExecuteNonQueryAsync();
         }
@@ -263,8 +270,8 @@ public class AuthRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("usuario_id", usuarioId);
-            cmd.Parameters.AddWithValue("senha", novaSenha);
+            cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId;
+            cmd.Parameters.Add("senha", NpgsqlTypes.NpgsqlDbType.Varchar).Value = novaSenha;
 
             return await cmd.ExecuteNonQueryAsync();
         }
@@ -289,7 +296,7 @@ public class AuthRepository : BaseRepository
         {
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.AddWithValue("codigo_acesso_id", codigoAcessoId);
+            cmd.Parameters.Add("codigo_acesso_id", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoAcessoId;
 
             await cmd.ExecuteNonQueryAsync();
         }

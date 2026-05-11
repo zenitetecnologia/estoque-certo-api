@@ -1,6 +1,7 @@
 ﻿using Estoque.Server.Exceptions;
 using Estoque.Server.Models;
 using Estoque.Server.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 namespace Estoque.Server.Services;
 
@@ -8,11 +9,13 @@ public class UsuarioService : BaseService
 {
     private readonly UsuarioRepository _usuarioRepository;
     private readonly UnidadeOrganizacionalRepository _unidadeOrganizacionalRepository;
+    private readonly IPasswordHasher<Usuario> _passwordHasher;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, UnidadeOrganizacionalRepository unidadeOrganizacionalRepository)
+    public UsuarioService(UsuarioRepository usuarioRepository, UnidadeOrganizacionalRepository unidadeOrganizacionalRepository, IPasswordHasher<Usuario> passwordHasher)
     {
         _usuarioRepository = usuarioRepository;
         _unidadeOrganizacionalRepository = unidadeOrganizacionalRepository;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<Guid> Cadastrar(Usuario usuario)
@@ -22,6 +25,7 @@ public class UsuarioService : BaseService
             await ValidarCampos(usuario, Guid.Empty);
 
             usuario.Perfil = PerfilUsuario.Normal;
+            usuario.Senha = _passwordHasher.HashPassword(usuario, usuario.Senha);
 
             return await _usuarioRepository.Cadastrar(usuario);
         }
@@ -40,6 +44,8 @@ public class UsuarioService : BaseService
         try
         {
             await ValidarCampos(usuario, usuarioId);
+
+            usuario.Senha = _passwordHasher.HashPassword(usuario, usuario.Senha);
 
             var affected = await _usuarioRepository.Atualizar(usuario, usuarioId);
 

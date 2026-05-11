@@ -1,8 +1,10 @@
 using Estoque.Server.Controllers;
 using Estoque.Server.Exceptions;
+using Estoque.Server.Models;
 using Estoque.Server.Repositories;
 using Estoque.Server.Services;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +28,8 @@ builder.Services.AddScoped<EspacoService>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ItemEstoqueService>();
 builder.Services.AddScoped<AuthService>();
+
+builder.Services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>();
 
 builder.Services.AddCors(x => x.AddPolicy("*", y => y.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 

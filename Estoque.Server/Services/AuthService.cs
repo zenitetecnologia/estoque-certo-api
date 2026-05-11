@@ -1,6 +1,7 @@
 ﻿using Estoque.Server.Exceptions;
 using Estoque.Server.Models;
 using Estoque.Server.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,11 +13,13 @@ public class AuthService : BaseService
 {
     private readonly AuthRepository _authRepository;
     private readonly IConfiguration _configuration;
+    private readonly IPasswordHasher<Usuario> _passwordHasher;
 
-    public AuthService(AuthRepository authRepository, IConfiguration configuration)
+    public AuthService(AuthRepository authRepository, IConfiguration configuration, IPasswordHasher<Usuario> passwordHasher)
     {
         _authRepository = authRepository;
         _configuration = configuration;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<AuthToken> Login(Auth auth)
@@ -30,7 +33,9 @@ public class AuthService : BaseService
             if (usuario == null)
                 throw new UnauthorizedAccessException("Usuário não encontrado para a unidade organizacional informada.");
 
-            if (usuario.Senha != auth.Senha)
+            var verificacaoSenha = _passwordHasher.VerifyHashedPassword(usuario, usuario.Senha, auth.Senha);
+
+            if (verificacaoSenha == PasswordVerificationResult.Failed)
                 throw new UnauthorizedAccessException("Usuário ou senha incorreta.");
 
             if (!usuario.Valido)
@@ -193,7 +198,13 @@ public class AuthService : BaseService
             if (existeMaisRecente)
                 throw new InvalidOperationException("Esta sessão expirou porque um novo código foi solicitado recentemente.");
 
-            await _authRepository.RedefinirSenha(codigoAcesso.UsuarioId, auth.Senha);
+            var DummyUsuario = new Usuario { UsuarioId = codigoAcesso.UsuarioId };
+
+            var hashedSenha = _passwordHasher.HashPassword(DummyUsuario, auth.Senha);
+
+            await _authRepository.RedefinirSenha(codigoAcesso.UsuarioId, hashedSenha);
+
+            await _authRepository.MarcarResetEfetuado(codigoAcesso.CodigoAcessoId!);
 
             await _authRepository.MarcarResetEfetuado(codigoAcesso.CodigoAcessoId!);
         }

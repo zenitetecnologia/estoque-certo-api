@@ -220,9 +220,9 @@ public class UsuarioRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            cmd.Parameters.AddWithValue("username", username);
-            cmd.Parameters.AddWithValue("unidade_organizacional_id", (object?)unidadeOrganizacionalId ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("ignoreId", ignoreId);
+            cmd.Parameters.Add("username", NpgsqlDbType.Varchar).Value = username;
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = (object?)unidadeOrganizacionalId ?? DBNull.Value;
+            cmd.Parameters.Add("ignoreId", NpgsqlDbType.Uuid).Value = ignoreId;
 
             var result = await cmd.ExecuteScalarAsync();
 
