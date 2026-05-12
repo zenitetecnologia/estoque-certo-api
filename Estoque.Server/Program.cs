@@ -8,7 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+    throw new InvalidOperationException("A variável de ambiente DefaultConnection não foi encontrada ou configurada.");
 
 builder.Services.AddScoped<IDbConnection>(x => new Npgsql.NpgsqlConnection(connectionString));
 
@@ -35,9 +39,6 @@ builder.Services.AddCors(x => x.AddPolicy("*", y => y.AllowAnyOrigin().AllowAnyM
 
 var app = builder.Build();
 
-app.UseDefaultFiles();
-app.MapStaticAssets();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -46,7 +47,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("*");
 app.UseAuthorization();
-app.MapFallbackToFile("/index.html");
 
 app.MapUnidadeOrganizacionalEndpoints();
 app.MapEspacoEndpoints();
