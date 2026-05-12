@@ -19,6 +19,7 @@ builder.Services.AddScoped<IDbConnection>(x => new Npgsql.NpgsqlConnection(conne
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 builder.Services.AddScoped<UnidadeOrganizacionalRepository>();
 builder.Services.AddScoped<EspacoRepository>();
