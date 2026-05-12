@@ -86,4 +86,6 @@ app.UseExceptionHandler(errorApp =>
     });
 });
 
+app.MapHealthChecks("/health");
+
 app.Run();
