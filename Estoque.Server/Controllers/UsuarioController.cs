@@ -55,7 +55,8 @@ public static class UsuarioController
        .Produces(StatusCodes.Status200OK)
        .Produces<string>(StatusCodes.Status400BadRequest)
        .Produces<string>(StatusCodes.Status404NotFound)
-       .Produces<string>(StatusCodes.Status500InternalServerError);
+       .Produces<string>(StatusCodes.Status500InternalServerError)
+       .RequireAuthorization(policy => policy.RequireRole("Admin"));
         #endregion
 
         #region [ delete ]
@@ -70,7 +71,8 @@ public static class UsuarioController
         .WithDescription("Exclui um usuário do sistema.")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<string>(StatusCodes.Status404NotFound)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
+        .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireAuthorization(policy => policy.RequireRole("Admin"));
         #endregion
 
         #region [ get ]
@@ -84,7 +86,8 @@ public static class UsuarioController
         .WithSummary("Retorna lista de usuários")
         .WithDescription("Retorna uma lista de usuários de acordo com os parâmetros informados.")
         .Produces<List<UsuarioGetResponse>>(StatusCodes.Status200OK)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
+        .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireAuthorization(policy => policy.RequireRole("Admin"));
         #endregion
 
         #region [ get by id ]
@@ -100,7 +103,8 @@ public static class UsuarioController
         .WithDescription("Retorna um usuário específico por ID.")
         .Produces<UsuarioGetResponse>(StatusCodes.Status200OK)
         .Produces<string>(StatusCodes.Status404NotFound)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
+        .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireAuthorization(policy => policy.RequireRole("Admin"));
         #endregion
     }
 }

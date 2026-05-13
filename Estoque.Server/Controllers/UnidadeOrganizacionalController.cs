@@ -23,7 +23,8 @@ public static class UnidadeOrganizacionalController
         .WithDescription("Cadastra uma nova unidade organizacional.")
         .Produces(StatusCodes.Status201Created)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
+        .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireAuthorization(policy => policy.RequireRole("Admin"));
         #endregion
 
         #region [ put ]
@@ -39,7 +40,8 @@ public static class UnidadeOrganizacionalController
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
+        .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireAuthorization(policy => policy.RequireRole("Admin"));
         #endregion
 
         #region [ delete ]
@@ -54,7 +56,8 @@ public static class UnidadeOrganizacionalController
         .WithDescription("Exclui uma unidade organizacional do banco de dados.")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<string>(StatusCodes.Status404NotFound)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
+        .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireAuthorization(policy => policy.RequireRole("Admin"));
         #endregion
 
         #region [ get ]

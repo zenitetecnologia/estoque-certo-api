@@ -5,7 +5,11 @@ using Estoque.Server.Repositories;
 using Estoque.Server.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +24,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<UnidadeOrganizacionalRepository>();
 builder.Services.AddScoped<EspacoRepository>();
@@ -47,6 +53,74 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("*");
+
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path;
+
+    if (path.StartsWithSegments("/v1/auth") ||
+            path.StartsWithSegments("/swagger") ||
+            path.StartsWithSegments("/health") ||
+            (path.StartsWithSegments("/v1/unidades-organizacionais") && context.Request.Method == HttpMethods.Get) ||
+            (path.StartsWithSegments("/v1/usuarios") && context.Request.Method == HttpMethods.Post))
+    {
+        await next();
+        return;
+    }
+
+    var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+
+    if (string.IsNullOrWhiteSpace(authHeader) || !authHeader.StartsWith("Bearer "))
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        await context.Response.WriteAsync("Não autorizado.");
+        return;
+    }
+
+    var token = authHeader.Substring("Bearer ".Length).Trim();
+
+    try
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var keyString = builder.Configuration["Jwt:Key"] ?? "yuri_lucas_zenite_tecnologia_2026_auth";
+        var key = Encoding.ASCII.GetBytes(keyString);
+
+        tokenHandler.ValidateToken(token, new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        }, out SecurityToken validatedToken);
+
+        var jwtToken = (JwtSecurityToken)validatedToken;
+
+        var claimsIdentity = new ClaimsIdentity(jwtToken.Claims, "Bearer", "unique_name", "role");
+        context.User = new ClaimsPrincipal(claimsIdentity);
+
+        await next();
+
+        if (context.Response.StatusCode == StatusCodes.Status403Forbidden && !context.Response.HasStarted)
+        {
+            await context.Response.WriteAsync("Não autorizado.");
+        }
+    }
+    catch (SecurityTokenExpiredException)
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        await context.Response.WriteAsync("Não autorizado");
+        return;
+    }
+    catch (Exception)
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        await context.Response.WriteAsync("Não autorizado.");
+        return;
+    }
+});
+
 app.UseAuthorization();
 
 app.MapUnidadeOrganizacionalEndpoints();
