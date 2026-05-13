@@ -18,12 +18,15 @@ public class Historico
     public virtual Guid? UsuarioId { get; set; }
 
     [JsonPropertyOrder(5)]
-    public DateTime DataHora { get; set; } = DateTime.UtcNow;
+    public string? Nome { get; set; }
 
     [JsonPropertyOrder(6)]
-    public decimal QuantidadeAnterior { get; set; }
+    public DateTime DataHora { get; set; } = DateTime.UtcNow;
 
     [JsonPropertyOrder(7)]
+    public decimal QuantidadeAnterior { get; set; }
+
+    [JsonPropertyOrder(8)]
     public decimal QuantidadeResultante { get; set; }
 }
 
