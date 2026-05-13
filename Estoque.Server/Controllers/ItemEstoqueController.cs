@@ -6,7 +6,7 @@ namespace Estoque.Server.Controllers;
 
 public static class ItemEstoqueController
 {
-    public record RequisicaoMovimentacao(decimal Quantidade, TipoMovimentacao TipoMovimentacao);
+    public record RequisicaoMovimentacao(decimal Quantidade, TipoMovimentacao TipoMovimentacao, Guid UsuarioId);
 
     public static void MapItemEstoqueEndpoints(this WebApplication app)
     {
@@ -94,7 +94,7 @@ public static class ItemEstoqueController
         {
             try
             {
-                await service.Movimentar(itemEstoqueId, req.Quantidade, req.TipoMovimentacao, null);
+                await service.Movimentar(itemEstoqueId, req.Quantidade, req.TipoMovimentacao, req.UsuarioId);
 
                 return Results.Ok(new { mensagem = "Movimentação registada e estoque atualizado com sucesso." });
             }
