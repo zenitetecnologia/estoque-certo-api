@@ -90,7 +90,7 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<UsuarioGetResponse?> Obter(Guid usuarioId)
+    public async Task<Usuario?> Obter(Guid usuarioId)
     {
         const string sql = @"
             SELECT
@@ -120,7 +120,7 @@ public class UsuarioRepository : BaseRepository
 
             if (!await reader.ReadAsync()) return null;
 
-            var usuarioGetResponse = new UsuarioGetResponse();
+            var usuarioGetResponse = new Usuario();
 
             usuarioGetResponse.UsuarioId = reader.GetGuid("usuario_id");
             usuarioGetResponse.Username = reader.GetString("username");
@@ -138,64 +138,55 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<List<UsuarioGetResponse>> Obter(int skip, int top, string? username, Guid? unidadeOrganizacionalId)
+    public async Task<List<UsuarioGetResponse>> Obter(int skip, int top, string? username, Guid? unidadeOrganizacionalId, bool? valido = null)
     {
         var usuarios = new List<UsuarioGetResponse>();
 
         string sql = @"
             SELECT
-                usuario_id,
-                username,
-                senha,
-                nome,
-                perfil,
-                unidade_organizacional_id,
-                valido
+                estoque_certo.usuario.usuario_id,
+                estoque_certo.usuario.username,
+                estoque_certo.usuario.nome,
+                estoque_certo.usuario.unidade_organizacional_id,
+                estoque_certo.usuario.valido,
+                COALESCE(estoque_certo.unidade_organizacional.nome_fantasia, estoque_certo.unidade_organizacional.razao_social, 'Sem Unidade') AS nome_unidade
             FROM
                 estoque_certo.usuario
+            LEFT JOIN
+                estoque_certo.unidade_organizacional ON estoque_certo.usuario.unidade_organizacional_id = estoque_certo.unidade_organizacional.unidade_organizacional_id
             WHERE 1 = 1
         ";
 
-        if (!string.IsNullOrWhiteSpace(username)) sql += " AND username ILIKE @username";
+        if (!string.IsNullOrWhiteSpace(username)) sql += " AND estoque_certo.usuario.username ILIKE @username";
+        if (unidadeOrganizacionalId != null) sql += " AND estoque_certo.usuario.unidade_organizacional_id = @unidade_organizacional_id";
+        if (valido != null) sql += " AND estoque_certo.usuario.valido = @valido";
 
-        if (unidadeOrganizacionalId != null) sql += " AND unidade_organizacional_id = @unidade_organizacional_id";
-
-        sql += " ORDER BY nome LIMIT @top OFFSET @skip";
+        sql += " ORDER BY estoque_certo.usuario.nome LIMIT @top OFFSET @skip";
 
         try
         {
             await EnsureOpenAsync();
-
             await using var cmd = new NpgsqlCommand(sql, Connection);
-
             cmd.Parameters.Add("username", NpgsqlDbType.Varchar).Value = $"%{username}%";
             cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId ?? (object)DBNull.Value;
+            cmd.Parameters.Add("valido", NpgsqlDbType.Boolean).Value = valido ?? (object)DBNull.Value;
             cmd.Parameters.Add("top", NpgsqlDbType.Integer).Value = top;
             cmd.Parameters.Add("skip", NpgsqlDbType.Integer).Value = skip;
 
             await using var reader = await cmd.ExecuteReaderAsync();
-
             while (await reader.ReadAsync())
             {
                 var usuarioGetResponse = new UsuarioGetResponse();
-
                 usuarioGetResponse.UsuarioId = reader.GetGuid("usuario_id");
                 usuarioGetResponse.Username = reader.GetString("username");
-                usuarioGetResponse.Senha = reader.GetString("senha");
                 usuarioGetResponse.Nome = reader.GetString("nome");
-                usuarioGetResponse.Perfil = (PerfilUsuario)reader.GetInt32("perfil");
-                usuarioGetResponse.UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id");
                 usuarioGetResponse.Valido = reader.GetBoolean("valido");
-
+                usuarioGetResponse.NomeUnidadeOrganizacional = reader.GetString("nome_unidade");
                 usuarios.Add(usuarioGetResponse);
             }
-
             return usuarios;
         }
-        catch
-        {
-            throw;
-        }
+        catch { throw; }
     }
 
     public async Task<bool> VerificarUsuarioExiste(string username, Guid? unidadeOrganizacionalId, Guid ignoreId)

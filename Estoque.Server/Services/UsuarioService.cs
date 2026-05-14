@@ -109,11 +109,11 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<List<UsuarioGetResponse>> Obter(int skip, int top, string? username, Guid? unidadeOrganizacionalId)
+    public async Task<List<UsuarioGetResponse>> Obter(int skip, int top, string? username, Guid? unidadeOrganizacionalId, bool? valido = null)
     {
         try
         {
-            return await _usuarioRepository.Obter(skip, top, username, unidadeOrganizacionalId);
+            return await _usuarioRepository.Obter(skip, top, username, unidadeOrganizacionalId, valido);
         }
         catch (Exception ex)
         {
@@ -121,7 +121,7 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<UsuarioGetResponse> Obter(Guid usuarioId)
+    public async Task<Usuario> Obter(Guid usuarioId)
     {
         try
         {

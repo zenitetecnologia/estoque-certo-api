@@ -76,9 +76,9 @@ public static class UsuarioController
         #endregion
 
         #region [ get ]
-        app.MapGet("v1/usuarios", async (UsuarioService service, int skip = 0, int top = 10, string? username = null, Guid? unidadeOrganizacionalId = null) =>
+        app.MapGet("v1/usuarios", async (UsuarioService service, int skip = 0, int top = 10, string? username = null, Guid? unidadeOrganizacionalId = null, bool? valido = null) =>
         {
-            var result = await service.Obter(skip, top, username, unidadeOrganizacionalId);
+            var result = await service.Obter(skip, top, username, unidadeOrganizacionalId, valido);
 
             return Results.Ok(result);
         })

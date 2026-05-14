@@ -29,17 +29,11 @@ public class Usuario
     public virtual bool Valido { get; set; }
 }
 
-public class UsuarioGetResponse : Usuario
+public class UsuarioGetResponse
 {
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    [JsonPropertyOrder(1)]
-    public override Guid UsuarioId { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    [JsonPropertyOrder(6)]
-    public override PerfilUsuario Perfil { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    [JsonPropertyOrder(7)]
-    public override bool Valido { get; set; }
+    public Guid UsuarioId { get; set; }
+    public string? Username { get; set; }
+    public string Nome { get; set; } = string.Empty;
+    public string? NomeUnidadeOrganizacional { get; set; }
+    public bool Valido { get; set; }
 }
