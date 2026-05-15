@@ -10,10 +10,10 @@ public enum TipoUnidadeMedida
 {
     Quilos = 1,
     Gramas = 2,
-    Miligramas = 2,
-    Litros = 3,
-    Mililitros = 4,
-    Unidades = 5
+    Miligramas = 3,
+    Litros = 4,
+    Mililitros = 5,
+    Unidades = 6
 }
 
 public enum TipoMovimentacao
