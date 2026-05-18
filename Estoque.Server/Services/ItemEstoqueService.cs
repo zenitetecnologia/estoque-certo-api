@@ -168,6 +168,45 @@ public class ItemEstoqueService : BaseService
         }
     }
 
+    public async Task<bool> Transferir(Guid itemEstoqueId, Guid novoEspacoId)
+    {
+        try
+        {
+            if (novoEspacoId == Guid.Empty)
+            {
+                AddError("NovoEspacoId", "Informe o novo espaço de destino.");
+                throw new ValidationException(Errors);
+            }
+
+            var itemExistente = await _repository.Obter(itemEstoqueId);
+
+            if (itemExistente == null)
+                throw new NotFoundException("Item de estoque não encontrado.");
+
+            if (itemExistente.EspacoId == novoEspacoId)
+            {
+                AddError("NovoEspacoId", "O item já se encontra neste espaço.");
+                throw new ValidationException(Errors);
+            }
+
+            var affected = await _repository.TransferirEspaco(itemEstoqueId, novoEspacoId);
+
+            return affected > 0;
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao transferir item: {ex.Message}");
+        }
+    }
+
     private async Task ValidarCampos(ItemEstoque item, Guid itemEstoqueId)
     {
         if (itemEstoqueId == Guid.Empty && item.UnidadeOrganizacionalId == Guid.Empty)

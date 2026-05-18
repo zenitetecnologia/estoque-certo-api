@@ -7,6 +7,7 @@ namespace Estoque.Server.Controllers;
 public static class ItemEstoqueController
 {
     public record RequisicaoMovimentacao(decimal Quantidade, TipoMovimentacao TipoMovimentacao, Guid UsuarioId);
+    public record RequisicaoTransferencia(Guid NovoEspacoId);
 
     public static void MapItemEstoqueEndpoints(this WebApplication app)
     {
@@ -106,6 +107,22 @@ public static class ItemEstoqueController
         .WithTags("itens-estoque")
         .WithSummary("Movimenta o estoque de um item")
         .WithDescription("Altera a quantidade de estoque de um item via PATCH, gerando histórico automático.")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError);
+        #endregion
+
+        #region [ patch - transferir ]
+        app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}/transferir", async (ItemEstoqueService service, Guid itemEstoqueId, RequisicaoTransferencia req) =>
+        {
+            await service.Transferir(itemEstoqueId, req.NovoEspacoId);
+
+            return Results.Ok(new { mensagem = "Item transferido com sucesso para o novo espaço." });
+        })
+        .WithTags("itens-estoque")
+        .WithSummary("Transfere um item para outro espaço")
+        .WithDescription("Altera o espaço (localização) de um item de estoque existente.")
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
