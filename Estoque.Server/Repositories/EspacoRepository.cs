@@ -187,4 +187,27 @@ public class EspacoRepository : BaseRepository
 
         return result != null;
     }
+
+    public async Task<bool> PossuiItensVinculados(Guid espacoId)
+    {
+        const string sql = @"
+            SELECT
+                1
+            FROM
+                estoque_certo.item_estoque
+            WHERE
+                espaco_id = @espaco_id
+            LIMIT 1;
+        ";
+
+        await EnsureOpenAsync();
+
+        await using var cmd = new NpgsqlCommand(sql, Connection);
+
+        cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
+
+        var result = await cmd.ExecuteScalarAsync();
+
+        return result != null;
+    }
 }

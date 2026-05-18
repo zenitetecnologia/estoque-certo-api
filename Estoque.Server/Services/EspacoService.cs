@@ -59,9 +59,21 @@ public class EspacoService : BaseService
     {
         try
         {
+            bool possuiItens = await _repository.PossuiItensVinculados(espacoId);
+
+            if (possuiItens)
+            {
+                AddError("EspacoId", "Não é possível excluir este espaço pois existem itens vinculados a ele.");
+                throw new ValidationException(Errors);
+            }
+
             var affected = await _repository.Excluir(espacoId);
 
             if (affected <= 0) throw new NotFoundException("Espaço não encontrado com o ID informado.");
+        }
+        catch (ValidationException)
+        {
+            throw;
         }
         catch (NotFoundException)
         {
