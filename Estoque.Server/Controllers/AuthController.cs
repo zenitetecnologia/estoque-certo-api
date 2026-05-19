@@ -68,7 +68,7 @@ public static class AuthController
         {
             await service.RedefinirSenha(request);
 
-            return Results.Ok(new { mensagem = "Senha redefinida com sucesso." });
+            return Results.Ok("Senha redefinida com sucesso.");
         })
         .WithTags("auth")
         .WithSummary("Redefine a senha do usuário")
