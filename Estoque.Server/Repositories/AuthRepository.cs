@@ -47,6 +47,8 @@ public class AuthRepository : BaseRepository
                 usuario.Perfil = (PerfilUsuario)reader.GetInt32("perfil");
                 usuario.UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id");
                 usuario.Valido = reader.GetBoolean("valido");
+
+                return usuario;
             }
 
             return null;
