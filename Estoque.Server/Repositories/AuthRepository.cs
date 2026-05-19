@@ -38,16 +38,15 @@ public class AuthRepository : BaseRepository
 
             if (await reader.ReadAsync())
             {
-                return new Usuario
-                {
-                    UsuarioId = reader.GetGuid("usuario_id"),
-                    Username = reader.GetString("username"),
-                    Senha = reader.GetString("senha"),
-                    Nome = reader.GetString("nome"),
-                    Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
-                    UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id"),
-                    Valido = reader.GetBoolean("valido")
-                };
+                var usuario = new Usuario();
+
+                usuario.UsuarioId = reader.GetGuid("usuario_id");
+                usuario.Username = reader.GetString("username");
+                usuario.Senha = reader.GetString("senha");
+                usuario.Nome = reader.GetString("nome");
+                usuario.Perfil = (PerfilUsuario)reader.GetInt32("perfil");
+                usuario.UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id");
+                usuario.Valido = reader.GetBoolean("valido");
             }
 
             return null;
