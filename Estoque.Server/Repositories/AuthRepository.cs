@@ -90,17 +90,17 @@ public class AuthRepository : BaseRepository
 
             if (await reader.ReadAsync())
             {
-                var codigoAcesso = new CodigoAcesso
-                {
-                    UsuarioId = reader.GetGuid("usuario_id"),
-                    Codigo = reader.GetString("codigo"),
-                    DataSolicitacao = reader.GetDateTime("data_solicitacao"),
-                    DataValidacao = reader.GetDateTimeNullable("data_validacao"),
-                    Utilizado = reader.GetBoolean("utilizado"),
-                    CodigoAcessoId = reader.GetStringNullable("codigo_acesso_id"),
-                    DataAcessoId = reader.GetDateTimeNullable("data_acesso_id"),
-                    ResetEfetuado = reader.GetBoolean("reset_efetuado")
-                };
+                var codigoAcesso = new CodigoAcesso();
+
+                codigoAcesso.UsuarioId = reader.GetGuid("usuario_id");
+                codigoAcesso.Codigo = reader.GetString("codigo");
+                codigoAcesso.DataSolicitacao = reader.GetDateTime("data_solicitacao");
+                codigoAcesso.DataValidacao = reader.GetDateTimeNullable("data_validacao");
+                codigoAcesso.Utilizado = reader.GetBoolean("utilizado");
+                codigoAcesso.CodigoAcessoId = reader.GetStringNullable("codigo_acesso_id");
+                codigoAcesso.DataAcessoId = reader.GetDateTimeNullable("data_acesso_id");
+                codigoAcesso.ResetEfetuado = reader.GetBoolean("reset_efetuado");
+
                 return codigoAcesso;
             }
 
@@ -204,20 +204,19 @@ public class AuthRepository : BaseRepository
 
             if (await reader.ReadAsync())
             {
-                var codigoAcesso = new CodigoAcesso
-                {
-                    UsuarioId = reader.GetGuid("usuario_id"),
-                    Codigo = reader.GetString("codigo"),
-                    DataSolicitacao = reader.GetDateTime("data_solicitacao"),
-                    DataValidacao = reader.GetDateTimeNullable("data_validacao"),
-                    Utilizado = reader.GetBoolean("utilizado"),
-                    CodigoAcessoId = reader.GetStringNullable("codigo_acesso_id"),
-                    DataAcessoId = reader.GetDateTimeNullable("data_acesso_id"),
-                    ResetEfetuado = reader.GetBoolean("reset_efetuado")
-                };
+                var codigoAcesso = new CodigoAcesso();
+
+                codigoAcesso.UsuarioId = reader.GetGuid("usuario_id");
+                codigoAcesso.Codigo = reader.GetString("codigo");
+                codigoAcesso.DataSolicitacao = reader.GetDateTime("data_solicitacao");
+                codigoAcesso.DataValidacao = reader.GetDateTimeNullable("data_validacao");
+                codigoAcesso.Utilizado = reader.GetBoolean("utilizado");
+                codigoAcesso.CodigoAcessoId = reader.GetStringNullable("codigo_acesso_id");
+                codigoAcesso.DataAcessoId = reader.GetDateTimeNullable("data_acesso_id");
+                codigoAcesso.ResetEfetuado = reader.GetBoolean("reset_efetuado");
+
                 return codigoAcesso;
             }
-
             return null;
         }
         catch
