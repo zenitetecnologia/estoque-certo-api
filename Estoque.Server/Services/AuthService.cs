@@ -68,7 +68,8 @@ public class AuthService : BaseService
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
-        var keyString = Environment.GetEnvironmentVariable("zenite_jwt_auth") ?? throw new InvalidOperationException("A variável de ambiente zenite_jwt_auth não foi encontrada ou configurada.");
+        var keyString = Environment.GetEnvironmentVariable("zenite_jwt_auth")
+            ?? throw new InvalidOperationException("A variável de ambiente zenite_jwt_auth não foi encontrada ou configurada.");
         var key = Encoding.ASCII.GetBytes(keyString);
 
         var tokenDescriptor = new SecurityTokenDescriptor
