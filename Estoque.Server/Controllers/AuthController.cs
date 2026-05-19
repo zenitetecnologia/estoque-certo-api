@@ -50,7 +50,6 @@ public static class AuthController
 
             return Results.Ok(new
             {
-                mensagem = "Código validado com sucesso.",
                 codigoAcessoId = codigoAcessoId
             });
         })
