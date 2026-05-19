@@ -81,7 +81,7 @@ public class AuthService : BaseService
                 new Claim(ClaimTypes.Role, usuario.Perfil.ToString()),
                 new Claim("Valido", usuario.Valido.ToString())
             }),
-            Expires = DateTime.UtcNow.AddHours(8),
+            Expires = DateTime.UtcNow.AddHours(24),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 

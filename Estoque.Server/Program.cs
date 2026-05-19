@@ -111,7 +111,7 @@ app.Use(async (context, next) =>
     catch (SecurityTokenExpiredException)
     {
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        await context.Response.WriteAsync("Não autorizado");
+        await context.Response.WriteAsync("Não Autorizado. Token expirado.");
         return;
     }
     catch (Exception)
