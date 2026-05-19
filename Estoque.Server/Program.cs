@@ -163,6 +163,13 @@ app.UseExceptionHandler(errorApp =>
             return;
         }
 
+        if (exception is UnauthorizedAccessException unauthorizedAccessException)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsync(unauthorizedAccessException.Message);
+            return;
+        }
+
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
         await context.Response.WriteAsync(exception?.Message ?? "Erro não identificado.");
     });
