@@ -31,7 +31,7 @@ public static class AuthController
         {
             await service.EsquecerSenha(request);
 
-            return Results.Ok(new { mensagem = "Se as informações estiverem corretas, você receberá um código de recuperação." });
+            return Results.Ok("Se as informações estiverem corretas, você receberá um código de recuperação.");
         })
         .WithTags("auth")
         .WithSummary("Solicita recuperação de acesso")
