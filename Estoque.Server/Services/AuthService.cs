@@ -39,7 +39,7 @@ public class AuthService : BaseService
                 throw new UnauthorizedAccessException("Usuário ou senha incorreta.");
 
             if (!usuario.Valido)
-                throw new Exception("Usuário não validado.");
+                throw new ForbiddenException("Usuário não validado.");
 
             return new AuthToken
             {
@@ -54,7 +54,7 @@ public class AuthService : BaseService
         {
             throw;
         }
-        catch (Exception ex) when (ex.Message.StartsWith("FORBIDDEN:"))
+        catch (ForbiddenException)
         {
             throw;
         }

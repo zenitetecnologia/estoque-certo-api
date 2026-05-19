@@ -82,8 +82,7 @@ app.Use(async (context, next) =>
     try
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var keyString = Environment.GetEnvironmentVariable("zenite_jwt_auth") ?? throw new InvalidOperationException("A variável de ambiente zenite_jwt_auth não foi encontrada ou configurada.")
-        ;
+        var keyString = Environment.GetEnvironmentVariable("zenite_jwt_auth") ?? throw new InvalidOperationException("A variável de ambiente zenite_jwt_auth não foi encontrada ou configurada.");
         var key = Encoding.ASCII.GetBytes(keyString);
 
         tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -154,6 +153,13 @@ app.UseExceptionHandler(errorApp =>
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync(invalidOperationException.Message);
+            return;
+        }
+
+        if (exception is ForbiddenException forbiddenException)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsync(forbiddenException.Message);
             return;
         }
 
