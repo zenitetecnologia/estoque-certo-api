@@ -70,6 +70,7 @@ public class AuthService : BaseService
 
         var keyString = Environment.GetEnvironmentVariable("zenite_jwt_auth")
             ?? throw new InvalidOperationException("A variável de ambiente zenite_jwt_auth não foi encontrada ou configurada.");
+
         var key = Encoding.ASCII.GetBytes(keyString);
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -124,10 +125,7 @@ public class AuthService : BaseService
         try
         {
             if (string.IsNullOrWhiteSpace(auth.Code))
-                AddError("Code", "Informe o código.");
-
-            if (Errors.Any())
-                throw new ValidationException(Errors);
+                throw new InvalidOperationException("Informe o código.");
 
             var codigoAcesso = await _authRepository.ObterCodigoPorSms(auth.Code);
 
@@ -150,15 +148,11 @@ public class AuthService : BaseService
 
             return codigoAcessoId;
         }
-        catch (ValidationException)
+        catch (InvalidOperationException)
         {
             throw;
         }
         catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (InvalidOperationException)
         {
             throw;
         }
@@ -173,13 +167,10 @@ public class AuthService : BaseService
         try
         {
             if (string.IsNullOrWhiteSpace(auth.CodigoAcessoId))
-                AddError("CodigoAcessoId", "Código de acesso não informado.");
+                throw new InvalidOperationException("Código de acesso não informado.");
 
             if (string.IsNullOrWhiteSpace(auth.Senha))
-                AddError("Senha", "Informe a nova senha.");
-
-            if (Errors.Any())
-                throw new ValidationException(Errors);
+                throw new InvalidOperationException("Informe a nova senha.");
 
             var codigoAcesso = await _authRepository.ObterCodigoPorId(auth.CodigoAcessoId);
 
@@ -207,15 +198,11 @@ public class AuthService : BaseService
 
             await _authRepository.MarcarResetEfetuado(codigoAcesso.CodigoAcessoId!);
         }
-        catch (ValidationException)
+        catch (InvalidOperationException)
         {
             throw;
         }
         catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (InvalidOperationException)
         {
             throw;
         }
@@ -230,11 +217,8 @@ public class AuthService : BaseService
         if (string.IsNullOrWhiteSpace(auth.Username))
             AddError(nameof(auth.Username), "Informe o username.");
 
-        if (auth.GetType() == typeof(Auth))
-        {
-            if (string.IsNullOrWhiteSpace(auth.Senha))
-                AddError(nameof(auth.Senha), "Informe a senha.");
-        }
+        if (string.IsNullOrWhiteSpace(auth.Senha))
+            AddError(nameof(auth.Senha), "Informe a senha.");
 
         if (auth.UnidadeOrganizacionalId == null || auth.UnidadeOrganizacionalId == Guid.Empty)
             AddError(nameof(auth.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
