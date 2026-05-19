@@ -143,11 +143,11 @@ public class AuthService : BaseService
             if (existeMaisRecente)
                 throw new InvalidOperationException("Este código foi invalidado porque uma nova solicitação foi feita.");
 
-            string codigoGigante = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)).ToLower();
+            string codigoAcessoId = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)).ToLower();
 
-            await _authRepository.AtualizarCodigoValidado(codigoAcesso.UsuarioId, codigoAcesso.Codigo, codigoGigante);
+            await _authRepository.AtualizarCodigoValidado(codigoAcesso.UsuarioId, codigoAcesso.Codigo, codigoAcessoId);
 
-            return codigoGigante;
+            return codigoAcessoId;
         }
         catch (ValidationException)
         {

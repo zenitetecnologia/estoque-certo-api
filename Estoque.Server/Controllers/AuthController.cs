@@ -46,12 +46,12 @@ public static class AuthController
         #region [ verify ]
         app.MapPost("v1/auth/verify", async (AuthService service, AuthVerify request) =>
         {
-            string codigoGigante = await service.VerificarCodigo(request);
+            string codigoAcessoId = await service.VerificarCodigo(request);
 
             return Results.Ok(new
             {
                 mensagem = "Código validado com sucesso.",
-                codigoAcessoId = codigoGigante
+                codigoAcessoId = codigoAcessoId
             });
         })
         .WithTags("auth")
