@@ -25,6 +25,12 @@ public static class DbExtentions
     public static DateTime GetDateTime(this IDataReader reader, string column) =>
         reader.GetDateTime(reader.GetOrdinal(column));
 
+    public static DateTime? GetDateTimeNullable(this IDataReader reader, string column)
+    {
+        int ordinal = reader.GetOrdinal(column);
+        return reader.IsDBNull(ordinal) ? null : reader.GetDateTime(ordinal);
+    }
+
     public static Guid? GetGuidNullable(this IDataReader reader, string column)
     {
         int ordinal = reader.GetOrdinal(column);

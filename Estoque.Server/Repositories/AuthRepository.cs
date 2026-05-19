@@ -90,18 +90,20 @@ public class AuthRepository : BaseRepository
 
             if (await reader.ReadAsync())
             {
-                return new CodigoAcesso
+                var codigoAcesso = new CodigoAcesso
                 {
-                    UsuarioId = reader.GetGuid(0),
-                    Codigo = reader.GetString(1),
-                    DataSolicitacao = reader.GetDateTime(2),
-                    DataValidacao = reader.IsDBNull(3) ? null : reader.GetDateTime(3),
-                    Utilizado = reader.GetBoolean(4),
-                    CodigoAcessoId = reader.IsDBNull(5) ? null : reader.GetString(5),
-                    DataAcessoId = reader.IsDBNull(6) ? null : reader.GetDateTime(6),
-                    ResetEfetuado = reader.GetBoolean(7)
+                    UsuarioId = reader.GetGuid("usuario_id"),
+                    Codigo = reader.GetString("codigo"),
+                    DataSolicitacao = reader.GetDateTime("data_solicitacao"),
+                    DataValidacao = reader.GetDateTimeNullable("data_validacao"),
+                    Utilizado = reader.GetBoolean("utilizado"),
+                    CodigoAcessoId = reader.GetStringNullable("codigo_acesso_id"),
+                    DataAcessoId = reader.GetDateTimeNullable("data_acesso_id"),
+                    ResetEfetuado = reader.GetBoolean("reset_efetuado")
                 };
+                return codigoAcesso;
             }
+
             return null;
         }
         catch
@@ -202,18 +204,20 @@ public class AuthRepository : BaseRepository
 
             if (await reader.ReadAsync())
             {
-                return new CodigoAcesso
+                var codigoAcesso = new CodigoAcesso
                 {
-                    UsuarioId = reader.GetGuid(0),
-                    Codigo = reader.GetString(1),
-                    DataSolicitacao = reader.GetDateTime(2),
-                    DataValidacao = reader.IsDBNull(3) ? null : reader.GetDateTime(3),
-                    Utilizado = reader.GetBoolean(4),
-                    CodigoAcessoId = reader.IsDBNull(5) ? null : reader.GetString(5),
-                    DataAcessoId = reader.IsDBNull(6) ? null : reader.GetDateTime(6),
-                    ResetEfetuado = reader.GetBoolean(7)
+                    UsuarioId = reader.GetGuid("usuario_id"),
+                    Codigo = reader.GetString("codigo"),
+                    DataSolicitacao = reader.GetDateTime("data_solicitacao"),
+                    DataValidacao = reader.GetDateTimeNullable("data_validacao"),
+                    Utilizado = reader.GetBoolean("utilizado"),
+                    CodigoAcessoId = reader.GetStringNullable("codigo_acesso_id"),
+                    DataAcessoId = reader.GetDateTimeNullable("data_acesso_id"),
+                    ResetEfetuado = reader.GetBoolean("reset_efetuado")
                 };
+                return codigoAcesso;
             }
+
             return null;
         }
         catch
