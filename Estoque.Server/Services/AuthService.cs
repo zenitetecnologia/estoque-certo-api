@@ -39,7 +39,7 @@ public class AuthService : BaseService
                 throw new UnauthorizedAccessException("Usuário ou senha incorreta.");
 
             if (!usuario.Valido)
-                throw new Exception("FORBIDDEN:Usuário não validado.");
+                throw new Exception("Usuário não validado.");
 
             return new AuthToken
             {
