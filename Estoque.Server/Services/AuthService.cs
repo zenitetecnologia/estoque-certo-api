@@ -68,8 +68,7 @@ public class AuthService : BaseService
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
-        var keyString = Environment.GetEnvironmentVariable("zenite_jwt_auth")
-            ?? throw new InvalidOperationException("A variável de ambiente zenite_jwt_auth não foi encontrada ou configurada.");
+        var keyString = Environment.GetEnvironmentVariable("zenite_jwt_auth") ?? throw new InvalidOperationException("A variável de ambiente zenite_jwt_auth não foi encontrada ou configurada.");
         var key = Encoding.ASCII.GetBytes(keyString);
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -124,10 +123,10 @@ public class AuthService : BaseService
         try
         {
             if (string.IsNullOrWhiteSpace(auth.Code))
-            {
                 AddError("Code", "Informe o código.");
+
+            if (Errors.Any())
                 throw new ValidationException(Errors);
-            }
 
             var codigoAcesso = await _authRepository.ObterCodigoPorSms(auth.Code);
 
@@ -204,8 +203,6 @@ public class AuthService : BaseService
             var hashedSenha = _passwordHasher.HashPassword(DummyUsuario, auth.Senha);
 
             await _authRepository.RedefinirSenha(codigoAcesso.UsuarioId, hashedSenha);
-
-            await _authRepository.MarcarResetEfetuado(codigoAcesso.CodigoAcessoId!);
 
             await _authRepository.MarcarResetEfetuado(codigoAcesso.CodigoAcessoId!);
         }
