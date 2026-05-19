@@ -105,7 +105,7 @@ app.Use(async (context, next) =>
 
         if (context.Response.StatusCode == StatusCodes.Status403Forbidden && !context.Response.HasStarted)
         {
-            await context.Response.WriteAsync("Não autorizado.");
+            await context.Response.WriteAsync("Acesso negado.");
         }
     }
     catch (SecurityTokenExpiredException)
