@@ -69,6 +69,7 @@ public class AuthService : BaseService
         var tokenHandler = new JwtSecurityTokenHandler();
 
         var keyString = Environment.GetEnvironmentVariable("zenite_jwt_auth") ?? throw new InvalidOperationException("A variável de ambiente zenite_jwt_auth não foi encontrada ou configurada.");
+
         var key = Encoding.ASCII.GetBytes(keyString);
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -123,10 +124,7 @@ public class AuthService : BaseService
         try
         {
             if (string.IsNullOrWhiteSpace(auth.Code))
-                AddError("Code", "Informe o código.");
-
-            if (Errors.Any())
-                throw new ValidationException(Errors);
+                throw new InvalidOperationException("Informe o código.");
 
             var codigoAcesso = await _authRepository.ObterCodigoPorSms(auth.Code);
 
@@ -143,21 +141,17 @@ public class AuthService : BaseService
             if (existeMaisRecente)
                 throw new InvalidOperationException("Este código foi invalidado porque uma nova solicitação foi feita.");
 
-            string codigoAcessoId = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)).ToLower();
+            string codigoResetId = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)).ToLower();
 
-            await _authRepository.AtualizarCodigoValidado(codigoAcesso.UsuarioId, codigoAcesso.Codigo, codigoAcessoId);
+            await _authRepository.AtualizarCodigoValidado(codigoAcesso.UsuarioId, codigoAcesso.Codigo, codigoResetId);
 
-            return codigoAcessoId;
+            return codigoResetId;
         }
-        catch (ValidationException)
+        catch (InvalidOperationException)
         {
             throw;
         }
         catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (InvalidOperationException)
         {
             throw;
         }
@@ -172,13 +166,10 @@ public class AuthService : BaseService
         try
         {
             if (string.IsNullOrWhiteSpace(auth.CodigoAcessoId))
-                AddError("CodigoAcessoId", "Código de acesso não informado.");
+                throw new InvalidOperationException("Código de acesso não informado.");
 
             if (string.IsNullOrWhiteSpace(auth.Senha))
-                AddError("Senha", "Informe a nova senha.");
-
-            if (Errors.Any())
-                throw new ValidationException(Errors);
+                throw new InvalidOperationException("Informe a nova senha.");
 
             var codigoAcesso = await _authRepository.ObterCodigoPorId(auth.CodigoAcessoId);
 
@@ -191,7 +182,7 @@ public class AuthService : BaseService
             if (codigoAcesso.ResetEfetuado)
                 throw new InvalidOperationException("Este código de acesso já foi utilizado.");
 
-            if (codigoAcesso.DataAcessoId.HasValue && DateTime.UtcNow > codigoAcesso.DataAcessoId.Value.AddMinutes(5))
+            if (codigoAcesso.DataResetId.HasValue && DateTime.UtcNow > codigoAcesso.DataResetId.Value.AddMinutes(5))
                 throw new InvalidOperationException("O tempo limite para utilizar este código expirou. Solicite um novo código.");
 
             bool existeMaisRecente = await _authRepository.BuscarUltimoCodigo(codigoAcesso.UsuarioId, codigoAcesso.DataSolicitacao);
@@ -204,17 +195,13 @@ public class AuthService : BaseService
 
             await _authRepository.RedefinirSenha(codigoAcesso.UsuarioId, hashedSenha);
 
-            await _authRepository.MarcarResetEfetuado(codigoAcesso.CodigoAcessoId!);
+            await _authRepository.MarcarResetEfetuado(codigoAcesso.CodigoResetId!);
         }
-        catch (ValidationException)
+        catch (InvalidOperationException)
         {
             throw;
         }
         catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (InvalidOperationException)
         {
             throw;
         }
@@ -229,11 +216,8 @@ public class AuthService : BaseService
         if (string.IsNullOrWhiteSpace(auth.Username))
             AddError(nameof(auth.Username), "Informe o username.");
 
-        if (auth.GetType() == typeof(Auth))
-        {
-            if (string.IsNullOrWhiteSpace(auth.Senha))
-                AddError(nameof(auth.Senha), "Informe a senha.");
-        }
+        if (string.IsNullOrWhiteSpace(auth.Senha))
+            AddError(nameof(auth.Senha), "Informe a senha.");
 
         if (auth.UnidadeOrganizacionalId == null || auth.UnidadeOrganizacionalId == Guid.Empty)
             AddError(nameof(auth.UnidadeOrganizacionalId), "Informe a unidade organizacional.");

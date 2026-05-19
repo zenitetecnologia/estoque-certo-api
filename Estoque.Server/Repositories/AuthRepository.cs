@@ -68,8 +68,8 @@ public class AuthRepository : BaseRepository
                 data_solicitacao,
                 data_validacao,
                 utilizado,
-                codigo_acesso_id,
-                data_acesso_id,
+                codigo_reset_id,
+                data_reset_id,
                 reset_efetuado
             FROM 
                 estoque_certo.codigo_acesso
@@ -97,8 +97,8 @@ public class AuthRepository : BaseRepository
                 codigoAcesso.DataSolicitacao = reader.GetDateTime("data_solicitacao");
                 codigoAcesso.DataValidacao = reader.GetDateTimeNullable("data_validacao");
                 codigoAcesso.Utilizado = reader.GetBoolean("utilizado");
-                codigoAcesso.CodigoAcessoId = reader.GetStringNullable("codigo_acesso_id");
-                codigoAcesso.DataAcessoId = reader.GetDateTimeNullable("data_acesso_id");
+                codigoAcesso.CodigoResetId = reader.GetStringNullable("codigo_reset_id");
+                codigoAcesso.DataResetId = reader.GetDateTimeNullable("data_reset_id");
                 codigoAcesso.ResetEfetuado = reader.GetBoolean("reset_efetuado");
 
                 return codigoAcesso;
@@ -112,7 +112,7 @@ public class AuthRepository : BaseRepository
         }
     }
 
-    public async Task AtualizarCodigoValidado(Guid usuarioId, string codigoSms, string codigoAcessoId)
+    public async Task AtualizarCodigoValidado(Guid usuarioId, string codigoSms, string codigoResetId)
     {
         const string sql = @"
             UPDATE 
@@ -120,8 +120,8 @@ public class AuthRepository : BaseRepository
             SET 
                 utilizado = true, 
                 data_validacao = @data_validacao,
-                codigo_acesso_id = @codigo_acesso_id,
-                data_acesso_id = @data_acesso_id
+                codigo_reset_id = @codigo_reset_id,
+                data_reset_id = @data_reset_id
             WHERE 
                 usuario_id = @usuario_id 
                 AND codigo = @codigo;
@@ -136,8 +136,8 @@ public class AuthRepository : BaseRepository
             var agora = DateTime.SpecifyKind(agoraUtc, DateTimeKind.Unspecified);
 
             cmd.Parameters.Add("data_validacao", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = agora;
-            cmd.Parameters.Add("codigo_acesso_id", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoAcessoId;
-            cmd.Parameters.Add("data_acesso_id", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = agora;
+            cmd.Parameters.Add("codigo_reset_id", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoResetId;
+            cmd.Parameters.Add("data_reset_id", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = agora;
             cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId;
             cmd.Parameters.Add("codigo", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoSms;
 
@@ -176,7 +176,7 @@ public class AuthRepository : BaseRepository
         }
     }
 
-    public async Task<CodigoAcesso?> ObterCodigoPorId(string codigoAcessoId)
+    public async Task<CodigoAcesso?> ObterCodigoPorId(string codigoResetId)
     {
         const string sql = @"
             SELECT 
@@ -185,20 +185,20 @@ public class AuthRepository : BaseRepository
                 data_solicitacao,
                 data_validacao,
                 utilizado,
-                codigo_acesso_id,
-                data_acesso_id,
+                codigo_reset_id,
+                data_reset_id,
                 reset_efetuado
             FROM 
                 estoque_certo.codigo_acesso
             WHERE 
-                codigo_acesso_id = @codigo_acesso_id;
+                codigo_reset_id = @codigo_reset_id;
         ";
 
         try
         {
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.Add("codigo_acesso_id", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoAcessoId;
+            cmd.Parameters.Add("codigo_reset_id", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoResetId;
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
@@ -211,8 +211,8 @@ public class AuthRepository : BaseRepository
                 codigoAcesso.DataSolicitacao = reader.GetDateTime("data_solicitacao");
                 codigoAcesso.DataValidacao = reader.GetDateTimeNullable("data_validacao");
                 codigoAcesso.Utilizado = reader.GetBoolean("utilizado");
-                codigoAcesso.CodigoAcessoId = reader.GetStringNullable("codigo_acesso_id");
-                codigoAcesso.DataAcessoId = reader.GetDateTimeNullable("data_acesso_id");
+                codigoAcesso.CodigoResetId = reader.GetStringNullable("codigo_reset_id");
+                codigoAcesso.DataResetId = reader.GetDateTimeNullable("data_reset_id");
                 codigoAcesso.ResetEfetuado = reader.GetBoolean("reset_efetuado");
 
                 return codigoAcesso;
@@ -285,7 +285,7 @@ public class AuthRepository : BaseRepository
         }
     }
 
-    public async Task MarcarResetEfetuado(string codigoAcessoId)
+    public async Task MarcarResetEfetuado(string codigoResetId)
     {
         const string sql = @"
             UPDATE
@@ -293,14 +293,14 @@ public class AuthRepository : BaseRepository
             SET 
                 reset_efetuado = true 
             WHERE 
-                codigo_acesso_id = @codigo_acesso_id;
+                codigo_reset_id = @codigo_reset_id;
         ";
 
         try
         {
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
-            cmd.Parameters.Add("codigo_acesso_id", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoAcessoId;
+            cmd.Parameters.Add("codigo_reset_id", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoResetId;
 
             await cmd.ExecuteNonQueryAsync();
         }

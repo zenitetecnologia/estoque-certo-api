@@ -45,16 +45,16 @@ public static class AuthController
         #region [ verify ]
         app.MapPost("v1/auth/verify", async (AuthService service, AuthVerify request) =>
         {
-            string codigoAcessoId = await service.VerificarCodigo(request);
+            string codigoResetId = await service.VerificarCodigo(request);
 
             return Results.Ok(new
             {
-                codigoAcessoId = codigoAcessoId
+                codigoResetId = codigoResetId
             });
         })
         .WithTags("auth")
         .WithSummary("Verifica o código SMS")
-        .WithDescription("Valida o código de 6 dígitos e retorna o CodigoAcessoId para redefinição.")
+        .WithDescription("Valida o código de 6 dígitos e retorna o CodigoResetId para redefinição.")
         .Produces(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)

@@ -7,7 +7,7 @@ public class CodigoAcesso
     public DateTime DataSolicitacao { get; set; }
     public DateTime? DataValidacao { get; set; }
     public bool Utilizado { get; set; }
-    public string? CodigoAcessoId { get; set; }
-    public DateTime? DataAcessoId { get; set; }
+    public string? CodigoResetId { get; set; }
+    public DateTime? DataResetId { get; set; }
     public bool ResetEfetuado { get; set; }
 }
