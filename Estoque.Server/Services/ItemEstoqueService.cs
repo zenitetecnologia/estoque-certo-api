@@ -1,6 +1,7 @@
 ﻿using Estoque.Server.Exceptions;
 using Estoque.Server.Models;
 using Estoque.Server.Repositories;
+using System.Data;
 
 namespace Estoque.Server.Services;
 
@@ -8,11 +9,13 @@ public class ItemEstoqueService : BaseService
 {
     private readonly ItemEstoqueRepository _repository;
     private readonly HistoricoRepository _historicoRepository;
+    private readonly IDbConnection _connection;
 
-    public ItemEstoqueService(ItemEstoqueRepository repository, HistoricoRepository historicoRepository)
+    public ItemEstoqueService(ItemEstoqueRepository repository, HistoricoRepository historicoRepository, IDbConnection connection)
     {
         _repository = repository;
         _historicoRepository = historicoRepository;
+        _connection = connection;
     }
 
     public async Task<Guid> Cadastrar(ItemEstoque item)
@@ -118,17 +121,51 @@ public class ItemEstoqueService : BaseService
                 throw new ValidationException(Errors);
             }
 
-            var sucesso = await _repository.Movimentar(itemEstoqueId, quantidade, tipo, usuarioId);
+            if (_connection.State != ConnectionState.Open)
+                _connection.Open();
 
-            if (!sucesso)
+            using var transaction = _connection.BeginTransaction();
+
+            try
             {
-                if (tipo == TipoMovimentacao.Subtracao)
-                    throw new InvalidOperationException("Estoque insuficiente para realizar esta saída, ou item não encontrado.");
-                else
-                    throw new NotFoundException("Item não encontrado.");
-            }
+                var item = await _repository.ObterParaAtualizacao(itemEstoqueId, transaction);
 
-            return true;
+                if (item == null)
+                    throw new NotFoundException("Item não encontrado.");
+
+                decimal novaQuantidade = item.Quantidade;
+
+                if (tipo == TipoMovimentacao.Acrescimo)
+                {
+                    novaQuantidade += quantidade;
+                }
+                else
+                {
+                    novaQuantidade -= quantidade;
+                    if (novaQuantidade < 0)
+                        throw new InvalidOperationException("Estoque insuficiente para realizar esta saída.");
+                }
+
+                await _repository.AtualizarQuantidade(itemEstoqueId, novaQuantidade, transaction);
+
+                var historico = new Historico
+                {
+                    ItemEstoqueId = itemEstoqueId,
+                    TipoMovimentacao = tipo,
+                    UsuarioId = usuarioId,
+                    QuantidadeAnterior = item.Quantidade,
+                    QuantidadeResultante = novaQuantidade
+                };
+                await _historicoRepository.InserirComTransacao(historico, transaction);
+
+                transaction.Commit();
+                return true;
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
         catch (InvalidOperationException)
         {

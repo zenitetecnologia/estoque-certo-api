@@ -66,4 +66,36 @@ public class HistoricoRepository : BaseRepository
             throw;
         }
     }
+
+    public async Task InserirComTransacao(Historico historico, IDbTransaction transaction)
+    {
+        const string sql = @"
+            INSERT INTO estoque_certo.historico
+            (
+                item_estoque_id,
+                tipo_movimentacao,
+                usuario_id,
+                quantidade_anterior,
+                quantidade_resultante
+            )
+            VALUES
+            (
+                @item_estoque_id,
+                @tipo_movimentacao,
+                @usuario_id,
+                @quantidade_anterior,
+                @quantidade_resultante
+            );
+        ";
+
+        await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
+
+        cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = historico.ItemEstoqueId;
+        cmd.Parameters.Add("tipo_movimentacao", NpgsqlDbType.Integer).Value = (int)historico.TipoMovimentacao;
+        cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = historico.UsuarioId.HasValue ? (object)historico.UsuarioId.Value : DBNull.Value;
+        cmd.Parameters.Add("quantidade_anterior", NpgsqlDbType.Numeric).Value = historico.QuantidadeAnterior;
+        cmd.Parameters.Add("quantidade_resultante", NpgsqlDbType.Numeric).Value = historico.QuantidadeResultante;
+
+        await cmd.ExecuteNonQueryAsync();
+    }
 }

@@ -212,62 +212,58 @@ public class ItemEstoqueRepository : BaseRepository
         }
     }
 
-    public async Task<bool> Movimentar(Guid itemEstoqueId, decimal quantidadeMovimento, TipoMovimentacao tipoMovimentacao, Guid? usuarioId)
+    public async Task<ItemEstoqueRecuperado?> ObterParaAtualizacao(Guid itemEstoqueId, IDbTransaction transaction)
     {
-        string operacao = tipoMovimentacao == TipoMovimentacao.Acrescimo ? "+" : "-";
-
-        string sql = $@"
-            WITH updated_item AS (
-                UPDATE 
-                    estoque_certo.item_estoque
-                SET 
-                    quantidade = quantidade {operacao} @quantidade_movimento
-                WHERE 
-                    item_estoque_id = @item_estoque_id
-                    AND (quantidade {operacao} @quantidade_movimento) >= 0
-                RETURNING 
-                    item_estoque_id, 
-                    
-                    quantidade {(operacao == "+" ? "-" : "+")} @quantidade_movimento AS qtd_anterior, 
-                    quantidade AS qtd_resultante
-            )
-            INSERT INTO estoque_certo.historico
-            (
-                item_estoque_id,
-                tipo_movimentacao,
-                usuario_id,
-                quantidade_anterior,
-                quantidade_resultante
-            )
+        const string sql = @"
             SELECT
                 item_estoque_id,
-                @tipo_movimentacao,
-                @usuario_id,
-                qtd_anterior,
-                qtd_resultante
+                unidade_organizacional_id,
+                espaco_id,
+                descricao,
+                tipo_unidade_medida,
+                quantidade
             FROM
-                updated_item
-            RETURNING
-                item_estoque_id;
+                estoque_certo.item_estoque
+            WHERE
+                item_estoque_id = @id
+            FOR UPDATE;
         ";
 
-        try
-        {
-            await EnsureOpenAsync();
-            await using var cmd = new NpgsqlCommand(sql, Connection);
+        await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
+        cmd.Parameters.Add("id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
 
-            cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
-            cmd.Parameters.Add("quantidade_movimento", NpgsqlDbType.Numeric).Value = quantidadeMovimento;
-            cmd.Parameters.Add("tipo_movimentacao", NpgsqlDbType.Integer).Value = (int)tipoMovimentacao;
-            cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId.HasValue ? (object)usuarioId.Value : DBNull.Value;
+        await using var reader = await cmd.ExecuteReaderAsync();
 
-            var result = await cmd.ExecuteScalarAsync();
-            return result != null;
-        }
-        catch
+        if (await reader.ReadAsync())
         {
-            throw;
+            var item = new ItemEstoqueRecuperado();
+
+            item.ItemEstoqueId = reader.GetGuid("item_estoque_id");
+            item.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+            item.EspacoId = reader.GetGuid("espaco_id");
+            item.Descricao = reader.GetString("descricao");
+            item.TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida");
+            item.Quantidade = reader.GetDecimal("quantidade");
+
+            return item;
         }
+
+        return null;
+    }
+
+    public async Task AtualizarQuantidade(Guid itemEstoqueId, decimal novaQuantidade, IDbTransaction transaction)
+    {
+        const string sql = @"
+            UPDATE estoque_certo.item_estoque
+            SET quantidade = @quantidade
+            WHERE item_estoque_id = @id;
+        ";
+
+        await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
+        cmd.Parameters.Add("id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
+        cmd.Parameters.Add("quantidade", NpgsqlDbType.Numeric).Value = novaQuantidade;
+
+        await cmd.ExecuteNonQueryAsync();
     }
 
     public async Task<int> TransferirEspaco(Guid itemEstoqueId, Guid novoEspacoId)
