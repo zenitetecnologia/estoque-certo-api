@@ -21,7 +21,6 @@ public static class AuthController
         .Produces<AuthToken>(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status401Unauthorized)
-        .Produces<string>(StatusCodes.Status403Forbidden)
         .Produces<string>(StatusCodes.Status500InternalServerError)
         .AllowAnonymous();
         #endregion
