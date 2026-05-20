@@ -94,7 +94,7 @@ public class AuthService : BaseService
     {
         try
         {
-            ValidarAuth(auth);
+            ValidarAuthForgot(auth);
 
             var usuario = await _authRepository.ObterUsername(auth.Username, auth.UnidadeOrganizacionalId!.Value);
 
@@ -219,6 +219,18 @@ public class AuthService : BaseService
         if (string.IsNullOrWhiteSpace(auth.Senha))
             AddError(nameof(auth.Senha), "Informe a senha.");
 
+        if (auth.UnidadeOrganizacionalId == null || auth.UnidadeOrganizacionalId == Guid.Empty)
+            AddError(nameof(auth.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
+
+        if (Errors.Any())
+            throw new ValidationException(Errors);
+    }
+
+    private void ValidarAuthForgot(Auth auth)
+    {
+        if (string.IsNullOrWhiteSpace(auth.Username))
+
+            AddError(nameof(auth.Username), "Informe o username.");
         if (auth.UnidadeOrganizacionalId == null || auth.UnidadeOrganizacionalId == Guid.Empty)
             AddError(nameof(auth.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
 
