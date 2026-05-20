@@ -7,10 +7,14 @@
 
 @espaco_fake_id = {{EspacoFakeId.response.body.$.espacoId}}
 
+@token = {{Login.response.body.$.token}}
+
 
 ### UnidadeOrganizacional_Cadastrar_201_Oficial
 POST {{base_url}}/v1/unidades-organizacionais
 Content-Type: application/json
+Authorization: Bearer {{token}}
+
 {
   "matrizId": null,
   "cnpj": "60935686000134",
@@ -31,6 +35,7 @@ Content-Type: application/json
 ### UnidadeOrganizacional_Cadastrar_201_Fake
 POST {{base_url}}/v1/unidades-organizacionais
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": "60163639000110",
@@ -51,6 +56,7 @@ Content-Type: application/json
 ### UnidadeOrganizacional_Cadastrar_400_CamposVazios
 POST {{base_url}}/v1/unidades-organizacionais
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": null,
@@ -71,6 +77,7 @@ Content-Type: application/json
 ### UnidadeOrganizacional_Cadastrar_400_CnpjInvalido
 POST {{base_url}}/v1/unidades-organizacionais
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": "1610404700013B",
@@ -91,6 +98,7 @@ Content-Type: application/json
 ### UnidadeOrganizacional_Cadastrar_400_RegistroDuplicado
 POST {{base_url}}/v1/unidades-organizacionais
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": "60935686000134",
@@ -111,6 +119,7 @@ Content-Type: application/json
 ### UnidadeOrganizacional_Cadastrar_500
 POST {{base_url}}/v1/unidades-organizacionais
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": "45907344000117",
@@ -152,7 +161,8 @@ GET {{base_url}}/v1/unidades-organizacionais
 
 
 ### UnidadeOrganizacional_ObterPorId_200
-GET {{base_url}}/v1/unidades-organizacionais/{{unidade_organizacional_fake_id}}
+GET {{base_url}}/v1/unidades-organizacionais/
+{{unidade_organizacional_fake_id}}
 ###
 
 ### UnidadeOrganizacional_ObterPorId_404
@@ -167,6 +177,7 @@ GET {{base_url}}/v1/unidades-organizacionais/{{unidade_organizacional_fake_id}}
 ### UnidadeOrganizacional_Atualizar_200_Fake
 PUT {{base_url}}/v1/unidades-organizacionais/{{unidade_organizacional_fake_id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": "60163639000110",
@@ -187,6 +198,7 @@ Content-Type: application/json
 ### UnidadeOrganizacional_Atualizar_400_CamposVazios
 PUT {{base_url}}/v1/unidades-organizacionais/{{unidade_organizacional_fake_id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": null,
@@ -207,6 +219,7 @@ Content-Type: application/json
 ### UnidadeOrganizacional_Atualizar_400_CnpjInvalido
 PUT {{base_url}}/v1/unidades-organizacionais/{{unidade_organizacional_fake_id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": "1610404700013B",
@@ -227,6 +240,7 @@ Content-Type: application/json
 ### UnidadeOrganizacional_Atualizar_400_RegistroDuplicado
 PUT {{base_url}}/v1/unidades-organizacionais/{{unidade_organizacional_fake_id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": "60935686000134",
@@ -247,6 +261,7 @@ Content-Type: application/json
 ### UnidadeOrganizacional_Atualizar_404
 PUT {{base_url}}/v1/unidades-organizacionais/{{general_fake_id_for_all_situations}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": "45907344000117",
@@ -267,6 +282,7 @@ Content-Type: application/json
 ### UnidadeOrganizacional_Atualizar_500
 PUT {{base_url}}/v1/unidades-organizacionais/{{unidade_organizacional_fake_id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "matrizId": null,
   "cnpj": "45907344000117",
@@ -287,14 +303,17 @@ Content-Type: application/json
 
 ### UnidadeOrganizacional_Excluir_204
 DELETE {{base_url}}/v1/unidades-organizacionais/{{unidade_organizacional_fake_id}}
+Authorization: Bearer {{token}}
 ###
 
 ### UnidadeOrganizacional_Excluir_404
 DELETE {{base_url}}/v1/unidades-organizacionais/{{general_fake_id_for_all_situations}}
+Authorization: Bearer {{token}}
 ###
 
 ### UnidadeOrganizacional_Excluir_500
 DELETE {{base_url}}/v1/unidades-organizacionais/{{general_fake_id_for_all_situations}}
+Authorization: Bearer {{token}}
 ###
 
 
@@ -306,6 +325,7 @@ GET {{base_url}}/v1/unidades-organizacionais?skip=0&top=1&cnpj=60935686000134
 ### Espaco_Cadastrar_201_Oficial
 POST {{base_url}}/v1/espacos
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}",
   "nome": "Sede",
@@ -316,6 +336,7 @@ Content-Type: application/json
 ### Espaco_Cadastrar_201_Fake
 POST {{base_url}}/v1/espacos
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}",
   "nome": "(Fake)",
@@ -326,6 +347,7 @@ Content-Type: application/json
 ### Espaco_Cadastrar_400_CamposInvalidos
 POST {{base_url}}/v1/espacos
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "unidadeOrganizacionalId": null,
   "nome": null,
@@ -336,6 +358,7 @@ Content-Type: application/json
 ### Espaco_Cadastrar_400_RegistroDuplicado
 POST {{base_url}}/v1/espacos
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}",
   "nome": "(Fake)",
@@ -346,6 +369,7 @@ Content-Type: application/json
 ### Espaco_Cadastrar_500
 POST {{base_url}}/v1/espacos
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}",
   "nome": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
@@ -356,42 +380,51 @@ Content-Type: application/json
 
 ### Espaco_Obter_200
 GET {{base_url}}/v1/espacos
+Authorization: Bearer {{token}}
 ###
 
 ### Espaco_Obter_200_ComPaginacao
 GET {{base_url}}/v1/espacos?skip=1&top=1
+Authorization: Bearer {{token}}
 ###
 
 ### Espaco_Obter_200_ComFiltro
 # @name EspacoFakeId
 GET {{base_url}}/v1/espacos?skip=0&top=10&nome=fake&unidadeOrganizacional={{unidade_organizacional_oficial_id}}
+Authorization: Bearer {{token}}
 ###
 
 ### Espaco_Obter_200_Vazio
 GET {{base_url}}/v1/espacos?skip=0&top=10&nome=xxx&unidadeOrganizacional={{unidade_organizacional_oficial_id}}
+Authorization: Bearer {{token}}
 ###
 
 ### Espaco_Obter_500
 GET {{base_url}}/v1/espacos
+Authorization: Bearer {{token}}
 ###
 
 
 ### Espaco_ObterPorId_200
 GET {{base_url}}/v1/espacos/{{espaco_fake_id}}
+Authorization: Bearer {{token}}
 ###
 
 ### Espaco_ObterPorId_404
 GET {{base_url}}/v1/espacos/{{general_fake_id_for_all_situations}}
+Authorization: Bearer {{token}}
 ###
 
 ### Espaco_ObterPorId_500
 GET {{base_url}}/v1/espacos/{{espaco_fake_id}}
+Authorization: Bearer {{token}}
 ###
 
 
 ### Espaco_Atualizar_200_Fake
 PUT {{base_url}}/v1/espacos/{{espaco_fake_id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}",
   "nome": "[Fake]",
@@ -402,6 +435,7 @@ Content-Type: application/json
 ### Espaco_Atualizar_400_CamposVazios
 PUT {{base_url}}/v1/espacos/{{espaco_fake_id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "unidadeOrganizacionalId": null,
   "nome": null,
@@ -412,6 +446,7 @@ Content-Type: application/json
 ### Espaco_Atualizar_400_RegistroDuplicado
 PUT {{base_url}}/v1/espacos/{{espaco_fake_id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}",
   "nome": "Sede",
@@ -422,6 +457,7 @@ Content-Type: application/json
 ### Espaco_Atualizar_404
 PUT {{base_url}}/v1/espacos/{{general_fake_id_for_all_situations}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}",
   "nome": "[ Fake ]",
@@ -432,6 +468,7 @@ Content-Type: application/json
 ### Espaco_Atualizar_500
 PUT {{base_url}}/v1/espacos/{{espaco_fake_id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 {
   "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}",
   "nome": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
@@ -442,12 +479,272 @@ Content-Type: application/json
 
 ### Espaco_Excluir_204
 DELETE {{base_url}}/v1/espacos/{{espaco_fake_id}}
+Authorization: Bearer {{token}}
 ###
 
 ### Espaco_Excluir_404
 DELETE {{base_url}}/v1/espacos/{{general_fake_id_for_all_situations}}
+Authorization: Bearer {{token}}
 ###
 
 ### Espaco_Excluir_500
 DELETE {{base_url}}/v1/espacos/{{general_fake_id_for_all_situations}}
+Authorization: Bearer {{token}}
+###
+
+
+# AUTH - LOGIN
+
+### Auth_Login_200_Sucesso
+# @name Login
+POST {{base_url}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "73999160352",
+  "senha": "123456",
+  "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}"
+}
+###
+
+### Auth_Login_400_UsernameVazio
+POST {{base_url}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "",
+  "senha": "123",
+  "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}"
+}
+###
+
+### Auth_Login_400_SenhaVazia
+POST {{base_url}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "37991974987",
+  "senha": "",
+  "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}"
+}
+###
+
+### Auth_Login_400_UnidadeVazia
+POST {{base_url}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "37991974987",
+  "senha": "123",
+  "unidadeOrganizacionalId": null
+}
+###
+
+### Auth_Login_401_UsuarioNaoEncontrado
+POST {{base_url}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "88888888888",
+  "senha": "123",
+  "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}"
+}
+###
+
+### Auth_Login_401_SenhaIncorreta
+POST {{base_url}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "37991974987",
+  "senha": "111",
+  "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}"
+}
+###
+
+### Auth_Login_401_UsuarioNaoValidado
+POST {{base_url}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "999999999999",
+  "senha": "123",
+  "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}"
+}
+###
+
+
+# AUTH - FORGOT (ESQUECER SENHA)
+
+### Auth_Forgot_200_Sucesso
+POST {{base_url}}/v1/auth/forgot
+Content-Type: application/json
+
+{
+  "username": "37991974987",
+  "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}"
+}
+###
+
+### Auth_Forgot_404_UsuarioNaoEncontrado
+# Exception: "Usuário não encontrado."
+POST {{base_url}}/v1/auth/forgot
+Content-Type: application/json
+
+{
+  "username": "37991974987",
+  "unidadeOrganizacionalId": "{{unidade_organizacional_oficial_id}}"
+}
+###
+
+
+# AUTH - VERIFY (VERIFICAR CÓDIGO SMS)
+
+### Auth_Verify_200_Sucesso
+POST {{base_url}}/v1/auth/verify
+Content-Type: application/json
+
+{
+  "codigoSms": "123456"
+}
+###
+
+### Auth_Verify_400_CodigoVazio
+# Exception: "Informe o código."
+POST {{base_url}}/v1/auth/verify
+Content-Type: application/json
+
+{
+  "codigoSms": ""
+}
+###
+
+### Auth_Verify_404_CodigoNaoEncontrado
+# Exception: "Código não encontrado."
+POST {{base_url}}/v1/auth/verify
+Content-Type: application/json
+
+{
+  "codigoSms": "999999"
+}
+###
+
+### Auth_Verify_400_CodigoJaUtilizado
+# Exception: "Este código já foi utilizado."
+POST {{base_url}}/v1/auth/verify
+Content-Type: application/json
+
+{
+  "codigoSms": "CODIGO_JA_USADO"
+}
+###
+
+### Auth_Verify_400_TempoExpirado
+# Exception: "O tempo de validação deste código expirou."
+POST {{base_url}}/v1/auth/verify
+Content-Type: application/json
+
+{
+  "codigoSms": "CODIGO_VELHO"
+}
+###
+
+### Auth_Verify_400_NovaSolicitacaoFeita
+# Exception: "Este código foi invalidado porque uma nova solicitação foi feita."
+POST {{base_url}}/v1/auth/verify
+Content-Type: application/json
+
+{
+  "codigoSms": "CODIGO_SUBSTITUIDO"
+}
+###
+
+
+# AUTH - RESET (REDEFINIR SENHA)
+
+### Auth_Reset_200_Sucesso
+POST {{base_url}}/v1/auth/reset
+Content-Type: application/json
+
+{
+  "codigoAcessoId": "COLE_O_CODIGO_ACESSO_ID_AQUI",
+  "senha": "nova_senha_segura"
+}
+###
+
+### Auth_Reset_400_CodigoAcessoVazio
+# Exception: "Código de acesso não informado."
+POST {{base_url}}/v1/auth/reset
+Content-Type: application/json
+
+{
+  "codigoAcessoId": "",
+  "senha": "nova_senha_segura"
+}
+###
+
+### Auth_Reset_400_SenhaVazia
+# Exception: "Informe a nova senha."
+POST {{base_url}}/v1/auth/reset
+Content-Type: application/json
+
+{
+  "codigoAcessoId": "COLE_O_CODIGO_ACESSO_ID_AQUI",
+  "senha": ""
+}
+###
+
+### Auth_Reset_404_CodigoAcessoNaoEncontrado
+# Exception: "Código de acesso inválido ou não encontrado."
+POST {{base_url}}/v1/auth/reset
+Content-Type: application/json
+
+{
+  "codigoAcessoId": "id_inexistente_ou_invalido",
+  "senha": "nova_senha_segura"
+}
+###
+
+### Auth_Reset_400_NaoValidado
+# Exception: "Este código não foi validado. Volte e informe os 6 dígitos primeiro."
+POST {{base_url}}/v1/auth/reset
+Content-Type: application/json
+
+{
+  "codigoAcessoId": "id_de_codigo_nao_validado",
+  "senha": "nova_senha_segura"
+}
+###
+
+### Auth_Reset_400_ResetJaEfetuado
+# Exception: "Este código de acesso já foi utilizado."
+POST {{base_url}}/v1/auth/reset
+Content-Type: application/json
+
+{
+  "codigoAcessoId": "id_de_codigo_ja_resetado",
+  "senha": "nova_senha_segura"
+}
+###
+
+### Auth_Reset_400_TempoLimiteExpirado
+# Exception: "O tempo limite para utilizar este código expirou. Solicite um novo código."
+POST {{base_url}}/v1/auth/reset
+Content-Type: application/json
+
+{
+  "codigoAcessoId": "id_de_codigo_expirado",
+  "senha": "nova_senha_segura"
+}
+###
+
+### Auth_Reset_400_SessaoExpirada
+# Exception: "Esta sessão expirou porque um novo código foi solicitado recentemente."
+POST {{base_url}}/v1/auth/reset
+Content-Type: application/json
+
+{
+  "codigoAcessoId": "id_de_codigo_substituido",
+  "senha": "nova_senha_segura"
+}
 ###
