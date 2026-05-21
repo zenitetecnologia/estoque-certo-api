@@ -93,16 +93,9 @@ public static class ItemEstoqueController
         #region [ patch - movimentação ]
         app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, Guid itemEstoqueId, RequisicaoMovimentacao req) =>
         {
-            try
-            {
-                await service.Movimentar(itemEstoqueId, req.Quantidade, req.TipoMovimentacao, req.UsuarioId);
+            await service.Movimentar(itemEstoqueId, req.Quantidade, req.TipoMovimentacao, req.UsuarioId);
 
-                return Results.Ok(new { mensagem = "Movimentação registada e estoque atualizado com sucesso." });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Results.BadRequest(new { erro = ex.Message });
-            }
+            return Results.Ok("Movimentação registada e estoque atualizado com sucesso.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Movimenta o estoque de um item")
@@ -118,7 +111,7 @@ public static class ItemEstoqueController
         {
             await service.Transferir(itemEstoqueId, req.NovoEspacoId);
 
-            return Results.Ok(new { mensagem = "Item transferido com sucesso para o novo espaço." });
+            return Results.Ok("Item transferido com sucesso para o novo espaço.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Transfere um item para outro espaço")
