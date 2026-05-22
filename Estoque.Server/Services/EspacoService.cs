@@ -63,7 +63,7 @@ public class EspacoService : BaseService
 
             if (possuiItens)
             {
-                AddError("EspacoId", "Não é possível excluir este espaço pois existem itens vinculados a ele.");
+                AddError("EspacoId", "Este espaço não pode ser excluído porque existem itens de estoque vinculados à ele.");
                 throw new ValidationException(Errors);
             }
 
