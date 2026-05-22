@@ -56,19 +56,16 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<int> Atualizar(Usuario usuario, Guid usuarioId)
+    public async Task<int> Atualizar(UsuarioPutRequest usuario, Guid usuarioId, string senhaHash)
     {
         const string sql = @"
             UPDATE
                 estoque_certo.usuario
             SET
-                username = @username,
-                senha = @senha,
-                nome = @nome
+                nome = @nome,
+                senha = @senha
             WHERE
                 usuario_id = @usuario_id
-            AND
-                unidade_organizacional_id = @unidade_organizacional_id
         ";
 
         try
@@ -78,10 +75,9 @@ public class UsuarioRepository : BaseRepository
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId;
-            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = usuario.UnidadeOrganizacionalId!;
-            cmd.Parameters.Add("username", NpgsqlDbType.Varchar).Value = usuario.Username;
-            cmd.Parameters.Add("senha", NpgsqlDbType.Varchar).Value = usuario.Senha;
+            cmd.Parameters.Add("senha", NpgsqlDbType.Varchar).Value = (object?)senhaHash ?? DBNull.Value;
             cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = usuario.Nome;
+
             return await cmd.ExecuteNonQueryAsync();
         }
         catch

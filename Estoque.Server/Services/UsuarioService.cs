@@ -39,15 +39,21 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task Atualizar(Usuario usuario, Guid usuarioId)
+    public async Task Atualizar(UsuarioPutRequest usuario, Guid usuarioId)
     {
         try
         {
-            await ValidarCampos(usuario, usuarioId);
+            ValidarCamposAtualizacao(usuario);
 
-            usuario.Senha = _passwordHasher.HashPassword(usuario, usuario.Senha);
+            string senhaHash = string.Empty;
 
-            var affected = await _usuarioRepository.Atualizar(usuario, usuarioId);
+            if (!string.IsNullOrWhiteSpace(usuario.Senha))
+            {
+                var usuarioHash = new Usuario { UsuarioId = usuarioId };
+                senhaHash = _passwordHasher.HashPassword(usuarioHash, usuario.Senha);
+            }
+
+            var affected = await _usuarioRepository.Atualizar(usuario, usuarioId, senhaHash);
 
             if (affected <= 0) throw new NotFoundException("Usuário não encontrado com os parâmetros informados.");
         }
@@ -172,6 +178,32 @@ public class UsuarioService : BaseService
 
         if (string.IsNullOrWhiteSpace(usuario.Nome))
             AddError(nameof(usuario.Nome), "Informe o nome.");
+
+        if (Errors.Any())
+            throw new ValidationException(Errors);
+    }
+
+    private void ValidarCamposAtualizacao(UsuarioPutRequest usuario)
+    {
+        if (string.IsNullOrWhiteSpace(usuario.Nome))
+            AddError(nameof(usuario.Nome), "Informe o nome.");
+
+        var senhaInformada = !string.IsNullOrWhiteSpace(usuario.Senha);
+        var confirmaSenhaInformada = !string.IsNullOrWhiteSpace(usuario.ConfirmaSenha);
+
+        if (senhaInformada || confirmaSenhaInformada)
+        {
+            if (string.IsNullOrWhiteSpace(usuario.Senha))
+                AddError(nameof(usuario.Senha), "Informe a senha.");
+
+            if (string.IsNullOrWhiteSpace(usuario.ConfirmaSenha))
+                AddError(nameof(usuario.ConfirmaSenha), "Confirme a senha.");
+
+            if (!string.IsNullOrWhiteSpace(usuario.Senha) &&
+                !string.IsNullOrWhiteSpace(usuario.ConfirmaSenha) &&
+                usuario.Senha != usuario.ConfirmaSenha)
+                AddError(nameof(usuario.ConfirmaSenha), "As senhas não coincidem.");
+        }
 
         if (Errors.Any())
             throw new ValidationException(Errors);
