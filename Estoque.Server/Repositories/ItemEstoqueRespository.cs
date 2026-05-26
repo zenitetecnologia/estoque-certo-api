@@ -293,4 +293,23 @@ public class ItemEstoqueRepository : BaseRepository
             throw;
         }
     }
+
+    public async Task<int> TransferirEspaco(Guid itemEstoqueId, Guid novoEspacoId, IDbTransaction transaction)
+    {
+        const string sql = @"
+            UPDATE
+                estoque_certo.item_estoque
+            SET
+                espaco_id = @novo_espaco_id
+            WHERE
+                item_estoque_id = @item_estoque_id;
+        ";
+
+        await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
+
+        cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
+        cmd.Parameters.Add("novo_espaco_id", NpgsqlDbType.Uuid).Value = novoEspacoId;
+
+        return await cmd.ExecuteNonQueryAsync();
+    }
 }

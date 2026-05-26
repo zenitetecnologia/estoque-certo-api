@@ -28,6 +28,18 @@ public class Historico
 
     [JsonPropertyOrder(8)]
     public decimal QuantidadeResultante { get; set; }
+
+    [JsonPropertyOrder(9)]
+    public Guid? EspacoOrigemId { get; set; }
+
+    [JsonPropertyOrder(10)]
+    public string? EspacoOrigemNome { get; set; }
+
+    [JsonPropertyOrder(11)]
+    public Guid? EspacoDestinoId { get; set; }
+
+    [JsonPropertyOrder(12)]
+    public string? EspacoDestinoNome { get; set; }
 }
 
 public class HistoricoRecuperado : Historico

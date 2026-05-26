@@ -7,7 +7,7 @@ namespace Estoque.Server.Controllers;
 public static class ItemEstoqueController
 {
     public record RequisicaoMovimentacao(decimal Quantidade, TipoMovimentacao TipoMovimentacao, Guid UsuarioId);
-    public record RequisicaoTransferencia(Guid NovoEspacoId);
+    public record RequisicaoTransferencia(Guid NovoEspacoId, Guid? UsuarioId);
 
     public static void MapItemEstoqueEndpoints(this WebApplication app)
     {
@@ -109,7 +109,7 @@ public static class ItemEstoqueController
         #region [ patch - transferir ]
         app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}/transferir", async (ItemEstoqueService service, Guid itemEstoqueId, RequisicaoTransferencia req) =>
         {
-            await service.Transferir(itemEstoqueId, req.NovoEspacoId);
+            await service.Transferir(itemEstoqueId, req.NovoEspacoId, req.UsuarioId);
 
             return Results.Ok("Item transferido com sucesso para o novo espaço.");
         })

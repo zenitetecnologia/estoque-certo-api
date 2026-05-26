@@ -70,6 +70,8 @@ CREATE TABLE IF NOT EXISTS estoque_certo.historico (
     data_hora TIMESTAMP NOT NULL DEFAULT NOW(),
     quantidade_anterior NUMERIC(18,3) NOT NULL,
     quantidade_resultante NUMERIC(18,3) NOT NULL,
+    espaco_origem_id UUID,
+    espaco_destino_id UUID,
     
     CONSTRAINT fk_historico_item FOREIGN KEY (item_estoque_id) 
         REFERENCES estoque_certo.item_estoque (item_estoque_id) ON DELETE CASCADE,

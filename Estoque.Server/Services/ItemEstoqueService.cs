@@ -205,7 +205,7 @@ public class ItemEstoqueService : BaseService
         }
     }
 
-    public async Task<bool> Transferir(Guid itemEstoqueId, Guid novoEspacoId)
+    public async Task<bool> Transferir(Guid itemEstoqueId, Guid novoEspacoId, Guid? usuarioId)
     {
         try
         {
@@ -215,20 +215,46 @@ public class ItemEstoqueService : BaseService
                 throw new ValidationException(Errors);
             }
 
-            var itemExistente = await _repository.Obter(itemEstoqueId);
+            if (_connection.State != ConnectionState.Open)
+                _connection.Open();
 
-            if (itemExistente == null)
-                throw new NotFoundException("Item de estoque não encontrado.");
+            using var transaction = _connection.BeginTransaction();
 
-            if (itemExistente.EspacoId == novoEspacoId)
+            try
             {
-                AddError("NovoEspacoId", "O item já se encontra neste espaço.");
-                throw new ValidationException(Errors);
+                var itemExistente = await _repository.ObterParaAtualizacao(itemEstoqueId, transaction);
+
+                if (itemExistente == null)
+                    throw new NotFoundException("Item de estoque não encontrado.");
+
+                if (itemExistente.EspacoId == novoEspacoId)
+                {
+                    AddError("NovoEspacoId", "O item já se encontra neste espaço.");
+                    throw new ValidationException(Errors);
+                }
+
+                var affected = await _repository.TransferirEspaco(itemEstoqueId, novoEspacoId, transaction);
+
+                var historico = new Historico
+                {
+                    ItemEstoqueId = itemEstoqueId,
+                    TipoMovimentacao = TipoMovimentacao.Transferencia,
+                    UsuarioId = usuarioId,
+                    EspacoOrigemId = itemExistente.EspacoId,
+                    EspacoDestinoId = novoEspacoId,
+                    QuantidadeAnterior = itemExistente.Quantidade,
+                    QuantidadeResultante = itemExistente.Quantidade
+                };
+                await _historicoRepository.InserirComTransacao(historico, transaction);
+
+                transaction.Commit();
+                return affected > 0;
             }
-
-            var affected = await _repository.TransferirEspaco(itemEstoqueId, novoEspacoId);
-
-            return affected > 0;
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
         catch (ValidationException)
         {
