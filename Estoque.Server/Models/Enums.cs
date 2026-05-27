@@ -8,11 +8,11 @@ public enum PerfilUsuario
 
 public enum TipoUnidadeMedida
 {
-    Quilos = 1,
-    Gramas = 2,
-    Miligramas = 3,
-    Litros = 4,
-    Mililitros = 5,
+    Litros = 1,
+    Mililitros = 2,
+    Quilos = 3,
+    Gramas = 4,
+    Miligramas = 5,
     Unidades = 6
 }
 

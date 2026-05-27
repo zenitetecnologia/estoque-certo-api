@@ -205,7 +205,7 @@ public class ItemEstoqueService : BaseService
         }
     }
 
-    public async Task<bool> Transferir(Guid itemEstoqueId, Guid novoEspacoId, Guid? usuarioId)
+    public async Task<bool> Transferir(Guid itemEstoqueId, Guid novoEspacoId, Guid usuarioId)
     {
         try
         {
