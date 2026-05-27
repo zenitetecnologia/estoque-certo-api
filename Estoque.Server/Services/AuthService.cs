@@ -14,12 +14,14 @@ public class AuthService : BaseService
     private readonly AuthRepository _authRepository;
     private readonly IConfiguration _configuration;
     private readonly IPasswordHasher<Usuario> _passwordHasher;
+    private readonly INotificationService _notificationService;
 
-    public AuthService(AuthRepository authRepository, IConfiguration configuration, IPasswordHasher<Usuario> passwordHasher)
+    public AuthService(AuthRepository authRepository, IConfiguration configuration, IPasswordHasher<Usuario> passwordHasher, INotificationService notificationService)
     {
         _authRepository = authRepository;
         _configuration = configuration;
         _passwordHasher = passwordHasher;
+        _notificationService = notificationService;
     }
 
     public async Task<AuthToken> Login(Auth auth)
@@ -104,6 +106,10 @@ public class AuthService : BaseService
             string codigoGerado = new Random().Next(100000, 999999).ToString();
 
             await _authRepository.InserirCodigoAcesso(usuario.UsuarioId, codigoGerado);
+
+            var telefoneE164 = NormalizarTelefoneE164(usuario.Username);
+
+            await _notificationService.EnviarCodigoRecuperacaoSenhaAsync(telefoneE164, codigoGerado);
         }
         catch (ValidationException)
         {
@@ -209,6 +215,19 @@ public class AuthService : BaseService
         {
             throw new Exception($"Erro ao redefinir senha: {ex.Message}");
         }
+    }
+
+    private string NormalizarTelefoneE164(string telefoneBruto)
+    {
+        if (string.IsNullOrWhiteSpace(telefoneBruto))
+            throw new InvalidOperationException("Telefone do usuário não informado.");
+
+        var digitos = new string(telefoneBruto.Where(char.IsDigit).ToArray());
+
+        if (digitos.StartsWith("55"))
+            return "whatsapp:+" + digitos;
+
+        return "whatsapp:+55" + digitos;
     }
 
     private void ValidarAuth(Auth auth)
