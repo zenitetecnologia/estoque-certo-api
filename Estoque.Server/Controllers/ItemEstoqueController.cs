@@ -7,7 +7,7 @@ namespace Estoque.Server.Controllers;
 public static class ItemEstoqueController
 {
     public record RequisicaoMovimentacao(decimal Quantidade, TipoMovimentacao TipoMovimentacao, Guid UsuarioId);
-    public record RequisicaoTransferencia(Guid NovoEspacoId, Guid? UsuarioId);
+    public record RequisicaoTransferencia(Guid NovoEspacoId, Guid UsuarioId);
 
     public static void MapItemEstoqueEndpoints(this WebApplication app)
     {
