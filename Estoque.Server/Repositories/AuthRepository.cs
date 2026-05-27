@@ -1,4 +1,5 @@
 ﻿using Estoque.Server.Models;
+using Estoque.Server.Utils;
 using Npgsql;
 using System.Data;
 
@@ -122,6 +123,7 @@ public class AuthRepository : BaseRepository
                 data_validacao = @data_validacao,
                 codigo_reset_id = @codigo_reset_id,
                 data_reset_id = @data_reset_id
+
             WHERE 
                 usuario_id = @usuario_id 
                 AND codigo = @codigo;
@@ -132,8 +134,7 @@ public class AuthRepository : BaseRepository
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            var agoraUtc = DateTime.UtcNow;
-            var agora = DateTime.SpecifyKind(agoraUtc, DateTimeKind.Unspecified);
+            var agora = DateTimeHelper.SaoPaulo();
 
             cmd.Parameters.Add("data_validacao", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = agora;
             cmd.Parameters.Add("codigo_reset_id", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoResetId;
@@ -249,8 +250,7 @@ public class AuthRepository : BaseRepository
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
-            var agoraUtc = DateTime.UtcNow;
-            var agora = DateTime.SpecifyKind(agoraUtc, DateTimeKind.Unspecified);
+            var agora = DateTimeHelper.SaoPaulo();
 
             cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId;
             cmd.Parameters.Add("codigo", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigo;

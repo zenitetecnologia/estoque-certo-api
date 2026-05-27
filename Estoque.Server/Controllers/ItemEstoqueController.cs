@@ -95,7 +95,7 @@ public static class ItemEstoqueController
         {
             await service.Movimentar(itemEstoqueId, req.Quantidade, req.TipoMovimentacao, req.UsuarioId);
 
-            return Results.Ok("Movimentação registada e estoque atualizado com sucesso.");
+            return Results.Ok("Movimentação registrada e estoque atualizado com sucesso.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Movimenta o estoque de um item")

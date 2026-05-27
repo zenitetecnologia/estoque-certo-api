@@ -1,6 +1,7 @@
 ﻿using Estoque.Server.Exceptions;
 using Estoque.Server.Models;
 using Estoque.Server.Repositories;
+using Estoque.Server.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -82,7 +83,7 @@ public class AuthService : BaseService
                 new Claim(ClaimTypes.Role, usuario.Perfil.ToString()),
                 new Claim("Valido", usuario.Valido.ToString())
             }),
-            Expires = DateTime.UtcNow.AddHours(24),
+            Expires = DateTimeHelper.SaoPaulo().AddHours(24),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
@@ -134,7 +135,7 @@ public class AuthService : BaseService
             if (codigoAcesso.Utilizado)
                 throw new InvalidOperationException("Este código já foi utilizado.");
 
-            if (DateTime.UtcNow > codigoAcesso.DataSolicitacao.AddMinutes(5))
+            if (DateTimeHelper.SaoPaulo() > codigoAcesso.DataSolicitacao.AddMinutes(5))
                 throw new InvalidOperationException("O tempo de validação deste código expirou.");
 
             bool existeMaisRecente = await _authRepository.BuscarUltimoCodigo(codigoAcesso.UsuarioId, codigoAcesso.DataSolicitacao);
@@ -182,7 +183,7 @@ public class AuthService : BaseService
             if (codigoAcesso.ResetEfetuado)
                 throw new InvalidOperationException("Este código de acesso já foi utilizado.");
 
-            if (codigoAcesso.DataResetId.HasValue && DateTime.UtcNow > codigoAcesso.DataResetId.Value.AddMinutes(5))
+            if (codigoAcesso.DataResetId.HasValue && DateTimeHelper.SaoPaulo() > codigoAcesso.DataResetId.Value.AddMinutes(5))
                 throw new InvalidOperationException("O tempo limite para utilizar este código expirou. Solicite um novo código.");
 
             bool existeMaisRecente = await _authRepository.BuscarUltimoCodigo(codigoAcesso.UsuarioId, codigoAcesso.DataSolicitacao);
