@@ -43,9 +43,11 @@ public static class EspacoController
         #endregion
 
         #region [ delete ]
-        app.MapDelete("v1/espacos/{espacoId:Guid}", async (EspacoService service, Guid espacoId) =>
+        app.MapDelete("v1/espacos/{espacoId:Guid}", async (EspacoService service, HttpResponse response, Guid espacoId) =>
         {
             await service.Excluir(espacoId);
+
+            response.Headers["X-Zenite-Message"] = Uri.EscapeDataString("Espaço excluído com sucesso.");
 
             return Results.NoContent();
         })
