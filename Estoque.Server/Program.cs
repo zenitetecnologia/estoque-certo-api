@@ -39,7 +39,7 @@ builder.Services.AddScoped<EspacoService>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ItemEstoqueService>();
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddHttpClient<INotificationService, TwilioNotificationService>();
+builder.Services.AddHttpClient<INotificationService, MetaWhatsAppNotificationService>();
 
 builder.Services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>();
 
