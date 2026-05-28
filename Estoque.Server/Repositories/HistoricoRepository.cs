@@ -1,4 +1,5 @@
 ﻿using Estoque.Server.Models;
+using Estoque.Server.Utils;
 using Npgsql;
 using NpgsqlTypes;
 using System.Data;
@@ -89,6 +90,7 @@ public class HistoricoRepository : BaseRepository
                 usuario_id,
                 espaco_origem_id,
                 espaco_destino_id,
+                data_hora,
                 quantidade_anterior,
                 quantidade_resultante
             )
@@ -99,6 +101,7 @@ public class HistoricoRepository : BaseRepository
                 @usuario_id,
                 @espaco_origem_id,
                 @espaco_destino_id,
+                @data_hora,
                 @quantidade_anterior,
                 @quantidade_resultante
             );
@@ -111,6 +114,7 @@ public class HistoricoRepository : BaseRepository
         cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = historico.UsuarioId.HasValue ? (object)historico.UsuarioId.Value : DBNull.Value;
         cmd.Parameters.Add("espaco_origem_id", NpgsqlDbType.Uuid).Value = historico.EspacoOrigemId.HasValue ? (object)historico.EspacoOrigemId.Value : DBNull.Value;
         cmd.Parameters.Add("espaco_destino_id", NpgsqlDbType.Uuid).Value = historico.EspacoDestinoId.HasValue ? (object)historico.EspacoDestinoId.Value : DBNull.Value;
+        cmd.Parameters.Add("data_hora", NpgsqlDbType.Timestamp).Value = DateTimeHelper.SaoPaulo();
         cmd.Parameters.Add("quantidade_anterior", NpgsqlDbType.Numeric).Value = historico.QuantidadeAnterior;
         cmd.Parameters.Add("quantidade_resultante", NpgsqlDbType.Numeric).Value = historico.QuantidadeResultante;
 

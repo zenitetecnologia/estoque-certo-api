@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Estoque.Server.Utils;
+using System.Text.Json.Serialization;
 
 namespace Estoque.Server.Models;
 
@@ -21,7 +22,7 @@ public class Historico
     public string? Nome { get; set; }
 
     [JsonPropertyOrder(6)]
-    public DateTime DataHora { get; set; } = DateTime.UtcNow;
+    public DateTime DataHora { get; set; } = DateTimeHelper.SaoPaulo();
 
     [JsonPropertyOrder(7)]
     public decimal QuantidadeAnterior { get; set; }
