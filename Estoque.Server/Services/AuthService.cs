@@ -225,9 +225,9 @@ public class AuthService : BaseService
         var digitos = new string(telefoneBruto.Where(char.IsDigit).ToArray());
 
         if (digitos.StartsWith("55"))
-            return "whatsapp:+" + digitos;
+            return "+" + digitos;
 
-        return "whatsapp:+55" + digitos;
+        return "+55" + digitos;
     }
 
     private void ValidarAuth(Auth auth)
