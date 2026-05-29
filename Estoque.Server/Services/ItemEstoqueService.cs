@@ -287,4 +287,20 @@ public class ItemEstoqueService : BaseService
         if (Errors.Any())
             throw new ValidationException(Errors);
     }
+
+    public async Task<List<PizzaDashboardItem>> ObterPizzaDashboard(
+    Guid unidadeOrganizacionalId,
+    Guid? espacoId,
+    int? tipoUnidadeMedida
+)
+    {
+        try
+        {
+            return await _repository.ObterPizzaDashboard(unidadeOrganizacionalId, espacoId, tipoUnidadeMedida);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao obter dados do dashboard de pizza: {ex.Message}");
+        }
+    }
 }
