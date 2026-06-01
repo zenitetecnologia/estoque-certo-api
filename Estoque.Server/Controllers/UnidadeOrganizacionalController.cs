@@ -9,8 +9,9 @@ public static class UnidadeOrganizacionalController
     public static void MapUnidadeOrganizacionalEndpoints(this WebApplication app)
     {
         #region [ post ]
-        app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacionalService service, UnidadeOrganizacional unidadeOrganizacional) =>
+        app.MapPost("v1/unidades-organizacionais/", async (UnidadeOrganizacionalService service, PayloadCryptoService cryptoService, EncryptedRequest request) =>
         {
+            var unidadeOrganizacional = cryptoService.Descriptografar<UnidadeOrganizacional>(request);
             Guid unidadeOrganizacionalId = await service.Cadastrar(unidadeOrganizacional);
 
             return TypedResults.CreatedAtRoute(
@@ -28,8 +29,9 @@ public static class UnidadeOrganizacionalController
         #endregion
 
         #region [ put ]
-        app.MapPut("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, Guid unidadeOrganizacionalId, UnidadeOrganizacional unidadeOrganizacional) =>
+        app.MapPut("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, PayloadCryptoService cryptoService, Guid unidadeOrganizacionalId, EncryptedRequest request) =>
         {
+            var unidadeOrganizacional = cryptoService.Descriptografar<UnidadeOrganizacional>(request);
             await service.Atualizar(unidadeOrganizacional, unidadeOrganizacionalId);
 
             return Results.Ok("Unidade organizacional atualizada com sucesso.");

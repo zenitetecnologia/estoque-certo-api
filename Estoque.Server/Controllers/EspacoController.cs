@@ -9,8 +9,9 @@ public static class EspacoController
     public static void MapEspacoEndpoints(this WebApplication app)
     {
         #region [ post ]
-        app.MapPost("v1/espacos/", async (EspacoService service, Espaco espaco) =>
+        app.MapPost("v1/espacos/", async (EspacoService service, PayloadCryptoService cryptoService, EncryptedRequest request) =>
         {
+            var espaco = cryptoService.Descriptografar<Espaco>(request);
             Guid espacoId = await service.Cadastrar(espaco);
 
             return TypedResults.CreatedAtRoute(
@@ -27,8 +28,9 @@ public static class EspacoController
         #endregion
 
         #region [ put ]
-        app.MapPut("v1/espacos/{espacoId:Guid}", async (EspacoService service, Guid espacoId, Espaco espaco) =>
+        app.MapPut("v1/espacos/{espacoId:Guid}", async (EspacoService service, PayloadCryptoService cryptoService, Guid espacoId, EncryptedRequest request) =>
         {
+            var espaco = cryptoService.Descriptografar<Espaco>(request);
             await service.Atualizar(espaco, espacoId);
 
             return Results.Ok("Espaço atualizado com sucesso.");

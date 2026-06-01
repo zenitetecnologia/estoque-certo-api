@@ -12,8 +12,9 @@ public static class ItemEstoqueController
     public static void MapItemEstoqueEndpoints(this WebApplication app)
     {
         #region [ post ]
-        app.MapPost("v1/itens-estoque", async (ItemEstoqueService service, ItemEstoque item) =>
+        app.MapPost("v1/itens-estoque", async (ItemEstoqueService service, PayloadCryptoService cryptoService, EncryptedRequest request) =>
         {
+            var item = cryptoService.Descriptografar<ItemEstoque>(request);
             Guid itemEstoqueId = await service.Cadastrar(item);
 
             return TypedResults.CreatedAtRoute(
@@ -30,8 +31,9 @@ public static class ItemEstoqueController
         #endregion
 
         #region [ put ]
-        app.MapPut("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, Guid itemEstoqueId, ItemEstoqueAtualizado item) =>
+        app.MapPut("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, PayloadCryptoService cryptoService, Guid itemEstoqueId, EncryptedRequest request) =>
         {
+            var item = cryptoService.Descriptografar<ItemEstoqueAtualizado>(request);
             await service.Atualizar(item, itemEstoqueId);
 
             return Results.Ok("Item de estoque atualizado com sucesso.");
@@ -91,8 +93,9 @@ public static class ItemEstoqueController
         #endregion
 
         #region [ patch - movimentação ]
-        app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, Guid itemEstoqueId, RequisicaoMovimentacao req) =>
+        app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, PayloadCryptoService cryptoService, Guid itemEstoqueId, EncryptedRequest request) =>
         {
+            var req = cryptoService.Descriptografar<RequisicaoMovimentacao>(request);
             await service.Movimentar(itemEstoqueId, req.Quantidade, req.TipoMovimentacao, req.UsuarioId);
 
             return Results.Ok("Movimentação registrada e estoque atualizado com sucesso.");
@@ -107,8 +110,9 @@ public static class ItemEstoqueController
         #endregion
 
         #region [ patch - transferir ]
-        app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}/transferir", async (ItemEstoqueService service, Guid itemEstoqueId, RequisicaoTransferencia req) =>
+        app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}/transferir", async (ItemEstoqueService service, PayloadCryptoService cryptoService, Guid itemEstoqueId, EncryptedRequest request) =>
         {
+            var req = cryptoService.Descriptografar<RequisicaoTransferencia>(request);
             await service.Transferir(itemEstoqueId, req.NovoEspacoId, req.UsuarioId);
 
             return Results.Ok("Item transferido com sucesso para o novo espaço.");

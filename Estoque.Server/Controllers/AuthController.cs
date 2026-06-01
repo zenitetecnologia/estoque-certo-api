@@ -8,9 +8,25 @@ public static class AuthController
 {
     public static void MapAuthEndpoints(this WebApplication app)
     {
-        #region [ post ]
-        app.MapPost("v1/auth/login", async (AuthService service, Auth auth) =>
+        #region [ public key ]
+        app.MapGet("v1/auth/public-key", (PayloadCryptoService cryptoService) =>
         {
+            return Results.Ok(new
+            {
+                publicKey = cryptoService.ObterChavePublica()
+            });
+        })
+        .WithTags("auth")
+        .WithSummary("Retorna a chave pública para criptografia de payload")
+        .WithDescription("Retorna a chave pública usada pelo front-end para criptografar payloads sensíveis antes do envio.")
+        .Produces(StatusCodes.Status200OK)
+        .AllowAnonymous();
+        #endregion
+
+        #region [ post ]
+        app.MapPost("v1/auth/login", async (AuthService service, PayloadCryptoService cryptoService, EncryptedRequest request) =>
+        {
+            var auth = cryptoService.Descriptografar<Auth>(request);
             var response = await service.Login(auth);
 
             return Results.Ok(response);
@@ -26,8 +42,9 @@ public static class AuthController
         #endregion
 
         #region [ forgot ]
-        app.MapPost("v1/auth/forgot", async (AuthService service, AuthForgot request) =>
+        app.MapPost("v1/auth/forgot", async (AuthService service, PayloadCryptoService cryptoService, EncryptedRequest encryptedRequest) =>
         {
+            var request = cryptoService.Descriptografar<AuthForgot>(encryptedRequest);
             await service.EsquecerSenha(request);
 
             return Results.Ok("Se as informações estiverem corretas, você receberá um código de recuperação.");
@@ -43,8 +60,9 @@ public static class AuthController
         #endregion
 
         #region [ verify ]
-        app.MapPost("v1/auth/verify", async (AuthService service, AuthVerify request) =>
+        app.MapPost("v1/auth/verify", async (AuthService service, PayloadCryptoService cryptoService, EncryptedRequest encryptedRequest) =>
         {
+            var request = cryptoService.Descriptografar<AuthVerify>(encryptedRequest);
             string codigoResetId = await service.VerificarCodigo(request);
 
             return Results.Ok(new
@@ -63,8 +81,9 @@ public static class AuthController
         #endregion
 
         #region [ reset ]
-        app.MapPost("v1/auth/reset", async (AuthService service, AuthReset request) =>
+        app.MapPost("v1/auth/reset", async (AuthService service, PayloadCryptoService cryptoService, EncryptedRequest encryptedRequest) =>
         {
+            var request = cryptoService.Descriptografar<AuthReset>(encryptedRequest);
             await service.RedefinirSenha(request);
 
             return Results.Ok("Senha redefinida com sucesso.");

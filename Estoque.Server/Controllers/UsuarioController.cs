@@ -9,8 +9,9 @@ public static class UsuarioController
     public static void MapUsuarioEndpoints(this WebApplication app)
     {
         #region [ post ]
-        app.MapPost("v1/usuarios/", async (UsuarioService service, Usuario usuario) =>
+        app.MapPost("v1/usuarios/", async (UsuarioService service, PayloadCryptoService cryptoService, EncryptedRequest request) =>
         {
+            var usuario = cryptoService.Descriptografar<Usuario>(request);
             Guid usuarioId = await service.Cadastrar(usuario);
 
             return TypedResults.CreatedAtRoute(
@@ -27,8 +28,9 @@ public static class UsuarioController
         #endregion
 
         #region [ put ]
-        app.MapPut("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId, UsuarioPutRequest usuario) =>
+        app.MapPut("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, PayloadCryptoService cryptoService, Guid usuarioId, EncryptedRequest request) =>
         {
+            var usuario = cryptoService.Descriptografar<UsuarioPutRequest>(request);
             await service.Atualizar(usuario, usuarioId);
 
             return Results.Ok("Usuário atualizado com sucesso.");
