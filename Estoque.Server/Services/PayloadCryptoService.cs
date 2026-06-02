@@ -7,7 +7,6 @@ namespace Estoque.Server.Services;
 public class PayloadCryptoService : IDisposable
 {
     private readonly RSA _rsa = RSA.Create(2048);
-    private readonly string _publicKeyBase64;
     private readonly JsonSerializerOptions _jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true
@@ -16,19 +15,12 @@ public class PayloadCryptoService : IDisposable
     public PayloadCryptoService()
     {
         var privateKey = Environment.GetEnvironmentVariable("encrypt_private_key");
-        var publicKey = Environment.GetEnvironmentVariable("encrypt_public_key");
 
-        if (string.IsNullOrWhiteSpace(privateKey) || string.IsNullOrWhiteSpace(publicKey))
-            throw new InvalidOperationException("As variáveis de ambiente encrypt_private_key e encrypt_public_key não foram encontradas ou configuradas.");
+        if (string.IsNullOrWhiteSpace(privateKey))
+            throw new InvalidOperationException("A variável de ambiente encrypt_private_key não foi encontrada ou configurada.");
 
         var privateKeyBytes = Convert.FromBase64String(privateKey);
         _rsa.ImportPkcs8PrivateKey(privateKeyBytes, out _);
-        _publicKeyBase64 = publicKey;
-    }
-
-    public string ObterChavePublica()
-    {
-        return _publicKeyBase64;
     }
 
     public T Descriptografar<T>(string payload)

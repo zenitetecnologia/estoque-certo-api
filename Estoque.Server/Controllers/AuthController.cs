@@ -8,21 +8,6 @@ public static class AuthController
 {
     public static void MapAuthEndpoints(this WebApplication app)
     {
-        #region [ public key ]
-        app.MapGet("v1/auth/public-key", (PayloadCryptoService cryptoService) =>
-        {
-            return Results.Ok(new
-            {
-                publicKey = cryptoService.ObterChavePublica()
-            });
-        })
-        .WithTags("auth")
-        .WithSummary("Retorna a chave pública para criptografia de payload")
-        .WithDescription("Retorna a chave pública usada pelo front-end para criptografar payloads sensíveis antes do envio.")
-        .Produces(StatusCodes.Status200OK)
-        .AllowAnonymous();
-        #endregion
-
         #region [ post ]
         app.MapPost("v1/auth/login", async (AuthService service, PayloadCryptoService cryptoService, EncryptedRequest request) =>
         {
