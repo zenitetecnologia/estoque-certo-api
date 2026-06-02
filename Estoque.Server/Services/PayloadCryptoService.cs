@@ -61,6 +61,38 @@ public class PayloadCryptoService : IDisposable
         }
     }
 
+    public Models.EncryptedResponse CriptografarResposta(Models.EncryptedRequest request, object response)
+    {
+        if (string.IsNullOrWhiteSpace(request.Key))
+            throw new InvalidOperationException("Chave criptografada não informada.");
+
+        try
+        {
+            var key = DecryptHybridKey(request);
+            var iv = RandomNumberGenerator.GetBytes(12);
+            var plainText = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response, _jsonOptions));
+            var cipherText = new byte[plainText.Length];
+            var tag = new byte[16];
+
+            using var aes = new AesGcm(key, tag.Length);
+            aes.Encrypt(iv, plainText, cipherText, tag);
+
+            return new Models.EncryptedResponse
+            {
+                Iv = Convert.ToBase64String(iv),
+                Payload = Convert.ToBase64String(cipherText.Concat(tag).ToArray())
+            };
+        }
+        catch (CryptographicException)
+        {
+            throw new InvalidOperationException("Não foi possível criptografar a resposta.");
+        }
+        catch (FormatException)
+        {
+            throw new InvalidOperationException("Não foi possível criptografar a resposta.");
+        }
+    }
+
     private byte[] DecryptRsaPayload(string payload)
     {
         var encryptedBytes = Convert.FromBase64String(payload);
@@ -69,8 +101,7 @@ public class PayloadCryptoService : IDisposable
 
     private byte[] DecryptHybridPayload(Models.EncryptedRequest request)
     {
-        var encryptedKey = Convert.FromBase64String(request.Key);
-        var key = _rsa.Decrypt(encryptedKey, RSAEncryptionPadding.OaepSHA256);
+        var key = DecryptHybridKey(request);
         var iv = Convert.FromBase64String(request.Iv);
         var payloadBytes = Convert.FromBase64String(request.Payload);
 
@@ -87,6 +118,12 @@ public class PayloadCryptoService : IDisposable
         aes.Decrypt(iv, cipherText, tag, plainText);
 
         return plainText;
+    }
+
+    private byte[] DecryptHybridKey(Models.EncryptedRequest request)
+    {
+        var encryptedKey = Convert.FromBase64String(request.Key);
+        return _rsa.Decrypt(encryptedKey, RSAEncryptionPadding.OaepSHA256);
     }
 
     public void Dispose()

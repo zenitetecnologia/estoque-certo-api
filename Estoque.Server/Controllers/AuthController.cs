@@ -50,10 +50,10 @@ public static class AuthController
             var request = cryptoService.Descriptografar<AuthVerify>(encryptedRequest);
             string codigoResetId = await service.VerificarCodigo(request);
 
-            return Results.Ok(new
+            return Results.Ok(cryptoService.CriptografarResposta(encryptedRequest, new
             {
                 codigoResetId = codigoResetId
-            });
+            }));
         })
         .WithTags("auth")
         .WithSummary("Verifica o código SMS")
