@@ -150,7 +150,7 @@ public class AuthRepository : BaseRepository
         }
     }
 
-    public async Task<bool> BuscarUltimoCodigo(Guid usuarioId, DateTime dataSolicitacao)
+    public async Task<bool> BuscarUltimoCodigo(Guid usuarioId, DateTime dataSolicitacao, int? minutosCooldown = null)
     {
         const string sql = @"
             SELECT EXISTS (
@@ -158,6 +158,7 @@ public class AuthRepository : BaseRepository
                 FROM estoque_certo.codigo_acesso 
                 WHERE usuario_id = @usuario_id 
                   AND data_solicitacao > @data_solicitacao
+                  AND (@minutos_cooldown IS NULL OR data_solicitacao > @agora - (@minutos_cooldown * INTERVAL '1 minute'))
             );
         ";
 
@@ -168,6 +169,8 @@ public class AuthRepository : BaseRepository
 
             cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId;
             cmd.Parameters.Add("data_solicitacao", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = dataSolicitacao;
+            cmd.Parameters.Add("agora", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = DateTimeHelper.SaoPaulo();
+            cmd.Parameters.Add("minutos_cooldown", NpgsqlTypes.NpgsqlDbType.Integer).Value = minutosCooldown.HasValue ? minutosCooldown.Value : DBNull.Value;
 
             return (bool)(await cmd.ExecuteScalarAsync())!;
         }

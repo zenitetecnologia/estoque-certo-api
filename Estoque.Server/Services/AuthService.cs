@@ -102,6 +102,10 @@ public class AuthService : BaseService
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
 
+            var existeCodigoEmCooldown = await _authRepository.BuscarUltimoCodigo(usuario.UsuarioId, DateTime.MinValue, 2);
+            if (existeCodigoEmCooldown)
+                throw new InvalidOperationException("Aguarde 2 minutos para solicitar um novo código de recuperação.");
+
             string codigoGerado = new Random().Next(100000, 999999).ToString();
 
             await _authRepository.InserirCodigoAcesso(usuario.UsuarioId, codigoGerado);
@@ -111,6 +115,10 @@ public class AuthService : BaseService
             throw;
         }
         catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (InvalidOperationException)
         {
             throw;
         }
