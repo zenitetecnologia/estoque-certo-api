@@ -180,8 +180,7 @@ public class AuthService : BaseService
             if (string.IsNullOrWhiteSpace(auth.CodigoAcessoId))
                 throw new InvalidOperationException("Código de acesso não informado.");
 
-            if (string.IsNullOrWhiteSpace(auth.Senha))
-                throw new InvalidOperationException("Informe a nova senha.");
+            ValidarAuthReset(auth);
 
             var codigoAcesso = await _authRepository.ObterCodigoPorId(auth.CodigoAcessoId);
 
@@ -214,6 +213,10 @@ public class AuthService : BaseService
             throw;
         }
         catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (ValidationException)
         {
             throw;
         }
@@ -254,6 +257,23 @@ public class AuthService : BaseService
     {
         if (string.IsNullOrWhiteSpace(auth.Code))
             AddError(nameof(auth.Code), "Informe o código.");
+
+        if (Errors.Any())
+            throw new ValidationException(Errors);
+    }
+
+    private void ValidarAuthReset(AuthReset auth)
+    {
+        if (string.IsNullOrWhiteSpace(auth.Senha))
+            AddError(nameof(auth.Senha), "Informe a nova senha.");
+
+        if (string.IsNullOrWhiteSpace(auth.ConfirmaSenha))
+            AddError(nameof(auth.ConfirmaSenha), "Confirme a nova senha.");
+
+        if (!string.IsNullOrWhiteSpace(auth.Senha)
+            && !string.IsNullOrWhiteSpace(auth.ConfirmaSenha)
+            && auth.Senha != auth.ConfirmaSenha)
+            AddError(nameof(auth.ConfirmaSenha), "A confirmação da senha não confere.");
 
         if (Errors.Any())
             throw new ValidationException(Errors);

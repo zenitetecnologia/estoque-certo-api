@@ -29,6 +29,7 @@ public class AuthReset
 {
     public string CodigoAcessoId { get; set; } = string.Empty;
     public string Senha { get; set; } = string.Empty;
+    public string ConfirmaSenha { get; set; } = string.Empty;
 }
 
 public class AuthToken
