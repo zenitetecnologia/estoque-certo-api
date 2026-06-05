@@ -132,8 +132,7 @@ public class AuthService : BaseService
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(auth.Code))
-                throw new InvalidOperationException("Informe o código.");
+            ValidarAuthVerify(auth);
 
             var codigoAcesso = await _authRepository.ObterCodigoPorSms(auth.Code);
 
@@ -161,6 +160,10 @@ public class AuthService : BaseService
             throw;
         }
         catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (ValidationException)
         {
             throw;
         }
@@ -242,6 +245,15 @@ public class AuthService : BaseService
 
         if (auth.UnidadeOrganizacionalId == null || auth.UnidadeOrganizacionalId == Guid.Empty)
             AddError(nameof(auth.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
+
+        if (Errors.Any())
+            throw new ValidationException(Errors);
+    }
+
+    private void ValidarAuthVerify(AuthVerify auth)
+    {
+        if (string.IsNullOrWhiteSpace(auth.Code))
+            AddError(nameof(auth.Code), "Informe o código.");
 
         if (Errors.Any())
             throw new ValidationException(Errors);
