@@ -23,6 +23,8 @@ public class AuthForgot : Auth
 public class AuthVerify
 {
     public string Code { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
+    public Guid? UnidadeOrganizacionalId { get; set; }
 }
 
 public class AuthReset
@@ -32,7 +34,16 @@ public class AuthReset
     public string ConfirmaSenha { get; set; } = string.Empty;
 }
 
-public class AuthToken
+public class AuthLoginResponse
 {
-    public string Token { get; set; } = string.Empty;
+    public string? Token { get; set; }
+    public JornadaUsuario? JornadaUsuario { get; set; }
+    public string? Message { get; set; }
+}
+
+public class AuthVerifyResponse
+{
+    public string? CodigoResetId { get; set; }
+    public JornadaUsuario? JornadaUsuario { get; set; }
+    public string? Message { get; set; }
 }

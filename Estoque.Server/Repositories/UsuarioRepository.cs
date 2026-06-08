@@ -19,7 +19,8 @@ public class UsuarioRepository : BaseRepository
                 nome,
                 perfil,
                 unidade_organizacional_id,
-                valido
+                cadastro_completo,
+                jornada_usuario
             )
             VALUES
             (
@@ -28,7 +29,8 @@ public class UsuarioRepository : BaseRepository
                 @nome,
                 @perfil,
                 @unidade_organizacional_id,
-                @valido
+                @cadastro_completo,
+                @jornada_usuario
             )
             RETURNING usuario_id;
         ";
@@ -44,7 +46,8 @@ public class UsuarioRepository : BaseRepository
             cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = usuario.Nome;
             cmd.Parameters.Add("perfil", NpgsqlDbType.Integer).Value = (int)usuario.Perfil;
             cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = usuario.UnidadeOrganizacionalId!;
-            cmd.Parameters.Add("valido", NpgsqlDbType.Boolean).Value = usuario.Valido;
+            cmd.Parameters.Add("cadastro_completo", NpgsqlDbType.Boolean).Value = usuario.CadastroCompleto;
+            cmd.Parameters.Add("jornada_usuario", NpgsqlDbType.Integer).Value = (int)usuario.JornadaUsuario;
 
             var result = await cmd.ExecuteScalarAsync();
 
@@ -96,7 +99,8 @@ public class UsuarioRepository : BaseRepository
                 nome,
                 perfil,
                 unidade_organizacional_id,
-                valido
+                cadastro_completo,
+                jornada_usuario
             FROM
                 estoque_certo.usuario
             WHERE
@@ -124,7 +128,8 @@ public class UsuarioRepository : BaseRepository
             usuarioGetResponse.Nome = reader.GetString("nome");
             usuarioGetResponse.Perfil = (PerfilUsuario)reader.GetInt32("perfil");
             usuarioGetResponse.UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id");
-            usuarioGetResponse.Valido = reader.GetBoolean("valido");
+            usuarioGetResponse.CadastroCompleto = reader.GetBoolean("cadastro_completo");
+            usuarioGetResponse.JornadaUsuario = (JornadaUsuario)reader.GetInt32("jornada_usuario");
 
             return usuarioGetResponse;
         }
@@ -134,7 +139,7 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<List<UsuarioGetResponse>> Obter(int skip, int top, string? username, Guid? unidadeOrganizacionalId, bool? valido = null)
+    public async Task<List<UsuarioGetResponse>> Obter(int skip, int top, string? username, Guid? unidadeOrganizacionalId, bool? cadastroCompleto = null)
     {
         var usuarios = new List<UsuarioGetResponse>();
 
@@ -144,7 +149,8 @@ public class UsuarioRepository : BaseRepository
                 estoque_certo.usuario.username,
                 estoque_certo.usuario.nome,
                 estoque_certo.usuario.unidade_organizacional_id,
-                estoque_certo.usuario.valido,
+                estoque_certo.usuario.cadastro_completo,
+                estoque_certo.usuario.jornada_usuario,
                 COALESCE(estoque_certo.unidade_organizacional.nome_fantasia, estoque_certo.unidade_organizacional.razao_social, 'Sem Unidade') AS nome_unidade
             FROM
                 estoque_certo.usuario
@@ -155,7 +161,7 @@ public class UsuarioRepository : BaseRepository
 
         if (!string.IsNullOrWhiteSpace(username)) sql += " AND estoque_certo.usuario.username ILIKE @username";
         if (unidadeOrganizacionalId != null) sql += " AND estoque_certo.usuario.unidade_organizacional_id = @unidade_organizacional_id";
-        if (valido != null) sql += " AND estoque_certo.usuario.valido = @valido";
+        if (cadastroCompleto != null) sql += " AND estoque_certo.usuario.cadastro_completo = @cadastro_completo";
 
         sql += " ORDER BY estoque_certo.usuario.nome LIMIT @top OFFSET @skip";
 
@@ -165,7 +171,7 @@ public class UsuarioRepository : BaseRepository
             await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.Add("username", NpgsqlDbType.Varchar).Value = $"%{username}%";
             cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId ?? (object)DBNull.Value;
-            cmd.Parameters.Add("valido", NpgsqlDbType.Boolean).Value = valido ?? (object)DBNull.Value;
+            cmd.Parameters.Add("cadastro_completo", NpgsqlDbType.Boolean).Value = cadastroCompleto ?? (object)DBNull.Value;
             cmd.Parameters.Add("top", NpgsqlDbType.Integer).Value = top;
             cmd.Parameters.Add("skip", NpgsqlDbType.Integer).Value = skip;
 
@@ -176,7 +182,8 @@ public class UsuarioRepository : BaseRepository
                 usuarioGetResponse.UsuarioId = reader.GetGuid("usuario_id");
                 usuarioGetResponse.Username = reader.GetString("username");
                 usuarioGetResponse.Nome = reader.GetString("nome");
-                usuarioGetResponse.Valido = reader.GetBoolean("valido");
+                usuarioGetResponse.CadastroCompleto = reader.GetBoolean("cadastro_completo");
+                usuarioGetResponse.JornadaUsuario = (JornadaUsuario)reader.GetInt32("jornada_usuario");
                 usuarioGetResponse.NomeUnidadeOrganizacional = reader.GetString("nome_unidade");
                 usuarios.Add(usuarioGetResponse);
             }
@@ -223,7 +230,13 @@ public class UsuarioRepository : BaseRepository
 
     public async Task<int> ValidarAcesso(Guid usuarioId)
     {
-        const string sql = "UPDATE estoque_certo.usuario SET valido = true WHERE usuario_id = @usuario_id";
+        const string sql = @"
+            UPDATE estoque_certo.usuario
+            SET
+                cadastro_completo = true,
+                jornada_usuario = @jornada_usuario
+            WHERE usuario_id = @usuario_id
+        ";
 
         try
         {
@@ -232,6 +245,7 @@ public class UsuarioRepository : BaseRepository
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
             cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId;
+            cmd.Parameters.Add("jornada_usuario", NpgsqlDbType.Integer).Value = (int)JornadaUsuario.Completed;
 
             return await cmd.ExecuteNonQueryAsync();
         }

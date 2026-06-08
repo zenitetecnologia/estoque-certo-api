@@ -26,7 +26,11 @@ public class Usuario
 
     [JsonIgnore]
     [JsonPropertyOrder(7)]
-    public virtual bool Valido { get; set; }
+    public virtual bool CadastroCompleto { get; set; }
+
+    [JsonIgnore]
+    [JsonPropertyOrder(8)]
+    public virtual JornadaUsuario JornadaUsuario { get; set; }
 }
 
 public class UsuarioGetResponse
@@ -35,7 +39,8 @@ public class UsuarioGetResponse
     public string? Username { get; set; }
     public string Nome { get; set; } = string.Empty;
     public string? NomeUnidadeOrganizacional { get; set; }
-    public bool Valido { get; set; }
+    public bool CadastroCompleto { get; set; }
+    public JornadaUsuario JornadaUsuario { get; set; }
 }
 
 public class UsuarioPutRequest
@@ -43,4 +48,12 @@ public class UsuarioPutRequest
     public string Nome { get; set; } = string.Empty;
     public string? Senha { get; set; }
     public string? ConfirmaSenha { get; set; }
+}
+
+public enum JornadaUsuario
+{
+    RegisterPage = 1,
+    CodeValidatePage = 2,
+    WaitingApprovalPage = 3,
+    Completed = 4
 }

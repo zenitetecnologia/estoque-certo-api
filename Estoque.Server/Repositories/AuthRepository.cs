@@ -19,7 +19,8 @@ public class AuthRepository : BaseRepository
                 nome,
                 perfil,
                 unidade_organizacional_id,
-                valido
+                cadastro_completo,
+                jornada_usuario
             FROM estoque_certo.usuario
             WHERE username = @username
               AND unidade_organizacional_id = @unidade_organizacional_id
@@ -47,7 +48,8 @@ public class AuthRepository : BaseRepository
                 usuario.Nome = reader.GetString("nome");
                 usuario.Perfil = (PerfilUsuario)reader.GetInt32("perfil");
                 usuario.UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id");
-                usuario.Valido = reader.GetBoolean("valido");
+                usuario.CadastroCompleto = reader.GetBoolean("cadastro_completo");
+                usuario.JornadaUsuario = (JornadaUsuario)reader.GetInt32("jornada_usuario");
 
                 return usuario;
             }
@@ -60,9 +62,55 @@ public class AuthRepository : BaseRepository
         }
     }
 
-    public async Task<CodigoAcesso?> ObterCodigoPorSms(string codigoSms)
+    public async Task<Usuario?> ObterUsuario(Guid usuarioId)
     {
         const string sql = @"
+            SELECT 
+                usuario_id,
+                username,
+                senha,
+                nome,
+                perfil,
+                unidade_organizacional_id,
+                cadastro_completo,
+                jornada_usuario
+            FROM estoque_certo.usuario
+            WHERE usuario_id = @usuario_id
+            LIMIT 1;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+            cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId;
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+
+            if (!await reader.ReadAsync()) return null;
+
+            return new Usuario
+            {
+                UsuarioId = reader.GetGuid("usuario_id"),
+                Username = reader.GetString("username"),
+                Senha = reader.GetString("senha"),
+                Nome = reader.GetString("nome"),
+                Perfil = (PerfilUsuario)reader.GetInt32("perfil"),
+                UnidadeOrganizacionalId = reader.GetGuidNullable("unidade_organizacional_id"),
+                CadastroCompleto = reader.GetBoolean("cadastro_completo"),
+                JornadaUsuario = (JornadaUsuario)reader.GetInt32("jornada_usuario")
+            };
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<CodigoAcesso?> ObterCodigoPorSms(string codigoSms, Guid? usuarioId = null)
+    {
+        var sql = @"
             SELECT 
                 usuario_id,
                 codigo,
@@ -76,6 +124,12 @@ public class AuthRepository : BaseRepository
                 estoque_certo.codigo_acesso
             WHERE 
                 codigo = @codigo
+        ";
+
+        if (usuarioId.HasValue)
+            sql += " AND usuario_id = @usuario_id";
+
+        sql += @"
             ORDER BY 
                 data_solicitacao DESC
             LIMIT 1;
@@ -86,6 +140,8 @@ public class AuthRepository : BaseRepository
             await EnsureOpenAsync();
             await using var cmd = new NpgsqlCommand(sql, Connection);
             cmd.Parameters.Add("codigo", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoSms;
+            if (usuarioId.HasValue)
+                cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId.Value;
 
             await using var reader = await cmd.ExecuteReaderAsync();
 
@@ -143,6 +199,60 @@ public class AuthRepository : BaseRepository
             cmd.Parameters.Add("codigo", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoSms;
 
             await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task AtualizarCodigoCadastroValidado(Guid usuarioId, string codigoSms)
+    {
+        const string sql = @"
+            UPDATE 
+                estoque_certo.codigo_acesso 
+            SET 
+                utilizado = true, 
+                data_validacao = @data_validacao
+            WHERE 
+                usuario_id = @usuario_id 
+                AND codigo = @codigo;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.Add("data_validacao", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = DateTimeHelper.SaoPaulo();
+            cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId;
+            cmd.Parameters.Add("codigo", NpgsqlTypes.NpgsqlDbType.Varchar).Value = codigoSms;
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<int> AtualizarJornadaUsuario(Guid usuarioId, JornadaUsuario jornadaUsuario)
+    {
+        const string sql = @"
+            UPDATE estoque_certo.usuario
+            SET jornada_usuario = @jornada_usuario
+            WHERE usuario_id = @usuario_id;
+        ";
+
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.Add("usuario_id", NpgsqlTypes.NpgsqlDbType.Uuid).Value = usuarioId;
+            cmd.Parameters.Add("jornada_usuario", NpgsqlTypes.NpgsqlDbType.Integer).Value = (int)jornadaUsuario;
+
+            return await cmd.ExecuteNonQueryAsync();
         }
         catch
         {

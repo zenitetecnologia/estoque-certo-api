@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS estoque_certo.usuario (
     senha VARCHAR(255) NOT NULL,
     nome VARCHAR(100) NOT NULL,
     perfil INTEGER NOT NULL,
-    valido BOOLEAN NOT NULL DEFAULT FALSE,
+    cadastro_completo BOOLEAN NOT NULL DEFAULT FALSE,
+    jornada_usuario INTEGER NOT NULL DEFAULT 1,
     
     CONSTRAINT uk_usuario_username_unidade UNIQUE (username, unidade_organizacional_id),
     

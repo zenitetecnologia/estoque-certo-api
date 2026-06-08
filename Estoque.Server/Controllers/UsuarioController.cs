@@ -17,7 +17,7 @@ public static class UsuarioController
             return TypedResults.CreatedAtRoute(
                 routeName: "usuario_get_by_id",
                 routeValues: new { usuarioId },
-                value: "Usuário cadastrado com sucesso. Aguarde a aprovação do Administrador.");
+                value: "Usuário cadastrado com sucesso. Informe o código enviado para validar o cadastro.");
         })
        .WithTags("usuarios")
        .WithSummary("Cadastra um novo usuário")
@@ -78,9 +78,9 @@ public static class UsuarioController
         #endregion
 
         #region [ get ]
-        app.MapGet("v1/usuarios", async (UsuarioService service, int skip = 0, int top = 10, string? username = null, Guid? unidadeOrganizacionalId = null, bool? valido = null) =>
+        app.MapGet("v1/usuarios", async (UsuarioService service, int skip = 0, int top = 10, string? username = null, Guid? unidadeOrganizacionalId = null, bool? cadastroCompleto = null) =>
         {
-            var result = await service.Obter(skip, top, username, unidadeOrganizacionalId, valido);
+            var result = await service.Obter(skip, top, username, unidadeOrganizacionalId, cadastroCompleto);
 
             return Results.Ok(result);
         })
