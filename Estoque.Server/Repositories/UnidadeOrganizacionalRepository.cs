@@ -74,8 +74,9 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             return (Guid)result!;
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             throw;
         }
     }

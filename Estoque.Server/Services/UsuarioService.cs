@@ -9,12 +9,14 @@ public class UsuarioService : BaseService
 {
     private readonly UsuarioRepository _usuarioRepository;
     private readonly UnidadeOrganizacionalRepository _unidadeOrganizacionalRepository;
+    private readonly AuthRepository _authRepository;
     private readonly IPasswordHasher<Usuario> _passwordHasher;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, UnidadeOrganizacionalRepository unidadeOrganizacionalRepository, IPasswordHasher<Usuario> passwordHasher)
+    public UsuarioService(UsuarioRepository usuarioRepository, UnidadeOrganizacionalRepository unidadeOrganizacionalRepository, AuthRepository authRepository, IPasswordHasher<Usuario> passwordHasher)
     {
         _usuarioRepository = usuarioRepository;
         _unidadeOrganizacionalRepository = unidadeOrganizacionalRepository;
+        _authRepository = authRepository;
         _passwordHasher = passwordHasher;
     }
 
@@ -25,9 +27,16 @@ public class UsuarioService : BaseService
             await ValidarCampos(usuario, Guid.Empty);
 
             usuario.Perfil = PerfilUsuario.Normal;
+            usuario.CadastroCompleto = false;
+            usuario.JornadaUsuario = JornadaUsuario.CodeValidatePage;
             usuario.Senha = _passwordHasher.HashPassword(usuario, usuario.Senha);
 
-            return await _usuarioRepository.Cadastrar(usuario);
+            var usuarioId = await _usuarioRepository.Cadastrar(usuario);
+
+            string codigoGerado = new Random().Next(100000, 999999).ToString();
+            await _authRepository.InserirCodigoAcesso(usuarioId, codigoGerado);
+
+            return usuarioId;
         }
         catch (ValidationException)
         {
@@ -79,7 +88,10 @@ public class UsuarioService : BaseService
 
             if (usuario == null) throw new NotFoundException("Usuário não encontrado com o ID informado.");
 
-            if (usuario.Valido) throw new InvalidOperationException("O acesso do usuário já está validado.");
+            if (usuario.CadastroCompleto) throw new InvalidOperationException("O acesso do usuário já está validado.");
+
+            if (usuario.JornadaUsuario != JornadaUsuario.WaitingApprovalPage)
+                throw new InvalidOperationException("O usuário ainda não concluiu a validação do código de cadastro.");
 
             await _usuarioRepository.ValidarAcesso(usuarioId);
         }
@@ -115,11 +127,11 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task<List<UsuarioGetResponse>> Obter(int skip, int top, string? username, Guid? unidadeOrganizacionalId, bool? valido = null)
+    public async Task<List<UsuarioGetResponse>> Obter(int skip, int top, string? username, Guid? unidadeOrganizacionalId, bool? cadastroCompleto = null)
     {
         try
         {
-            return await _usuarioRepository.Obter(skip, top, username, unidadeOrganizacionalId, valido);
+            return await _usuarioRepository.Obter(skip, top, username, unidadeOrganizacionalId, cadastroCompleto);
         }
         catch (Exception ex)
         {

@@ -19,7 +19,7 @@ public static class AuthController
         .WithTags("auth")
         .WithSummary("Autentica um usuário")
         .WithDescription("Realiza o login e gera um Token JWT informando o username e a senha.")
-        .Produces<AuthToken>(StatusCodes.Status200OK)
+        .Produces<AuthLoginResponse>(StatusCodes.Status200OK)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status401Unauthorized)
         .Produces<string>(StatusCodes.Status500InternalServerError)
@@ -44,16 +44,31 @@ public static class AuthController
         .AllowAnonymous();
         #endregion
 
+        #region [ registration-code ]
+        app.MapPost("v1/auth/registration-code", async (AuthService service, PayloadCryptoService cryptoService, EncryptedRequest encryptedRequest) =>
+        {
+            var request = cryptoService.Descriptografar<AuthForgot>(encryptedRequest);
+            await service.ReenviarCodigoCadastro(request);
+
+            return Results.Ok("Código reenviado com sucesso.");
+        })
+        .WithTags("auth")
+        .WithSummary("Reenvia código de validação de cadastro")
+        .WithDescription("Reenvia o código de 6 dígitos para cadastros que ainda estão em validação.")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError)
+        .AllowAnonymous();
+        #endregion
+
         #region [ verify ]
         app.MapPost("v1/auth/verify", async (AuthService service, PayloadCryptoService cryptoService, EncryptedRequest encryptedRequest) =>
         {
             var request = cryptoService.Descriptografar<AuthVerify>(encryptedRequest);
-            string codigoResetId = await service.VerificarCodigo(request);
+            var response = await service.VerificarCodigo(request);
 
-            return Results.Ok(cryptoService.CriptografarResposta(encryptedRequest, new
-            {
-                codigoResetId = codigoResetId
-            }));
+            return Results.Ok(cryptoService.CriptografarResposta(encryptedRequest, response));
         })
         .WithTags("auth")
         .WithSummary("Verifica o código SMS")

@@ -23,7 +23,7 @@ public class AuthService : BaseService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<AuthToken> Login(Auth auth)
+    public async Task<AuthLoginResponse> Login(Auth auth)
     {
         try
         {
@@ -39,12 +39,42 @@ public class AuthService : BaseService
             if (verificacaoSenha == PasswordVerificationResult.Failed)
                 throw new UnauthorizedAccessException("Usuário ou senha incorreta.");
 
-            if (!usuario.Valido)
-                throw new ForbiddenException("Usuário não validado.");
-
-            return new AuthToken
+            if (usuario.CadastroCompleto)
             {
-                Token = GerarTokenJwt(usuario)
+                if (usuario.JornadaUsuario != JornadaUsuario.Completed)
+                {
+                    await _authRepository.AtualizarJornadaUsuario(usuario.UsuarioId, JornadaUsuario.Completed);
+                    usuario.JornadaUsuario = JornadaUsuario.Completed;
+                }
+
+                return new AuthLoginResponse
+                {
+                    Token = GerarTokenJwt(usuario)
+                };
+            }
+
+            if (usuario.JornadaUsuario == JornadaUsuario.CodeValidatePage)
+            {
+                return new AuthLoginResponse
+                {
+                    JornadaUsuario = usuario.JornadaUsuario,
+                    Message = "Valide o código de 6 dígitos enviado."
+                };
+            }
+
+            if (usuario.JornadaUsuario == JornadaUsuario.WaitingApprovalPage)
+            {
+                return new AuthLoginResponse
+                {
+                    JornadaUsuario = JornadaUsuario.WaitingApprovalPage,
+                    Message = "Isso pode levar até algumas horas."
+                };
+            }
+
+            return new AuthLoginResponse
+            {
+                JornadaUsuario = JornadaUsuario.WaitingApprovalPage,
+                Message = "Isso pode levar até algumas horas."
             };
         }
         catch (ValidationException)
@@ -81,7 +111,8 @@ public class AuthService : BaseService
                 new Claim(ClaimTypes.Name, usuario.Username),
                 new Claim("UnidadeOrganizacionalId", usuario.UnidadeOrganizacionalId.ToString()!),
                 new Claim(ClaimTypes.Role, usuario.Perfil.ToString()),
-                new Claim("Valido", usuario.Valido.ToString())
+                new Claim("CadastroCompleto", usuario.CadastroCompleto.ToString()),
+                new Claim("JornadaUsuario", usuario.JornadaUsuario.ToString())
             }),
             Expires = DateTimeHelper.SaoPaulo().AddHours(24),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -102,9 +133,9 @@ public class AuthService : BaseService
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
 
-            var existeCodigoEmCooldown = await _authRepository.BuscarUltimoCodigo(usuario.UsuarioId, DateTime.MinValue, 2, 2);
+            var existeCodigoEmCooldown = await _authRepository.BuscarUltimoCodigo(usuario.UsuarioId, DateTime.MinValue, 5, 2);
             if (existeCodigoEmCooldown)
-                throw new InvalidOperationException("Aguarde 2 minutos para solicitar um novo código de recuperação.");
+                throw new InvalidOperationException("Aguarde 5 minutos para solicitar um novo código de recuperação.");
 
             string codigoGerado = new Random().Next(100000, 999999).ToString();
 
@@ -128,14 +159,57 @@ public class AuthService : BaseService
         }
     }
 
-    public async Task<string> VerificarCodigo(AuthVerify auth)
+    public async Task ReenviarCodigoCadastro(Auth auth)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(auth.Code))
-                throw new InvalidOperationException("Informe o código.");
+            ValidarAuthForgot(auth);
 
-            var codigoAcesso = await _authRepository.ObterCodigoPorSms(auth.Code);
+            var usuario = await _authRepository.ObterUsername(auth.Username, auth.UnidadeOrganizacionalId!.Value);
+
+            if (usuario == null)
+                throw new NotFoundException("Usuário não encontrado.");
+
+            if (usuario.JornadaUsuario != JornadaUsuario.CodeValidatePage)
+                throw new InvalidOperationException("Este cadastro não está aguardando validação de código.");
+
+            var existeCodigoEmCooldown = await _authRepository.BuscarUltimoCodigo(usuario.UsuarioId, DateTime.MinValue, 5, 2);
+            if (existeCodigoEmCooldown)
+                throw new InvalidOperationException("Aguarde 5 minutos para solicitar um novo código.");
+
+            string codigoGerado = new Random().Next(100000, 999999).ToString();
+
+            await _authRepository.InserirCodigoAcesso(usuario.UsuarioId, codigoGerado);
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (InvalidOperationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao reenviar código de cadastro: {ex.Message}");
+        }
+    }
+
+    public async Task<AuthVerifyResponse> VerificarCodigo(AuthVerify auth)
+    {
+        try
+        {
+            ValidarAuthVerify(auth);
+
+            Usuario? usuario = null;
+            if (!string.IsNullOrWhiteSpace(auth.Username) && auth.UnidadeOrganizacionalId.HasValue)
+                usuario = await _authRepository.ObterUsername(auth.Username, auth.UnidadeOrganizacionalId.Value);
+
+            var codigoAcesso = await _authRepository.ObterCodigoPorSms(auth.Code, usuario?.UsuarioId);
 
             if (codigoAcesso == null)
                 throw new NotFoundException("Código não encontrado.");
@@ -150,17 +224,38 @@ public class AuthService : BaseService
             if (existeMaisRecente)
                 throw new InvalidOperationException("Este código foi invalidado porque uma nova solicitação foi feita.");
 
+            usuario ??= await _authRepository.ObterUsuario(codigoAcesso.UsuarioId);
+
+            if (usuario?.JornadaUsuario == JornadaUsuario.CodeValidatePage)
+            {
+                await _authRepository.AtualizarCodigoCadastroValidado(codigoAcesso.UsuarioId, codigoAcesso.Codigo);
+                await _authRepository.AtualizarJornadaUsuario(codigoAcesso.UsuarioId, JornadaUsuario.WaitingApprovalPage);
+
+                return new AuthVerifyResponse
+                {
+                    JornadaUsuario = JornadaUsuario.WaitingApprovalPage,
+                    Message = "Código validado com sucesso."
+                };
+            }
+
             string codigoResetId = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)).ToLower();
 
             await _authRepository.AtualizarCodigoValidado(codigoAcesso.UsuarioId, codigoAcesso.Codigo, codigoResetId);
 
-            return codigoResetId;
+            return new AuthVerifyResponse
+            {
+                CodigoResetId = codigoResetId
+            };
         }
         catch (InvalidOperationException)
         {
             throw;
         }
         catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (ValidationException)
         {
             throw;
         }
@@ -177,8 +272,7 @@ public class AuthService : BaseService
             if (string.IsNullOrWhiteSpace(auth.CodigoAcessoId))
                 throw new InvalidOperationException("Código de acesso não informado.");
 
-            if (string.IsNullOrWhiteSpace(auth.Senha))
-                throw new InvalidOperationException("Informe a nova senha.");
+            ValidarAuthReset(auth);
 
             var codigoAcesso = await _authRepository.ObterCodigoPorId(auth.CodigoAcessoId);
 
@@ -214,6 +308,10 @@ public class AuthService : BaseService
         {
             throw;
         }
+        catch (ValidationException)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
             throw new Exception($"Erro ao redefinir senha: {ex.Message}");
@@ -242,6 +340,32 @@ public class AuthService : BaseService
 
         if (auth.UnidadeOrganizacionalId == null || auth.UnidadeOrganizacionalId == Guid.Empty)
             AddError(nameof(auth.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
+
+        if (Errors.Any())
+            throw new ValidationException(Errors);
+    }
+
+    private void ValidarAuthVerify(AuthVerify auth)
+    {
+        if (string.IsNullOrWhiteSpace(auth.Code))
+            AddError(nameof(auth.Code), "Informe o código.");
+
+        if (Errors.Any())
+            throw new ValidationException(Errors);
+    }
+
+    private void ValidarAuthReset(AuthReset auth)
+    {
+        if (string.IsNullOrWhiteSpace(auth.Senha))
+            AddError(nameof(auth.Senha), "Informe a nova senha.");
+
+        if (string.IsNullOrWhiteSpace(auth.ConfirmaSenha))
+            AddError(nameof(auth.ConfirmaSenha), "Confirme a nova senha.");
+
+        if (!string.IsNullOrWhiteSpace(auth.Senha)
+            && !string.IsNullOrWhiteSpace(auth.ConfirmaSenha)
+            && auth.Senha != auth.ConfirmaSenha)
+            AddError(nameof(auth.ConfirmaSenha), "A confirmação da senha não confere.");
 
         if (Errors.Any())
             throw new ValidationException(Errors);
