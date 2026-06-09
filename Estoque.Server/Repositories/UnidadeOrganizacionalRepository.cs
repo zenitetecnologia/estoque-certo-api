@@ -130,8 +130,9 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             return await cmd.ExecuteNonQueryAsync();
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             throw;
         }
     }
