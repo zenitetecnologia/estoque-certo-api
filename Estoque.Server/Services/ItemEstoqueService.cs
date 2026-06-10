@@ -107,7 +107,7 @@ public class ItemEstoqueService : BaseService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao recuperar  histórico do item: {ex.Message}");
+            throw new Exception($"Erro ao recuperar histórico do item: {ex.Message}");
         }
     }
 
