@@ -188,6 +188,14 @@ public class UsuarioService : BaseService
         if (string.IsNullOrWhiteSpace(usuario.Senha))
             AddError(nameof(usuario.Senha), "Informe a senha.");
 
+        if (string.IsNullOrWhiteSpace(usuario.ConfirmaSenha))
+            AddError(nameof(usuario.ConfirmaSenha), "Confirme a senha.");
+
+        if (!string.IsNullOrWhiteSpace(usuario.Senha) &&
+            !string.IsNullOrWhiteSpace(usuario.ConfirmaSenha) &&
+            usuario.Senha != usuario.ConfirmaSenha)
+            AddError(nameof(usuario.ConfirmaSenha), "As senhas não coincidem.");
+
         if (string.IsNullOrWhiteSpace(usuario.Nome))
             AddError(nameof(usuario.Nome), "Informe o nome.");
 

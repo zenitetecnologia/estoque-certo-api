@@ -17,19 +17,23 @@ public class Usuario
     [JsonPropertyOrder(4)]
     public string Senha { get; set; } = string.Empty;
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     [JsonPropertyOrder(5)]
+    public string ConfirmaSenha { get; set; } = string.Empty;
+
+    [JsonPropertyOrder(6)]
     public string Nome { get; set; } = string.Empty;
 
     [JsonIgnore]
-    [JsonPropertyOrder(6)]
+    [JsonPropertyOrder(7)]
     public virtual PerfilUsuario Perfil { get; set; }
 
     [JsonIgnore]
-    [JsonPropertyOrder(7)]
+    [JsonPropertyOrder(8)]
     public virtual bool CadastroCompleto { get; set; }
 
     [JsonIgnore]
-    [JsonPropertyOrder(8)]
+    [JsonPropertyOrder(9)]
     public virtual JornadaUsuario JornadaUsuario { get; set; }
 }
 
