@@ -365,7 +365,7 @@ public class AuthService : BaseService
         if (!string.IsNullOrWhiteSpace(auth.Senha)
             && !string.IsNullOrWhiteSpace(auth.ConfirmaSenha)
             && auth.Senha != auth.ConfirmaSenha)
-            AddError(nameof(auth.ConfirmaSenha), "A confirmação da senha não confere.");
+            AddError(nameof(auth.ConfirmaSenha), "A senha e a confirmação não são iguais.");
 
         if (Errors.Any())
             throw new ValidationException(Errors);

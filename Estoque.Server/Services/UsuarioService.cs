@@ -194,7 +194,7 @@ public class UsuarioService : BaseService
         if (!string.IsNullOrWhiteSpace(usuario.Senha) &&
             !string.IsNullOrWhiteSpace(usuario.ConfirmaSenha) &&
             usuario.Senha != usuario.ConfirmaSenha)
-            AddError(nameof(usuario.ConfirmaSenha), "As senhas não coincidem.");
+            AddError(nameof(usuario.ConfirmaSenha), "A senha e a confirmação não são iguais.");
 
         if (string.IsNullOrWhiteSpace(usuario.Nome))
             AddError(nameof(usuario.Nome), "Informe o nome.");
@@ -222,7 +222,7 @@ public class UsuarioService : BaseService
             if (!string.IsNullOrWhiteSpace(usuario.Senha) &&
                 !string.IsNullOrWhiteSpace(usuario.ConfirmaSenha) &&
                 usuario.Senha != usuario.ConfirmaSenha)
-                AddError(nameof(usuario.ConfirmaSenha), "As senhas não coincidem.");
+                AddError(nameof(usuario.ConfirmaSenha), "A senha e a confirmação não são iguais.");
         }
 
         if (Errors.Any())
