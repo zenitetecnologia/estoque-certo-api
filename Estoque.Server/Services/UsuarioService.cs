@@ -80,6 +80,30 @@ public class UsuarioService : BaseService
         }
     }
 
+    public async Task AtualizarNome(UsuarioPatchRequest usuario, Guid usuarioId)
+    {
+        try
+        {
+            ValidarCamposAtualizacaoNome(usuario);
+
+            var affected = await _usuarioRepository.AtualizarNome(usuario, usuarioId);
+
+            if (affected <= 0) throw new NotFoundException("Usuário não encontrado com os parâmetros informados.");
+        }
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao atualizar nome do usuário: {ex.Message}");
+        }
+    }
+
     public async Task ValidarAcesso(Guid usuarioId)
     {
         try
@@ -224,6 +248,15 @@ public class UsuarioService : BaseService
                 usuario.Senha != usuario.ConfirmaSenha)
                 AddError(nameof(usuario.ConfirmaSenha), "A senha e a confirmação não são iguais.");
         }
+
+        if (Errors.Any())
+            throw new ValidationException(Errors);
+    }
+
+    private void ValidarCamposAtualizacaoNome(UsuarioPatchRequest usuario)
+    {
+        if (string.IsNullOrWhiteSpace(usuario.Nome))
+            AddError(nameof(usuario.Nome), "Informe o nome.");
 
         if (Errors.Any())
             throw new ValidationException(Errors);

@@ -54,6 +54,11 @@ public class UsuarioPutRequest
     public string? ConfirmaSenha { get; set; }
 }
 
+public class UsuarioPatchRequest
+{
+    public string Nome { get; set; } = string.Empty;
+}
+
 public enum JornadaUsuario
 {
     RegisterPage = 1,

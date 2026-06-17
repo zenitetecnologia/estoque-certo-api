@@ -45,6 +45,22 @@ public static class UsuarioController
         #endregion
 
         #region [ patch ]
+        app.MapPatch("v1/usuarios/{usuarioId:guid}/nome", async (UsuarioService service, PayloadCryptoService cryptoService, Guid usuarioId, EncryptedRequest request) =>
+        {
+            var usuario = cryptoService.Descriptografar<UsuarioPatchRequest>(request);
+            await service.AtualizarNome(usuario, usuarioId);
+
+            return Results.Ok("Nome atualizado com sucesso.");
+        })
+        .WithTags("usuarios")
+        .WithSummary("Atualiza o nome do usuário")
+        .WithDescription("Atualiza apenas o nome de um usuário existente.")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireAuthorization();
+
         app.MapPatch("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId) =>
         {
             await service.ValidarAcesso(usuarioId);
