@@ -193,6 +193,35 @@ public class ItemEstoqueRepository : BaseRepository
         }
     }
 
+    public async Task<bool> VerificarItemExiste(string descricao, Guid espacoId, Guid ignoreId)
+    {
+        const string sql = @"
+            SELECT
+                1
+            FROM
+                estoque_certo.item_estoque
+            WHERE
+                descricao = @descricao
+            AND
+                espaco_id = @espaco_id
+            AND
+                item_estoque_id <> @item_estoque_id
+            LIMIT 1;
+        ";
+
+        await EnsureOpenAsync();
+
+        await using var cmd = new NpgsqlCommand(sql, Connection);
+
+        cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = descricao;
+        cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
+        cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = ignoreId;
+
+        var result = await cmd.ExecuteScalarAsync();
+
+        return result != null;
+    }
+
     public async Task<int> Excluir(Guid itemEstoqueId)
     {
         const string sql = "DELETE FROM estoque_certo.item_estoque WHERE item_estoque_id = @id";

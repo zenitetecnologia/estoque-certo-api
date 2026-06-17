@@ -280,6 +280,13 @@ public class ItemEstoqueService : BaseService
 
         if (string.IsNullOrWhiteSpace(item.Descricao))
             AddError(nameof(item.Descricao), "Informe a descrição do item.");
+        else if (item.EspacoId != Guid.Empty)
+        {
+            bool existe = await _repository.VerificarItemExiste(item.Descricao, item.EspacoId, itemEstoqueId);
+
+            if (existe)
+                AddError(nameof(item.Descricao), "Já existe um item com esta descrição neste espaço.");
+        }
 
         if (item.Quantidade < 0)
             AddError(nameof(item.Quantidade), "Informe a quantidade.");
