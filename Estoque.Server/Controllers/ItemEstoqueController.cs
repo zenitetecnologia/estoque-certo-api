@@ -6,7 +6,7 @@ namespace Estoque.Server.Controllers;
 
 public static class ItemEstoqueController
 {
-    public record RequisicaoMovimentacao(decimal Quantidade, TipoMovimentacao TipoMovimentacao, Guid UsuarioId);
+    public record RequisicaoMovimentacao(decimal QuantidadeMovimento, TipoMovimentacao TipoMovimentacao, Guid UsuarioId);
     public record RequisicaoTransferencia(Guid NovoEspacoId, Guid UsuarioId);
 
     public static void MapItemEstoqueEndpoints(this WebApplication app)
@@ -96,9 +96,9 @@ public static class ItemEstoqueController
         app.MapPatch("v1/itens-estoque/{itemEstoqueId:guid}", async (ItemEstoqueService service, PayloadCryptoService cryptoService, Guid itemEstoqueId, EncryptedRequest request) =>
         {
             var req = cryptoService.Descriptografar<RequisicaoMovimentacao>(request);
-            await service.Movimentar(itemEstoqueId, req.Quantidade, req.TipoMovimentacao, req.UsuarioId);
+            await service.Movimentar(itemEstoqueId, req.QuantidadeMovimento, req.TipoMovimentacao, req.UsuarioId);
 
-            return Results.Ok("Movimentação registrada e estoque atualizado com sucesso.");
+            return Results.Ok("Movimentação registrada com sucesso.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Movimenta o estoque de um item")

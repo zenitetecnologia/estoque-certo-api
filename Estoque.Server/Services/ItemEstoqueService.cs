@@ -117,7 +117,7 @@ public class ItemEstoqueService : BaseService
         {
             if (quantidade <= 0)
             {
-                AddError("Quantidade", "A quantidade de movimentação deve ser maior que zero.");
+                AddError("QuantidadeMovimento", "A quantidade de movimentação deve ser maior que zero.");
                 throw new ValidationException(Errors);
             }
 
