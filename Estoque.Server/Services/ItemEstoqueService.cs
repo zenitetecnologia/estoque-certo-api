@@ -1,4 +1,4 @@
-﻿using Estoque.Server.Exceptions;
+using Estoque.Server.Exceptions;
 using Estoque.Server.Models;
 using Estoque.Server.Repositories;
 using System.Data;
@@ -205,11 +205,11 @@ public class ItemEstoqueService : BaseService
         }
     }
 
-    public async Task<bool> Transferir(Guid itemEstoqueId, Guid novoEspacoId, Guid usuarioId)
+    public async Task<bool> Transferir(Guid itemEstoqueId, Guid? novoEspacoId, Guid usuarioId)
     {
         try
         {
-            if (novoEspacoId == Guid.Empty)
+            if (!novoEspacoId.HasValue || novoEspacoId.Value == Guid.Empty)
             {
                 AddError("NovoEspacoId", "Informe o novo espaço de destino.");
                 throw new ValidationException(Errors);
@@ -227,13 +227,13 @@ public class ItemEstoqueService : BaseService
                 if (itemExistente == null)
                     throw new NotFoundException("Item de estoque não encontrado.");
 
-                if (itemExistente.EspacoId == novoEspacoId)
+                if (itemExistente.EspacoId == novoEspacoId.Value)
                 {
                     AddError("NovoEspacoId", "O item já se encontra neste espaço.");
                     throw new ValidationException(Errors);
                 }
 
-                var affected = await _repository.TransferirEspaco(itemEstoqueId, novoEspacoId, transaction);
+                var affected = await _repository.TransferirEspaco(itemEstoqueId, novoEspacoId.Value, transaction);
 
                 var historico = new Historico
                 {
@@ -241,7 +241,7 @@ public class ItemEstoqueService : BaseService
                     TipoMovimentacao = TipoMovimentacao.Transferencia,
                     UsuarioId = usuarioId,
                     EspacoOrigemId = itemExistente.EspacoId,
-                    EspacoDestinoId = novoEspacoId,
+                    EspacoDestinoId = novoEspacoId.Value,
                     QuantidadeAnterior = itemExistente.Quantidade,
                     QuantidadeResultante = itemExistente.Quantidade
                 };

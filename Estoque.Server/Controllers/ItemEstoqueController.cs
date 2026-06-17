@@ -1,4 +1,4 @@
-﻿using Estoque.Server.Models;
+using Estoque.Server.Models;
 using Estoque.Server.Services;
 using Estoque.Server.Validations;
 
@@ -7,7 +7,7 @@ namespace Estoque.Server.Controllers;
 public static class ItemEstoqueController
 {
     public record RequisicaoMovimentacao(decimal QuantidadeMovimento, TipoMovimentacao TipoMovimentacao, Guid UsuarioId);
-    public record RequisicaoTransferencia(Guid NovoEspacoId, Guid UsuarioId);
+    public record RequisicaoTransferencia(Guid? NovoEspacoId, Guid UsuarioId);
 
     public static void MapItemEstoqueEndpoints(this WebApplication app)
     {
@@ -115,7 +115,7 @@ public static class ItemEstoqueController
             var req = cryptoService.Descriptografar<RequisicaoTransferencia>(request);
             await service.Transferir(itemEstoqueId, req.NovoEspacoId, req.UsuarioId);
 
-            return Results.Ok("Item transferido com sucesso para o novo espaço.");
+            return Results.Ok("Item transferido com sucesso.");
         })
         .WithTags("itens-estoque")
         .WithSummary("Transfere um item para outro espaço")
