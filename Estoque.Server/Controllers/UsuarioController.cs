@@ -27,23 +27,6 @@ public static class UsuarioController
        .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
 
-        #region [ put ]
-        app.MapPut("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, PayloadCryptoService cryptoService, Guid usuarioId, EncryptedRequest request) =>
-        {
-            var usuario = cryptoService.Descriptografar<UsuarioPutRequest>(request);
-            await service.Atualizar(usuario, usuarioId);
-
-            return Results.Ok("Usuário atualizado com sucesso.");
-        })
-        .WithTags("usuarios")
-        .WithSummary("Atualiza registro de usuário")
-        .WithDescription("Atualiza os dados de um usuário existente.")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
-        .Produces<string>(StatusCodes.Status404NotFound)
-        .Produces<string>(StatusCodes.Status500InternalServerError);
-        #endregion
-
         #region [ patch ]
         app.MapPatch("v1/usuarios/{usuarioId:guid}/nome", async (UsuarioService service, PayloadCryptoService cryptoService, Guid usuarioId, EncryptedRequest request) =>
         {
@@ -75,22 +58,6 @@ public static class UsuarioController
        .Produces<string>(StatusCodes.Status404NotFound)
        .Produces<string>(StatusCodes.Status500InternalServerError)
        .RequireAuthorization(policy => policy.RequireRole("Admin"));
-        #endregion
-
-        #region [ delete ]
-        app.MapDelete("v1/usuarios/{usuarioId:guid}", async (UsuarioService service, Guid usuarioId) =>
-        {
-            await service.Excluir(usuarioId);
-
-            return Results.NoContent();
-        })
-        .WithTags("usuarios")
-        .WithSummary("Exclui um usuário")
-        .WithDescription("Exclui um usuário do sistema.")
-        .Produces(StatusCodes.Status204NoContent)
-        .Produces<string>(StatusCodes.Status404NotFound)
-        .Produces<string>(StatusCodes.Status500InternalServerError)
-        .RequireAuthorization(policy => policy.RequireRole("Admin"));
         #endregion
 
         #region [ get ]

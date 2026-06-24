@@ -59,36 +59,6 @@ public class UsuarioRepository : BaseRepository
         }
     }
 
-    public async Task<int> Atualizar(UsuarioPutRequest usuario, Guid usuarioId, string senhaHash)
-    {
-        const string sql = @"
-            UPDATE
-                estoque_certo.usuario
-            SET
-                nome = @nome,
-                senha = @senha
-            WHERE
-                usuario_id = @usuario_id
-        ";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, Connection);
-
-            cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId;
-            cmd.Parameters.Add("senha", NpgsqlDbType.Varchar).Value = (object?)senhaHash ?? DBNull.Value;
-            cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = usuario.Nome;
-
-            return await cmd.ExecuteNonQueryAsync();
-        }
-        catch
-        {
-            throw;
-        }
-    }
-
     public async Task<int> AtualizarNome(UsuarioPatchRequest usuario, Guid usuarioId)
     {
         const string sql = @"
@@ -274,26 +244,6 @@ public class UsuarioRepository : BaseRepository
 
             cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId;
             cmd.Parameters.Add("jornada_usuario", NpgsqlDbType.Integer).Value = (int)JornadaUsuario.Completed;
-
-            return await cmd.ExecuteNonQueryAsync();
-        }
-        catch
-        {
-            throw;
-        }
-    }
-
-    public async Task<int> Excluir(Guid usuarioId)
-    {
-        const string sql = "DELETE FROM estoque_certo.usuario WHERE usuario_id = @usuario_id";
-
-        try
-        {
-            await EnsureOpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, Connection);
-
-            cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = usuarioId;
 
             return await cmd.ExecuteNonQueryAsync();
         }

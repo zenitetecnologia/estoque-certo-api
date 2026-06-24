@@ -48,38 +48,6 @@ public class UsuarioService : BaseService
         }
     }
 
-    public async Task Atualizar(UsuarioPutRequest usuario, Guid usuarioId)
-    {
-        try
-        {
-            ValidarCamposAtualizacao(usuario);
-
-            string senhaHash = string.Empty;
-
-            if (!string.IsNullOrWhiteSpace(usuario.Senha))
-            {
-                var usuarioHash = new Usuario { UsuarioId = usuarioId };
-                senhaHash = _passwordHasher.HashPassword(usuarioHash, usuario.Senha);
-            }
-
-            var affected = await _usuarioRepository.Atualizar(usuario, usuarioId, senhaHash);
-
-            if (affected <= 0) throw new NotFoundException("Usuário não encontrado com os parâmetros informados.");
-        }
-        catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (ValidationException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao atualizar usuário: {ex.Message}");
-        }
-    }
-
     public async Task AtualizarNome(UsuarioPatchRequest usuario, Guid usuarioId)
     {
         try
@@ -130,24 +98,6 @@ public class UsuarioService : BaseService
         catch (Exception ex)
         {
             throw new Exception($"Erro ao validar acesso do usuário: {ex.Message}");
-        }
-    }
-
-    public async Task Excluir(Guid usuarioId)
-    {
-        try
-        {
-            var affected = await _usuarioRepository.Excluir(usuarioId);
-
-            if (affected <= 0) throw new NotFoundException("Usuário não encontrado com o ID informado.");
-        }
-        catch (NotFoundException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao excluir usuário: {ex.Message}");
         }
     }
 
@@ -222,32 +172,6 @@ public class UsuarioService : BaseService
 
         if (string.IsNullOrWhiteSpace(usuario.Nome))
             AddError(nameof(usuario.Nome), "Informe o nome.");
-
-        if (Errors.Any())
-            throw new ValidationException(Errors);
-    }
-
-    private void ValidarCamposAtualizacao(UsuarioPutRequest usuario)
-    {
-        if (string.IsNullOrWhiteSpace(usuario.Nome))
-            AddError(nameof(usuario.Nome), "Informe o nome.");
-
-        var senhaInformada = !string.IsNullOrWhiteSpace(usuario.Senha);
-        var confirmaSenhaInformada = !string.IsNullOrWhiteSpace(usuario.ConfirmaSenha);
-
-        if (senhaInformada || confirmaSenhaInformada)
-        {
-            if (string.IsNullOrWhiteSpace(usuario.Senha))
-                AddError(nameof(usuario.Senha), "Informe a senha.");
-
-            if (string.IsNullOrWhiteSpace(usuario.ConfirmaSenha))
-                AddError(nameof(usuario.ConfirmaSenha), "Confirme a senha.");
-
-            if (!string.IsNullOrWhiteSpace(usuario.Senha) &&
-                !string.IsNullOrWhiteSpace(usuario.ConfirmaSenha) &&
-                usuario.Senha != usuario.ConfirmaSenha)
-                AddError(nameof(usuario.ConfirmaSenha), "A senha e a confirmação não são iguais.");
-        }
 
         if (Errors.Any())
             throw new ValidationException(Errors);

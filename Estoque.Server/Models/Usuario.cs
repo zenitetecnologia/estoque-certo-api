@@ -47,13 +47,6 @@ public class UsuarioGetResponse
     public JornadaUsuario JornadaUsuario { get; set; }
 }
 
-public class UsuarioPutRequest
-{
-    public string Nome { get; set; } = string.Empty;
-    public string? Senha { get; set; }
-    public string? ConfirmaSenha { get; set; }
-}
-
 public class UsuarioPatchRequest
 {
     public string Nome { get; set; } = string.Empty;
