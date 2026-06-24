@@ -76,7 +76,6 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
             throw;
         }
     }
