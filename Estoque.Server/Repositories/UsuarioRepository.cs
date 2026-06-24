@@ -187,7 +187,10 @@ public class UsuarioRepository : BaseRepository
             }
             return usuarios;
         }
-        catch { throw; }
+        catch 
+        {
+            throw; 
+        }
     }
 
     public async Task<bool> VerificarUsuarioExiste(string username, Guid? unidadeOrganizacionalId, Guid ignoreId)
