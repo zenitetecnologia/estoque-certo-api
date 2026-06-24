@@ -74,7 +74,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             return (Guid)result!;
         }
-        catch (Exception ex)
+        catch
         {
             throw;
         }
