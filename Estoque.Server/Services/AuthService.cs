@@ -37,7 +37,7 @@ public class AuthService : BaseService
             var verificacaoSenha = _passwordHasher.VerifyHashedPassword(usuario, usuario.Senha, auth.Senha);
 
             if (verificacaoSenha == PasswordVerificationResult.Failed)
-                throw new UnauthorizedAccessException("Usuário ou senha incorreta.");
+                throw new UnauthorizedAccessException("Usuário ou senha incorretos.");
 
             if (usuario.CadastroCompleto)
             {
