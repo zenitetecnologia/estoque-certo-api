@@ -167,7 +167,7 @@ public class EspacoRepository : BaseRepository
             FROM
                 estoque_certo.espaco
             WHERE
-                nome = @nome
+                LOWER(BTRIM(nome)) = LOWER(BTRIM(@nome))
             AND
                 unidade_organizacional_id = @unidade_organizacional_id
             AND

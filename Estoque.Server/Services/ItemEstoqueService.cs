@@ -272,6 +272,8 @@ public class ItemEstoqueService : BaseService
 
     private async Task ValidarCampos(ItemEstoque item, Guid itemEstoqueId)
     {
+        item.Descricao = item.Descricao?.Trim() ?? string.Empty;
+
         if (itemEstoqueId == Guid.Empty && item.UnidadeOrganizacionalId == Guid.Empty)
             AddError(nameof(item.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
 

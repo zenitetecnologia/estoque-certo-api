@@ -119,6 +119,8 @@ public class EspacoService : BaseService
 
     private async Task ValidarCampos(Espaco espaco, Guid espacoId)
     {
+        espaco.Nome = espaco.Nome?.Trim() ?? string.Empty;
+
         if (espaco.UnidadeOrganizacionalId == null || espaco.UnidadeOrganizacionalId == Guid.Empty)
             AddError(nameof(espaco.UnidadeOrganizacionalId), "Informe a unidade organizacional.");
 

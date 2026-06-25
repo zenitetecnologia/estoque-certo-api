@@ -201,7 +201,7 @@ public class ItemEstoqueRepository : BaseRepository
             FROM
                 estoque_certo.item_estoque
             WHERE
-                descricao = @descricao
+                LOWER(BTRIM(descricao)) = LOWER(BTRIM(@descricao))
             AND
                 espaco_id = @espaco_id
             AND
