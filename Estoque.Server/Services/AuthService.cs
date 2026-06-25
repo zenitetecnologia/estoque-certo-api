@@ -131,7 +131,7 @@ public class AuthService : BaseService
             var usuario = await _authRepository.ObterUsername(auth.Username, auth.UnidadeOrganizacionalId!.Value);
 
             if (usuario == null)
-                throw new NotFoundException("Usuário não encontrado.");
+                throw new NotFoundException("Usuário não encontrado para a unidade organizacional informada.");
 
             var existeCodigoEmCooldown = await _authRepository.BuscarUltimoCodigo(usuario.UsuarioId, DateTime.MinValue, 5, 2);
             if (existeCodigoEmCooldown)
