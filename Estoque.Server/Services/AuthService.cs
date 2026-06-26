@@ -109,6 +109,7 @@ public class AuthService : BaseService
             {
                 new Claim(ClaimTypes.NameIdentifier, usuario.UsuarioId.ToString()),
                 new Claim(ClaimTypes.Name, usuario.Username),
+                new Claim("Nome", usuario.Nome),
                 new Claim("UnidadeOrganizacionalId", usuario.UnidadeOrganizacionalId.ToString()!),
                 new Claim(ClaimTypes.Role, usuario.Perfil.ToString()),
                 new Claim("CadastroCompleto", usuario.CadastroCompleto.ToString()),
