@@ -208,18 +208,25 @@ public class ItemEstoqueRepository : BaseRepository
                 item_estoque_id <> @item_estoque_id
             LIMIT 1;
         ";
+        try
+        {
 
-        await EnsureOpenAsync();
+            await EnsureOpenAsync();
 
-        await using var cmd = new NpgsqlCommand(sql, Connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
-        cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = descricao;
-        cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
-        cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = ignoreId;
+            cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = descricao;
+            cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
+            cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = ignoreId;
 
-        var result = await cmd.ExecuteScalarAsync();
+            var result = await cmd.ExecuteScalarAsync();
 
-        return result != null;
+            return result != null;
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public async Task<int> Excluir(Guid itemEstoqueId)
@@ -257,27 +264,33 @@ public class ItemEstoqueRepository : BaseRepository
                 item_estoque_id = @id
             FOR UPDATE;
         ";
-
-        await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
-        cmd.Parameters.Add("id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
-
-        await using var reader = await cmd.ExecuteReaderAsync();
-
-        if (await reader.ReadAsync())
+        try
         {
-            var item = new ItemEstoqueRecuperado();
+            await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
+            cmd.Parameters.Add("id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
 
-            item.ItemEstoqueId = reader.GetGuid("item_estoque_id");
-            item.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
-            item.EspacoId = reader.GetGuid("espaco_id");
-            item.Descricao = reader.GetString("descricao");
-            item.TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida");
-            item.Quantidade = reader.GetDecimal("quantidade");
+            await using var reader = await cmd.ExecuteReaderAsync();
 
-            return item;
+            if (await reader.ReadAsync())
+            {
+                var item = new ItemEstoqueRecuperado();
+
+                item.ItemEstoqueId = reader.GetGuid("item_estoque_id");
+                item.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+                item.EspacoId = reader.GetGuid("espaco_id");
+                item.Descricao = reader.GetString("descricao");
+                item.TipoUnidadeMedida = (TipoUnidadeMedida)reader.GetInt32("tipo_unidade_medida");
+                item.Quantidade = reader.GetDecimal("quantidade");
+
+                return item;
+            }
+
+            return null;
         }
-
-        return null;
+        catch
+        {
+            throw;
+        }
     }
 
     public async Task AtualizarQuantidade(Guid itemEstoqueId, decimal novaQuantidade, IDbTransaction transaction)
@@ -287,35 +300,13 @@ public class ItemEstoqueRepository : BaseRepository
             SET quantidade = @quantidade
             WHERE item_estoque_id = @id;
         ";
-
-        await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
-        cmd.Parameters.Add("id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
-        cmd.Parameters.Add("quantidade", NpgsqlDbType.Numeric).Value = novaQuantidade;
-
-        await cmd.ExecuteNonQueryAsync();
-    }
-
-    public async Task<int> TransferirEspaco(Guid itemEstoqueId, Guid novoEspacoId)
-    {
-        const string sql = @"
-            UPDATE
-                estoque_certo.item_estoque
-            SET
-                espaco_id = @novo_espaco_id
-            WHERE
-                item_estoque_id = @item_estoque_id;
-        ";
-
         try
         {
-            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
+            cmd.Parameters.Add("id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
+            cmd.Parameters.Add("quantidade", NpgsqlDbType.Numeric).Value = novaQuantidade;
 
-            await using var cmd = new NpgsqlCommand(sql, Connection);
-
-            cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
-            cmd.Parameters.Add("novo_espaco_id", NpgsqlDbType.Uuid).Value = novoEspacoId;
-
-            return await cmd.ExecuteNonQueryAsync();
+            await cmd.ExecuteNonQueryAsync();
         }
         catch
         {
@@ -334,11 +325,18 @@ public class ItemEstoqueRepository : BaseRepository
                 item_estoque_id = @item_estoque_id;
         ";
 
-        await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
+        try
+        {
+            await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
 
-        cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
-        cmd.Parameters.Add("novo_espaco_id", NpgsqlDbType.Uuid).Value = novoEspacoId;
+            cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = itemEstoqueId;
+            cmd.Parameters.Add("novo_espaco_id", NpgsqlDbType.Uuid).Value = novoEspacoId;
 
-        return await cmd.ExecuteNonQueryAsync();
+            return await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
     }
 }
