@@ -27,17 +27,24 @@ public class EspacoRepository : BaseRepository
             RETURNING espaco_id;
         ";
 
-        await EnsureOpenAsync();
+        try
+        {
+            await EnsureOpenAsync();
 
-        await using var cmd = new NpgsqlCommand(sql, Connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
-        cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = espaco.UnidadeOrganizacionalId;
-        cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = espaco.Nome;
-        cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = espaco.Descricao.ToDbValue();
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = espaco.UnidadeOrganizacionalId;
+            cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = espaco.Nome;
+            cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = espaco.Descricao.ToDbValue();
 
-        var result = await cmd.ExecuteScalarAsync();
+            var result = await cmd.ExecuteScalarAsync();
 
-        return (Guid)result!;
+            return (Guid)result!;
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public async Task<int> Atualizar(Espaco espaco, Guid espacoId)
@@ -52,16 +59,23 @@ public class EspacoRepository : BaseRepository
                 espaco_id = @espaco_id;
         ";
 
-        await EnsureOpenAsync();
+        try
+        {
+            await EnsureOpenAsync();
 
-        await using var cmd = new NpgsqlCommand(sql, Connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
-        cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
+            cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
 
-        cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = espaco.Nome;
-        cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = espaco.Descricao.ToDbValue();
+            cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = espaco.Nome;
+            cmd.Parameters.Add("descricao", NpgsqlDbType.Varchar).Value = espaco.Descricao.ToDbValue();
 
-        return await cmd.ExecuteNonQueryAsync();
+            return await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public async Task<List<EspacoGetResponse>> Obter(int skip, int top, string? nome, Guid? unidadeOrganizacionalId)
@@ -79,36 +93,43 @@ public class EspacoRepository : BaseRepository
             WHERE 1 = 1
         ";
 
-        if (!string.IsNullOrWhiteSpace(nome)) sql += " AND nome ILIKE @nome ";
-
-        if (unidadeOrganizacionalId != null) sql += " AND unidade_organizacional_id = @unidade_organizacional_id ";
-
-        sql += " ORDER BY nome LIMIT @top OFFSET @skip";
-
-        await EnsureOpenAsync();
-
-        await using var cmd = new NpgsqlCommand(sql, Connection);
-
-        cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = $"%{nome?.Trim()}%";
-        cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId.ToDbValue();
-        cmd.Parameters.Add("top", NpgsqlDbType.Integer).Value = top;
-        cmd.Parameters.Add("skip", NpgsqlDbType.Integer).Value = skip;
-
-        await using var reader = await cmd.ExecuteReaderAsync();
-
-        while (await reader.ReadAsync())
+        try
         {
-            var espacoGetResponse = new EspacoGetResponse();
+            if (!string.IsNullOrWhiteSpace(nome)) sql += " AND nome ILIKE @nome ";
 
-            espacoGetResponse.EspacoId = reader.GetGuid("espaco_id");
-            espacoGetResponse.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
-            espacoGetResponse.Nome = reader.GetString("nome");
-            espacoGetResponse.Descricao = reader.GetStringNullable("descricao");
+            if (unidadeOrganizacionalId != null) sql += " AND unidade_organizacional_id = @unidade_organizacional_id ";
 
-            espacosGetResponse.Add(espacoGetResponse);
+            sql += " ORDER BY nome LIMIT @top OFFSET @skip";
+
+            await EnsureOpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+
+            cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = $"%{nome?.Trim()}%";
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId.ToDbValue();
+            cmd.Parameters.Add("top", NpgsqlDbType.Integer).Value = top;
+            cmd.Parameters.Add("skip", NpgsqlDbType.Integer).Value = skip;
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                var espacoGetResponse = new EspacoGetResponse();
+
+                espacoGetResponse.EspacoId = reader.GetGuid("espaco_id");
+                espacoGetResponse.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+                espacoGetResponse.Nome = reader.GetString("nome");
+                espacoGetResponse.Descricao = reader.GetStringNullable("descricao");
+
+                espacosGetResponse.Add(espacoGetResponse);
+            }
+
+            return espacosGetResponse;
         }
-
-        return espacosGetResponse;
+        catch
+        {
+            throw;
+        }
     }
 
     public async Task<EspacoGetResponse?> Obter(Guid espacoId)
@@ -126,37 +147,51 @@ public class EspacoRepository : BaseRepository
             LIMIT 1;
         ";
 
-        await EnsureOpenAsync();
+        try
+        {
+            await EnsureOpenAsync();
 
-        await using var cmd = new NpgsqlCommand(sql, Connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
-        cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
+            cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
 
-        await using var reader = await cmd.ExecuteReaderAsync();
+            await using var reader = await cmd.ExecuteReaderAsync();
 
-        if (!await reader.ReadAsync()) return null;
+            if (!await reader.ReadAsync()) return null;
 
-        var espacoGetResponse = new EspacoGetResponse();
+            var espacoGetResponse = new EspacoGetResponse();
 
-        espacoGetResponse.EspacoId = reader.GetGuid("espaco_id");
-        espacoGetResponse.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
-        espacoGetResponse.Nome = reader.GetString("nome");
-        espacoGetResponse.Descricao = reader.GetStringNullable("descricao");
+            espacoGetResponse.EspacoId = reader.GetGuid("espaco_id");
+            espacoGetResponse.UnidadeOrganizacionalId = reader.GetGuid("unidade_organizacional_id");
+            espacoGetResponse.Nome = reader.GetString("nome");
+            espacoGetResponse.Descricao = reader.GetStringNullable("descricao");
 
-        return espacoGetResponse;
+            return espacoGetResponse;
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public async Task<int> Excluir(Guid espacoId)
     {
         const string sql = "DELETE FROM estoque_certo.espaco WHERE espaco_id = @espaco_id";
 
-        await EnsureOpenAsync();
+        try
+        {
+            await EnsureOpenAsync();
 
-        await using var cmd = new NpgsqlCommand(sql, Connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
-        cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
+            cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
 
-        return await cmd.ExecuteNonQueryAsync();
+            return await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public async Task<bool> ValidarDuplicidade(string nome, Guid unidadeOrganizacionalId, Guid ignoreId)
@@ -175,17 +210,24 @@ public class EspacoRepository : BaseRepository
             LIMIT 1;
         ";
 
-        await EnsureOpenAsync();
+        try
+        {
+            await EnsureOpenAsync();
 
-        await using var cmd = new NpgsqlCommand(sql, Connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
-        cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = nome;
-        cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId;
-        cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = ignoreId;
+            cmd.Parameters.Add("nome", NpgsqlDbType.Varchar).Value = nome;
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeOrganizacionalId;
+            cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = ignoreId;
 
-        var result = await cmd.ExecuteScalarAsync();
+            var result = await cmd.ExecuteScalarAsync();
 
-        return result != null;
+            return result != null;
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public async Task<bool> PossuiItensVinculados(Guid espacoId)
@@ -200,14 +242,21 @@ public class EspacoRepository : BaseRepository
             LIMIT 1;
         ";
 
-        await EnsureOpenAsync();
+        try
+        {
+            await EnsureOpenAsync();
 
-        await using var cmd = new NpgsqlCommand(sql, Connection);
+            await using var cmd = new NpgsqlCommand(sql, Connection);
 
-        cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
+            cmd.Parameters.Add("espaco_id", NpgsqlDbType.Uuid).Value = espacoId;
 
-        var result = await cmd.ExecuteScalarAsync();
+            var result = await cmd.ExecuteScalarAsync();
 
-        return result != null;
+            return result != null;
+        }
+        catch
+        {
+            throw;
+        }
     }
 }
