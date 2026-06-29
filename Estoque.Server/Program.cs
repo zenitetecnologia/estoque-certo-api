@@ -209,5 +209,17 @@ app.MapHealthChecks("/health");
 app.Run();
 static string ObterIpCliente(HttpContext httpContext)
 {
+    var cloudflareIp = httpContext.Request.Headers["CF-Connecting-IP"].FirstOrDefault();
+    if (!string.IsNullOrWhiteSpace(cloudflareIp))
+        return cloudflareIp.Trim();
+
+    var forwardedFor = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+    if (!string.IsNullOrWhiteSpace(forwardedFor))
+        return forwardedFor.Split(',')[0].Trim();
+
+    var realIp = httpContext.Request.Headers["X-Real-IP"].FirstOrDefault();
+    if (!string.IsNullOrWhiteSpace(realIp))
+        return realIp.Trim();
+
     return httpContext.Connection.RemoteIpAddress?.ToString() ?? "ip-nao-identificado";
 }
