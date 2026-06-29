@@ -1,1 +1,1 @@
-https://api.estoquecerto.zenitetecnologia.ia.br/health
+https://api.estoquecerto.zenitetecnologia.com/health
