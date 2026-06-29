@@ -33,12 +33,14 @@ builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<ItemEstoqueRepository>();
 builder.Services.AddScoped<HistoricoRepository>();
 builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<RelatorioRepository>();
 
 builder.Services.AddScoped<UnidadeOrganizacionalService>();
 builder.Services.AddScoped<EspacoService>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ItemEstoqueService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<RelatorioService>();
 builder.Services.AddSingleton<PayloadCryptoService>();
 
 builder.Services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>();
@@ -129,6 +131,7 @@ app.MapEspacoEndpoints();
 app.MapUsuarioEndpoints();
 app.MapItemEstoqueEndpoints();
 app.MapAuthEndpoints();
+app.MapRelatorioEndPoint();
 
 app.UseExceptionHandler(errorApp =>
 {
