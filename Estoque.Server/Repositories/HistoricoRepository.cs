@@ -107,17 +107,24 @@ public class HistoricoRepository : BaseRepository
             );
         ";
 
-        await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
+        try
+        {
+            await using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)transaction.Connection!, (NpgsqlTransaction)transaction);
 
-        cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = historico.ItemEstoqueId;
-        cmd.Parameters.Add("tipo_movimentacao", NpgsqlDbType.Integer).Value = (int)historico.TipoMovimentacao;
-        cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = historico.UsuarioId.HasValue ? (object)historico.UsuarioId.Value : DBNull.Value;
-        cmd.Parameters.Add("espaco_origem_id", NpgsqlDbType.Uuid).Value = historico.EspacoOrigemId.HasValue ? (object)historico.EspacoOrigemId.Value : DBNull.Value;
-        cmd.Parameters.Add("espaco_destino_id", NpgsqlDbType.Uuid).Value = historico.EspacoDestinoId.HasValue ? (object)historico.EspacoDestinoId.Value : DBNull.Value;
-        cmd.Parameters.Add("data_hora", NpgsqlDbType.Timestamp).Value = DateTimeHelper.SaoPaulo();
-        cmd.Parameters.Add("quantidade_anterior", NpgsqlDbType.Numeric).Value = historico.QuantidadeAnterior;
-        cmd.Parameters.Add("quantidade_resultante", NpgsqlDbType.Numeric).Value = historico.QuantidadeResultante;
+            cmd.Parameters.Add("item_estoque_id", NpgsqlDbType.Uuid).Value = historico.ItemEstoqueId;
+            cmd.Parameters.Add("tipo_movimentacao", NpgsqlDbType.Integer).Value = (int)historico.TipoMovimentacao;
+            cmd.Parameters.Add("usuario_id", NpgsqlDbType.Uuid).Value = historico.UsuarioId.HasValue ? (object)historico.UsuarioId.Value : DBNull.Value;
+            cmd.Parameters.Add("espaco_origem_id", NpgsqlDbType.Uuid).Value = historico.EspacoOrigemId.HasValue ? (object)historico.EspacoOrigemId.Value : DBNull.Value;
+            cmd.Parameters.Add("espaco_destino_id", NpgsqlDbType.Uuid).Value = historico.EspacoDestinoId.HasValue ? (object)historico.EspacoDestinoId.Value : DBNull.Value;
+            cmd.Parameters.Add("data_hora", NpgsqlDbType.Timestamp).Value = DateTimeHelper.SaoPaulo();
+            cmd.Parameters.Add("quantidade_anterior", NpgsqlDbType.Numeric).Value = historico.QuantidadeAnterior;
+            cmd.Parameters.Add("quantidade_resultante", NpgsqlDbType.Numeric).Value = historico.QuantidadeResultante;
 
-        await cmd.ExecuteNonQueryAsync();
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch
+        {
+            throw;
+        }
     }
 }
