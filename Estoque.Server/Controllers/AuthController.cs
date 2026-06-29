@@ -23,6 +23,7 @@ public static class AuthController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status401Unauthorized)
         .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireRateLimiting("login-policy")
         .AllowAnonymous();
         #endregion
 
@@ -41,6 +42,7 @@ public static class AuthController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireRateLimiting("login-policy")
         .AllowAnonymous();
         #endregion
 
@@ -59,6 +61,7 @@ public static class AuthController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireRateLimiting("login-policy")
         .AllowAnonymous();
         #endregion
 
@@ -77,6 +80,7 @@ public static class AuthController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireRateLimiting("login-policy")
         .AllowAnonymous();
         #endregion
 
@@ -95,6 +99,7 @@ public static class AuthController
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireRateLimiting("login-policy")
         .AllowAnonymous();
         #endregion
     }

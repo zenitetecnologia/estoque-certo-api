@@ -24,7 +24,9 @@ public static class UsuarioController
        .WithDescription("Cadastra um novo usuário com perfil normal e não validado.")
        .Produces(StatusCodes.Status201Created)
        .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
-       .Produces<string>(StatusCodes.Status500InternalServerError);
+       .Produces<string>(StatusCodes.Status500InternalServerError)
+       .RequireRateLimiting("login-policy")
+       .AllowAnonymous();
         #endregion
 
         #region [ patch ]

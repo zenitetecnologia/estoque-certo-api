@@ -10,6 +10,7 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,29 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 
 builder.Services.AddAuthorization();
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = async (context, cancellationToken) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+
+        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+            context.HttpContext.Response.Headers.RetryAfter = ((int)retryAfter.TotalSeconds).ToString();
+
+        await context.HttpContext.Response.WriteAsync("Muitas tentativas. Tente novamente mais tarde.", cancellationToken);
+    };
+
+    options.AddPolicy("login-policy", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: ObterIpCliente(httpContext),
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(10),
+                QueueLimit = 0
+            }));
+});
 
 builder.Services.AddScoped<UnidadeOrganizacionalRepository>();
 builder.Services.AddScoped<EspacoRepository>();
@@ -56,6 +80,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("*");
+app.UseRateLimiter();
 
 app.Use(async (context, next) =>
 {
@@ -182,3 +207,7 @@ app.UseExceptionHandler(errorApp =>
 app.MapHealthChecks("/health");
 
 app.Run();
+static string ObterIpCliente(HttpContext httpContext)
+{
+    return httpContext.Connection.RemoteIpAddress?.ToString() ?? "ip-nao-identificado";
+}
