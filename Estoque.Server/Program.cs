@@ -89,7 +89,7 @@ app.Use(async (context, next) =>
     if (path.StartsWithSegments("/v1/auth") ||
         path.StartsWithSegments("/swagger") ||
         path.StartsWithSegments("/health") ||
-        (path.StartsWithSegments("/v1/unidades-organizacionais") && context.Request.Method == HttpMethods.Get) ||
+        (path.StartsWithSegments("/v1/unidades-organizacionais") && (context.Request.Method == HttpMethods.Get || context.Request.Method == HttpMethods.Post)) ||
         (path.StartsWithSegments("/v1/usuarios") && context.Request.Method == HttpMethods.Post))
     {
         await next();
