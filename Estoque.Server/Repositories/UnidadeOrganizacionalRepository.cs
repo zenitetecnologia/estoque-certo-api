@@ -27,7 +27,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 uf,
                 pais,
                 email,
-                telefone
+                telefone,
+                aprovado
             )
             VALUES
             (
@@ -45,6 +46,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 @pais,
                 @email,
                 @telefone
+                @aprovado
             )
             RETURNING unidade_organizacional_id;
         ";
@@ -69,6 +71,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             cmd.Parameters.Add("pais", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Pais.ToDbValue();
             cmd.Parameters.Add("email", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Email.ToDbValue();
             cmd.Parameters.Add("telefone", NpgsqlDbType.Varchar).Value = unidadeOrganizacional.Telefone.ToDbValue();
+            cmd.Parameters.Add("aprovado", NpgsqlDbType.Boolean).Value = unidadeOrganizacional.Aprovado;
 
             var result = await cmd.ExecuteScalarAsync();
 
@@ -155,10 +158,11 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 uf,
                 pais,
                 email,
-                telefone
+                telefone,
+                aprovado
             FROM
                 estoque_certo.unidade_organizacional
-            WHERE 1 = 1
+            WHERE aprovado = true
         ";
 
         if (!string.IsNullOrWhiteSpace(razaoSocial)) sql += " AND razao_social ILIKE @razao_social ";
@@ -199,6 +203,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 unidadeOrganizacionalGetResponse.Pais = reader.GetStringNullable("pais");
                 unidadeOrganizacionalGetResponse.Email = reader.GetStringNullable("email");
                 unidadeOrganizacionalGetResponse.Telefone = reader.GetStringNullable("telefone");
+                unidadeOrganizacionalGetResponse.Aprovado = reader.GetBoolean("aprovado");
 
                 unidadesOrganizacionaisGetResponse.Add(unidadeOrganizacionalGetResponse);
             }
@@ -229,7 +234,8 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 uf,
                 pais,
                 email,
-                telefone
+                telefone,
+                aprovado   
             FROM
                 estoque_certo.unidade_organizacional
             WHERE
@@ -266,6 +272,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             unidadeOrganizacionalGetResponse.Pais = reader.GetStringNullable("pais");
             unidadeOrganizacionalGetResponse.Email = reader.GetStringNullable("email");
             unidadeOrganizacionalGetResponse.Telefone = reader.GetStringNullable("telefone");
+            unidadeOrganizacionalGetResponse.Aprovado = reader.GetBoolean("aprovado");
 
             return unidadeOrganizacionalGetResponse;
         }
@@ -321,6 +328,26 @@ public class UnidadeOrganizacionalRepository : BaseRepository
             var result = await cmd.ExecuteScalarAsync();
 
             return result != null;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<int> AprovarUnidade(Guid unidadeorganizacionalId)
+    {
+        const string sql = @"
+            UPDATE  estoque_certo.unidade_organizacional
+            SET aprovado = true
+            WHERE   unidade_organizacional_id = @unidade_organizacional_id;
+        ";
+        try
+        {
+            await EnsureOpenAsync();
+            await using var cmd = new NpgsqlCommand(sql, Connection);
+            cmd.Parameters.Add("unidade_organizacional_id", NpgsqlDbType.Uuid).Value = unidadeorganizacionalId;
+            return await cmd.ExecuteNonQueryAsync();
         }
         catch
         {

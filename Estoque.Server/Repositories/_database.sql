@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS estoque_certo.unidade_organizacional (
     uf VARCHAR(2),
     pais VARCHAR(100),
     email VARCHAR(100),
-    telefone VARCHAR(12)
+    telefone VARCHAR(12),
+    aprovado BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS estoque_certo.espaco (

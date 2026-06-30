@@ -92,5 +92,20 @@ public static class UnidadeOrganizacionalController
         .Produces<string>(StatusCodes.Status404NotFound)
         .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
+
+        #region [ patch ]
+        app.MapPatch("v1/unidades-organizacionais/{unidadeOrganizacionalId:Guid}", async (UnidadeOrganizacionalService service, PayloadCryptoService cryptoService, Guid unidadeOrganizacionalId, EncryptedRequest request) =>
+        {
+            await service.AprovarUnidade(unidadeOrganizacionalId);
+            return Results.Ok("Unidade organizacional aprovada com sucesso.");
+        })
+        .WithTags("unidades-organizacionais")
+        .WithSummary("Aprova uma unidade organizacional")
+        .WithDescription("Aprova uma unidade organizacional existente.")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<string>(StatusCodes.Status404NotFound)
+        .Produces<string>(StatusCodes.Status500InternalServerError)
+        .RequireAuthorization(policy => policy.RequireRole("Admin"));
+        #endregion
     }
 }

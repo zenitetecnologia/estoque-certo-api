@@ -49,6 +49,9 @@ public class UnidadeOrganizacional
 
     [JsonPropertyOrder(15)]
     public string? Telefone { get; set; } = string.Empty;
+
+    [JsonPropertyOrder(16)]
+    public bool Aprovado { get; set; }
 }
 
 public class UnidadeOrganizacionalGetResponse : UnidadeOrganizacional

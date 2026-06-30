@@ -32,6 +32,30 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
+    public async Task AprovarUnidade(Guid unidadeorganizacionalId)
+    {
+        try
+        {
+            var unidadeOrganizacional = await _repository.Obter(unidadeorganizacionalId);
+
+            if (unidadeOrganizacional == null) throw new NotFoundException("Unidade organizacional não encontrada com o ID informado.");
+
+            if (unidadeOrganizacional.Aprovado) throw new InvalidOperationException("O acesso da unidade já está validado.");
+
+            await _repository.AprovarUnidade(unidadeorganizacionalId);
+        }
+
+        catch (NotFoundException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao aprovar unidade organizacional: {ex.Message}");
+        }
+    }
+
+
     public async Task Atualizar(UnidadeOrganizacional unidadeOrganizacional, Guid unidadeOrganizacionalId)
     {
         try
