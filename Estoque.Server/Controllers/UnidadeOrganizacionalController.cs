@@ -24,8 +24,7 @@ public static class UnidadeOrganizacionalController
         .WithDescription("Cadastra uma nova unidade organizacional.")
         .Produces(StatusCodes.Status201Created)
         .Produces<List<ValidationError>>(StatusCodes.Status400BadRequest)
-        .Produces<string>(StatusCodes.Status500InternalServerError)
-        .RequireAuthorization(policy => policy.RequireRole("Admin"));
+        .Produces<string>(StatusCodes.Status500InternalServerError);
         #endregion
 
         #region [ put ]
