@@ -45,7 +45,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 @uf,
                 @pais,
                 @email,
-                @telefone
+                @telefone,
                 @aprovado
             )
             RETURNING unidade_organizacional_id;
