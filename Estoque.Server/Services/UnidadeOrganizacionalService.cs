@@ -128,6 +128,9 @@ public class UnidadeOrganizacionalService : BaseService
                 AddError(nameof(unidadeOrganizacional.Cnpj), "Unidade organizacional já cadastrada para o CNPJ informado.");
         }
 
+        if (string.IsNullOrWhiteSpace(unidadeOrganizacional.Telefone))
+            AddError(nameof(unidadeOrganizacional.Telefone), "Informe o telefone.");
+
         if (Errors.Any())
             throw new ValidationException(Errors);
     }
