@@ -1,4 +1,4 @@
-﻿using Estoque.Server.Models;
+using Estoque.Server.Models;
 using Npgsql;
 using NpgsqlTypes;
 using System.Data;
@@ -138,7 +138,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
         }
     }
 
-    public async Task<List<UnidadeOrganizacionalGetResponse>> Obter(int skip, int top, string? razaoSocial, string? cnpj)
+    public async Task<List<UnidadeOrganizacionalGetResponse>> Obter(int skip, int top, string? razaoSocial, string? cnpj, bool? aprovado = true)
     {
         var unidadesOrganizacionaisGetResponse = new List<UnidadeOrganizacionalGetResponse>();
 
@@ -162,7 +162,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
                 aprovado
             FROM
                 estoque_certo.unidade_organizacional
-            WHERE aprovado = true
+            WHERE (@aprovado IS NULL OR aprovado = @aprovado)
         ";
 
         if (!string.IsNullOrWhiteSpace(razaoSocial)) sql += " AND razao_social ILIKE @razao_social ";
@@ -177,6 +177,7 @@ public class UnidadeOrganizacionalRepository : BaseRepository
 
             await using var cmd = new NpgsqlCommand(sql, Connection);
 
+            cmd.Parameters.Add("aprovado", NpgsqlDbType.Boolean).Value = (object?)aprovado ?? DBNull.Value;
             cmd.Parameters.Add("razao_social", NpgsqlDbType.Varchar).Value = $"%{razaoSocial?.Trim()}%";
             cmd.Parameters.Add("cnpj", NpgsqlDbType.Varchar).Value = $"%{cnpj?.Trim()}%";
             cmd.Parameters.Add("top", NpgsqlDbType.Integer).Value = top;

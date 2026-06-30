@@ -1,4 +1,4 @@
-﻿using Estoque.Server.Exceptions;
+using Estoque.Server.Exceptions;
 using Estoque.Server.Models;
 using Estoque.Server.Repositories;
 using Estoque.Server.Validations;
@@ -98,11 +98,11 @@ public class UnidadeOrganizacionalService : BaseService
         }
     }
 
-    public async Task<List<UnidadeOrganizacionalGetResponse>> Obter(int skip, int top, string? razaoSocial, string? cnpj)
+    public async Task<List<UnidadeOrganizacionalGetResponse>> Obter(int skip, int top, string? razaoSocial, string? cnpj, bool? aprovado = true)
     {
         try
         {
-            return await _repository.Obter(skip, top, razaoSocial, cnpj);
+            return await _repository.Obter(skip, top, razaoSocial, cnpj, aprovado);
         }
         catch (Exception ex)
         {

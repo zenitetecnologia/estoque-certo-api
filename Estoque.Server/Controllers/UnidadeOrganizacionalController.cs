@@ -1,4 +1,4 @@
-﻿using Estoque.Server.Models;
+using Estoque.Server.Models;
 using Estoque.Server.Services;
 using Estoque.Server.Validations;
 
@@ -64,9 +64,9 @@ public static class UnidadeOrganizacionalController
         #endregion
 
         #region [ get ]
-        app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service, int skip = 0, int top = 10, string? razaoSocial = null, string? cnpj = null) =>
+        app.MapGet("v1/unidades-organizacionais", async (UnidadeOrganizacionalService service, int skip = 0, int top = 10, string? razaoSocial = null, string? cnpj = null, bool? aprovado = true) =>
         {
-            var result = await service.Obter(skip, top, razaoSocial, cnpj);
+            var result = await service.Obter(skip, top, razaoSocial, cnpj, aprovado);
 
             return Results.Ok(result);
         })
