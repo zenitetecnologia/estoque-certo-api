@@ -42,7 +42,7 @@ builder.Services.AddRateLimiter(options =>
 
     options.AddPolicy("login-policy", httpContext =>
         RateLimitPartition.GetFixedWindowLimiter(
-            partitionKey: ObterIpCliente(httpContext),
+            partitionKey: ObterChaveRateLimitPorRota(httpContext),
             factory: _ => new FixedWindowRateLimiterOptions
             {
                 PermitLimit = 5,
@@ -222,4 +222,13 @@ static string ObterIpCliente(HttpContext httpContext)
         return realIp.Trim();
 
     return httpContext.Connection.RemoteIpAddress?.ToString() ?? "ip-nao-identificado";
+}
+
+static string ObterChaveRateLimitPorRota(HttpContext httpContext)
+{
+    var rota = httpContext.GetEndpoint() is RouteEndpoint routeEndpoint
+        ? routeEndpoint.RoutePattern.RawText
+        : httpContext.Request.Path.Value;
+
+    return $"{ObterIpCliente(httpContext)}:{httpContext.Request.Method}:{rota ?? "rota-nao-identificada"}";
 }
